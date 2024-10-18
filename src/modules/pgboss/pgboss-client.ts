@@ -3,10 +3,8 @@ import { ConfigService } from '@nestjs/config'
 import PgBoss from 'pg-boss'
 
 @Injectable()
-export class PgBossClientService extends PgBoss implements OnModuleInit, OnModuleDestroy {
-  constructor (
-    configService: ConfigService
-  ) {
+export class PgBossClient extends PgBoss implements OnModuleInit, OnModuleDestroy {
+  constructor (configService: ConfigService) {
     super({
       connectionString: configService.getOrThrow<string>('DATABASE_URI')
     })
@@ -17,8 +15,6 @@ export class PgBossClientService extends PgBoss implements OnModuleInit, OnModul
   }
 
   async onModuleDestroy (): Promise<void> {
-    await this.stop({
-      destroy: true
-    })
+    await this.stop({ destroy: true })
   }
 }
