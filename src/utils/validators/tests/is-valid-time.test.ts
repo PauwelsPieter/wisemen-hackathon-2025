@@ -1,8 +1,6 @@
-import { after, before, describe, it } from 'node:test'
+import { describe, it } from 'node:test'
 import { validate } from 'class-validator'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { setupTest } from '../../test-setup/setup.js'
 import { IsValidTimeString } from '../is-valid-time.js'
 
 class TestClass {
@@ -11,16 +9,6 @@ class TestClass {
 }
 
 describe('IsValidTimeString decorator', () => {
-  let app: NestExpressApplication
-
-  before(async () => {
-    ({ app } = await setupTest())
-  })
-
-  after(async () => {
-    await app.close()
-  })
-
   describe('IsValidTimeString decorator Test', () => {
     it('should pass validation when the time is in formate hh:mm', async () => {
       const testInstance = new TestClass()
