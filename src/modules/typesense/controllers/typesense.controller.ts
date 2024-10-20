@@ -13,6 +13,7 @@ import { TypesenseInitializationService } from '../services/typesense-initializa
 @ApiOAuth2([])
 export class TypesenseController {
   constructor (private readonly typesenseImportService: TypesenseInitializationService) {}
+
   @Get('migrate')
   @ApiQuery({ required: false, name: 'fresh', type: 'boolean' })
   @ApiQuery({ required: false, name: 'collections', enum: TypesenseCollectionName, isArray: true })
