@@ -47,7 +47,7 @@ class Worker extends WorkerContainer {
     return await NestFactory.createApplicationContext(
       AppModule.forRoot([
         PgBossWorkerModule.forRoot({
-          queueName: queueName,
+          queueName,
           concurrency: args.concurrency,
           batchSize: args.concurrency * 4,
           fetchRefreshThreshold: args.concurrency * 4,

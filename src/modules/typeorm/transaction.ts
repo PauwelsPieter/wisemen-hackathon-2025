@@ -14,7 +14,7 @@ export async function transaction<T> (
   })
 }
 
-export function createTransactionManagerProxy (manager: EntityManager) {
+export function createTransactionManagerProxy (manager: EntityManager): EntityManager {
   return new Proxy(manager, {
     get (target, prop) {
       const manager = transactionStorage.getStore()
