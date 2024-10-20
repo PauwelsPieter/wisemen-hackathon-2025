@@ -2,7 +2,8 @@ import { EntityManager } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectEntityManager } from '@nestjs/typeorm'
 import { Role } from '../entities/role.entity.js'
-import { TypeOrmRepository } from '../../typeorm/utils/transaction.js'
+
+import { TypeOrmRepository } from '../../typeorm/typeorm.repository.js'
 
 @Injectable()
 export class RoleRepository extends TypeOrmRepository<Role> {
