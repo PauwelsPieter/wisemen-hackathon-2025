@@ -6,8 +6,9 @@ import { ConfigService } from '@nestjs/config'
 import { UnauthorizedError } from '../../exceptions/generic/unauthorized.error.js'
 import { AuthContent, UserAuthService } from '../../users/services/user-auth.service.js'
 
-interface TokenContent {
+export interface TokenContent {
   sub: string
+  email: string
 }
 
 export const authStorage = new AsyncLocalStorage<AuthContent>()
@@ -52,7 +53,7 @@ export class AuthMiddleware implements NestMiddleware {
       audience: this.configService.getOrThrow('AUTH_AUDIENCE')
     })
 
-    return await this.userAuthService.findOneBySubject(payload.sub)
+    return await this.userAuthService.findOneBySubject(payload)
   }
 }
 

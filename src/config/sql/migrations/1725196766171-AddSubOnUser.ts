@@ -4,10 +4,10 @@ export class AddSubOnUser1725196766171 implements MigrationInterface {
   name = 'AddSubOnUser1725196766171'
 
   public async up (queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "user" ADD "subject" character varying NOT NULL`)
+    await queryRunner.query(`ALTER TABLE "user" ADD "userId" character varying NOT NULL`)
   }
 
   public async down (queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "subject"`)
+    await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "userId"`)
   }
 }
