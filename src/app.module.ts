@@ -1,7 +1,8 @@
 import { type DynamicModule, type MiddlewareConsumer, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule } from '@nestjs/config'
-import { AuthModule } from './modules/auth/modules/auth.module.js'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+import { AuthModule } from './modules/auth/auth.module.js'
 import { UserModule } from './modules/users/user.module.js'
 import { TypesenseModule } from './modules/typesense/modules/typesense.module.js'
 import { MailModule } from './modules/mail/modules/mail.module.js'
@@ -35,6 +36,24 @@ export class AppModule {
           load: [configuration],
           validationSchema: envValidationSchema,
           isGlobal: true
+        }),
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => {
+            return {
+              privateKey: {
+                key: Buffer.from(configService.getOrThrow<string>('RSA_PRIVATE'), 'base64'),
+                passphrase: configService.getOrThrow('RSA_PASSPHRASE')
+              },
+              publicKey: Buffer.from(configService.getOrThrow<string>('RSA_PUBLIC'), 'base64'),
+              global: true,
+              signOptions: {
+                algorithm: 'RS256'
+              }
+            }
+          },
+          global: true
         }),
         TypeOrmModule.forRoot({
           type: 'postgres',
