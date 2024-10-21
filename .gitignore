@@ -5,7 +5,6 @@ node_modules
 .typesense/
 .postgres
 _build
-.eslintcache
 
 # Logs
 logs
@@ -50,4 +49,5 @@ yarn-error.log*
 # Certificates
 *.pem
 
-
+# Caches
+.eslintcache

@@ -2,7 +2,8 @@ import { EntityManager } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectEntityManager } from '@nestjs/typeorm'
 import { RefreshToken } from '../entities/refreshtoken.entity.js'
-import { TypeOrmRepository } from '../../typeorm/utils/transaction.js'
+
+import { TypeOrmRepository } from '../../typeorm/typeorm.repository.js'
 
 @Injectable()
 export class RefreshTokenRepository extends TypeOrmRepository<RefreshToken> {

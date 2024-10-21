@@ -1,5 +1,5 @@
 import { PrimaryColumn, Column, Entity } from 'typeorm'
-import { JobState } from '../types/job-state.enum.js'
+import { JobState } from './job-state.enum.js'
 
 @Entity({ name: 'job', schema: 'pgboss', synchronize: false })
 export abstract class Job<T> {

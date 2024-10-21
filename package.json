@@ -44,7 +44,7 @@
     "@nestjs/schedule": "^4.1.0",
     "@sentry/node": "^7.91.0",
     "@sentry/tracing": "^7.91.0",
-    "@wisemen/app-container": "^2.1.2",
+    "@wisemen/app-container": "^2.1.9",
     "axios": "^1.7.5",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
