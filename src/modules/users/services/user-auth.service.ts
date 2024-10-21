@@ -5,10 +5,7 @@ import { RedisClient } from '../../redis/redis.client.js'
 import { TokenContent } from '../../auth/middleware/auth.middleware.js'
 import { TypesenseCollectionName } from '../../typesense/enums/typesense-collection-index.enum.js'
 import { TypesenseCollectionService } from '../../typesense/services/typesense-collection.service.js'
-
-export interface AuthContent {
-  uuid: string
-}
+import { AuthContent } from '../../auth/auth.storage.js'
 
 @Injectable()
 export class UserAuthService {

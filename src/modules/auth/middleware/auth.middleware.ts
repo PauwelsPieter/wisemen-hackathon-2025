@@ -1,17 +1,15 @@
-import { AsyncLocalStorage } from 'async_hooks'
 import { Injectable, type NestMiddleware } from '@nestjs/common'
 import type { Request, Response, NextFunction } from 'express'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { ConfigService } from '@nestjs/config'
 import { UnauthorizedError } from '../../exceptions/generic/unauthorized.error.js'
-import { AuthContent, UserAuthService } from '../../users/services/user-auth.service.js'
+import { UserAuthService } from '../../users/services/user-auth.service.js'
+import { AuthContent, AuthStorage } from '../auth.storage.js'
 
 export interface TokenContent {
   sub: string
   email: string
 }
-
-export const authStorage = new AsyncLocalStorage<AuthContent>()
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -19,6 +17,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   constructor (
     private readonly configService: ConfigService,
+    private readonly authStorage: AuthStorage,
     private readonly userAuthService: UserAuthService
   ) {
     this.jwks = createRemoteJWKSet(
@@ -42,7 +41,7 @@ export class AuthMiddleware implements NestMiddleware {
     try {
       const content = await this.verify(token)
 
-      authStorage.run(content, next)
+      this.authStorage.run(content, next)
     } catch (_error) {
       next()
     }
@@ -55,14 +54,4 @@ export class AuthMiddleware implements NestMiddleware {
 
     return await this.userAuthService.findOneByUserId(payload)
   }
-}
-
-export function getAuthOrFail (): AuthContent {
-  const token = authStorage.getStore()
-
-  if (token == null) {
-    throw new UnauthorizedError()
-  }
-
-  return token
 }
