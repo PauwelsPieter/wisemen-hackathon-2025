@@ -3,6 +3,8 @@ import { UserRepository } from '../repositories/user.repository.js'
 import { User } from '../entities/user.entity.js'
 import { RedisClient } from '../../redis/redis.client.js'
 import { TokenContent } from '../../auth/middleware/auth.middleware.js'
+import { TypesenseCollectionName } from '../../typesense/enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionService } from '../../typesense/services/typesense-collection.service.js'
 
 export interface AuthContent {
   uuid: string
@@ -12,10 +14,11 @@ export interface AuthContent {
 export class UserAuthService {
   constructor (
     private readonly userRepository: UserRepository,
-    private readonly redisClient: RedisClient
+    private readonly redisClient: RedisClient,
+    private readonly typesenseService: TypesenseCollectionService
   ) { }
 
-  async findOneBySubject (token: TokenContent): Promise<AuthContent> {
+  async findOneByUserId (token: TokenContent): Promise<AuthContent> {
     const cacheKey = `auth:${token.sub}`
 
     const cachedUser = await this.redisClient.getCachedValue(cacheKey)
@@ -48,6 +51,8 @@ export class UserAuthService {
     })
 
     await this.userRepository.insert(user)
+
+    await this.typesenseService.importManuallyToTypesense(TypesenseCollectionName.USER, [user])
 
     return user
   }

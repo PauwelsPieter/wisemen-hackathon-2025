@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import { v4 } from 'uuid'
 import { User } from '../entities/user.entity.js'
 import type { Role } from '../../roles/entities/role.entity.js'
 
@@ -13,6 +14,7 @@ export class UserEntityBuilder {
     this.user = new User()
 
     this.user.uuid = randomUUID()
+    this.user.userId = v4()
     this.user.createdAt = new Date()
     this.user.updatedAt = new Date()
     this.user.email = 'test@mail.com'

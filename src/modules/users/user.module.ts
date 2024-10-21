@@ -8,12 +8,8 @@ import { RedisModule } from '../redis/redis.module.js'
 import { User } from './entities/user.entity.js'
 import { UserRepository } from './repositories/user.repository.js'
 import { UserTypesenseRepository } from './repositories/user-typesense.repository.js'
-import {
-  ChangeUserNameController
-} from './use-cases/change-user-name/change-user-name.controller.js'
 import { ViewUserController } from './use-cases/view-user/view-user.controller.js'
 import { ViewUsersController } from './use-cases/view-users/view-users.controller.js'
-import { ChangeUserNameUseCase } from './use-cases/change-user-name/change-user-name.use-case.js'
 import { ViewUsersUseCase } from './use-cases/view-users/view-users.use-case.js'
 import { ViewUserUseCase } from './use-cases/view-user/view-user.use-case.js'
 import {
@@ -31,7 +27,6 @@ import { UserAuthService } from './services/user-auth.service.js'
     RedisModule.forRoot()
   ],
   controllers: [
-    ChangeUserNameController,
     ChangeUserRoleController,
     ViewUserController,
     ViewUsersController
@@ -41,7 +36,6 @@ import { UserAuthService } from './services/user-auth.service.js'
     UserRepository,
     UserTypesenseRepository,
     RoleRepository,
-    ChangeUserNameUseCase,
     ChangeUserRoleUseCase,
     ViewUserUseCase,
     ViewUsersUseCase

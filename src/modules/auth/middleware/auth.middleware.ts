@@ -53,7 +53,7 @@ export class AuthMiddleware implements NestMiddleware {
       audience: this.configService.getOrThrow('AUTH_PROJECT_ID')
     })
 
-    return await this.userAuthService.findOneBySubject(payload)
+    return await this.userAuthService.findOneByUserId(payload)
   }
 }
 
