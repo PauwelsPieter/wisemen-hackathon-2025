@@ -14,7 +14,7 @@ export class PublishNatsEventJob extends PgBossJob {
   protected readonly retryBackoff = false
   protected readonly retryDelayInSeconds = 10
   protected readonly expireInSeconds = 5 * SECONDS_PER_MINUTE
-  protected readonly startAfterInSeconds = 1
+  protected readonly startAfterInSeconds = 0
 
   constructor (
     private readonly event: NatsOutboxEvent
