@@ -15,10 +15,12 @@ export class NatsOutboxSubscriber {
   @SubscribeToAll()
   async handleEventFired (event: WiseEvent): Promise<void> {
     if (event.isExternal) {
-      const mappedEvent = this.mapper.map(event)
-      const job = new PublishNatsEventJob(mappedEvent)
+      for (let i = 0; i < 200; i++) {
+        const mappedEvent = this.mapper.map(event)
+        const job = new PublishNatsEventJob(mappedEvent)
 
-      await this.jobScheduler.scheduleJob(job)
+        await this.jobScheduler.scheduleJob(job)
+      }
     }
   }
 }

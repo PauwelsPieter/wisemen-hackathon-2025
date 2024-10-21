@@ -4,9 +4,7 @@ import { ModuleRef } from '@nestjs/core'
 import { QueueName } from '../queue-name.enum.js'
 import { PgBossClient } from '../pgboss-client.js'
 import { JobSerialization } from '../jobs/job-serialization.type.js'
-import {
-  TypesenseInitializationService
-} from '../../typesense/services/typesense-initialization.service.js'
+
 import { PgBossWorkerConfig } from './pgboss-worker.config.js'
 import { RawPgBossJob } from './raw-pgboss-job.js'
 import {
@@ -33,7 +31,6 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
     private readonly client: PgBossClient,
     private readonly moduleRef: ModuleRef
   ) {
-    moduleRef.get(TypesenseInitializationService, { strict: false })
     this.queueName = config.queueName
     this.concurrency = config?.concurrency ?? 1
     this.pollInterval = config?.pollInterval ?? 2000

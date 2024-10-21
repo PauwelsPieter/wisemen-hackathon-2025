@@ -1,9 +1,9 @@
 import { ModuleRef } from '@nestjs/core'
-import { QueueName } from 'src/modules/pgboss/queue-name.enum.js'
 import { StringCodec } from 'nats'
 import { SECONDS_PER_MINUTE } from '@appwise/time'
 import { PgBossJob } from '../../pgboss/jobs/pgboss.job.js'
 import { NatsClient } from '../nats.client.js'
+import { QueueName } from '../../pgboss/queue-name.enum.js'
 import { NatsOutboxEvent } from './nats-outbox-event.js'
 
 export class PublishNatsEventJob extends PgBossJob {
@@ -23,7 +23,7 @@ export class PublishNatsEventJob extends PgBossJob {
   }
 
   run (moduleRef: ModuleRef): void {
-    const natsClient = moduleRef.get(NatsClient)
+    const natsClient = moduleRef.get(NatsClient, { strict: false })
     const encoder = StringCodec()
 
     natsClient.publish(this.event.topic, encoder.encode(this.event.serializedMessage))
