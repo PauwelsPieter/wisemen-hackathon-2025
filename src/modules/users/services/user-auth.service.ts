@@ -27,7 +27,7 @@ export class UserAuthService {
       return JSON.parse(cachedUser) as AuthContent
     }
 
-    const user = await this.fetchAndCreateUser(token)
+    const user = await this.fetchOrCreateUser(token)
 
     const response: AuthContent = {
       uuid: user.uuid
@@ -38,7 +38,7 @@ export class UserAuthService {
     return user
   }
 
-  private async fetchAndCreateUser (token: TokenContent): Promise<User> {
+  private async fetchOrCreateUser (token: TokenContent): Promise<User> {
     let user = await this.userRepository.findOne({ where: { userId: token.sub } })
 
     if (user != null) {
