@@ -11,7 +11,7 @@ import {
   TypesenseCollectionService
 } from '../../../typesense/services/typesense-collection.service.js'
 import { EventEmitter } from '../../../events/event-emitter.js'
-import { transaction } from '../../../typeorm/utils/transaction.js'
+import { transaction } from '../../../typeorm/transaction.js'
 import type { RegisterUserCommand } from './register-user.command.js'
 import { EmailAlreadyInUseError } from './email-already-in-use.error.js'
 import { UserRegisteredEvent } from './user-registered.event.js'

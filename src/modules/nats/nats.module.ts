@@ -1,11 +1,10 @@
 import { type DynamicModule, Module, type Provider } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { PgBossModule } from '../pgboss/pgboss.module.js'
 import { NatsClient } from './nats.client.js'
 import { NatsOutboxSubscriber } from './outbox/nats-outbox.subscriber.js'
 import { ExamplePublisher } from './publishers/example.publisher.js'
-import { NatsOutboxRepository } from './outbox/nats-outbox.repository.js'
-import { NatsOutboxEvent } from './outbox/nats-outbox-event.js'
-import { NatsOutboxEventSerializer } from './outbox/nats-outbox-event.serializer.js'
+import { NatsOutboxEventMapper } from './outbox/nats-outbox-event.mapper.js'
+import { PublishNatsEventJob } from './outbox/publish-nats-event.job.js'
 
 @Module({})
 export class NatsModule {
@@ -13,14 +12,13 @@ export class NatsModule {
     return {
       module: NatsModule,
       imports: [
-        TypeOrmModule.forFeature([NatsOutboxEvent])
+        PgBossModule.forFeature([PublishNatsEventJob])
       ],
       providers: [
         NatsClient,
         ExamplePublisher,
         NatsOutboxSubscriber,
-        NatsOutboxRepository,
-        NatsOutboxEventSerializer,
+        NatsOutboxEventMapper,
         ...providers
       ],
       exports: [

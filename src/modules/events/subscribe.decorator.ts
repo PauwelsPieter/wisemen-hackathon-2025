@@ -2,8 +2,8 @@ import { applyDecorators } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { ALL_TYPES } from './constants.js'
 
-export function Subscribe (toType: string): MethodDecorator {
-  return applyDecorators(OnEvent(toType, { suppressErrors: false }))
+export function Subscribe (toTopic: string): MethodDecorator {
+  return applyDecorators(OnEvent(toTopic, { suppressErrors: false }))
 }
 
 export function SubscribeToAll (): MethodDecorator {

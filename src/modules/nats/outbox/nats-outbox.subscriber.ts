@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common'
 import { WiseEvent } from '../../events/wise-event.js'
 import { SubscribeToAll } from '../../events/subscribe.decorator.js'
-import { NatsOutboxRepository } from './nats-outbox.repository.js'
-import { NatsOutboxEventSerializer } from './nats-outbox-event.serializer.js'
+import { PgBossScheduler } from '../../pgboss/pgboss-scheduler.js'
+import { NatsOutboxEventMapper } from './nats-outbox-event.mapper.js'
+import { PublishNatsEventJob } from './publish-nats-event.job.js'
 
 @Injectable()
 export class NatsOutboxSubscriber {
   constructor (
-    private readonly outbox: NatsOutboxRepository,
-    private readonly serializer: NatsOutboxEventSerializer
+    private readonly mapper: NatsOutboxEventMapper,
+    private readonly jobScheduler: PgBossScheduler
   ) {}
 
   @SubscribeToAll()
   async handleEventFired (event: WiseEvent): Promise<void> {
     if (event.isExternal) {
-      await this.outbox.insert({
-        topic: event.topic,
-        serializedMessage: this.serializer.serialize(event)
-      })
+      const mappedEvent = this.mapper.map(event)
+      const job = new PublishNatsEventJob(mappedEvent)
+
+      await this.jobScheduler.scheduleJob(job)
     }
   }
 }

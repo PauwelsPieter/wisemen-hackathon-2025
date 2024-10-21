@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { WiseEvent } from '../../events/wise-event.js'
 import { CloudEvent } from './cloud-event.js'
+import { NatsOutboxEvent } from './nats-outbox-event.js'
 
 @Injectable()
-export class NatsOutboxEventSerializer {
-  serialize (event: WiseEvent): string {
-    return JSON.stringify(this.mapToCloudEvent(event))
+export class NatsOutboxEventMapper {
+  map (event: WiseEvent): NatsOutboxEvent {
+    return {
+      topic: event.topic,
+      serializedMessage: JSON.stringify(this.mapToCloudEvent(event))
+    }
   }
 
   private mapToCloudEvent (event: WiseEvent): CloudEvent {
