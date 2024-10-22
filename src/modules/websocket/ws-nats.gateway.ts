@@ -31,7 +31,7 @@ export class WsExceptionFilter extends BaseWsExceptionFilter {
     }))
   }
 }
-@WebSocketGateway(3000, {
+@WebSocketGateway(Number(process.env.PORT ?? 3000), {
   wsEngine: 'ws',
   transports: ['websocket']
 })
