@@ -3,9 +3,9 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { INestApplicationContext } from '@nestjs/common'
 import { WorkerContainer } from '@wisemen/app-container'
-import { AppModule } from '../app.module.js'
 import { QueueName } from '../modules/pgboss/queue-name.enum.js'
 import { PgBossWorkerModule } from '../modules/pgboss/pgboss-worker.module.js'
+import { WorkerFactory } from './worker.factory.js'
 
 const args = await yargs(hideBin(process.argv))
   .option('queue', {
@@ -45,7 +45,8 @@ const queueName = unvalidatedQueueName as QueueName
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {
     return await NestFactory.createApplicationContext(
-      AppModule.forRoot([
+      WorkerFactory.create(
+        queueName,
         PgBossWorkerModule.forRoot({
           queueName,
           concurrency: args.concurrency,
@@ -54,7 +55,7 @@ class Worker extends WorkerContainer {
           pollInterval: args.interval,
           isOnCompleteWorker: args.onComplete
         })
-      ])
+      )
     )
   }
 }

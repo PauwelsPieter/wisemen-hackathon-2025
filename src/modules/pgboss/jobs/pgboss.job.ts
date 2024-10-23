@@ -72,7 +72,7 @@ export abstract class PgBossJob<T = void> {
     }
   }
 
-  abstract run (moduleRef: ModuleRef | TestingModule): Promise<T>
+  abstract run (moduleRef: ModuleRef | TestingModule): Promise<T> | T
 
   onComplete (_completedJob: CompletedJob): Promise<void> {
     throw new Error('Method not implemented.')
