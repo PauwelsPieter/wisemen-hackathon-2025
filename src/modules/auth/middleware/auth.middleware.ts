@@ -49,6 +49,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   public async verify (token: string): Promise<AuthContent> {
     const { payload } = await jwtVerify<TokenContent>(token, this.jwks, {
+      issuer: this.configService.getOrThrow('AUTH_ISSUER'),
       audience: this.configService.getOrThrow('AUTH_PROJECT_ID')
     })
 

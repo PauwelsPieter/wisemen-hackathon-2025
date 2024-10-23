@@ -101,6 +101,9 @@ importers:
       nestjs-i18n:
         specifier: ^10.4.5
         version: 10.4.5(@nestjs/common@10.4.1(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.1(@nestjs/common@10.4.1(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.1)(@nestjs/websockets@10.4.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-validator@0.14.1)(rxjs@7.8.1)
+      openid-client:
+        specifier: ^6.1.1
+        version: 6.1.1
       pg:
         specifier: ^8.12.0
         version: 8.12.0
@@ -2263,6 +2266,9 @@ packages:
   jose@5.9.2:
     resolution: {integrity: sha512-ILI2xx/I57b20sd7rHZvgiiQrmp2mcotwsAH+5ajbpFQbrYVQdNHYlQhoA5cFb78CgtBOxtC05TeA+mcgkuCqQ==}
 
+  jose@5.9.6:
+    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
+
   js-beautify@1.15.1:
     resolution: {integrity: sha512-ESjNzSlt/sWE8sciZH8kBF8BPlwXPwhR6pWKAw8bw4Bwj+iZcnKW6ONWUutJ7eObuBZQpiIb8S7OYspWrKt7rA==}
     engines: {node: '>=14'}
@@ -2669,6 +2675,9 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
+  oauth4webapi@3.1.1:
+    resolution: {integrity: sha512-0h4FZjsntbKQ5IHGM9mFT7uOwQCRdcTG7YhC0xXlWIcCch24wUa6Vggaipa3Sw6Ab7nEnmO4rctROmyuHBfP7Q==}
+
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
@@ -2690,6 +2699,9 @@ packages:
   onetime@5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
+
+  openid-client@6.1.1:
+    resolution: {integrity: sha512-JVN2ao1ErxHdWTme+xAQrLsQV2rV4RlhdiR8ZfaN0ktMhE8lEapU+VH7XuHSxTPHaAK7Rz7AqIB98ea+cHaCUg==}
 
   optionator@0.9.3:
     resolution: {integrity: sha512-JjCoypp+jKn1ttEFExxhetCKeJt9zhAgAve5FXHixTvFDW/5aEktX9bufBKLRRMdU7bNtpLfcGu94B3cdEJgjg==}
@@ -6304,6 +6316,8 @@ snapshots:
 
   jose@5.9.2: {}
 
+  jose@5.9.6: {}
+
   js-beautify@1.15.1:
     dependencies:
       config-chain: 1.1.13
@@ -6875,6 +6889,8 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
+  oauth4webapi@3.1.1: {}
+
   object-assign@4.1.1: {}
 
   object-hash@3.0.0: {}
@@ -6892,6 +6908,11 @@ snapshots:
   onetime@5.1.2:
     dependencies:
       mimic-fn: 2.1.0
+
+  openid-client@6.1.1:
+    dependencies:
+      jose: 5.9.6
+      oauth4webapi: 3.1.1
 
   optionator@0.9.3:
     dependencies:
