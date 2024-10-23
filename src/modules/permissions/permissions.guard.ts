@@ -1,7 +1,7 @@
 import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { CacheService } from '../cache/cache.service.js'
-import { getAuthOrFail } from '../auth/middleware/auth.middleware.js'
+import { AuthStorage } from '../auth/auth.storage.js'
 import type { Permission } from './permission.enum.js'
 import { PERMISSIONS_KEY } from './permissions.decorator.js'
 
@@ -9,7 +9,8 @@ import { PERMISSIONS_KEY } from './permissions.decorator.js'
 export class PermissionsGuard implements CanActivate {
   constructor (
     private readonly reflector: Reflector,
-    private readonly cache: CacheService
+    private readonly cache: CacheService,
+    private readonly authStorage: AuthStorage
   ) {}
 
   async canActivate (context: ExecutionContext): Promise<boolean> {
@@ -22,7 +23,7 @@ export class PermissionsGuard implements CanActivate {
       return true
     }
 
-    const userUuid = getAuthOrFail().uid
+    const userUuid = this.authStorage.getUserUuid()
 
     return await this.cache.hasPermissions(userUuid, requiredPermissions)
   }

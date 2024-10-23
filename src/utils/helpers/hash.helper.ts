@@ -16,7 +16,7 @@ export async function verifyPassword (password: string, hashedPassword: string):
 
 export class InvalidPasswordError extends BadRequestApiError {
   @ApiErrorCode('invalid_password')
-  code: 'invalid_password'
+  readonly code: 'invalid_password'
 
   meta: undefined
   constructor () {
