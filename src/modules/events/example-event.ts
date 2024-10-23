@@ -1,6 +1,6 @@
-import { WiseEvent } from '../../../events/wise-event.js'
-import { User } from '../../entities/user.entity.js'
-import { EventVisibility } from '../../../events/event-visibility.enum.js'
+import { User } from '../users/entities/user.entity.js'
+import { WiseEvent } from './wise-event.js'
+import { EventVisibility } from './event-visibility.enum.js'
 
 export class UserRegisteredEventContent {
   public readonly userUuid: string
