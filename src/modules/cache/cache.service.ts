@@ -4,10 +4,8 @@ import { UserRepository } from '../users/repositories/user.repository.js'
 import { Permission } from '../permissions/permission.enum.js'
 import { RedisClient } from '../redis/redis.client.js'
 
-const prefix = `${process.env.NODE_ENV ?? 'local'}`
-
-const rolePermissionsCache = `${prefix}.role-permissions-cache`
-const userRoleCache = `${prefix}.user-role-cache`
+const rolePermissionsCache = `role-permissions-cache`
+const userRoleCache = `user-role-cache`
 
 @Injectable()
 export class CacheService {
