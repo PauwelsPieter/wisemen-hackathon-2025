@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import type { TestingModule } from '@nestjs/testing'
 import { expect } from 'expect'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import { ConfigService } from '@nestjs/config'
 import { uuid } from '../../../test/expect/expectUuid.js'
 import { toHaveErrorCode } from '../../../test/expect/expectErrorCode.js'
 import { toHaveStatus } from '../../../test/expect/expectStatus.js'
@@ -11,6 +12,7 @@ import { S3Service } from '../../modules/files/services/s3.service.js'
 import { toHaveApiError } from '../../../test/expect/expect-api-error.js'
 import { TestContext } from '../../../test/utils/test-context.js'
 import { AuthMiddleware } from '../../modules/auth/middleware/auth.middleware.js'
+import { EnvType } from '../envs/env.enum.js'
 import { compileTestModule } from './compile-test-module.js'
 
 export interface TestSetup {
@@ -21,15 +23,17 @@ export interface TestSetup {
 }
 
 export async function setupTest (): Promise<TestSetup> {
-  if (process.env.NODE_ENV !== 'test') {
-    throw new Error('NODE_ENV must be set to test')
-  }
-
   const testModule = await compileTestModule()
   const [app, dataSource] = await Promise.all([
     setupTestApp(testModule),
     setupTestDataSource(testModule)
   ])
+
+  const configService = testModule.get(ConfigService)
+
+  if (configService.getOrThrow('NODE_ENV') !== EnvType.TEST) {
+    throw new Error('NODE_ENV must be set to test')
+  }
 
   const context = new TestContext(dataSource.manager)
 

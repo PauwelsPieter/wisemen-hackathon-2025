@@ -3,15 +3,16 @@ import { ConfigService } from '@nestjs/config'
 import type { RedisClientType } from 'redis'
 import { createClient } from 'redis'
 
-const prefix = `${process.env.NODE_ENV ?? 'local'}`
-
 @Injectable()
 export class RedisClient implements OnModuleInit, OnModuleDestroy {
   public client: RedisClientType
+  private readonly prefix: string
 
   constructor (
     private readonly configService: ConfigService
-  ) {}
+  ) {
+    this.prefix = this.configService.getOrThrow('NODE_ENV')
+  }
 
   async onModuleInit (): Promise<void> {
     this.client = createClient({
@@ -29,14 +30,14 @@ export class RedisClient implements OnModuleInit, OnModuleDestroy {
   }
 
   async getCachedValue (key: string): Promise<string | null> {
-    return await this.client.get(`${prefix}.${key}`)
+    return await this.client.get(`${this.prefix}.${key}`)
   }
 
   async putCachedValue (key: string, value: string, ttl = 7200): Promise<void> {
-    await this.client.set(`${prefix}.${key}`, value, { EX: ttl })
+    await this.client.set(`${this.prefix}.${key}`, value, { EX: ttl })
   }
 
   async deleteCachedValue (key: string): Promise<void> {
-    await this.client.del(`${prefix}.${key}`)
+    await this.client.del(`${this.prefix}.${key}`)
   }
 }
