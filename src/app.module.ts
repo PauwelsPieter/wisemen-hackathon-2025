@@ -1,5 +1,5 @@
 import { type DynamicModule, type MiddlewareConsumer, Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { AuthModule } from './modules/auth/auth.module.js'
 import { UserModule } from './modules/users/user.module.js'
@@ -35,7 +35,6 @@ export class AppModule {
         DefaultConfigModule.forRoot(),
         DefaultTypeormModule.forRoot(),
         JwtModule.registerAsync({
-          imports: [ConfigModule],
           inject: [ConfigService],
           useFactory: (configService: ConfigService) => {
             return {
