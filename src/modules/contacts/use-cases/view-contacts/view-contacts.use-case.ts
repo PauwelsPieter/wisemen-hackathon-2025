@@ -12,8 +12,8 @@ export class ViewContactsUseCase {
   ) {}
 
   public async execute (): Promise<ViewContactsResponse> {
-    const contacts = await this.contactRepository.find()
+    const [contacts, count] = await this.contactRepository.findAndCount()
 
-    return new ViewContactsResponse(contacts, contacts.length, 10, 0)
+    return new ViewContactsResponse(contacts, count, 10, 0)
   }
 }

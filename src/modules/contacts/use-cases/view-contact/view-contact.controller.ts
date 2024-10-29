@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiTags, ApiOAuth2 } from '@nestjs/swagger'
+import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { Permissions } from '../../../permissions/permissions.decorator.js'
 import { Permission } from '../../../permissions/permission.enum.js'
 import { UuidParam } from '../../../../utils/nest/decorators/uuid-param.js'
@@ -16,6 +16,7 @@ export class ViewContactController {
 
   @Get()
   @Permissions(Permission.CONTACT_READ)
+  @ApiOkResponse({ type: ViewContactResponse })
   public async viewContact (
     @UuidParam('uuid') uuid: string
   ): Promise<ViewContactResponse> {
