@@ -7,7 +7,7 @@ import { TestUser } from '../../users/tests/setup-user.type.js'
 import { TestContext } from '../../../../test/utils/test-context.js'
 import { Contact } from '../entities/contact.entity.js'
 
-describe('Contact E2E', () => {
+describe('Contact Flow', () => {
   let app: NestExpressApplication
   let context: TestContext
   let adminUser: TestUser
