@@ -22,7 +22,7 @@ export class CreateContactUseCase {
       phone: command.phone
     })
 
-    await this.contactRepository.save(contact)
+    await this.contactRepository.insert(contact)
 
     return new CreateContactResponse(contact)
   }
