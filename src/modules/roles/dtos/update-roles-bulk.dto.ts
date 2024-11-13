@@ -9,6 +9,10 @@ export class RoleValueDto {
   @IsUUID()
   uuid: string
 
+  @ApiProperty({ type: String })
+  @IsNotEmpty()
+  name: string
+
   @ApiProperty({ type: PermissionObject, isArray: true })
   @IsArray()
   permissions: PermissionObject[]
