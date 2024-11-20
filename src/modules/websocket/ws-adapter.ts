@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { IncomingMessage } from 'http'
 import { AsyncResource } from 'async_hooks'
+import { Server } from 'http'
 import { Injectable, UnauthorizedException, type INestApplicationContext } from '@nestjs/common'
 import { WsAdapter } from '@nestjs/platform-ws'
 import { WebSocketServer } from 'ws'
@@ -43,11 +44,27 @@ export class AuthenticatedWsAdapter extends WsAdapter {
     port: number,
     options?: Record<string, any> & {
       namespace?: string
-      server?: any
+      server?: unknown
       path?: string
     }
   ): any {
-    const wss = super.create(port, options) as WebSocketServer
+    const { server, path, ...wsOptions } = options ?? {}
+
+    if (server != null) {
+      return server
+    }
+
+    this.ensureHttpServerExists(
+      port,
+      this.httpServer as Server
+    )
+
+    const wss = this.bindErrorHandler(new WebSocketServer({
+      noServer: true,
+      ...wsOptions
+    })) as WebSocketServer
+
+    this.addWsServerToRegistry(wss, port, '')
 
     wss.options.verifyClient = (
       info: { req: IncomingMessage },
