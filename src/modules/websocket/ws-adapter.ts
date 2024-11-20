@@ -64,7 +64,7 @@ export class AuthenticatedWsAdapter extends WsAdapter {
       ...wsOptions
     })) as WebSocketServer
 
-    this.addWsServerToRegistry(wss, port, '')
+    this.addWsServerToRegistry(wss, port, path ?? '/')
 
     wss.options.verifyClient = (
       info: { req: IncomingMessage },

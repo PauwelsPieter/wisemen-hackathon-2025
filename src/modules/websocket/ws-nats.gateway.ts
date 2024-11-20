@@ -33,7 +33,8 @@ export class WsExceptionFilter extends BaseWsExceptionFilter {
 }
 @WebSocketGateway(Number(process.env.PORT ?? 3000), {
   wsEngine: 'ws',
-  transports: ['websocket']
+  transports: ['websocket'],
+  path: '/websockets'
 })
 export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly clients = new Map<string, WebSocket>()
