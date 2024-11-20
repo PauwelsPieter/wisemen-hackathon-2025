@@ -63,8 +63,8 @@ importers:
         specifier: ^7.119.2
         version: 7.119.2
       '@wisemen/app-container':
-        specifier: ^2.1.9
-        version: 2.1.9
+        specifier: ^2.1.10
+        version: 2.1.10
       axios:
         specifier: ^1.7.7
         version: 1.7.7
@@ -1268,8 +1268,8 @@ packages:
   '@webassemblyjs/wast-printer@1.12.1':
     resolution: {integrity: sha512-+X4WAlOisVWQMikjbcvY2e0rwPsKQ9F688lksZhBcPycBBuii3O7m8FACbDMWDojpAqvjIncrG8J0XHKyQfVeA==}
 
-  '@wisemen/app-container@2.1.9':
-    resolution: {integrity: sha512-Y5W7d2uff6eM47CF/pCoON7A4tTRn+vn8HzOi/VuU/fqwOoOxLJj7JzsR8Lbl5wBrwO2lHBnUY9iF3SCV2FUxg==}
+  '@wisemen/app-container@2.1.10':
+    resolution: {integrity: sha512-uO1pD2YI8H+zsO+kRGe/pz+ngxBnJYKsJ1BuPUb66kCaGadMG9NOqwZnJ8kD0lcT6f26s8n3SLjP/dGo99TJ/A==}
 
   '@wisemen/eslint-config-nestjs@0.1.6':
     resolution: {integrity: sha512-LJ50OAY05zb5QjeSrnmZf74dgzcBDFwwEEUHvwN921xTQbft/h62hmJiQOax3iNp3GMZ4e+peOUbbJXHDHq9mw==}
@@ -5268,7 +5268,7 @@ snapshots:
       '@webassemblyjs/ast': 1.12.1
       '@xtuc/long': 4.2.2
 
-  '@wisemen/app-container@2.1.9':
+  '@wisemen/app-container@2.1.10':
     dependencies:
       express: 4.21.1
     transitivePeerDependencies:
