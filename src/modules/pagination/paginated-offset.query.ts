@@ -2,11 +2,12 @@ import { Type } from 'class-transformer'
 import { IsInt, IsOptional, IsPositive, Max, Min, ValidateNested } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { SearchQuery } from './search.query.js'
+import { DEFAULT_PAGINATION_MAX_LIMIT } from './pagination-mapper.js'
 
 export class PaginatedOffsetQuery {
-  @ApiProperty({ minimum: 1, maximum: 100 })
+  @ApiProperty({ minimum: 1, maximum: DEFAULT_PAGINATION_MAX_LIMIT })
   @Type(() => Number)
-  @Max(100)
+  @Max(DEFAULT_PAGINATION_MAX_LIMIT)
   @IsPositive()
   @IsInt()
   limit: number

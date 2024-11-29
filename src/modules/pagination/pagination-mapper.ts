@@ -1,6 +1,6 @@
 import type { PaginatedOffsetQuery } from './paginated-offset.query.js'
 
-const DEFAULT_PAGINATION_MAX_LIMIT = 25
+export const DEFAULT_PAGINATION_MAX_LIMIT = 100
 
 export interface TypeormPagination {
   skip: number
