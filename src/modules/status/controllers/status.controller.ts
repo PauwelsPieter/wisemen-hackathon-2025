@@ -24,6 +24,12 @@ export class StatusController {
     }
   }
 
+  @Public()
+  @Get('/debug-sentry')
+  getError () {
+    throw new Error('My first Sentry error!')
+  }
+
   @Get('/health')
   @Public()
   getHealthStatus (): { status: string } {
