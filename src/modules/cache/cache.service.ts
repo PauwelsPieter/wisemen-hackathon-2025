@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { RoleRepository } from '../roles/repositories/role.repository.js'
 import { UserRepository } from '../users/repositories/user.repository.js'
-import { Permission } from '../permissions/permission.enum.js'
+import { Permission } from '../permission/permission.enum.js'
 import { RedisClient } from '../redis/redis.client.js'
 
 const rolePermissionsCache = `role-permissions-cache`

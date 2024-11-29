@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { Role } from '../../../entities/role.entity.js'
-import type { Permission } from '../../../../permissions/permission.enum.js'
+import type { Permission } from '../../../../permission/permission.enum.js'
 
 export class RoleEntityBuilder {
   private roleEntity: Role

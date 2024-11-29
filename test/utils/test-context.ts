@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import type { EntityManager } from 'typeorm'
-import type { Permission } from 'src/modules/permissions/permission.enum.js'
+import type { Permission } from 'src/modules/permission/permission.enum.js'
 import { UserSeeder } from '../../src/modules/users/tests/user.seeder.js'
 import { RoleSeeder } from '../../src/modules/roles/tests/seeders/role.seeder.js'
 import type { Role } from '../../src/modules/roles/entities/role.entity.js'

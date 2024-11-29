@@ -1,6 +1,6 @@
 import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common'
 import { Request } from 'express'
-import { Permission } from '../../permissions/permission.enum.js'
+import { Permission } from '../../permission/permission.enum.js'
 import { CacheService } from '../../cache/cache.service.js'
 import { AuthStorage } from '../../auth/auth.storage.js'
 
