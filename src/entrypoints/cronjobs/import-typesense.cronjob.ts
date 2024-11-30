@@ -1,3 +1,5 @@
+import '../utils/sentry/sentry.js'
+
 import { DataSource } from 'typeorm'
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'

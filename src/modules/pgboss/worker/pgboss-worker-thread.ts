@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import { ModuleRef } from '@nestjs/core'
 import { captureError } from 'rxjs/internal/util/errorContext'
 import { JobFactory } from '../jobs/job-factory.js'

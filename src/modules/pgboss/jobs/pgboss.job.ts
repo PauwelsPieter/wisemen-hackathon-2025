@@ -2,7 +2,7 @@
 import type { JobInsert, Job } from 'pg-boss'
 import { SECONDS_PER_MINUTE } from '@appwise/time'
 import { plainToInstance } from 'class-transformer'
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import dayjs from 'dayjs'
 import colors from 'colors'
 import type { ModuleRef } from '@nestjs/core'
