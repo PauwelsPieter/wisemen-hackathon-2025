@@ -1,5 +1,5 @@
 import type { DynamicModule } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { ArchivedJob } from './persistence/archive.entity.js'
 import { Job } from './persistence/job.entity.js'
 import { JobFactory } from './jobs/job-factory.js'

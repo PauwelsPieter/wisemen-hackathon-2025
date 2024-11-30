@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import type { EntityManager } from 'typeorm'
 import { ConnectionOptions } from 'pg-boss'
-import { InjectEntityManager } from '@nestjs/typeorm'
-import { createTransactionManagerProxy } from '../typeorm/transaction.js'
+import { createTransactionManagerProxy, InjectEntityManager } from '@wisemen/nestjs-typeorm'
 import type { PgBossJob } from './jobs/pgboss.job.js'
 import { PgBossClient } from './pgboss-client.js'
 
