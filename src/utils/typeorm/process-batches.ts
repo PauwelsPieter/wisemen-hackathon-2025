@@ -1,5 +1,5 @@
 import type { FindManyOptions, ObjectLiteral, Repository, SelectQueryBuilder } from 'typeorm'
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 
 type ReturnType<T> = T[] | null
 

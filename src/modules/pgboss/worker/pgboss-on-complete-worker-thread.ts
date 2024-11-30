@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import { captureError } from 'rxjs/internal/util/errorContext'
 import { CompletedJob } from '../jobs/pgboss.job.js'
 import { JobFactory } from '../jobs/job-factory.js'

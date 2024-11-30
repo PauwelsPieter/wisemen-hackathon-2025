@@ -1,3 +1,5 @@
+import '../utils/sentry/sentry.js'
+
 import { NestFactory } from '@nestjs/core'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
