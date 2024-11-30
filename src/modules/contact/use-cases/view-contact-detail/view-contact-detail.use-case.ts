@@ -12,10 +12,8 @@ export class ViewContactDetailUseCase {
   ) {}
 
   public async execute (uuid: string): Promise<ViewContactDetailResponse> {
-    const contact = await this.contactRepository.findOneOrFail({
-      where: {
-        uuid
-      }
+    const contact = await this.contactRepository.findOneByOrFail({
+      uuid
     })
 
     return new ViewContactDetailResponse(contact)
