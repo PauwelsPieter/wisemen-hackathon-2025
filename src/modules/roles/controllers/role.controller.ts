@@ -6,7 +6,7 @@ import { CreateRoleDto } from '../dtos/create-role.dto.js'
 import { RoleCount } from '../transformers/role-count.type.js'
 import { RoleService } from '../services/role.service.js'
 import { UpdateRolesBulkDto } from '../dtos/update-roles-bulk.dto.js'
-import { Permissions } from '../../permission/permissions.decorator.js'
+import { Permissions } from '../../permission/permission.decorator.js'
 import { Permission } from '../../permission/permission.enum.js'
 
 @ApiTags('Roles')
