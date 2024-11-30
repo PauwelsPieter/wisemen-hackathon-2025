@@ -1,6 +1,6 @@
 import { Transformer } from '@appwise/transformer'
 import { ApiProperty } from '@nestjs/swagger'
-import { Permission } from '../../permissions/permission.enum.js'
+import { Permission } from '../../permission/permission.enum.js'
 import type { Role } from '../entities/role.entity.js'
 
 export class RoleTransformerType {

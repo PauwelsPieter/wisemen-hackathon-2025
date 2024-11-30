@@ -4,7 +4,7 @@ import {
   Injectable
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { IS_PUBLIC_KEY } from '../../permissions/permissions.decorator.js'
+import { IS_PUBLIC_KEY } from '../../permission/permissions.decorator.js'
 import { AuthStorage } from '../auth.storage.js'
 
 @Injectable()
