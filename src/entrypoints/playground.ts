@@ -1,3 +1,5 @@
+import '../utils/sentry/sentry.js'
+
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'

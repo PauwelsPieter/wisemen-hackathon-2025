@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import type { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 

@@ -1,6 +1,7 @@
 import { type DynamicModule, type MiddlewareConsumer, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
+import { SentryModule } from '@sentry/nestjs/setup'
 import { AuthModule } from './modules/auth/auth.module.js'
 import { UserModule } from './modules/users/user.module.js'
 import { TypesenseModule } from './modules/typesense/modules/typesense.module.js'
@@ -33,6 +34,7 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
+        SentryModule.forRoot(),
         DefaultConfigModule.forRoot(),
         DefaultTypeOrmModule.forRootAsync(),
         JwtModule.registerAsync({
