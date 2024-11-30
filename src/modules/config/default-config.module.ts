@@ -6,7 +6,7 @@ import { envValidationSchema } from '../../config/env/env.validation.js'
 export class DefaultConfigModule {
   static async forRoot (): Promise<DynamicModule> {
     return ConfigModule.forRoot({
-      envFilePath: process.env.ENV_FILE,
+      ignoreEnvFile: true,
       validationSchema: envValidationSchema,
       isGlobal: true
     })
