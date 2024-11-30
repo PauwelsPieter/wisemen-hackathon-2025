@@ -1,18 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { ApiCreatedResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
-import { Permission } from '../../../permissions/permission.enum.js'
-import { Permissions } from '../../../permissions/permissions.decorator.js'
+import { Permission } from '../../../permission/permission.enum.js'
+import { Permissions } from '../../../permission/permission.decorator.js'
 import { CreateContactCommand } from './create-contact.command.js'
 import { CreateContactResponse } from './create-contact.response.js'
 import { CreateContactUseCase } from './create-contact.use-case.js'
 
-@Controller('contacts')
-@ApiTags('Contacts')
+@ApiTags('Contact')
 @ApiOAuth2([])
+@Controller('contacts')
 export class CreateContactController {
   constructor (
     private readonly createContactUseCase: CreateContactUseCase
-  ) {}
+  ) { }
 
   @Post()
   @Permissions(Permission.CONTACT_CREATE)

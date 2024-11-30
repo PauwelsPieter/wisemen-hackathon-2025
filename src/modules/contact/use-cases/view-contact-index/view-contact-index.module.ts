@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Contact } from '../../entities/contact.entity.js'
-import { ViewContactController } from './view-contact.controller.js'
-import { ViewContactUseCase } from './view-contact.use-case.js'
+import { ViewContactIndexUseCase } from './view-contact-index.use-case.js'
+import { ViewContactIndexController } from './view-contact-index.controller.js'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Contact])
   ],
   controllers: [
-    ViewContactController
+    ViewContactIndexController
   ],
   providers: [
-    ViewContactUseCase
+    ViewContactIndexUseCase
   ]
 })
-export class ViewContactModule {}
+export class ViewContactIndexModule { }

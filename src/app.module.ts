@@ -20,7 +20,7 @@ import { ExceptionModule } from './modules/exceptions/exception.module.js'
 import { EventModule } from './modules/events/event.module.js'
 import { DefaultTypeormModule } from './modules/typeorm/default-typeorm.module.js'
 import { DefaultConfigModule } from './modules/config/default-config.module.js'
-import { ContactModule } from './modules/contacts/contact.module.js'
+import { ContactModule } from './modules/contact/contact.module.js'
 
 @Module({})
 export class AppModule {

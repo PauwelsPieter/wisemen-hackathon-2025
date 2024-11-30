@@ -11,7 +11,10 @@ export class UpdateContactUseCase {
     private contactRepository: Repository<Contact>
   ) {}
 
-  public async execute (uuid: string, command: UpdateContactCommand): Promise<void> {
+  public async execute (
+    uuid: string,
+    command: UpdateContactCommand
+  ): Promise<void> {
     await this.contactRepository.findOneByOrFail({ uuid })
 
     await this.contactRepository.update({

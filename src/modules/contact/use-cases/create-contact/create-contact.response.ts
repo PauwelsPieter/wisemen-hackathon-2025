@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Contact } from '../entities/contact.entity.js'
+import { Contact } from '../../entities/contact.entity.js'
 
-export class ContactResponse {
+export class CreateContactResponse {
   @ApiProperty({ type: String, format: 'uuid' })
   uuid: string
 
