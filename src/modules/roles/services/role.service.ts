@@ -69,6 +69,7 @@ export class RoleService {
     const permissionTransformer = new PermissionTransformer()
     const roles: UpdateRoleTransformedType[] = dto.roles.map(role => ({
       uuid: role.uuid,
+      name: role.name,
       permissions: permissionTransformer.transformObjectToPermissions(role.permissions)
     }))
 

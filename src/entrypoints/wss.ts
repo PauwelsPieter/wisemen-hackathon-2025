@@ -8,12 +8,16 @@ import { AuthenticatedWsAdapter } from '../modules/websocket/ws-adapter.js'
 
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    const httpServer = adapter.getHttpServer()
+
     const app = await NestFactory.create(
       AppModule.forRoot([
         WSModule.register()
       ]),
       adapter
     )
+
+    adapter.setHttpServer(httpServer)
 
     app.useWebSocketAdapter(new AuthenticatedWsAdapter(app))
 
