@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { Contact } from '../../entities/contact.entity.js'
 import { ViewContactDetailResponse } from './view-contact-detail.response.js'

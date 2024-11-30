@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { Contact } from '../../entities/contact.entity.js'
 import { CreateContactUseCase } from './create-contact.use-case.js'
 import { CreateContactController } from './create-contact.controller.js'
