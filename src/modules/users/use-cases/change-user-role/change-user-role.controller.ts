@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common'
 import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../permission/permission.enum.js'
-import { Permissions } from '../../../permission/permissions.decorator.js'
+import { Permissions } from '../../../permission/permission.decorator.js'
 import { ChangeUserRoleUseCase } from './change-user-role.use-case.js'
 import { ChangeUserRoleCommand } from './change-user-role.command.js'
 
