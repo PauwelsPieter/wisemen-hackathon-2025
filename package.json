@@ -19,7 +19,7 @@
     "test": "ENV_FILE=.env.test node --test --test-reporter=spec",
     "test:run": "pnpm build && pnpm test",
     "test:pipeline": "pnpm test:setup && pnpm test",
-    "test:setup": "ENV_FILE=.env.test pnpm build && dist/src/utils/test-setup/global-setup.js",
+    "test:setup": "ENV_FILE=.env.test pnpm build && node dist/src/utils/test-setup/global-setup.js",
     "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/config/sql/sources/main.js"
   },
   "dependencies": {
