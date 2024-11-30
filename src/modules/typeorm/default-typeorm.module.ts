@@ -15,7 +15,6 @@ export class DefaultTypeormModule {
         extra: { max: 50 },
         logging: false,
         synchronize: false,
-        // migrations: mainMigrations,
         migrations: ['dist/src/config/sql/migrations/**/*.js'],
         migrationsRun: true,
         autoLoadEntities: true
