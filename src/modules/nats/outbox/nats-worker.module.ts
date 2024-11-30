@@ -1,7 +1,7 @@
 import { type DynamicModule, Module } from '@nestjs/common'
 import { NatsClient } from '../nats.client.js'
 import { PgBossModule } from '../../pgboss/pgboss.module.js'
-import { DefaultTypeormModule } from '../../typeorm/default-typeorm.module.js'
+import { DefaultTypeOrmModule } from '../../typeorm/default-typeorm.module.js'
 import { DefaultConfigModule } from '../../config/default-config.module.js'
 import { PublishNatsEventJob } from './publish-nats-event.job.js'
 
@@ -14,7 +14,7 @@ export class NatsWorkerModule {
       module: NatsWorkerModule,
       imports: [
         PgBossModule.forFeature([PublishNatsEventJob]),
-        DefaultTypeormModule.forRoot(),
+        DefaultTypeOrmModule.forRootAsync(),
         DefaultConfigModule.forRoot(),
         ...modules
       ],

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
+import { transaction } from '@wisemen/nestjs-typeorm'
 import type { CreateFileLinkDto } from '../dtos/create-file-entity.dto.js'
 import type { FileLink } from '../entities/file-link.entity.js'
 import { FileLinkRepository } from '../repositories/file-link.repository.js'
-import { transaction } from '../../typeorm/transaction.js'
 
 @Injectable()
 export class FileLinkService {

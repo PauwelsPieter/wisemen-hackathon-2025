@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { TypesenseModule } from '../typesense/modules/typesense.module.js'
 import { RoleRepository } from '../roles/repositories/role.repository.js'
 import { CacheModule } from '../cache/cache.module.js'

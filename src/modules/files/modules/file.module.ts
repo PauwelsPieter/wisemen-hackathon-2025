@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { UserModule } from '../../users/user.module.js'
 import { S3Service } from '../services/s3.service.js'
 import { FileRepository } from '../repositories/file.repository.js'
