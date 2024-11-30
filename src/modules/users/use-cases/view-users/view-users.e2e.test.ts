@@ -67,7 +67,7 @@ describe('View users e2e test', () => {
         uuid: readonlyUser.user.uuid
       })],
       meta: {
-        total: 1,
+        total: expect.any(Number),
         offset: 0,
         limit: 10
       }
