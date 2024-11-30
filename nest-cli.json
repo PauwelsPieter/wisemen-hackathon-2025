@@ -35,10 +35,10 @@
       "entryFile": "entrypoints/worker",
       "sourceRoot": "src"
     },
-    "websocket-server": {
+    "wss": {
       "type": "application",
       "root": "src",
-      "entryFile": "entrypoints/websocket-server",
+      "entryFile": "entrypoints/wss",
       "sourceRoot": "src"
     },
     "playground": {

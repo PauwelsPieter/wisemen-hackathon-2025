@@ -1,13 +1,14 @@
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { Controller, Get, UseGuards } from '@nestjs/common'
-import { Permission } from '../../../permissions/permission.enum.js'
-import { Permissions } from '../../../permissions/permissions.decorator.js'
+import { UuidParam } from '@wisemen/decorators'
+import { Permission } from '../../../permission/permission.enum.js'
+import { Permissions } from '../../../permission/permission.decorator.js'
 import { UserIsSelfOrAdminGuard } from '../../guards/user-is-self-or-admin.guard.js'
-import { UuidParam } from '../../../../utils/nest/decorators/uuid-param.js'
 import { ViewUserUseCase } from './view-user.use-case.js'
 import { ViewUserResponse } from './view-user.response.js'
 
 @ApiTags('User')
+@ApiOAuth2([])
 @Controller('users/:user')
 export class ViewUserController {
   constructor (

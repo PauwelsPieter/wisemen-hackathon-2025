@@ -1,11 +1,13 @@
+import '../utils/sentry/sentry.js'
+
 import { NestFactory } from '@nestjs/core'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { INestApplicationContext } from '@nestjs/common'
 import { WorkerContainer } from '@wisemen/app-container'
-import { AppModule } from '../app.module.js'
-import { QueueName } from '../modules/pgboss/types/queue-name.enum.js'
-import { PgBossWorkerModule } from '../modules/pgboss-worker/pgboss-worker.module.js'
+import { QueueName } from '../modules/pgboss/queue-name.enum.js'
+import { PgBossWorkerModule } from '../modules/pgboss/pgboss-worker.module.js'
+import { WorkerFactory } from './worker.factory.js'
 
 const args = await yargs(hideBin(process.argv))
   .option('queue', {
@@ -15,22 +17,47 @@ const args = await yargs(hideBin(process.argv))
     choices: Object.values(QueueName),
     demandOption: true
   })
+  .option('concurrency', {
+    alias: 'c',
+    type: 'number',
+    description: 'The number of jobs to process concurrently',
+    default: 1
+  })
+  .option('interval', {
+    alias: 'i',
+    type: 'number',
+    description: 'The interval in milliseconds to poll for new jobs',
+    default: 2000
+  })
+  .options('on-complete', {
+    alias: 'o',
+    type: 'boolean',
+    description: 'Whether this worker is an onComplete worker'
+  })
   .help()
   .argv
 
-const queueName = args.queue
+const unvalidatedQueueName = args.queue
 
-if (!Object.values(QueueName).includes(queueName as QueueName)) {
-  throw new Error(`Queue ${queueName} not found`)
+if (!Object.values(QueueName).includes(unvalidatedQueueName as QueueName)) {
+  throw new Error(`Queue ${unvalidatedQueueName} not found`)
 }
-const queue = queueName as QueueName
+const queueName = unvalidatedQueueName as QueueName
 
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {
     return await NestFactory.createApplicationContext(
-      AppModule.forRoot([
-        PgBossWorkerModule.register(queue)
-      ])
+      WorkerFactory.create(
+        queueName,
+        PgBossWorkerModule.forRoot({
+          queueName,
+          concurrency: args.concurrency,
+          batchSize: args.concurrency * 4,
+          fetchRefreshThreshold: args.concurrency * 4,
+          pollInterval: args.interval,
+          isOnCompleteWorker: args.onComplete
+        })
+      )
     )
   }
 }

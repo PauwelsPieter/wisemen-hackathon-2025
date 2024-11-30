@@ -2,18 +2,20 @@ import { join } from 'path'
 import { Global, Module, type OnModuleInit } from '@nestjs/common'
 import { AcceptLanguageResolver, I18nModule, I18nService } from 'nestjs-i18n'
 import { ModuleRef } from '@nestjs/core'
+import { ConfigService } from '@nestjs/config'
 import { DEFAULT_LANGUAGE } from '../constants/defaults.constant.js'
-import { isLocalEnv } from '../../../utils/envs/env-checks.js'
+import { EnvType } from '../../../utils/envs/env.enum.js'
 
 @Global()
 @Module({
   imports: [
     I18nModule.forRootAsync({
-      useFactory: () => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         fallbackLanguage: DEFAULT_LANGUAGE,
         loaderOptions: {
           path: join(process.cwd(), '/dist/src/modules/localization/resources/'),
-          watch: isLocalEnv()
+          watch: configService.getOrThrow('NODE_ENV') === EnvType.LOCAL
         },
         typesOutputPath: join(process.cwd(), '/src/modules/localization/generated/i18n.generated.ts')
       }),

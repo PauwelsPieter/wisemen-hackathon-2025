@@ -1,3 +1,5 @@
+import '../utils/sentry/sentry.js'
+
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
@@ -8,12 +10,16 @@ import { AuthenticatedWsAdapter } from '../modules/websocket/ws-adapter.js'
 
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    const httpServer = adapter.getHttpServer()
+
     const app = await NestFactory.create(
       AppModule.forRoot([
         WSModule.register()
       ]),
       adapter
     )
+
+    adapter.setHttpServer(httpServer)
 
     app.useWebSocketAdapter(new AuthenticatedWsAdapter(app))
 

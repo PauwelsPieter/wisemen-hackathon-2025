@@ -5,7 +5,7 @@ ARG NODE_VERSION=lts
 # --- Stage 1: Build ---
 #
 
-FROM node:${NODE_VERSION} as build
+FROM node:${NODE_VERSION} AS build
 RUN corepack enable
 
 # Install dependencies
@@ -24,7 +24,7 @@ RUN pnpm prune --prod
 # --- Stage 2: Run ---
 #
 
-FROM node:${NODE_VERSION}-alpine as final
+FROM node:${NODE_VERSION}-alpine AS final
 
 WORKDIR /usr/src/app
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import type { User } from '../../users/entities/user.entity.js'
 import { ScalewayMailClient } from '../clients/scaleway-mail.client.js'
 import { MjmlRenderer } from '../renderer/mjml.renderer.js'
@@ -10,7 +11,8 @@ import { translate } from '../../localization/helpers/translate.helper.js'
 export class MailService {
   constructor (
     private readonly mailClient: ScalewayMailClient,
-    private readonly mjmlRenderer: MjmlRenderer
+    private readonly mjmlRenderer: MjmlRenderer,
+    private readonly configService: ConfigService
   ) {}
 
   async sendForgotPasswordMail (
@@ -19,7 +21,7 @@ export class MailService {
     secret: string
   ): Promise<void> {
     const queryParams = new URLSearchParams({ token, secret })
-    const deeplink = `${process.env.FRONTEND_URL}/reset-password?${queryParams.toString()}`
+    const deeplink = `${this.configService.getOrThrow('FRONTEND_URL')}/reset-password?${queryParams.toString()}`
 
     const duration = translate('common.duration.hours', { args: { count: PASSWORD_TOKEN_HOURS_VALID } })
     const content: ForgotPasswordMailContent = {

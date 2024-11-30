@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import { Injectable } from '@nestjs/common'
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import type { MultiSearchResult, TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'

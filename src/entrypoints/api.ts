@@ -1,3 +1,5 @@
+import '../utils/sentry/sentry.js'
+
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'

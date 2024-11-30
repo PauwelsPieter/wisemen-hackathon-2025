@@ -5,9 +5,9 @@ import type { Role } from '../entities/role.entity.js'
 import type { CreateRoleDto } from '../dtos/create-role.dto.js'
 import { UserRepository } from '../../users/repositories/user.repository.js'
 import type { UpdateRolesBulkDto } from '../dtos/update-roles-bulk.dto.js'
-import { transaction } from '../../typeorm/utils/transaction.js'
+import { transaction } from '../../typeorm/transaction.js'
 import { CacheService } from '../../cache/cache.service.js'
-import { PermissionTransformer } from '../../permissions/transformers/permission.transformer.js'
+import { PermissionTransformer } from '../../permission/transformers/permission.transformer.js'
 import { TypesenseCollectionName } from '../../typesense/enums/typesense-collection-index.enum.js'
 import type { UpdateRoleTransformedType } from '../types/update-role-transformed.type.js'
 import { TypesenseCollectionService } from '../../typesense/services/typesense-collection.service.js'
@@ -69,6 +69,7 @@ export class RoleService {
     const permissionTransformer = new PermissionTransformer()
     const roles: UpdateRoleTransformedType[] = dto.roles.map(role => ({
       uuid: role.uuid,
+      name: role.name,
       permissions: permissionTransformer.transformObjectToPermissions(role.permissions)
     }))
 
