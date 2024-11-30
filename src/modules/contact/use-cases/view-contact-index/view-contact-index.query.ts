@@ -13,7 +13,7 @@ export class ViewContactIndexFilterQuery extends FilterQuery {
 
 export class ViewContactIndexQuery extends PaginatedOffsetSearchQuery {
   @Equals(undefined)
-  sort: never
+  sort?: never
 
   @ApiProperty({ type: ViewContactIndexFilterQuery, required: false })
   @IsOptional()
@@ -21,7 +21,6 @@ export class ViewContactIndexQuery extends PaginatedOffsetSearchQuery {
   @ValidateNested()
   filter?: ViewContactIndexFilterQuery
 
-  @ApiProperty({ type: String, required: false })
-  @IsOptional()
-  search?: string
+  @Equals(undefined)
+  search?: never
 }
