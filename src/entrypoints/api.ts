@@ -1,63 +1,35 @@
-import fs from 'node:fs'
-import { HttpAdapterHost, NestFactory } from '@nestjs/core'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import { ValidationPipe, VersioningType } from '@nestjs/common'
+import '../utils/sentry/sentry.js'
+
+import { NestFactory } from '@nestjs/core'
+import { INestApplicationContext, VersioningType } from '@nestjs/common'
+import { ExpressAdapter } from '@nestjs/platform-express'
+import { ApiContainer } from '@wisemen/app-container'
 import { AppModule } from '../app.module.js'
-import { initSentry } from '../utils/sentry/sentry.js'
-import { HttpExceptionFilter } from '../utils/exceptions/http-exception.filter.js'
-import { WSModule } from '../modules/websocket/ws.module.js'
-import { buildDocumentationConfig } from '../utils/documentation/documentation.js'
+import { addApiDocumentation, addWebSocketDocumentation } from '../utils/swagger/swagger.js'
 
-async function bootstrap (): Promise<void> {
-  const app = await NestFactory.create(
-    AppModule.forRoot()
-  )
+class Api extends ApiContainer {
+  async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    const app = await NestFactory.create(
+      AppModule.forRoot(),
+      adapter
+    )
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true
+    app.setGlobalPrefix('api', {
+      exclude: []
     })
-  )
-  app.setGlobalPrefix('api', {
-    exclude: []
-  })
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1'
-  })
-  app.enableCors({
-    exposedHeaders: ['Content-Disposition']
-  })
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1'
+    })
+    app.enableCors({
+      exposedHeaders: ['Content-Disposition']
+    })
 
-  const config = buildDocumentationConfig()
-  const document = SwaggerModule.createDocument(app, config)
+    addApiDocumentation(app, 'api/docs')
+    addWebSocketDocumentation(app, 'api/docs/websockets')
 
-  SwaggerModule.setup('api/docs', app, document)
-
-  const configWs = new DocumentBuilder()
-    .setTitle('WS Documentation')
-    .setDescription(fs.readFileSync('./dist/src/modules/websocket/documentation.md').toString())
-    .setVersion('1.0')
-    .build()
-  const wsDocument = SwaggerModule.createDocument(app, configWs, {
-    include: [
-      WSModule
-    ]
-  })
-
-  SwaggerModule.setup('api/docs/websockets', app, wsDocument)
-
-  const httpAdapterHost = app.get(HttpAdapterHost)
-
-  app.useGlobalFilters(new HttpExceptionFilter(httpAdapterHost))
-
-  initSentry()
-
-  app.enableShutdownHooks()
-
-  await app.listen(3000)
+    return app
+  }
 }
 
-await bootstrap()
+const _api = new Api()

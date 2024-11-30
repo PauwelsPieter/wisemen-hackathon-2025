@@ -1,21 +1,26 @@
 import { Controller, Get } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { ConfigService } from '@nestjs/config'
 import { ApiStatusType } from '../types/api-status.type.js'
-import { Public } from '../../permissions/permissions.decorator.js'
+import { Public } from '../../permission/permission.decorator.js'
 
 @ApiTags('Default')
 @Controller({
   version: ''
 })
 export class StatusController {
+  constructor (
+    private readonly configService: ConfigService
+  ) {}
+
   @Get()
   @Public()
   getApiStatus (): ApiStatusType {
     return {
-      environment: process.env.NODE_ENV,
-      commit: process.env.BUILD_COMMIT,
-      version: process.env.BUILD_NUMBER,
-      timestamp: process.env.BUILD_TIMESTAMP
+      environment: this.configService.getOrThrow('NODE_ENV'),
+      commit: this.configService.getOrThrow('BUILD_COMMIT'),
+      version: this.configService.getOrThrow('BUILD_NUMBER'),
+      timestamp: this.configService.getOrThrow('BUILD_TIMESTAMP')
     }
   }
 

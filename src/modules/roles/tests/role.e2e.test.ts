@@ -6,12 +6,10 @@ import { type DataSource, In } from 'typeorm'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import type { Role } from '../entities/role.entity.js'
 import { UserRepository } from '../../users/repositories/user.repository.js'
-import { Permission } from '../../permissions/permission.enum.js'
+import { Permission } from '../../permission/permission.enum.js'
 import { UserSeeder } from '../../users/tests/user.seeder.js'
 import { UserEntityBuilder } from '../../users/tests/user-entity.builder.js'
-import { TokenSeeder } from '../../auth/tests/seeders/token.seeder.js'
 import { setupTest } from '../../../../test/setup/test-setup.js'
-import { ClientSeeder } from '../../auth/tests/seeders/client.seeder.js'
 import { TestContext } from '../../../../test/utils/test-context.js'
 import type { TestUser } from '../../users/tests/setup-user.type.js'
 import { RoleSeeder } from './seeders/role.seeder.js'
@@ -31,9 +29,7 @@ describe('Roles', () => {
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, dataSource } = await setupTest())
-
-    context = new TestContext(dataSource.manager)
+    ({ app, dataSource, context } = await setupTest())
 
     adminRole = await context.getAdminRole()
     readonlyRole = await context.getReadonlyRole()
@@ -82,8 +78,8 @@ describe('Roles', () => {
           .withRole(role)
           .build()
       )
-      const client = await new ClientSeeder(dataSource.manager).getTestClient()
-      const token = await new TokenSeeder(dataSource.manager).seedOne(user, client)
+
+      const token = context.getToken(user)
 
       const response = await request(app.getHttpServer())
         .get('/roles')
@@ -147,7 +143,7 @@ describe('Roles', () => {
         .send(roleDto)
 
       expect(response).toHaveStatus(409)
-      expect(response).toHaveErrorCode('already_exists')
+      expect(response).toHaveErrorCode('role_name_already_in_use')
     })
 
     it('should not create role with invalid name', async () => {
@@ -243,8 +239,8 @@ describe('Roles', () => {
         .delete(`/roles/${adminRole.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
-      expect(response.body.errors[0].code).toBe('not_editable')
-      expect(response.body.errors[0].detail).toBe('Cannot delete this role')
+      expect(response.body.errors[0].code).toBe('role_not_editable')
+      expect(response.body.errors[0].detail).toBe('This role is not editable')
 
       expect(response).toHaveStatus(400)
     })

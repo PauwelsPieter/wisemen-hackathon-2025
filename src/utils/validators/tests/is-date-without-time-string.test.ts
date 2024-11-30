@@ -1,9 +1,7 @@
-import { after, before, describe, it } from 'node:test'
+import { describe, it } from 'node:test'
 import dayjs from 'dayjs'
 import { validate } from 'class-validator'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { setupTest } from '../../../../test/setup/test-setup.js'
 import { IsDateWithoutTimeString } from '../is-date-without-time-string.validator.js'
 
 class TestClass {
@@ -12,16 +10,6 @@ class TestClass {
 }
 
 describe('IsDateWithoutTimeString decorator', () => {
-  let app: NestExpressApplication
-
-  before(async () => {
-    ({ app } = await setupTest())
-  })
-
-  after(async () => {
-    await app.close()
-  })
-
   describe('IsDateWithoutTimeString decorator Test', () => {
     it('should pass validation when the date has no time', async () => {
       const testInstance = new TestClass()

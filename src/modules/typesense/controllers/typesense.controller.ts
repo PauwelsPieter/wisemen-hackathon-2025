@@ -1,10 +1,10 @@
 import { Controller, Get, Query } from '@nestjs/common'
 import type { CollectionSchema } from 'typesense/lib/Typesense/Collection.js'
 import { ApiOAuth2, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { MigrateTypesenseQueryDto } from '../dtos/migrate-typesense-query.dto.js'
-import { ImportTypesenseQueryDto } from '../dtos/import-typesense-query.dto.js'
-import { Permissions } from '../../permissions/permissions.decorator.js'
-import { Permission } from '../../permissions/permission.enum.js'
+import { MigrateTypesenseQuery } from '../dtos/migrate-typesense.query.js'
+import { ImportTypesenseQuery } from '../dtos/import-typesense.query.js'
+import { Permissions } from '../../permission/permission.decorator.js'
+import { Permission } from '../../permission/permission.enum.js'
 import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseInitializationService } from '../services/typesense-initialization.service.js'
 
@@ -13,6 +13,7 @@ import { TypesenseInitializationService } from '../services/typesense-initializa
 @ApiOAuth2([])
 export class TypesenseController {
   constructor (private readonly typesenseImportService: TypesenseInitializationService) {}
+
   @Get('migrate')
   @ApiQuery({ required: false, name: 'fresh', type: 'boolean' })
   @ApiQuery({ required: false, name: 'collections', enum: TypesenseCollectionName, isArray: true })
@@ -22,7 +23,7 @@ export class TypesenseController {
   })
   @Permissions(Permission.ADMIN)
   async migrate (
-    @Query() query: MigrateTypesenseQueryDto
+    @Query() query: MigrateTypesenseQuery
   ): Promise<void> {
     await this.typesenseImportService.migrate(query.fresh, query.collections)
   }
@@ -35,7 +36,7 @@ export class TypesenseController {
   })
   @Permissions(Permission.ADMIN)
   async import (
-    @Query() query: ImportTypesenseQueryDto
+    @Query() query: ImportTypesenseQuery
   ): Promise<void> {
     await this.typesenseImportService.import(query.collections)
   }

@@ -1,9 +1,7 @@
-import { after, before, describe, it } from 'node:test'
+import { describe, it } from 'node:test'
 import dayjs from 'dayjs'
 import { validate } from 'class-validator'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { setupTest } from '../../../../test/setup/test-setup.js'
 import { IsAfterTodayString } from '../is-after-today.js'
 
 class TestClass {
@@ -12,16 +10,6 @@ class TestClass {
 }
 
 describe('IsAfterTodayString decorator', () => {
-  let app: NestExpressApplication
-
-  before(async () => {
-    ({ app } = await setupTest())
-  })
-
-  after(async () => {
-    await app.close()
-  })
-
   describe('IsAfterTodayString decorator Test', () => {
     it('should pass validation when the date is after today', async () => {
       const testInstance = new TestClass()
