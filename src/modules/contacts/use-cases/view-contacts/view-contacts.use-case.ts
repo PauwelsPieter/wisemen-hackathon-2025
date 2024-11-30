@@ -20,7 +20,8 @@ export class ViewContactsUseCase {
 
     const [contacts, count] = await this.contactRepository.findAndCount({
       take: pagination.take,
-      skip: pagination.skip
+      skip: pagination.skip,
+      order: { uuid: 'ASC' }
     })
 
     return new ViewContactsResponse(
