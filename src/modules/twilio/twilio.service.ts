@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { captureException } from '@sentry/nestjs'
 import twilio, { Twilio } from 'twilio'
 
 @Injectable()
@@ -18,25 +19,33 @@ export class TwilioService {
   public async createMessage (
     to: string,
     body: string
-  ): Promise<void> {
+  ): Promise<string> {
     const from = this.configService.getOrThrow<string>('TWILIO_PHONE_NUMBER')
 
-    const message = await this.client.messages.create({ from, to, body })
+    const message = await this.client.messages.create({ from, to, body }, (error: Error | null) => {
+      if (error !== null) captureException(error)
 
-    console.log(message.sid)
+      return 0
+    })
+
+    return message.sid
   }
 
   public async createCall (
     to: string,
     body: string
-  ): Promise<void> {
+  ): Promise<string> {
     const from = this.configService.getOrThrow<string>('TWILIO_PHONE_NUMBER')
     const call = await this.client.calls.create({
       from,
       to,
       twiml: `<Response><Say>${body}</Say></Response>`
+    }, (error: Error | null) => {
+      if (error !== null) captureException(error)
+
+      return 0
     })
 
-    console.log(call.sid)
+    return call.sid
   }
 }
