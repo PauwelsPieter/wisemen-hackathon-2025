@@ -4,10 +4,10 @@ import { DataSource } from 'typeorm'
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'
+import { transaction } from '@wisemen/nestjs-typeorm'
 import { PgBossScheduler } from '../../modules/pgboss/pgboss-scheduler.js'
 import { ImportTypesenseJob } from '../../modules/typesense/jobs/import-typesense.job.js'
 import { AppModule } from '../../app.module.js'
-import { transaction } from '../../modules/typeorm/transaction.js'
 
 export class ImportTypesenseCronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {

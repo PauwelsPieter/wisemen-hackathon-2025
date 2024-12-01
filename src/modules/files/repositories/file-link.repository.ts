@@ -1,9 +1,8 @@
 import { EntityManager } from 'typeorm'
 import { Injectable } from '@nestjs/common'
-import { InjectEntityManager } from '@nestjs/typeorm'
+import { InjectEntityManager } from '@wisemen/nestjs-typeorm'
+import { TypeOrmRepository } from '@wisemen/nestjs-typeorm'
 import { FileLink } from '../entities/file-link.entity.js'
-
-import { TypeOrmRepository } from '../../typeorm/typeorm.repository.js'
 
 @Injectable()
 export class FileLinkRepository extends TypeOrmRepository<FileLink> {
