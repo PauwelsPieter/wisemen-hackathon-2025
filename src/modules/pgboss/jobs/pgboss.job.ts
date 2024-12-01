@@ -35,7 +35,6 @@ export abstract class PgBossJob<T = void> {
   protected startedAt?: number
 
   protected abstract readonly queueName: QueueName
-  protected readonly onCompleteJob: boolean = false
   protected readonly priority: number = 0
   protected readonly retryLimit: number = 3
   protected readonly retryBackoff: boolean = false
@@ -74,10 +73,6 @@ export abstract class PgBossJob<T = void> {
 
   abstract run (moduleRef: ModuleRef | TestingModule): Promise<T> | T
 
-  onComplete (_completedJob: CompletedJob): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   getName (): string {
     return this.constructor.name
   }
@@ -86,7 +81,6 @@ export abstract class PgBossJob<T = void> {
     const {
       queueName,
       priority,
-      onCompleteJob,
       retryLimit,
       retryBackoff,
       retryDelayInSeconds,
@@ -107,8 +101,7 @@ export abstract class PgBossJob<T = void> {
       retryBackoff,
       retryDelay: retryDelayInSeconds,
       startAfter: dayjs().add(startAfterInSeconds, 'seconds').toDate(),
-      expireInSeconds,
-      onComplete: onCompleteJob
+      expireInSeconds
     }
   }
 

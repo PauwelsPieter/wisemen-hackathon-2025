@@ -29,11 +29,6 @@ const args = await yargs(hideBin(process.argv))
     description: 'The interval in milliseconds to poll for new jobs',
     default: 2000
   })
-  .options('on-complete', {
-    alias: 'o',
-    type: 'boolean',
-    description: 'Whether this worker is an onComplete worker'
-  })
   .help()
   .argv
 
@@ -54,8 +49,7 @@ class Worker extends WorkerContainer {
           concurrency: args.concurrency,
           batchSize: args.concurrency * 4,
           fetchRefreshThreshold: args.concurrency * 4,
-          pollInterval: args.interval,
-          isOnCompleteWorker: args.onComplete
+          pollInterval: args.interval
         })
       )
     )
