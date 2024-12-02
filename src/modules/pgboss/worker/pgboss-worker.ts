@@ -4,13 +4,8 @@ import { ModuleRef } from '@nestjs/core'
 import { QueueName } from '../queue-name.enum.js'
 import { PgBossClient } from '../pgboss-client.js'
 import { JobSerialization } from '../jobs/job-serialization.type.js'
-
 import { PgBossWorkerConfig } from './pgboss-worker.config.js'
 import { RawPgBossJob } from './raw-pgboss-job.js'
-import {
-  PgBossCompletedJobGenerator,
-  PgBossOnCompleteWorkerThread
-} from './pgboss-on-complete-worker-thread.js'
 import { PgBossWorkerThread } from './pgboss-worker-thread.js'
 
 @Injectable()
@@ -24,7 +19,6 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
   private readonly pollInterval: number
   private readonly batchSize: number
   private readonly fetchRefreshThreshold: number
-  private readonly isOnCompleteWorker: boolean
 
   constructor (
     @Inject('PG_BOSS_WORKER_CONFIG') config: PgBossWorkerConfig,
@@ -36,7 +30,6 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
     this.pollInterval = config?.pollInterval ?? 2000
     this.batchSize = config?.batchSize ?? this.concurrency
     this.fetchRefreshThreshold = config?.fetchRefreshThreshold ?? 0
-    this.isOnCompleteWorker = config?.isOnCompleteWorker ?? false
   }
 
   onModuleInit (): void {
@@ -48,24 +41,11 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
 
     const jobGenerator = this.createJobGenerator()
 
-    if (this.isOnCompleteWorker) {
-      this.startOnCompleteWorkerThreads(jobGenerator)
-    } else {
-      this.startWorkerThreads(jobGenerator)
-    }
+    this.startWorkerThreads(jobGenerator)
   }
 
   async onModuleDestroy (): Promise<void> {
     await this.stop()
-  }
-
-  private startOnCompleteWorkerThreads (jobGenerator: AsyncGenerator<RawPgBossJob, void, unknown>) {
-    for (let i = 0; i < this.concurrency; i++) {
-      const completedJobGenerator = jobGenerator as PgBossCompletedJobGenerator
-      const thread = new PgBossOnCompleteWorkerThread(completedJobGenerator, this.client)
-
-      this.threads.push(thread.run())
-    }
   }
 
   private startWorkerThreads (jobGenerator: AsyncGenerator<RawPgBossJob, void, unknown>) {
@@ -105,9 +85,8 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
 
     this.jobFetchingPromise = new Promise((resolve, reject) => {
       void this.client.fetch<JobSerialization>(
-        this.getQueueName(),
-        this.batchSize,
-        { enforceSingletonQueueActiveLimit: true }
+        this.queueName,
+        { batchSize: this.batchSize }
       )
         .then(async (jobs) => {
           if (jobs == null) {
@@ -126,14 +105,6 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
     await this.jobFetchingPromise
 
     this.jobFetchingPromise = null
-  }
-
-  private getQueueName (): string {
-    if (this.isOnCompleteWorker) {
-      return '__state__completed__' + this.queueName
-    } else {
-      return this.queueName
-    }
   }
 
   public async stop (): Promise<void> {

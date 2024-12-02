@@ -8,7 +8,6 @@ import { NatsOutboxEvent } from './nats-outbox-event.js'
 
 export class PublishNatsEventJob extends PgBossJob {
   protected queueName = QueueName.NATS
-  protected readonly onCompleteJob: boolean = false
   protected readonly priority = 0
   protected readonly retryLimit = 3
   protected readonly retryBackoff = false
