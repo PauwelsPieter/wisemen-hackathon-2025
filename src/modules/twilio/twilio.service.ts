@@ -5,11 +5,13 @@ import twilio, { Twilio } from 'twilio'
 
 @Injectable()
 export class TwilioService {
-  private readonly client: Twilio
+  private client: Twilio
 
   constructor (
     private readonly configService: ConfigService
-  ) {
+  ) { }
+
+  public onModuleInit (): void {
     this.client = twilio(
       this.configService.getOrThrow<string>('TWILIO_ACCOUNT_SID'),
       this.configService.getOrThrow<string>('TWILIO_AUTH_TOKEN')
