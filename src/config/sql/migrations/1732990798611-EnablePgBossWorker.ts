@@ -16,7 +16,7 @@ export class EnablePgBossWorker1732990798611 implements MigrationInterface {
       END $$;
     `)
 
-    const migrations = PgBoss.getMigrationPlans()
+    const migrations = PgBoss.getConstructionPlans()
 
     await queryRunner.query(migrations)
 
