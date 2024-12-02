@@ -1,3 +1,4 @@
+import PgBoss from 'pg-boss'
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
 export class EnablePgBossWorker1732990798611 implements MigrationInterface {
@@ -14,6 +15,10 @@ export class EnablePgBossWorker1732990798611 implements MigrationInterface {
         END IF;
       END $$;
     `)
+
+    const migrations = PgBoss.getMigrationPlans()
+
+    await queryRunner.query(migrations)
 
     await queryRunner.query(`SELECT pgboss.create_queue('system', '{"policy":"stately"}')`)
     await queryRunner.query(`SELECT pgboss.create_queue('nats', '{"policy":"stately"}')`)
