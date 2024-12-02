@@ -2,7 +2,6 @@ import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { sslHelper } from '../../config/sql/utils/typeorm.js'
-import { mainMigrations } from '../../config/sql/migrations/index.js'
 
 @Module({})
 export class DefaultTypeOrmModule {
@@ -15,7 +14,7 @@ export class DefaultTypeOrmModule {
         extra: { max: 50 },
         logging: false,
         synchronize: false,
-        migrations: mainMigrations,
+        migrations: ['dist/src/config/sql/migrations/**/*.js'],
         migrationsRun: true,
         autoLoadEntities: true
       }),
