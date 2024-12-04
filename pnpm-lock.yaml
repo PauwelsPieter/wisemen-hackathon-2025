@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@appwise/time':
-        specifier: ^0.0.14
-        version: 0.0.14
+        specifier: ^0.0.16
+        version: 0.0.16
       '@appwise/transformer':
         specifier: ^0.0.2
         version: 0.0.2
@@ -229,8 +229,8 @@ packages:
   '@appwise/express-dto-router@1.1.5':
     resolution: {integrity: sha512-EUOUH2B6L4kZnLxONxomVGoyhsFdFHcFb1G/QpNuRmL6CdrrOkQpSE7AHkxlQjuB3uWSSPSbFP22GkOMPHHqRA==}
 
-  '@appwise/time@0.0.14':
-    resolution: {integrity: sha512-zM0tCU3s7xqby3dtnEwEZi0XfNJ6e0Exh9z385Xju+ydKawolmmTefCyP+a2jMGaW3uD/wqp6XrUtCHp37hvQg==}
+  '@appwise/time@0.0.16':
+    resolution: {integrity: sha512-V7fNtD4Mbr0brNtGAO65oNwSJ3W0Gb4kPsnJ4T55vdq03iTlvVzaIpD/QHR7m930feehC2K5FfZiQGLwckYZJA==}
 
   '@appwise/transformer@0.0.2':
     resolution: {integrity: sha512-glxSh5OdwVauKm3mTp8prZZtSh8F7/j9GHdVRmxMvJafJJw1sDvdXRziSeiAQl5CB9xzcaVlP9Uu5c+uquxoZA==}
@@ -3917,7 +3917,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@appwise/time@0.0.14':
+  '@appwise/time@0.0.16':
     dependencies:
       '@appwise/express-dto-router': 1.1.5
       class-validator: 0.14.1
