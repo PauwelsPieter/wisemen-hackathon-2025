@@ -3,8 +3,8 @@ import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../permission/permission.enum.js'
 import { Permissions } from '../../../permission/permission.decorator.js'
-import { ChangeUserRoleUseCase } from './change-user-role.use-case.js'
-import { ChangeUserRoleCommand } from './change-user-role.command.js'
+import { ChangeUserRoleUseCase } from './change-user-roles.use-case.js'
+import { ChangeUserRoleCommand } from './change-user-roles.command.js'
 
 @ApiTags('User')
 @ApiOAuth2([])
@@ -21,6 +21,6 @@ export class ChangeUserRoleController {
     @UuidParam('user') userUuid: string,
     @Body() dto: ChangeUserRoleCommand
   ): Promise<void> {
-    await this.useCase.changeRole(userUuid, dto)
+    await this.useCase.changeRoles(userUuid, dto)
   }
 }

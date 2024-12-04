@@ -21,7 +21,7 @@ export class UserTypesenseCollector implements TypesenseCollector {
   async fetch (uuids?: string[]): Promise<User[]> {
     return await this.userRepository.find({
       where: { uuid: InOrIgnore(uuids) },
-      relations: { role: true }
+      relations: { userRoles: { role: true } }
     })
   }
 }

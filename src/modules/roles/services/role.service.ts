@@ -14,6 +14,7 @@ import { TypesenseCollectionService } from '../../typesense/services/typesense-c
 import { RoleNameAlreadyInUseError } from '../types/role-name-already-in-use.error.js'
 import { RoleNotEditableError } from '../types/role-not-editable.error.js'
 import { NotFoundError } from '../../exceptions/generic/not-found.error.js'
+import { UserRoleRepository } from '../repositories/user-role.repository.js'
 
 @Injectable()
 export class RoleService {
@@ -21,6 +22,7 @@ export class RoleService {
     private readonly dataSource: DataSource,
     private readonly roleRepository: RoleRepository,
     private readonly userRepository: UserRepository,
+    private readonly userRoleRepository: UserRoleRepository,
     private readonly typesenseCollectionService: TypesenseCollectionService,
     private readonly cache: CacheService
   ) {}
@@ -91,23 +93,9 @@ export class RoleService {
       throw new RoleNotEditableError()
     }
 
-    const readOnlyRole = await this.roleRepository.findOneOrFail({
-      where: { name: 'readonly' }
-    })
-
-    const users = await this.userRepository.find({
-      where: { roleUuid: role.uuid }
-    })
-
     await transaction(this.dataSource, async () => {
-      await this.userRepository.update({
+      await this.userRoleRepository.delete({
         roleUuid: uuid
-      }, {
-        roleUuid: readOnlyRole.uuid
-      })
-
-      users.forEach((user) => {
-        user.roleUuid = readOnlyRole.uuid
       })
 
       await this.roleRepository.remove(role)
@@ -117,7 +105,7 @@ export class RoleService {
   }
 
   async count (uuid: string): Promise<number> {
-    return await this.userRepository.count({
+    return await this.userRoleRepository.count({
       where: { roleUuid: uuid }
     })
   }
