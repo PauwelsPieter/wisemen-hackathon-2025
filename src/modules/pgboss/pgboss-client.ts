@@ -15,6 +15,6 @@ export class PgBossClient extends PgBoss implements OnModuleInit, OnModuleDestro
   }
 
   async onModuleDestroy (): Promise<void> {
-    await this.stop({ destroy: true })
+    await this.stop()
   }
 }

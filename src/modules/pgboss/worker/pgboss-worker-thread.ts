@@ -20,7 +20,7 @@ export class PgBossWorkerThread {
       try {
         const result = await this.handleJob(job)
 
-        await this.client.complete(job.id, result ?? undefined)
+        await this.client.complete(job.name, job.id, result ?? undefined)
       } catch (error) {
         await this.failJob(job, error as Error)
       }
@@ -43,10 +43,10 @@ export class PgBossWorkerThread {
 
   private async failJob (job: RawPgBossJob, error: Error): Promise<void> {
     try {
-      await this.client.fail(job.id, error)
+      await this.client.fail(job.name, job.id, error)
     } catch (error) {
       if (error instanceof Error && error.message === DUPLICATE_SINGLETON_ERROR_MESSAGE) {
-        await this.client.cancel(job.id)
+        await this.client.cancel(job.name, job.id)
       } else {
         captureError(error)
       }

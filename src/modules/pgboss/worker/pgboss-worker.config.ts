@@ -6,5 +6,4 @@ export interface PgBossWorkerConfig {
   pollInterval?: number
   batchSize?: number
   fetchRefreshThreshold?: number
-  isOnCompleteWorker?: boolean
 }
