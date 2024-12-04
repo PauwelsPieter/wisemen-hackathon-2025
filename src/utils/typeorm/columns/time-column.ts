@@ -21,6 +21,7 @@ class TimeTransformer {
     if (TimeTransformer.instance === undefined) {
       TimeTransformer.instance = new TypeormTimeTransformer()
     }
+
     return TimeTransformer.instance
   }
 }
