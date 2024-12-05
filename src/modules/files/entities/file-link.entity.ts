@@ -18,7 +18,7 @@ export class FileLink {
   fileUuid: string
 
   @ManyToOne(() => File, file => file.fileEntities, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'fileUuid' })
+  @JoinColumn({ name: 'file_uuid' })
   file?: Relation<File>
 
   @Column({ type: 'varchar' })
