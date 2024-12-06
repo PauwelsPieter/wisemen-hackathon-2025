@@ -1,3 +1,4 @@
+import assert from 'assert'
 import { Transformer } from '@appwise/transformer'
 import { ApiProperty } from '@nestjs/swagger'
 import type { User } from '../entities/user.entity.js'
@@ -22,8 +23,8 @@ export class UserTransformerType {
   @ApiProperty({ type: String, nullable: true, example: 'Doe' })
   lastName: string | null
 
-  @ApiProperty({ type: () => RoleTransformerType, nullable: true })
-  role?: RoleTransformerType | null
+  @ApiProperty({ type: () => RoleTransformerType, isArray: true })
+  roles: RoleTransformerType[]
 }
 
 export interface ExistsTransformerType {
@@ -32,6 +33,8 @@ export interface ExistsTransformerType {
 
 export class UserTransformer extends Transformer<User, UserTransformerType> {
   transform (user: User): UserTransformerType {
+    assert(user.userRoles != null)
+
     return {
       uuid: user.uuid,
       createdAt: user.createdAt,
@@ -39,7 +42,11 @@ export class UserTransformer extends Transformer<User, UserTransformerType> {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      role: new RoleTransformer().item(user.role)
+      roles: new RoleTransformer().array(user.userRoles.map((userRole) => {
+        assert(userRole.role != null)
+
+        return userRole.role
+      }))
     }
   }
 }

@@ -12,9 +12,12 @@ import { UserEntityBuilder } from '../../users/tests/user-entity.builder.js'
 import { setupTest } from '../../../../test/setup/test-setup.js'
 import { TestContext } from '../../../../test/utils/test-context.js'
 import type { TestUser } from '../../users/tests/setup-user.type.js'
+import { UserRole } from '../entities/user-role.entity.js'
 import { RoleSeeder } from './seeders/role.seeder.js'
 import { RoleEntityBuilder } from './builders/entities/role-entity.builder.js'
 import { CreateRoleDtoBuilder } from './builders/dtos/create-role-dto.builder.js'
+import { UserRoleEntityBuilder } from './builders/entities/user-role-entity.builder.js'
+import { UserRoleSeeder } from './seeders/user-role.seeder.js'
 
 describe('Roles', () => {
   let app: NestExpressApplication
@@ -75,7 +78,13 @@ describe('Roles', () => {
       )
       const user = await new UserSeeder(dataSource.manager).seedOne(
         new UserEntityBuilder()
-          .withRole(role)
+          .build()
+      )
+
+      await new UserRoleSeeder(dataSource.manager).seedOne(
+        new UserRoleEntityBuilder()
+          .withUserUuid(user.uuid)
+          .withRoleUuid(role.uuid)
           .build()
       )
 
@@ -245,7 +254,7 @@ describe('Roles', () => {
       expect(response).toHaveStatus(400)
     })
 
-    it('should delete role and replace all staff roles to readonly', async () => {
+    it('should delete role', async () => {
       const role = await new RoleSeeder(dataSource.manager).seedOne(
         new RoleEntityBuilder()
           .withName('should-delete-role-with-staff')
@@ -253,26 +262,26 @@ describe('Roles', () => {
       )
 
       const userSeeder = new UserSeeder(dataSource.manager)
-      const user1 = await userSeeder.seedOne(
+      const users = await userSeeder.seedMany([
         new UserEntityBuilder()
           .withEmail(randomUUID() + '@mail.com')
-          .withRole(role)
-          .build()
-      )
-      const user2 = await userSeeder.seedOne(
+          .build(),
         new UserEntityBuilder()
           .withEmail(randomUUID() + '@mail.com')
-          .withRole(role)
-          .build()
-      )
-      const user3 = await userSeeder.seedOne(
+          .build(),
         new UserEntityBuilder()
           .withEmail(randomUUID() + '@mail.com')
-          .withRole(role)
           .build()
-      )
+      ])
 
-      const users = [user1, user2, user3]
+      const userRoles: UserRole[] = users.map((user) => {
+        return new UserRoleEntityBuilder()
+          .withUserUuid(user.uuid)
+          .withRoleUuid(role.uuid)
+          .build()
+      })
+
+      await new UserRoleSeeder(dataSource.manager).seedUserRoles(userRoles)
 
       const response = await request(app.getHttpServer())
         .delete(`/roles/${role.uuid}`)
@@ -280,14 +289,14 @@ describe('Roles', () => {
 
       expect(response).toHaveStatus(200)
 
-      // check if staffs have readonly role
+      // check if users do not have the role anymore
       const usersAfter = await new UserRepository(dataSource.manager).find({
         where: { uuid: Any(users.map(user => user.uuid)) },
-        relations: { role: true }
+        relations: { userRoles: { role: true } }
       })
 
       usersAfter.forEach((user) => {
-        expect(user.role?.name).toBe('readonly')
+        expect(user.userRoles).toHaveLength(0)
       })
     })
   })

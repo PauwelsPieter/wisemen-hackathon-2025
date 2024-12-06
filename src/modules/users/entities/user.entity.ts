@@ -5,11 +5,10 @@ import {
   Index,
   PrimaryGeneratedColumn,
   type Relation,
-  UpdateDateColumn,
-  JoinColumn,
-  ManyToOne, DeleteDateColumn
+  UpdateDateColumn, DeleteDateColumn,
+  OneToMany
 } from 'typeorm'
-import { Role } from '../../roles/entities/role.entity.js'
+import { UserRole } from '../../roles/entities/user-role.entity.js'
 
 @Entity()
 export class User {
@@ -38,11 +37,6 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   lastName: string | null
 
-  @Index()
-  @Column({ type: 'uuid', nullable: true })
-  roleUuid: string | null
-
-  @ManyToOne(() => Role, role => role.users, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'role_uuid' })
-  role?: Relation<Role> | null
+  @OneToMany(() => UserRole, role => role.user)
+  userRoles?: Array<Relation<UserRole>>
 }

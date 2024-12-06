@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { Any, DataSource } from 'typeorm'
-import { transaction } from '@wisemen/nestjs-typeorm'
-import { RoleRepository } from '../repositories/role.repository.js'
-import type { Role } from '../entities/role.entity.js'
+import { Any, DataSource, Repository } from 'typeorm'
+import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
+import { Role } from '../entities/role.entity.js'
 import type { CreateRoleDto } from '../dtos/create-role.dto.js'
-import { UserRepository } from '../../users/repositories/user.repository.js'
 import type { UpdateRolesBulkDto } from '../dtos/update-roles-bulk.dto.js'
 import { CacheService } from '../../cache/cache.service.js'
 import { PermissionTransformer } from '../../permission/transformers/permission.transformer.js'
@@ -14,13 +12,16 @@ import { TypesenseCollectionService } from '../../typesense/services/typesense-c
 import { RoleNameAlreadyInUseError } from '../types/role-name-already-in-use.error.js'
 import { RoleNotEditableError } from '../types/role-not-editable.error.js'
 import { NotFoundError } from '../../exceptions/generic/not-found.error.js'
+import { UserRole } from '../entities/user-role.entity.js'
 
 @Injectable()
 export class RoleService {
   constructor (
     private readonly dataSource: DataSource,
-    private readonly roleRepository: RoleRepository,
-    private readonly userRepository: UserRepository,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
+    @InjectRepository(UserRole)
+    private userRoleRepository: Repository<UserRole>,
     private readonly typesenseCollectionService: TypesenseCollectionService,
     private readonly cache: CacheService
   ) {}
@@ -91,23 +92,9 @@ export class RoleService {
       throw new RoleNotEditableError()
     }
 
-    const readOnlyRole = await this.roleRepository.findOneOrFail({
-      where: { name: 'readonly' }
-    })
-
-    const users = await this.userRepository.find({
-      where: { roleUuid: role.uuid }
-    })
-
     await transaction(this.dataSource, async () => {
-      await this.userRepository.update({
+      await this.userRoleRepository.delete({
         roleUuid: uuid
-      }, {
-        roleUuid: readOnlyRole.uuid
-      })
-
-      users.forEach((user) => {
-        user.roleUuid = readOnlyRole.uuid
       })
 
       await this.roleRepository.remove(role)
@@ -117,7 +104,7 @@ export class RoleService {
   }
 
   async count (uuid: string): Promise<number> {
-    return await this.userRepository.count({
+    return await this.userRoleRepository.count({
       where: { roleUuid: uuid }
     })
   }
