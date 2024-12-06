@@ -16,7 +16,7 @@ export class ViewUserController {
 
   @Get()
   @UseGuards(UserIsSelfOrAdminGuard)
-  @Permissions(Permission.USER_READ)
+  @Permissions(Permission.READ_ONLY)
   @ApiOkResponse({
     description: 'User details retrieved',
     type: ViewUserResponse
