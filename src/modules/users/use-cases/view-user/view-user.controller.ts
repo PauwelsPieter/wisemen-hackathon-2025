@@ -1,6 +1,5 @@
 import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { Controller, Get, UseGuards } from '@nestjs/common'
-import { UuidParam } from '@wisemen/decorators'
+import { Controller, Get, Param, UseGuards } from '@nestjs/common'
 import { Permission } from '../../../permission/permission.enum.js'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { UserIsSelfOrAdminGuard } from '../../guards/user-is-self-or-admin.guard.js'
@@ -23,9 +22,9 @@ export class ViewUserController {
     type: ViewUserResponse
   })
   async viewUser (
-    @UuidParam('user') userUuid: string
+    @Param('user') userId: string
   ): Promise<ViewUserResponse> {
-    const user = await this.useCase.viewUser(userUuid)
+    const user = await this.useCase.viewUser(userId)
 
     return new ViewUserResponse(user)
   }
