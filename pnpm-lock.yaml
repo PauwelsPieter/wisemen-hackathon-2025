@@ -63,8 +63,8 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@wisemen/nestjs-typeorm':
-        specifier: ^0.0.1
-        version: 0.0.1(@nestjs/core@10.4.12(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.12)(@nestjs/websockets@10.4.12)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.1)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+        specifier: ^0.0.2
+        version: 0.0.2(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/config@3.3.0(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1))(@nestjs/core@10.4.12(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.12)(@nestjs/websockets@10.4.12)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(pg@8.13.1)(redis@4.7.0))
       axios:
         specifier: ^1.7.8
         version: 1.7.8
@@ -1555,8 +1555,13 @@ packages:
     peerDependencies:
       eslint: 9.9.1
 
-  '@wisemen/nestjs-typeorm@0.0.1':
-    resolution: {integrity: sha512-q1rhStTejwZoVzfw8CIO6t5AUFsPzZzdakCDqc5ZWcD2UE5DmVSc4La0JhqON15jEjO7dtriiqpf+zSOl9qWcg==}
+  '@wisemen/nestjs-typeorm@0.0.2':
+    resolution: {integrity: sha512-QcIspAIoir1HTBLZgETCFPKuPckh5inCI1no0M3bQCQBub02dm7j7E2rpVJAERSo2pONYH2XVWyte8uNb989Gw==}
+    peerDependencies:
+      '@nestjs/common': ^10.4.12
+      '@nestjs/config': ^3.3.0
+      class-validator: ^0.14.1
+      typeorm: ^0.3.20
 
   '@xtuc/ieee754@1.2.0':
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
@@ -6010,36 +6015,17 @@ snapshots:
       - '@typescript-eslint/eslint-plugin'
       - supports-color
 
-  '@wisemen/nestjs-typeorm@0.0.1(@nestjs/core@10.4.12(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.12)(@nestjs/websockets@10.4.12)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.1)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)':
+  '@wisemen/nestjs-typeorm@0.0.2(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/config@3.3.0(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1))(@nestjs/core@10.4.12(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.12)(@nestjs/websockets@10.4.12)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(pg@8.13.1)(redis@4.7.0))':
     dependencies:
       '@nestjs/common': 10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       '@nestjs/config': 3.3.0(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(rxjs@7.8.1)
       '@nestjs/typeorm': 10.0.2(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.12(@nestjs/common@10.4.12(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.12)(@nestjs/websockets@10.4.12)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(pg@8.13.1)(redis@4.7.0))
+      class-validator: 0.14.1
       typeorm: 0.3.20(pg@8.13.1)(redis@4.7.0)
     transitivePeerDependencies:
-      - '@google-cloud/spanner'
       - '@nestjs/core'
-      - '@sap/hana-client'
-      - better-sqlite3
-      - class-transformer
-      - class-validator
-      - hdb-pool
-      - ioredis
-      - mongodb
-      - mssql
-      - mysql2
-      - oracledb
-      - pg
-      - pg-native
-      - pg-query-stream
-      - redis
       - reflect-metadata
       - rxjs
-      - sql.js
-      - sqlite3
-      - supports-color
-      - ts-node
-      - typeorm-aurora-data-api-driver
 
   '@xtuc/ieee754@1.2.0': {}
 
