@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "nest build",
+    "start": "node dist/src/entrypoints/api.js",
     "start:dev": "nest start --exec \"node --env-file=.env\" --watch",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint": "eslint",
@@ -20,7 +21,7 @@
     "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/config/sql/sources/main.js"
   },
   "dependencies": {
-    "@appwise/time": "^0.0.14",
+    "@appwise/time": "^0.0.16",
     "@appwise/transformer": "^0.0.2",
     "@aws-sdk/client-s3": "^3.701.0",
     "@aws-sdk/lib-storage": "^3.701.0",

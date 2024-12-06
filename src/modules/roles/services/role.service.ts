@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { DataSource, In, Repository } from 'typeorm'
+import { Any, DataSource, Repository } from 'typeorm'
 import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
 import { Role } from '../entities/role.entity.js'
 import type { CreateRoleDto } from '../dtos/create-role.dto.js'
@@ -81,7 +81,7 @@ export class RoleService {
     await this.typesenseCollectionService.importToTypesense(TypesenseCollectionName.USER)
 
     return await this.roleRepository.findBy({
-      uuid: In(dto.roles.map(role => role.uuid))
+      uuid: Any(dto.roles.map(role => role.uuid))
     })
   }
 
