@@ -2,7 +2,7 @@ import { before, describe, it, after } from 'node:test'
 import { randomUUID } from 'node:crypto'
 import request from 'supertest'
 import { expect } from 'expect'
-import { type DataSource, In } from 'typeorm'
+import { Any, type DataSource } from 'typeorm'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import type { Role } from '../entities/role.entity.js'
 import { UserRepository } from '../../users/repositories/user.repository.js'
@@ -282,7 +282,7 @@ describe('Roles', () => {
 
       // check if staffs have readonly role
       const usersAfter = await new UserRepository(dataSource.manager).find({
-        where: { uuid: In(users.map(user => user.uuid)) },
+        where: { uuid: Any(users.map(user => user.uuid)) },
         relations: { role: true }
       })
 

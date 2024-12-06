@@ -21,7 +21,7 @@
     "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/config/sql/sources/main.js"
   },
   "dependencies": {
-    "@appwise/time": "^0.0.14",
+    "@appwise/time": "^0.0.16",
     "@appwise/transformer": "^0.0.2",
     "@aws-sdk/client-s3": "^3.701.0",
     "@aws-sdk/lib-storage": "^3.701.0",
@@ -39,7 +39,7 @@
     "@sentry/nestjs": "^8.41.0",
     "@wisemen/app-container": "^2.1.11",
     "@wisemen/decorators": "^0.0.3",
-    "@wisemen/nestjs-typeorm": "^0.0.1",
+    "@wisemen/nestjs-typeorm": "^0.0.2",
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
