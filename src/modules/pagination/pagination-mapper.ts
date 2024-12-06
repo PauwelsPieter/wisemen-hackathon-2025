@@ -1,4 +1,4 @@
-import type { PaginatedOffsetQuery } from './paginated-offset.query.js'
+import type { PaginatedOffsetQuery } from './offset/paginated-offset.query.js'
 
 export const DEFAULT_PAGINATION_MAX_LIMIT = 100
 

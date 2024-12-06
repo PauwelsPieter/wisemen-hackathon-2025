@@ -1,4 +1,4 @@
-import type { PaginatedOffsetResponse } from '../../../utils/pagination/offset/paginated-offset.response.js'
+import type { PaginatedOffsetResponse } from '../../pagination/offset/paginated-offset.response.js'
 import type { UserSearchSchema } from '../collections/user.collections.js'
 
 export enum TypesenseCollectionName {
