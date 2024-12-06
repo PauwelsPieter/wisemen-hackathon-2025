@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
+import { SnakeNamingStrategy, TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { sslHelper } from '../../config/sql/utils/typeorm.js'
 
 @Module({})
@@ -16,7 +16,8 @@ export class DefaultTypeOrmModule {
         synchronize: false,
         migrations: ['dist/src/config/sql/migrations/**/*.js'],
         migrationsRun: true,
-        autoLoadEntities: true
+        autoLoadEntities: true,
+        namingStrategy: new SnakeNamingStrategy()
       }),
       inject: [ConfigService]
     })

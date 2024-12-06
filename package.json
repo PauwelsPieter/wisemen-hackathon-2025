@@ -39,7 +39,7 @@
     "@sentry/nestjs": "^8.41.0",
     "@wisemen/app-container": "^2.1.11",
     "@wisemen/decorators": "^0.0.3",
-    "@wisemen/nestjs-typeorm": "^0.0.2",
+    "@wisemen/nestjs-typeorm": "^0.0.3",
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
