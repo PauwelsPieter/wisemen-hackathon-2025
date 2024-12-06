@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm'
+import { SnakeNamingStrategy } from '@wisemen/nestjs-typeorm'
 import { sslHelper } from '../utils/typeorm.js'
-import { SnakeNamingStrategy } from '../naming-strategies/snake-case.naming-strategy.js'
 
 export const mainDataSource = new DataSource({
   name: 'default',
