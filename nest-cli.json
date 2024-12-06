@@ -18,6 +18,10 @@
         "include": "**/*.json",
         "outDir": "dist/src",
         "watchAssets": true
+      },
+      {
+        "include": "modules/swagger/resources/oauth2-redirect.html",
+        "outDir": "dist/src"
       }
     ],
     "deleteOutDir": true

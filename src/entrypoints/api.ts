@@ -5,7 +5,7 @@ import { INestApplicationContext, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import { ApiContainer } from '@wisemen/app-container'
 import { AppModule } from '../app.module.js'
-import { addApiDocumentation, addWebSocketDocumentation } from '../utils/swagger/swagger.js'
+import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
@@ -25,8 +25,7 @@ class Api extends ApiContainer {
       exposedHeaders: ['Content-Disposition']
     })
 
-    addApiDocumentation(app, 'api/docs')
-    addWebSocketDocumentation(app, 'api/docs/websockets')
+    SwaggerModule.addDocumentation(app)
 
     return app
   }

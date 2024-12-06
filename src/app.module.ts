@@ -22,6 +22,7 @@ import { EventModule } from './modules/events/event.module.js'
 import { DefaultTypeOrmModule } from './modules/typeorm/default-typeorm.module.js'
 import { DefaultConfigModule } from './modules/config/default-config.module.js'
 import { ContactModule } from './modules/contact/contact.module.js'
+import { SwaggerModule } from './modules/swagger/swagger.module.js'
 
 @Module({})
 export class AppModule {
@@ -76,8 +77,8 @@ export class AppModule {
         NatsModule.forRoot(),
         LocalizationModule,
         CacheModule,
-
         ContactModule,
+        SwaggerModule,
 
         ...modules,
         ...testDisabledModules

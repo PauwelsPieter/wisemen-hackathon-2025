@@ -1,5 +1,5 @@
 import { DocumentBuilder } from '@nestjs/swagger'
-import { OpenApiDocument } from './open-api-document.js'
+import { OpenApiDocument } from '../types/open-api-document.js'
 
 export function buildApiDocumentation (): OpenApiDocument {
   return new DocumentBuilder()
@@ -12,14 +12,8 @@ export function buildApiDocumentation (): OpenApiDocument {
     .addServer('https://example.test.appwi.se')
     .addServer('https://example.production.appwi.se')
     .addOAuth2({
-      type: 'oauth2',
-      flows: {
-        password: {
-          tokenUrl: 'api/auth/token',
-          refreshUrl: 'api/auth/token',
-          scopes: {}
-        }
-      }
+      type: 'openIdConnect',
+      openIdConnectUrl: 'https://auth.example.appwi.se/.well-known/openid-configuration'
     })
     .build()
 }
