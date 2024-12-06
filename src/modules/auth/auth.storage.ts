@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { UnauthorizedError } from '../exceptions/generic/unauthorized.error.js'
 
 export interface AuthContent {
+  userId: string
   uuid: string
 }
 

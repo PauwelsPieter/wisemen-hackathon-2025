@@ -12,13 +12,13 @@ export class UserIsSelfOrAdminGuard implements CanActivate {
   ) {}
 
   async canActivate (context: ExecutionContext): Promise<boolean> {
-    const userUuid = this.authStorage.getUserUuid()
+    const auth = this.authStorage.getAuthOrFail()
     const { params } = context.switchToHttp().getRequest<Request>()
 
-    if (userUuid === params.user) {
+    if (auth.userId === params.user) {
       return true
     } else {
-      const userPermissions = await this.cache.getUserPermissions(userUuid)
+      const userPermissions = await this.cache.getUserPermissions(auth.uuid)
 
       return userPermissions.includes(Permission.ADMIN)
     }
