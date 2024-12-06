@@ -27,7 +27,8 @@ export class UserAuthService {
     const user = await this.fetchOrCreateUser(token)
 
     const response: AuthContent = {
-      uuid: user.uuid
+      uuid: user.uuid,
+      userId: user.userId
     }
 
     await this.redisClient.putCachedValue(cacheKey, JSON.stringify(response))

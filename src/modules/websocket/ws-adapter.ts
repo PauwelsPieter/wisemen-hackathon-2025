@@ -13,7 +13,7 @@ import {
 import { WebSocket } from 'ws'
 import { isNil } from '@nestjs/common/utils/shared.utils.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
-import { AuthStorage } from '../auth/auth.storage.js'
+import { AuthContent, AuthStorage } from '../auth/auth.storage.js'
 
 declare module 'http' {
   interface IncomingMessage {
@@ -78,8 +78,8 @@ export class AuthenticatedWsAdapter extends WsAdapter {
         cb(false)
       } else {
         this.verifyAuthorization(authToken)
-          .then((userUuid) => {
-            this.authStorage.run({ uuid: userUuid }, () => {
+          .then((auth) => {
+            this.authStorage.run(auth, () => {
               cb(true)
             })
           })
@@ -126,7 +126,7 @@ export class AuthenticatedWsAdapter extends WsAdapter {
     source$.subscribe(onMessage)
   }
 
-  private async verifyAuthorization (header: string): Promise<string> {
+  private async verifyAuthorization (header: string): Promise<AuthContent> {
     const [bearer, token] = header.split(' ')
 
     if (bearer !== 'Bearer' || token == null) {
@@ -135,6 +135,9 @@ export class AuthenticatedWsAdapter extends WsAdapter {
 
     const payload = await this.authMiddleware.verify(token)
 
-    return payload.uuid
+    return {
+      uuid: payload.uuid,
+      userId: payload.userId
+    }
   }
 }

@@ -73,7 +73,7 @@ function mockAuth (context: TestContext): void {
   mock.method(AuthMiddleware.prototype, 'verify', async (token: string) => {
     const user = context.resolveUser(token)
 
-    return Promise.resolve({ uuid: user.uuid })
+    return Promise.resolve({ uuid: user.uuid, userId: user.userId })
   })
 }
 
