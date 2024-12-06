@@ -6,9 +6,7 @@ import { TypesenseModule } from '../typesense/modules/typesense.module.js'
 import { Role } from './entities/role.entity.js'
 import { RoleController } from './controllers/role.controller.js'
 import { RoleService } from './services/role.service.js'
-import { RoleRepository } from './repositories/role.repository.js'
 import { UserRole } from './entities/user-role.entity.js'
-import { UserRoleRepository } from './repositories/user-role.repository.js'
 
 @Module({
   imports: [
@@ -19,8 +17,6 @@ import { UserRoleRepository } from './repositories/user-role.repository.js'
   controllers: [RoleController],
   providers: [
     RoleService,
-    RoleRepository,
-    UserRoleRepository,
     UserRepository
   ],
   exports: [RoleService]

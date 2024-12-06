@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { RoleRepository } from '../roles/repositories/role.repository.js'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { Repository } from 'typeorm'
 import { UserRepository } from '../users/repositories/user.repository.js'
 import { Permission } from '../permission/permission.enum.js'
 import { RedisClient } from '../redis/redis.client.js'
+import { Role } from '../roles/entities/role.entity.js'
 
 const rolePermissionsCache = `role-permissions-cache`
 const userRoleCache = `user-role-cache`
@@ -11,8 +13,9 @@ const userRoleCache = `user-role-cache`
 export class CacheService {
   constructor (
     // private readonly client: NatsClient,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
     private readonly client: RedisClient,
-    private readonly roleRepository: RoleRepository,
     private readonly userRepository: UserRepository
   ) {
 

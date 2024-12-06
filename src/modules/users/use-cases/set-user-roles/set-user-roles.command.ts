@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsUUID } from 'class-validator'
 
-export class ChangeUserRoleCommand {
+export class SetUserRolesCommand {
   @ApiProperty({ type: String, format: 'uuid', isArray: true })
   @IsArray()
   @IsUUID()

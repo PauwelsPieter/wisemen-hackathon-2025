@@ -1,25 +1,26 @@
 import assert from 'assert'
 import { Injectable } from '@nestjs/common'
-import { Any, DataSource } from 'typeorm'
-import { transaction } from '@wisemen/nestjs-typeorm'
-import { UserRoleRepository } from '../../../roles/repositories/user-role.repository.js'
+import { Any, DataSource, Repository } from 'typeorm'
+import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
 import { CacheService } from '../../../cache/cache.service.js'
 import { UserRepository } from '../../repositories/user.repository.js'
 import { TypesenseCollectionName } from '../../../typesense/enums/typesense-collection-index.enum.js'
 import { TypesenseCollectionService } from '../../../typesense/services/typesense-collection.service.js'
-import type { ChangeUserRoleCommand } from './change-user-roles.command.js'
+import { UserRole } from '../../../roles/entities/user-role.entity.js'
+import type { SetUserRolesCommand } from './set-user-roles.command.js'
 
 @Injectable()
-export class ChangeUserRoleUseCase {
+export class SetUserRolesUseCase {
   constructor (
-    private readonly userRoleRepository: UserRoleRepository,
+    @InjectRepository(UserRole)
+    private userRoleRepository: Repository<UserRole>,
     private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource,
     private readonly cache: CacheService,
     private readonly typesenseService: TypesenseCollectionService
   ) {}
 
-  async changeRoles (userUuid: string, dto: ChangeUserRoleCommand): Promise<void> {
+  async changeRoles (userUuid: string, dto: SetUserRolesCommand): Promise<void> {
     const user = await this.userRepository.findOneOrFail({
       where: { uuid: userUuid },
       relations: { userRoles: { role: true } }

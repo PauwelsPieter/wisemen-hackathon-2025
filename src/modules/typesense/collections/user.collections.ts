@@ -8,6 +8,7 @@ export interface UserSearchSchema {
   email: string
   firstName: string
   lastName: string
+  roleUuids: string[]
   permissions: Permission[]
 }
 
@@ -20,6 +21,7 @@ export class UserTypesenseCollection extends TypesenseCollection {
   ] as const
 
   readonly filterableFields = [
-    { name: 'permissions', type: 'string[]', optional: true }
+    { name: 'permissions', type: 'string[]', optional: true },
+    { name: 'roleUuids', type: 'string[]', optional: true }
   ] as const
 }

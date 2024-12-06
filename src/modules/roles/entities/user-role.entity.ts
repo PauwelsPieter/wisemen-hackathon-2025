@@ -8,7 +8,6 @@ export class UserRole {
   @PrimaryGeneratedColumn('uuid')
   uuid: string
 
-  @Index()
   @Column({ type: 'uuid' })
   userUuid: string
 

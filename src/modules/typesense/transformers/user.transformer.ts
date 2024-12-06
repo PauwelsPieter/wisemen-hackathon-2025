@@ -9,6 +9,7 @@ export class UserSearchTransformerType {
   firstName: string
   lastName: string
   email: string
+  roleUuids: string[]
   permissions: Permission[]
 }
 
@@ -31,6 +32,7 @@ export class UserSearchTransformer
       firstName: user.firstName ?? '',
       lastName: user.lastName ?? '',
       email: user.email ?? '',
+      roleUuids: user.userRoles.map(userRole => userRole.roleUuid),
       permissions: permissions
     }
   }

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { TypesenseModule } from '../typesense/modules/typesense.module.js'
-import { RoleRepository } from '../roles/repositories/role.repository.js'
 import { CacheModule } from '../cache/cache.module.js'
 import { RoleModule } from '../roles/role.module.js'
 import { RedisModule } from '../redis/redis.module.js'
-import { UserRoleRepository } from '../roles/repositories/user-role.repository.js'
+import { UserRole } from '../roles/entities/user-role.entity.js'
 import { User } from './entities/user.entity.js'
 import { UserRepository } from './repositories/user.repository.js'
 import { UserTypesenseRepository } from './repositories/user-typesense.repository.js'
@@ -14,21 +13,21 @@ import { ViewUsersController } from './use-cases/view-users/view-users.controlle
 import { ViewUsersUseCase } from './use-cases/view-users/view-users.use-case.js'
 import { ViewUserUseCase } from './use-cases/view-user/view-user.use-case.js'
 import {
-  ChangeUserRoleController
-} from './use-cases/change-user-roles/change-user-roles.controller.js'
-import { ChangeUserRoleUseCase } from './use-cases/change-user-roles/change-user-roles.use-case.js'
+  SetUserRolesController
+} from './use-cases/set-user-roles/set-user-roles.controller.js'
+import { SetUserRolesUseCase } from './use-cases/set-user-roles/set-user-roles.use-case.js'
 import { UserAuthService } from './services/user-auth.service.js'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, UserRole]),
     CacheModule,
     TypesenseModule,
     RoleModule,
     RedisModule.forRoot()
   ],
   controllers: [
-    ChangeUserRoleController,
+    SetUserRolesController,
     ViewUserController,
     ViewUsersController
   ],
@@ -36,9 +35,7 @@ import { UserAuthService } from './services/user-auth.service.js'
     UserAuthService,
     UserRepository,
     UserTypesenseRepository,
-    RoleRepository,
-    UserRoleRepository,
-    ChangeUserRoleUseCase,
+    SetUserRolesUseCase,
     ViewUserUseCase,
     ViewUsersUseCase
   ],

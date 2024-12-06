@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { DataSource, In } from 'typeorm'
-import { transaction } from '@wisemen/nestjs-typeorm'
-import { RoleRepository } from '../repositories/role.repository.js'
-import type { Role } from '../entities/role.entity.js'
+import { DataSource, In, Repository } from 'typeorm'
+import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
+import { Role } from '../entities/role.entity.js'
 import type { CreateRoleDto } from '../dtos/create-role.dto.js'
-import { UserRepository } from '../../users/repositories/user.repository.js'
 import type { UpdateRolesBulkDto } from '../dtos/update-roles-bulk.dto.js'
 import { CacheService } from '../../cache/cache.service.js'
 import { PermissionTransformer } from '../../permission/transformers/permission.transformer.js'
@@ -14,15 +12,16 @@ import { TypesenseCollectionService } from '../../typesense/services/typesense-c
 import { RoleNameAlreadyInUseError } from '../types/role-name-already-in-use.error.js'
 import { RoleNotEditableError } from '../types/role-not-editable.error.js'
 import { NotFoundError } from '../../exceptions/generic/not-found.error.js'
-import { UserRoleRepository } from '../repositories/user-role.repository.js'
+import { UserRole } from '../entities/user-role.entity.js'
 
 @Injectable()
 export class RoleService {
   constructor (
     private readonly dataSource: DataSource,
-    private readonly roleRepository: RoleRepository,
-    private readonly userRepository: UserRepository,
-    private readonly userRoleRepository: UserRoleRepository,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
+    @InjectRepository(UserRole)
+    private userRoleRepository: Repository<UserRole>,
     private readonly typesenseCollectionService: TypesenseCollectionService,
     private readonly cache: CacheService
   ) {}
