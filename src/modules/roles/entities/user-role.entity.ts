@@ -16,10 +16,10 @@ export class UserRole {
   roleUuid: string
 
   @ManyToOne(() => User, user => user.userRoles)
-  @JoinColumn({ name: 'userUuid' })
+  @JoinColumn({ name: 'user_uuid' })
   user?: Relation<User>
 
   @ManyToOne(() => Role)
-  @JoinColumn({ name: 'roleUuid' })
+  @JoinColumn({ name: 'role_uuid' })
   role?: Relation<Role>
 }
