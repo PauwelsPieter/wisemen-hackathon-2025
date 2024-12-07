@@ -8,11 +8,14 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { PgBossScheduler } from '../../modules/pgboss/pgboss-scheduler.js'
 import { ImportTypesenseJob } from '../../modules/typesense/jobs/import-typesense.job.js'
 import { AppModule } from '../../app.module.js'
+import { TypesenseModule } from '../../modules/typesense/modules/typesense.module.js'
 
 export class ImportTypesenseCronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {
     return await NestFactory.createApplicationContext(
-      AppModule.forRoot([])
+      AppModule.forRoot([
+        TypesenseModule
+      ])
     )
   }
 

@@ -8,7 +8,9 @@ import { AppModule } from '../app.module.js'
 export class Playground extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {
     return await NestFactory.createApplicationContext(
-      AppModule.forRoot([])
+      AppModule.forRoot([
+
+      ])
     )
   }
 

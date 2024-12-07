@@ -9,7 +9,10 @@ export class PgBossWorkerModule {
     return {
       module: PgBossWorkerModule,
       imports: [
-        PgBossModule.forRoot()
+        PgBossModule.forRoot(),
+        PgBossModule.forFeature([
+
+        ])
       ],
       providers: [
         {
