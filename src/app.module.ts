@@ -10,7 +10,6 @@ import { RoleModule } from './modules/roles/role.module.js'
 import { PermissionModule } from './modules/permission/permission.module.js'
 import { StatusModule } from './modules/status/modules/status.module.js'
 import { FileModule } from './modules/files/modules/file.module.js'
-import { PgBossModule } from './modules/pgboss/pgboss.module.js'
 import { NatsModule } from './modules/nats/nats.module.js'
 import { CacheModule } from './modules/cache/cache.module.js'
 import { RedisModule } from './modules/redis/redis.module.js'
@@ -64,7 +63,6 @@ export class AppModule {
         PermissionModule,
 
         // PG Boss
-        PgBossModule.forRoot(),
 
         // Utils
         MailModule,
