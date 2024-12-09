@@ -89,7 +89,7 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
         { batchSize: this.batchSize }
       )
         .then(async (jobs) => {
-          if (jobs == null) {
+          if (jobs == null || jobs.length === 0) {
             await new Promise(resolve => setTimeout(resolve, this.pollInterval))
           } else {
             this.jobs.push(...jobs)

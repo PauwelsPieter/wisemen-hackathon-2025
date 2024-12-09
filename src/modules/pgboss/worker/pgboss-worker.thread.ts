@@ -5,11 +5,9 @@ import { PgBossClient } from '../client/pgboss-client.js'
 import { JobRegistry } from '../jobs/job.registry.js'
 import { RawPgBossJob } from './constants.js'
 
-export type PgBossJobGenerator = AsyncGenerator<RawPgBossJob, void, unknown>
-
 export class PgBossWorkerThread {
   constructor (
-    private readonly queue: PgBossJobGenerator,
+    private readonly queue: AsyncGenerator<RawPgBossJob, void, unknown>,
     private readonly client: PgBossClient,
     private readonly jobRegistry: JobRegistry
   ) {}
@@ -21,9 +19,8 @@ export class PgBossWorkerThread {
 
         await this.client.complete(job.name, job.id, result ?? undefined)
       } catch (error) {
-        // todo: what if this fails, is a worker thread broken then???
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        await this.client.fail(job.name, job.id, { error })
+        await this.client.fail(job.name, job.id, { error }).catch(() => {})
       }
     }
   }
