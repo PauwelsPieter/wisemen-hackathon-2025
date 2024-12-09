@@ -9,13 +9,18 @@ type ConfigConstructor<S extends BaseJobData, T extends BaseJobConfig<S>>
   = new (...args: unknown[]) => T
 
 export function PgBossJobHandler<S extends BaseJobData, T extends BaseJobConfig<S>> (
-  name: QueueName,
   config: ConfigConstructor<S, T>
 ): ClassDecorator {
   return (target) => {
-    SetMetadata(PGBOSS_QUEUE_NAME, name)(target)
     SetMetadata(PGBOSS_JOB_HANDLER, config.name)(target)
-    SetMetadata(PGBOSS_QUEUE_NAME, name)(config)
-    SetMetadata(PGBOSS_JOB_HANDLER, config.name)(config)
+  }
+}
+
+export function PgBossJob (
+  name: QueueName
+): ClassDecorator {
+  return (target) => {
+    SetMetadata(PGBOSS_QUEUE_NAME, name)(target)
+    SetMetadata(PGBOSS_JOB_HANDLER, target.name)(target)
   }
 }

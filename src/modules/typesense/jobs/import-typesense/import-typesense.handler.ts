@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
 import { TypesenseInitializationService } from '../../services/typesense-initialization.service.js'
 import { BaseJobHandler } from '../../../pgboss/jobs/job.abstract.js'
-import { QueueName } from '../../../pgboss/queue-name.enum.js'
 import { PgBossJobHandler } from '../../../pgboss/jobs/job.decorator.js'
 import { ImportTypesenseJob } from './import-typesense.job.js'
 
 @Injectable()
-@PgBossJobHandler(QueueName.TYPESENSE, ImportTypesenseJob)
+@PgBossJobHandler(ImportTypesenseJob)
 export class ImportTypesenseJobHandler extends BaseJobHandler {
   constructor (
     private readonly typesense: TypesenseInitializationService
