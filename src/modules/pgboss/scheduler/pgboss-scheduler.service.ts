@@ -1,16 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common'
 import { ConnectionOptions, JobInsert } from 'pg-boss'
 import { EntityManager } from 'typeorm'
 import { createTransactionManagerProxy, InjectEntityManager } from '@wisemen/nestjs-typeorm'
 import { Reflector } from '@nestjs/core'
 import { PgBossClient } from '../client/pgboss-client.js'
-import { BaseJobData, BaseJobHandler } from '../jobs/job.abstract.js'
+import { BaseJobConfig, BaseJobData } from '../jobs/job.abstract.js'
 import { PGBOSS_JOB_HANDLER, PGBOSS_QUEUE_NAME } from '../jobs/job.decorator.js'
-
-type Constructor<S extends BaseJobData = never> =
-  (abstract new (...args: any[]) => BaseJobHandler<S>)
-  & { uniqueBy?: (data?: BaseJobData) => string }
 
 @Injectable()
 export class PgBossScheduler {
@@ -24,22 +19,19 @@ export class PgBossScheduler {
     this.manager = createTransactionManagerProxy(entityManager)
   }
 
-  async scheduleJob<D extends BaseJobData, H extends Constructor<D>>(
-    handler: H,
-    ...data: D extends never ? [] : [D]
+  async scheduleJob<S extends BaseJobData, T extends BaseJobConfig<S>>(
+    handler: T
   ): Promise<void> {
-    const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, handler)
-    const className = this.reflector.get<string>(PGBOSS_JOB_HANDLER, handler)
+    const queue = this.reflector.get<string>(PGBOSS_QUEUE_NAME, handler.constructor)
+    const className = this.reflector.get<string>(PGBOSS_JOB_HANDLER, handler.constructor)
 
-    const uniqueBy = handler.uniqueBy?.(data[0])
-
-    const job: JobInsert<H> | JobInsert = {
+    const job: JobInsert<S> | JobInsert = {
       name: queue,
       data: {
         className,
-        classData: data[0]
+        classData: handler.data
       },
-      singletonKey: uniqueBy
+      singletonKey: handler.uniqueBy?.(handler.data)
     }
 
     await this.scheduleJobs([job])
