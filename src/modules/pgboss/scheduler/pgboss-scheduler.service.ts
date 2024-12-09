@@ -31,7 +31,7 @@ export class PgBossScheduler {
         className,
         classData: handler.data
       },
-      singletonKey: handler.uniqueBy?.(handler.data)
+      singletonKey: handler.uniqueBy?.()
     }
 
     await this.scheduleJobs([job])

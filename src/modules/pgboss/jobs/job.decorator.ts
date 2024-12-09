@@ -8,7 +8,7 @@ export const PGBOSS_QUEUE_NAME = 'PGBOSS_QUEUE_NAME'
 type ConfigConstructor<S extends BaseJobData, T extends BaseJobConfig<S>>
   = new (...args: unknown[]) => T
 
-export function PgBossJob<S extends BaseJobData, T extends BaseJobConfig<S>> (
+export function PgBossJobHandler<S extends BaseJobData, T extends BaseJobConfig<S>> (
   name: QueueName,
   config: ConfigConstructor<S, T>
 ): ClassDecorator {

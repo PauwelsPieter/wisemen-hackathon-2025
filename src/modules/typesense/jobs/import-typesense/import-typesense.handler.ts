@@ -3,11 +3,11 @@ import { TypesenseCollectionName } from '../../enums/typesense-collection-index.
 import { TypesenseInitializationService } from '../../services/typesense-initialization.service.js'
 import { BaseJobHandler } from '../../../pgboss/jobs/job.abstract.js'
 import { QueueName } from '../../../pgboss/queue-name.enum.js'
-import { PgBossJob } from '../../../pgboss/jobs/job.decorator.js'
+import { PgBossJobHandler } from '../../../pgboss/jobs/job.decorator.js'
 import { ImportTypesenseJob } from './import-typesense.job.js'
 
 @Injectable()
-@PgBossJob(QueueName.TYPESENSE, ImportTypesenseJob)
+@PgBossJobHandler(QueueName.TYPESENSE, ImportTypesenseJob)
 export class ImportTypesenseJobHandler extends BaseJobHandler {
   constructor (
     private readonly typesense: TypesenseInitializationService
