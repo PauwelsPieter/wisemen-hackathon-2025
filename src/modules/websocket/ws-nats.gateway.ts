@@ -5,9 +5,10 @@ import { type ArgumentsHost, Catch, UsePipes, ValidationPipe, UseFilters, Unauth
 import { v4 as uuidv4 } from 'uuid'
 import { captureException } from '@sentry/nestjs'
 import { NatsClient } from '../nats/nats.client.js'
-import { SubscribeDto } from './dtos/subscribe.dto.js'
-import { UnsubscribeDto } from './dtos/unsubscribe.dto.js'
+import { SubscribeCommand } from './commands/subscribe.command.js'
+import { UnsubscribeCommand } from './commands/unsubscribe.command.js'
 import { WsTopicValidator } from './ws-topic.validator.js'
+import { PingPongCommand } from './commands/ping-pong.command.js'
 
 declare module 'ws' {
   interface WebSocket {
@@ -72,7 +73,7 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }))
   @UseFilters(new WsExceptionFilter())
   @SubscribeMessage('subscribe')
-  async handleSubscribe (client: WebSocket, payload: SubscribeDto): Promise<void> {
+  async handleSubscribe (client: WebSocket, payload: SubscribeCommand): Promise<void> {
     const clientSubscriptions = this.subscriptions.get(client.uuid)
 
     if (clientSubscriptions == null || clientSubscriptions.has(payload.topic)) {
@@ -84,6 +85,13 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const subscription = this.natsClient.subscribe(payload.topic)
 
     clientSubscriptions.set(payload.topic, subscription)
+
+    client.send(JSON.stringify({
+      event: 'subscribed',
+      data: {
+        topic: payload.topic
+      }
+    }))
 
     for await (const msg of subscription) {
       try {
@@ -98,7 +106,7 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @UsePipes(new ValidationPipe())
   @SubscribeMessage('unsubscribe')
-  handleUnsubscribe (client: WebSocket, payload: UnsubscribeDto): void {
+  handleUnsubscribe (client: WebSocket, payload: UnsubscribeCommand): void {
     const clientSubscriptions = this.subscriptions.get(client.uuid)
 
     if (clientSubscriptions == null) {
@@ -111,5 +119,16 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       subscription.unsubscribe()
       clientSubscriptions.delete(payload.topic)
     }
+  }
+
+  @UsePipes(new ValidationPipe())
+  @SubscribeMessage('ping')
+  handlePing (client: WebSocket, payload: PingPongCommand): void {
+    client.send(JSON.stringify({
+      event: 'pong',
+      data: {
+        uuid: payload.uuid
+      }
+    }))
   }
 }

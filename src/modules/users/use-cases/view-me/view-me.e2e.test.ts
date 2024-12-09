@@ -1,5 +1,4 @@
 import { after, before, describe, it } from 'node:test'
-import { randomUUID } from 'crypto'
 import request from 'supertest'
 import { expect } from 'expect'
 import { NestExpressApplication } from '@nestjs/platform-express'
@@ -10,19 +9,14 @@ import { setupTest } from '../../../../../test/setup/test-setup.js'
 
 describe('View user e2e test', () => {
   let app: NestExpressApplication
-  let adminUser: TestUser
   let authorizedUser: TestUser
   let context: TestContext
 
   before(async () => {
     ({ app, context } = await setupTest())
 
-    const [admin, user] = await Promise.all([
-      context.getAdminUser(),
-      context.getUser([Permission.READ_ONLY])
-    ])
+    const user = await context.getUser([Permission.USER_READ])
 
-    adminUser = admin
     authorizedUser = user
   })
 
@@ -32,31 +26,15 @@ describe('View user e2e test', () => {
 
   it('returns 401 when not authenticated', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${authorizedUser.user.userId}`)
+      .get(`/users/me`)
 
     expect(response).toHaveStatus(401)
   })
 
-  it('returns 404 when the user does not exist', async () => {
+  it('returns user data about themselves', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${randomUUID()}`)
-      .set('Authorization', `Bearer ${adminUser.token}`)
-
-    expect(response).toHaveStatus(404)
-  })
-
-  it('returns 403 (unauthorized) when a user attempts to view another user', async () => {
-    const response = await request(app.getHttpServer())
-      .get(`/users/${adminUser.user.userId}`)
+      .get(`/users/me`)
       .set('Authorization', `Bearer ${authorizedUser.token}`)
-
-    expect(response).toHaveStatus(403)
-  })
-
-  it('an admin can view any user', async () => {
-    const response = await request(app.getHttpServer())
-      .get(`/users/${authorizedUser.user.userId}`)
-      .set('Authorization', `Bearer ${adminUser.token}`)
 
     expect(response).toHaveStatus(200)
   })
