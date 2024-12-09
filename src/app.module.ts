@@ -62,8 +62,6 @@ export class AppModule {
         RoleModule,
         PermissionModule,
 
-        // PG Boss
-
         // Utils
         MailModule,
         // NatsModule.forRoot(),

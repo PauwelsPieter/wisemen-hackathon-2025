@@ -45,7 +45,7 @@ export class PgBossScheduler {
     await this.scheduleJobs([job])
   }
 
-  public async scheduleJobs <T extends object> (
+  private async scheduleJobs <T extends object> (
     jobs: JobInsert<T>[] | JobInsert[]
   ): Promise<void> {
     const manager = this.manager
