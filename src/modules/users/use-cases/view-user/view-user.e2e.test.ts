@@ -32,7 +32,7 @@ describe('View user e2e test', () => {
 
   it('returns 401 when not authenticated', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${authorizedUser.user.userId}`)
+      .get(`/users/${authorizedUser.user.uuid}`)
 
     expect(response).toHaveStatus(401)
   })
@@ -47,7 +47,7 @@ describe('View user e2e test', () => {
 
   it('returns 403 (unauthorized) when a user attempts to view another user', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${adminUser.user.userId}`)
+      .get(`/users/${adminUser.user.uuid}`)
       .set('Authorization', `Bearer ${authorizedUser.token}`)
 
     expect(response).toHaveStatus(403)
@@ -55,7 +55,7 @@ describe('View user e2e test', () => {
 
   it('an admin can view any user', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${authorizedUser.user.userId}`)
+      .get(`/users/${authorizedUser.user.uuid}`)
       .set('Authorization', `Bearer ${adminUser.token}`)
 
     expect(response).toHaveStatus(200)

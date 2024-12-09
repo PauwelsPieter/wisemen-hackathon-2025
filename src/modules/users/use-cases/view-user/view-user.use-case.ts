@@ -8,9 +8,9 @@ export class ViewUserUseCase {
     private readonly userRepository: UserRepository
   ) {}
 
-  async viewUser (userId: string): Promise<User> {
+  async viewUser (userUuid: string): Promise<User> {
     return await this.userRepository.findOneOrFail({
-      where: { userId: userId },
+      where: { uuid: userUuid },
       relations: { userRoles: { role: true } }
     })
   }
