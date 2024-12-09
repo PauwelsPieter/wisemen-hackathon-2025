@@ -1,4 +1,4 @@
-import { type DynamicModule, type MiddlewareConsumer, Module } from '@nestjs/common'
+import { type DynamicModule, type MiddlewareConsumer, Module, Type } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { SentryModule } from '@sentry/nestjs/setup'
@@ -25,7 +25,7 @@ import { ContactModule } from './modules/contact/contact.module.js'
 @Module({})
 export class AppModule {
   static forRoot (
-    modules: DynamicModule[] = [],
+    modules: Array<DynamicModule | Type<unknown>> = [],
     forTest: boolean = false
   ): DynamicModule {
     const testDisabledModules = forTest ? [] : [EventModule.forRoot()]

@@ -5,13 +5,16 @@ import { NestExpressApplication } from '@nestjs/platform-express'
 import { setupTest } from '../../../../test/setup/test-setup.js'
 import { TypesenseInitializationService } from '../services/typesense-initialization.service.js'
 import { ImportTypesenseJobHandler } from '../jobs/import-typesense/import-typesense.handler.js'
+import { ImportTypesenseJobModule } from '../jobs/import-typesense/import-typesense.module.js'
 
 describe('Test import typesense job', () => {
   let app: NestExpressApplication
   let testModule: TestingModule
 
   before(async () => {
-    ({ app, testModule } = await setupTest())
+    ({ app, testModule } = await setupTest([
+      ImportTypesenseJobModule
+    ]))
   })
 
   after(async () => {
