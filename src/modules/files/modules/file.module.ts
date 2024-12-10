@@ -15,9 +15,6 @@ import { FileFlowService } from '../services/file.flows.service.js'
   imports: [
     TypeOrmModule.forFeature([File, FileLink]),
     UserModule
-    // PGBossModule.forJobs([
-    //   RemoveUnusedMediaJob
-    // ])
   ],
   controllers: [FileController],
   providers: [

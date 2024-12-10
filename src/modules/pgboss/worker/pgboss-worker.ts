@@ -1,12 +1,12 @@
 import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { captureError } from 'rxjs/internal/util/errorContext'
-import { ModuleRef } from '@nestjs/core'
-import { QueueName } from '../queue-name.enum.js'
-import { PgBossClient } from '../pgboss-client.js'
 import { JobSerialization } from '../jobs/job-serialization.type.js'
+import { PgBossClient } from '../client/pgboss-client.js'
+import { QueueName } from '../queue-name.enum.js'
+import { JobRegistry } from '../jobs/job.registry.js'
 import { PgBossWorkerConfig } from './pgboss-worker.config.js'
-import { RawPgBossJob } from './raw-pgboss-job.js'
-import { PgBossWorkerThread } from './pgboss-worker-thread.js'
+import { PgBossWorkerThread } from './pgboss-worker.thread.js'
+import { RawPgBossJob } from './constants.js'
 
 @Injectable()
 export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
@@ -23,7 +23,7 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
   constructor (
     @Inject('PG_BOSS_WORKER_CONFIG') config: PgBossWorkerConfig,
     private readonly client: PgBossClient,
-    private readonly moduleRef: ModuleRef
+    private readonly jobRegistry: JobRegistry
   ) {
     this.queueName = config.queueName
     this.concurrency = config?.concurrency ?? 1
@@ -50,7 +50,7 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
 
   private startWorkerThreads (jobGenerator: AsyncGenerator<RawPgBossJob, void, unknown>) {
     for (let i = 0; i < this.concurrency; i++) {
-      const thread = new PgBossWorkerThread(jobGenerator, this.client, this.moduleRef)
+      const thread = new PgBossWorkerThread(jobGenerator, this.client, this.jobRegistry)
 
       this.threads.push(thread.run())
     }
@@ -89,7 +89,7 @@ export class PgBossWorker implements OnModuleInit, OnModuleDestroy {
         { batchSize: this.batchSize }
       )
         .then(async (jobs) => {
-          if (jobs == null) {
+          if (jobs == null || jobs.length === 0) {
             await new Promise(resolve => setTimeout(resolve, this.pollInterval))
           } else {
             this.jobs.push(...jobs)

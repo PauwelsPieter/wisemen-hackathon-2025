@@ -4,6 +4,7 @@ import type { TestingModule } from '@nestjs/testing'
 import { expect } from 'expect'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { ConfigService } from '@nestjs/config'
+import { DynamicModule, Type } from '@nestjs/common'
 import { uuid } from '../expect/expectUuid.js'
 import { TestContext } from '../utils/test-context.js'
 import { EnvType } from '../../src/utils/envs/env.enum.js'
@@ -22,8 +23,10 @@ export interface TestSetup {
   context: TestContext
 }
 
-export async function setupTest (): Promise<TestSetup> {
-  const testModule = await compileTestModule()
+export async function setupTest (
+  modules?: Array<DynamicModule | Type<unknown>>
+): Promise<TestSetup> {
+  const testModule = await compileTestModule(modules)
   const [app, dataSource] = await Promise.all([
     setupTestApp(testModule),
     setupTestDataSource(testModule)

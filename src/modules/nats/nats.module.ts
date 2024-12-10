@@ -1,10 +1,9 @@
 import { type DynamicModule, Module, type Provider } from '@nestjs/common'
-import { PgBossModule } from '../pgboss/pgboss.module.js'
+import { PgBossSchedulerModule } from '../pgboss/scheduler/pgboss-scheduler.module.js'
 import { NatsClient } from './nats.client.js'
 import { NatsOutboxSubscriber } from './outbox/nats-outbox.subscriber.js'
 import { ExamplePublisher } from './publishers/example.publisher.js'
 import { NatsOutboxEventMapper } from './outbox/nats-outbox-event.mapper.js'
-import { PublishNatsEventJob } from './outbox/publish-nats-event.job.js'
 
 @Module({})
 export class NatsModule {
@@ -12,7 +11,7 @@ export class NatsModule {
     return {
       module: NatsModule,
       imports: [
-        PgBossModule.forFeature([PublishNatsEventJob])
+        PgBossSchedulerModule
       ],
       providers: [
         NatsClient,
