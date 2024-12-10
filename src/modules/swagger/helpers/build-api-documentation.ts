@@ -1,19 +1,28 @@
 import { DocumentBuilder } from '@nestjs/swagger'
 import { OpenApiDocument } from '../types/open-api-document.js'
+import { EnvType } from '../../../utils/envs/env.enum.js'
+import { buildBaseUrl } from './build-base-url.js'
 
 export function buildApiDocumentation (): OpenApiDocument {
-  return new DocumentBuilder()
+  const builder = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('The API documentation description')
     .setVersion('1.0')
-    .addServer('http://localhost:3000')
-    .addServer('https://example.development.appwi.se')
-    .addServer('https://example.staging.appwi.se')
-    .addServer('https://example.test.appwi.se')
-    .addServer('https://example.production.appwi.se')
-    .addOAuth2({
+
+  const environments = Object.values(EnvType)
+
+  for (const environment of environments) {
+    builder.addServer(buildBaseUrl(environment))
+  }
+
+  const openIdConnectUrl = process.env.SWAGGER_OPENID_CONNECT_URL
+
+  if (openIdConnectUrl !== undefined) {
+    builder.addOAuth2({
       type: 'openIdConnect',
-      openIdConnectUrl: 'https://auth.example.appwi.se/.well-known/openid-configuration'
+      openIdConnectUrl: openIdConnectUrl
     })
-    .build()
+  }
+
+  return builder.build()
 }
