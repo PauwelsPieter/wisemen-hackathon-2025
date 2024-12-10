@@ -1,14 +1,14 @@
-import '../utils/sentry/sentry.js'
+import '../../utils/sentry/sentry.js'
 
 import { DataSource } from 'typeorm'
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'
 import { transaction } from '@wisemen/nestjs-typeorm'
-import { PgBossScheduler } from '../../modules/pgboss/pgboss-scheduler.js'
-import { ImportTypesenseJob } from '../../modules/typesense/jobs/import-typesense.job.js'
 import { AppModule } from '../../app.module.js'
 import { TypesenseModule } from '../../modules/typesense/modules/typesense.module.js'
+import { PgBossScheduler } from '../../modules/pgboss/scheduler/pgboss-scheduler.service.js'
+import { ImportTypesenseJob } from '../../modules/typesense/jobs/import-typesense/import-typesense.job.js'
 
 export class ImportTypesenseCronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {
@@ -23,10 +23,10 @@ export class ImportTypesenseCronjob extends JobContainer {
     const scheduler = app.get(PgBossScheduler)
     const dataSource = app.get(DataSource)
 
-    const job = ImportTypesenseJob.create()
-
     await transaction(dataSource, async () => {
-      await scheduler.scheduleJobs([job])
+      const job = new ImportTypesenseJob()
+
+      await scheduler.scheduleJob(job)
     })
   }
 }

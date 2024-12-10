@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import { DocumentBuilder } from '@nestjs/swagger'
-import { OpenApiDocument } from './open-api-document.js'
+import { OpenApiDocument } from '../types/open-api-document.js'
 
 export function buildWebSocketDocumentation (): OpenApiDocument {
   return new DocumentBuilder()

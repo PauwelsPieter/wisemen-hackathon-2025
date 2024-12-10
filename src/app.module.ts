@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DynamicModule, Module, Type } from '@nestjs/common'
 import { SentryModule } from '@sentry/nestjs/setup'
-import { PgBossModule } from './modules/pgboss/pgboss.module.js'
 import { NatsModule } from './modules/nats/nats.module.js'
 import { LocalizationModule } from './modules/localization/modules/localization.module.js'
 import { ValidationModule } from './modules/validation/validation.module.js'
@@ -13,7 +11,7 @@ import { DefaultConfigModule } from './modules/config/default-config.module.js'
 @Module({})
 export class AppModule {
   static forRoot (
-    modules: Array<DynamicModule | Type<any>> = []
+    modules: Array<DynamicModule | Type<unknown>> = []
   ): DynamicModule {
     return {
       module: AppModule,
@@ -26,10 +24,10 @@ export class AppModule {
         ValidationModule,
         LocalizationModule,
 
-        PgBossModule.forRoot(),
         NatsModule.forRoot(),
         EventModule.forRoot(),
 
+        // Utils
         ...modules
       ]
     }

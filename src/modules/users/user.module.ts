@@ -17,6 +17,8 @@ import {
 } from './use-cases/set-user-roles/set-user-roles.controller.js'
 import { SetUserRolesUseCase } from './use-cases/set-user-roles/set-user-roles.use-case.js'
 import { UserAuthService } from './services/user-auth.service.js'
+import { ViewMeController } from './use-cases/view-me/view-me.controller.js'
+import { ViewMeUseCase } from './use-cases/view-me/view-me.use-case.js'
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { UserAuthService } from './services/user-auth.service.js'
   ],
   controllers: [
     SetUserRolesController,
+    ViewMeController,
     ViewUserController,
     ViewUsersController
   ],
@@ -36,6 +39,7 @@ import { UserAuthService } from './services/user-auth.service.js'
     UserRepository,
     UserTypesenseRepository,
     SetUserRolesUseCase,
+    ViewMeUseCase,
     ViewUserUseCase,
     ViewUsersUseCase
   ],

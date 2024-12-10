@@ -6,8 +6,8 @@ import { hideBin } from 'yargs/helpers'
 import { INestApplicationContext, Module } from '@nestjs/common'
 import { WorkerContainer } from '@wisemen/app-container'
 import { QueueName } from '../modules/pgboss/queue-name.enum.js'
-import { PgBossWorkerModule } from '../modules/pgboss/pgboss-worker.module.js'
 import { AppModule } from '../app.module.js'
+import { PgBossWorkerModule } from '../modules/pgboss/worker/pgboss-worker.module.js'
 
 const args = await yargs(hideBin(process.argv))
   .option('queue', {

@@ -4,7 +4,6 @@ import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import { ApiContainer } from '@wisemen/app-container'
-import { addApiDocumentation, addWebSocketDocumentation } from '../utils/swagger/swagger.js'
 import { AuthMiddleware } from '../modules/auth/middleware/auth.middleware.js'
 import { AuthModule } from '../modules/auth/auth.module.js'
 import { UserModule } from '../modules/users/user.module.js'
@@ -15,11 +14,13 @@ import { FileModule } from '../modules/files/modules/file.module.js'
 import { LocalizationModule } from '../modules/localization/modules/localization.module.js'
 import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
+import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 
 @Module({
   imports: [
     AppModule.forRoot(),
     AuthModule,
+    SwaggerModule,
     StatusModule,
     UserModule,
     RoleModule,
@@ -53,8 +54,7 @@ class Api extends ApiContainer {
       exposedHeaders: ['Content-Disposition']
     })
 
-    addApiDocumentation(app, 'api/docs')
-    addWebSocketDocumentation(app, 'api/docs/websockets')
+    SwaggerModule.addDocumentation(app)
 
     return app
   }

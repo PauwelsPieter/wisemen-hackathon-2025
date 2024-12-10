@@ -1,7 +1,8 @@
 import { type DynamicModule, Module } from '@nestjs/common'
-import { PgBossWorker } from './worker/pgboss-worker.js'
-import { PgBossModule } from './pgboss.module.js'
-import { PgBossWorkerConfig } from './worker/pgboss-worker.config.js'
+import { JobModule } from '../jobs/job.module.js'
+import { PgBossClientModule } from '../client/pgboss-client.module.js'
+import { PgBossWorker } from './pgboss-worker.js'
+import { PgBossWorkerConfig } from './pgboss-worker.config.js'
 
 @Module({})
 export class PgBossWorkerModule {
@@ -9,10 +10,8 @@ export class PgBossWorkerModule {
     return {
       module: PgBossWorkerModule,
       imports: [
-        PgBossModule.forRoot(),
-        PgBossModule.forFeature([
-
-        ])
+        JobModule,
+        PgBossClientModule
       ],
       providers: [
         {
