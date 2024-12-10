@@ -1,7 +1,6 @@
 import { DynamicModule, Module, Type } from '@nestjs/common'
 import { SentryModule } from '@sentry/nestjs/setup'
 import { NatsModule } from './modules/nats/nats.module.js'
-import { LocalizationModule } from './modules/localization/modules/localization.module.js'
 import { ValidationModule } from './modules/validation/validation.module.js'
 import { ExceptionModule } from './modules/exceptions/exception.module.js'
 import { EventModule } from './modules/events/event.module.js'
@@ -22,7 +21,6 @@ export class AppModule {
 
         ExceptionModule,
         ValidationModule,
-        LocalizationModule,
 
         NatsModule.forRoot(),
         EventModule.forRoot(),
