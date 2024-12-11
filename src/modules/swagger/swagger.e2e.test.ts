@@ -3,12 +3,13 @@ import request from 'supertest'
 import { expect } from 'expect'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { setupTest } from '../../../test/setup/test-setup.js'
+import { SwaggerModule } from './swagger.module.js'
 
 describe('Swagger e2e tests', () => {
   let app: NestExpressApplication
 
   before(async () => {
-    ({ app } = await setupTest())
+    ({ app } = await setupTest([SwaggerModule]))
   })
 
   after(async () => {

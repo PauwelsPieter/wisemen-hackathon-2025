@@ -6,6 +6,7 @@ import { setupTest } from '../../../../../test/setup/test-setup.js'
 import { TestContext } from '../../../../../test/utils/test-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { CreateRoleCommandBuilder } from '../../tests/builders/commands/create-role-command.builder.js'
+import { RoleModule } from '../../role.module.js'
 
 describe('Roles', () => {
   let app: NestExpressApplication
@@ -16,7 +17,7 @@ describe('Roles', () => {
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, context } = await setupTest())
+    ({ app, context } = await setupTest([RoleModule]))
 
     adminUser = await context.getAdminUser()
     readonlyUser = await context.getReadonlyUser()
