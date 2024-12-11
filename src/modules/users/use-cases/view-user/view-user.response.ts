@@ -1,7 +1,7 @@
 import assert from 'assert'
 import { ApiProperty } from '@nestjs/swagger'
 import type { User } from '../../entities/user.entity.js'
-import { RoleTransformerType, RoleTransformer } from '../../../roles/transformers/role.transformer.js'
+import { RoleResponse } from '../../../roles/use-cases/view-role/view-role.response.js'
 
 export class ViewUserResponse {
   @ApiProperty({ type: String, format: 'uuid' })
@@ -16,8 +16,8 @@ export class ViewUserResponse {
   @ApiProperty({ type: String, nullable: true, example: 'Doe' })
   lastName: string | null
 
-  @ApiProperty({ type: () => RoleTransformerType, isArray: true })
-  roles: RoleTransformerType[]
+  @ApiProperty({ type: () => RoleResponse, isArray: true })
+  roles: RoleResponse[]
 
   constructor (user: User) {
     assert(user.userRoles != null)
@@ -26,10 +26,10 @@ export class ViewUserResponse {
     this.email = user.email
     this.firstName = user.firstName
     this.lastName = user.lastName
-    this.roles = new RoleTransformer().array(user.userRoles.map((userRole) => {
+    this.roles = user.userRoles.map((userRole) => {
       assert(userRole.role != null)
 
-      return userRole.role
-    }))
+      return new RoleResponse(userRole.role)
+    })
   }
 }

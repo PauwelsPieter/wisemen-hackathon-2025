@@ -62,7 +62,7 @@ export class TestContext {
         .build()
     )
 
-    await this.userRoleSeeder.seedOne(
+    const userRole = await this.userRoleSeeder.seedOne(
       new UserRoleEntityBuilder()
         .withUserUuid(user.uuid)
         .withRoleUuid(role.uuid)
@@ -70,6 +70,9 @@ export class TestContext {
     )
 
     const token = this.getToken(user)
+
+    userRole.role = role
+    user.userRoles = [userRole]
 
     return { user, token }
   }

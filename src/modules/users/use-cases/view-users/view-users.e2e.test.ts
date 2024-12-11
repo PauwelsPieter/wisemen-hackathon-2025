@@ -20,6 +20,7 @@ describe('View users e2e test', () => {
   let context: TestContext
   let adminUser: TestUser
   let readonlyUser: TestUser
+  let userWithUserDeletePermission: TestUser
 
   before(async () => {
     ({ app, context, testModule } = await setupTest())
@@ -27,11 +28,13 @@ describe('View users e2e test', () => {
     readonlyUser = await context.getReadonlyUser()
     adminUser = await context.getAdminUser()
 
+    userWithUserDeletePermission = await context.getUser([Permission.USER_DELETE])
+
     const typesenseCollectionService = testModule.get(TypesenseCollectionService)
 
     await typesenseCollectionService.importManuallyToTypesense(
       TypesenseCollectionName.USER,
-      [adminUser.user, readonlyUser.user]
+      [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
     )
   })
 
@@ -55,16 +58,16 @@ describe('View users e2e test', () => {
           limit: 10,
           offset: 0
         },
-        'filter[permissions][0]': Permission.READ_ONLY
+        'filter[permissions][0]': Permission.USER_DELETE
       })
 
     expect(response).toHaveStatus(200)
     expect(response.body).toStrictEqual(expect.objectContaining({
       items: [expect.objectContaining({
-        email: readonlyUser.user.email,
-        firstName: readonlyUser.user.firstName,
-        lastName: readonlyUser.user.lastName,
-        uuid: readonlyUser.user.uuid
+        email: userWithUserDeletePermission.user.email,
+        firstName: userWithUserDeletePermission.user.firstName,
+        lastName: userWithUserDeletePermission.user.lastName,
+        uuid: userWithUserDeletePermission.user.uuid
       })],
       meta: {
         total: 1,
