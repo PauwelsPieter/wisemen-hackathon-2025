@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import { IsArray, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator'
-import { PermissionObject } from '../../permission/transformers/permission.transformer.js'
+import { PermissionObject } from '../../../permission/transformers/permission.transformer.js'
 
-export class RoleValueDto {
+export class UpdateRolesBulkRoleCommand {
   @ApiProperty({ type: String })
   @IsNotEmpty()
   @IsUUID()
@@ -18,11 +18,11 @@ export class RoleValueDto {
   permissions: PermissionObject[]
 }
 
-export class UpdateRolesBulkDto {
-  @ApiProperty({ type: [RoleValueDto] })
+export class UpdateRolesBulkCommand {
+  @ApiProperty({ type: [UpdateRolesBulkRoleCommand] })
   @ValidateNested({ each: true })
-  @Type(() => RoleValueDto)
+  @Type(() => UpdateRolesBulkRoleCommand)
   @IsArray()
   @IsNotEmpty()
-  roles: RoleValueDto[]
+  roles: UpdateRolesBulkRoleCommand[]
 }
