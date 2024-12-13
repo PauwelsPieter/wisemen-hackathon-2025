@@ -68,7 +68,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
         code: exception.code,
         detail: exception.detail,
         status: exception.status,
-        meta: Object.assign({}, exception.meta)
+        meta: exception.meta
       }]
     })
   }
