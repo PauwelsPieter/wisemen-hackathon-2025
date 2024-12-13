@@ -1,21 +1,19 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserRepository } from '../users/repositories/user.repository.js'
-import { CacheModule } from '../cache/cache.module.js'
-import { TypesenseModule } from '../typesense/modules/typesense.module.js'
-import { Role } from './entities/role.entity.js'
-import { RoleController } from './controllers/role.controller.js'
-import { RoleService } from './services/role.service.js'
-import { RoleRepository } from './repositories/role.repository.js'
+import { CreateRoleModule } from './use-cases/create-role/create-role.module.js'
+import { DeleteRoleModule } from './use-cases/delete-role/delete-role.module.js'
+import { UpdateRoleModule } from './use-cases/update-role/update-role.module.js'
+import { UpdateRolesBulkModule } from './use-cases/update-roles-bulk/update-roles-bulk.module.js'
+import { ViewRoleModule } from './use-cases/view-role/view-role.module.js'
+import { ViewRolesModule } from './use-cases/view-roles/view-roles.module.js'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role]),
-    CacheModule,
-    TypesenseModule
-  ],
-  controllers: [RoleController],
-  providers: [RoleService, RoleRepository, UserRepository],
-  exports: [RoleService]
+    CreateRoleModule,
+    DeleteRoleModule,
+    UpdateRolesBulkModule,
+    UpdateRoleModule,
+    ViewRoleModule,
+    ViewRolesModule
+  ]
 })
 export class RoleModule {}

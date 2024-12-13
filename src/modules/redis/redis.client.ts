@@ -1,20 +1,22 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import type { RedisClientType } from 'redis'
 import { createClient } from 'redis'
 
 @Injectable()
 export class RedisClient implements OnModuleInit, OnModuleDestroy {
   public client: RedisClientType
+  private readonly prefix: string
+
+  constructor (
+    private readonly configService: ConfigService
+  ) {
+    this.prefix = this.configService.getOrThrow('NODE_ENV')
+  }
 
   async onModuleInit (): Promise<void> {
-    const url = process.env.REDIS_URL
-
-    if (url == null) {
-      throw new Error('REDIS_URL is not set')
-    }
-
     this.client = createClient({
-      url,
+      url: this.configService.getOrThrow('REDIS_URL'),
       pingInterval: 10000
     })
 
@@ -28,14 +30,14 @@ export class RedisClient implements OnModuleInit, OnModuleDestroy {
   }
 
   async getCachedValue (key: string): Promise<string | null> {
-    return await this.client.get(key)
+    return await this.client.get(`${this.prefix}.${key}`)
   }
 
-  async putCachedValue (key: string, value: string): Promise<void> {
-    await this.client.set(key, value)
+  async putCachedValue (key: string, value: string, ttl = 7200): Promise<void> {
+    await this.client.set(`${this.prefix}.${key}`, value, { EX: ttl })
   }
 
   async deleteCachedValue (key: string): Promise<void> {
-    await this.client.del(key)
+    await this.client.del(`${this.prefix}.${key}`)
   }
 }

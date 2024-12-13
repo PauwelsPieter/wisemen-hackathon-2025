@@ -9,6 +9,9 @@ export class ViewUserUseCase {
   ) {}
 
   async viewUser (userUuid: string): Promise<User> {
-    return await this.userRepository.findOneByOrFail({ uuid: userUuid })
+    return await this.userRepository.findOneOrFail({
+      where: { uuid: userUuid },
+      relations: { userRoles: { role: true } }
+    })
   }
 }

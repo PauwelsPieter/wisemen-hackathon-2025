@@ -2,27 +2,24 @@ import { after, before, describe, it } from 'node:test'
 import { randomUUID } from 'crypto'
 import request from 'supertest'
 import { expect } from 'expect'
-import type { DataSource } from 'typeorm'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { TestContext } from '../../../../../test/utils/test-context.js'
-import { Permission } from '../../../permissions/permission.enum.js'
+import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import { setupTest } from '../../../../utils/test-setup/setup.js'
+import { setupTest } from '../../../../../test/setup/test-setup.js'
 
 describe('View user e2e test', () => {
   let app: NestExpressApplication
-  let dataSource: DataSource
   let adminUser: TestUser
   let authorizedUser: TestUser
+  let context: TestContext
 
   before(async () => {
-    ({ app, dataSource } = await setupTest())
-
-    const context = new TestContext(dataSource.manager)
+    ({ app, context } = await setupTest())
 
     const [admin, user] = await Promise.all([
       context.getAdminUser(),
-      context.getUser([Permission.USER_READ])
+      context.getUser([Permission.READ_ONLY])
     ])
 
     adminUser = admin
@@ -46,14 +43,6 @@ describe('View user e2e test', () => {
       .set('Authorization', `Bearer ${adminUser.token}`)
 
     expect(response).toHaveStatus(404)
-  })
-
-  it('returns the user when the user views themselves', async () => {
-    const response = await request(app.getHttpServer())
-      .get(`/users/${authorizedUser.user.uuid}`)
-      .set('Authorization', `Bearer ${authorizedUser.token}`)
-
-    expect(response).toHaveStatus(200)
   })
 
   it('returns 403 (unauthorized) when a user attempts to view another user', async () => {

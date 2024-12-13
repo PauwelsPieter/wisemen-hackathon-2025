@@ -6,7 +6,8 @@ import { NestExpressApplication } from '@nestjs/platform-express'
 import type { File } from '../entities/file.entity.js'
 import { TestContext } from '../../../../test/utils/test-context.js'
 import type { TestUser } from '../../users/tests/setup-user.type.js'
-import { setupTest } from '../../../utils/test-setup/setup.js'
+import { setupTest } from '../../../../test/setup/test-setup.js'
+import { FileModule } from '../modules/file.module.js'
 import { CreateFileDtoBuilder } from './builders/create-file-dto.builder.js'
 import { FileSeeder } from './seeders/file.seeder.js'
 import { FileBuilder } from './builders/file-link.builder.js'
@@ -20,9 +21,7 @@ describe('File', () => {
   let adminUser: TestUser
 
   before(async () => {
-    ({ app, dataSource } = await setupTest())
-
-    context = new TestContext(dataSource.manager)
+    ({ app, dataSource, context } = await setupTest([FileModule]))
 
     adminUser = await context.getAdminUser()
   })

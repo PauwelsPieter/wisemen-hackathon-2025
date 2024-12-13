@@ -1,12 +1,12 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import type { DataSource } from 'typeorm'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import { TestingModule } from '@nestjs/testing'
 import { TestContext } from '../../../../../test/utils/test-context.js'
-import { Permission } from '../../../permissions/permission.enum.js'
+import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import { setupTest } from '../../../../utils/test-setup/setup.js'
+import { setupTest } from '../../../../../test/setup/test-setup.js'
 import {
   TypesenseCollectionService
 } from '../../../typesense/services/typesense-collection.service.js'
@@ -14,30 +14,27 @@ import {
   TypesenseCollectionName
 } from '../../../typesense/enums/typesense-collection-index.enum.js'
 
-describe('View user e2e test', () => {
+describe('View users e2e test', () => {
   let app: NestExpressApplication
-  let dataSource: DataSource
+  let testModule: TestingModule
+  let context: TestContext
   let adminUser: TestUser
   let readonlyUser: TestUser
+  let userWithUserDeletePermission: TestUser
 
   before(async () => {
-    const setup = await setupTest()
-
-    dataSource = setup.dataSource
-    app = setup.app
-
-    const moduleRef = setup.testModule
-
-    const context = new TestContext(dataSource.manager)
+    ({ app, context, testModule } = await setupTest())
 
     readonlyUser = await context.getReadonlyUser()
     adminUser = await context.getAdminUser()
 
-    const typesenseCollectionService = moduleRef.get(TypesenseCollectionService)
+    userWithUserDeletePermission = await context.getUser([Permission.USER_DELETE])
+
+    const typesenseCollectionService = testModule.get(TypesenseCollectionService)
 
     await typesenseCollectionService.importManuallyToTypesense(
       TypesenseCollectionName.USER,
-      [adminUser.user, readonlyUser.user]
+      [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
     )
   })
 
@@ -61,16 +58,16 @@ describe('View user e2e test', () => {
           limit: 10,
           offset: 0
         },
-        'filter[permissions][0]': Permission.READ_ONLY
+        'filter[permissions][0]': Permission.USER_DELETE
       })
 
     expect(response).toHaveStatus(200)
     expect(response.body).toStrictEqual(expect.objectContaining({
       items: [expect.objectContaining({
-        email: readonlyUser.user.email,
-        firstName: readonlyUser.user.firstName,
-        lastName: readonlyUser.user.lastName,
-        uuid: readonlyUser.user.uuid
+        email: userWithUserDeletePermission.user.email,
+        firstName: userWithUserDeletePermission.user.firstName,
+        lastName: userWithUserDeletePermission.user.lastName,
+        uuid: userWithUserDeletePermission.user.uuid
       })],
       meta: {
         total: 1,

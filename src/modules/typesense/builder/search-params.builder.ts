@@ -1,10 +1,10 @@
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import type { FilterField, SearchField, TypesenseCollection, SortField } from '../collections/abstract-typesense.collection.js'
-import type { SortDirection } from '../../../utils/query/search.query.js'
 import { FilterOptions } from '../enums/typesense-filter-options.enum.js'
+import type { SortDirection } from '../../pagination/search.query.js'
 
 export const DEFAULT_LIMIT = 10
-export const DEFAULT_OFFSET = 1
+export const DEFAULT_OFFSET = 0
 
 export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection> {
   private readonly filters: string[] = []

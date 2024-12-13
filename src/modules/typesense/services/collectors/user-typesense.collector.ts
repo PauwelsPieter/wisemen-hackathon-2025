@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { InOrIgnore } from '../../../../utils/typeorm/operators/in-or-ignore.js'
+import { AnyOrIgnore } from '@wisemen/nestjs-typeorm'
 import { UserRepository } from '../../../users/repositories/user.repository.js'
 import {
   UserSearchTransformer,
@@ -20,8 +20,8 @@ export class UserTypesenseCollector implements TypesenseCollector {
 
   async fetch (uuids?: string[]): Promise<User[]> {
     return await this.userRepository.find({
-      where: { uuid: InOrIgnore(uuids) },
-      relations: { role: true }
+      where: { uuid: AnyOrIgnore(uuids) },
+      relations: { userRoles: { role: true } }
     })
   }
 }

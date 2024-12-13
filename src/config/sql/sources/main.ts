@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm'
-import { mainMigrations } from '../migrations/index.js'
+import { SnakeNamingStrategy } from '@wisemen/nestjs-typeorm'
 import { sslHelper } from '../utils/typeorm.js'
-import { mainModels } from '../models/models.js'
 
 export const mainDataSource = new DataSource({
   name: 'default',
@@ -12,6 +11,7 @@ export const mainDataSource = new DataSource({
   logging: false,
   synchronize: false,
   migrationsRun: false,
-  entities: mainModels,
-  migrations: mainMigrations
+  entities: ['dist/**/*.entity.js'],
+  migrations: ['dist/src/config/sql/migrations/**/*.js'],
+  namingStrategy: new SnakeNamingStrategy()
 })

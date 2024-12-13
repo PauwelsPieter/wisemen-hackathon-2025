@@ -1,15 +1,15 @@
 import { type ExceptionFilter, Catch, type ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
-import { captureException } from '@sentry/node'
 import { plainToInstance } from 'class-transformer'
 import { EntityNotFoundError } from 'typeorm'
+import { captureException } from '@sentry/nestjs'
 import { JsonApiError } from './types/json-api-error.type.js'
 import { NotFoundError } from './generic/not-found.error.js'
 import { ApiError } from './api-errors/api-error.js'
 import { CompositeApiError } from './api-errors/composite.api-error.js'
 
 @Catch()
-export class CustomerExceptionFilter implements ExceptionFilter {
+export class CustomExceptionFilter implements ExceptionFilter {
   constructor (
     private readonly httpAdapterHost: HttpAdapterHost
   ) {}
