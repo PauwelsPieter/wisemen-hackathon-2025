@@ -14,14 +14,15 @@ import { ValidationModule } from '../../src/modules/validation/validation.module
 @Module({})
 export class TestModule {
   static forRoot (
-    modules: Array<DynamicModule | Type<unknown>> = []
+    modules: Array<DynamicModule | Type<unknown>> = [],
+    migrationsRun = false
   ): DynamicModule {
     return {
       module: TestModule,
       imports: [
         SentryModule.forRoot(),
         DefaultConfigModule.forRoot(),
-        DefaultTypeOrmModule.forRootAsync({ migrationsRun: false }),
+        DefaultTypeOrmModule.forRootAsync({ migrationsRun }),
 
         ExceptionModule,
         ValidationModule,

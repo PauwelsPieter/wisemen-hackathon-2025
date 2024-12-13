@@ -7,7 +7,7 @@ import { Permission } from '../../src/modules/permission/permission.enum.js'
 import { compileTestModule } from './compile-test-module.js'
 
 async function globalTestSetup (): Promise<void> {
-  const testingModule = await compileTestModule()
+  const testingModule = await compileTestModule([], true)
 
   await Promise.all([
     migrateTypesense(testingModule),
