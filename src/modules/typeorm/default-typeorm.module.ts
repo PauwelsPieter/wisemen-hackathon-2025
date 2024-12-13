@@ -8,9 +8,10 @@ export class DefaultTypeOrmModule {
   static forRootAsync (
     options: {
       migrationsRun?: boolean
-      migrations?: string[]
     }
   ): DynamicModule {
+    const migrationsRun = options.migrationsRun ?? false
+
     return TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
@@ -19,8 +20,8 @@ export class DefaultTypeOrmModule {
         extra: { max: 50 },
         logging: false,
         synchronize: false,
-        migrations: options.migrations,
-        migrationsRun: options.migrationsRun ?? false,
+        migrations: migrationsRun ? ['dist/src/config/sql/migrations/**/*.js'] : [],
+        migrationsRun,
         autoLoadEntities: true,
         namingStrategy: new SnakeNamingStrategy()
       }),
