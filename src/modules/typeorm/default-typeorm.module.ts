@@ -5,7 +5,12 @@ import { sslHelper } from '../../config/sql/utils/typeorm.js'
 
 @Module({})
 export class DefaultTypeOrmModule {
-  static forRootAsync (): DynamicModule {
+  static forRootAsync (
+    options: {
+      migrationsRun?: boolean
+      migrations?: string[]
+    }
+  ): DynamicModule {
     return TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
@@ -14,8 +19,8 @@ export class DefaultTypeOrmModule {
         extra: { max: 50 },
         logging: false,
         synchronize: false,
-        migrations: ['dist/src/config/sql/migrations/**/*.js'],
-        migrationsRun: true,
+        migrations: options.migrations,
+        migrationsRun: options.migrationsRun ?? false,
         autoLoadEntities: true,
         namingStrategy: new SnakeNamingStrategy()
       }),

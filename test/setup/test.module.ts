@@ -21,7 +21,7 @@ export class TestModule {
       imports: [
         SentryModule.forRoot(),
         DefaultConfigModule.forRoot(),
-        DefaultTypeOrmModule.forRootAsync(),
+        DefaultTypeOrmModule.forRootAsync({ migrationsRun: false }),
 
         ExceptionModule,
         ValidationModule,

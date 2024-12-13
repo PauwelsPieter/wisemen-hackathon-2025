@@ -17,7 +17,10 @@ export class AppModule {
       imports: [
         SentryModule.forRoot(),
         DefaultConfigModule.forRoot(),
-        DefaultTypeOrmModule.forRootAsync(),
+        DefaultTypeOrmModule.forRootAsync({
+          migrationsRun: true,
+          migrations: ['dist/src/config/sql/migrations/**/*.js']
+        }),
 
         ExceptionModule,
         ValidationModule,
