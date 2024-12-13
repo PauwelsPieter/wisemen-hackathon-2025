@@ -4,17 +4,14 @@ import { EventEmitter } from './event-emitter.js'
 
 @Module({})
 export class EventModule {
-  static forRoot (
-    modules: DynamicModule[] = []
-  ): DynamicModule {
+  static forRoot (): DynamicModule {
     return {
       module: EventModule,
       imports: [
         EventEmitterModule.forRoot({
           wildcard: true,
           ignoreErrors: false
-        }),
-        ...modules
+        })
       ],
       providers: [EventEmitter],
       exports: [EventEmitter]

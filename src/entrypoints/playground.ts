@@ -14,7 +14,7 @@ import { DefaultTypeOrmModule } from '../modules/typeorm/default-typeorm.module.
   imports: [
     SentryModule.forRoot(),
     DefaultConfigModule.forRoot(),
-    DefaultTypeOrmModule.forRootAsync(),
+    DefaultTypeOrmModule.forRootAsync({ migrationsRun: false }),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
