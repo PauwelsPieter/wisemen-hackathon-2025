@@ -1,4 +1,4 @@
-import '../../utils/sentry/sentry.js'
+import '../../modules/exceptions/sentry.js'
 
 import { DataSource } from 'typeorm'
 import { INestApplicationContext } from '@nestjs/common'
