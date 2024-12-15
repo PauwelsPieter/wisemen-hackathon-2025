@@ -1,9 +1,8 @@
 import assert from 'assert'
-import { Transformer } from '@appwise/transformer'
 import type { User } from '../../users/entities/user.entity.js'
 import type { Permission } from '../../permission/permission.enum.js'
 
-export class UserSearchTransformerType {
+export class UserSearchTransformer {
   id: string
   uuid: string
   firstName: string
@@ -11,29 +10,23 @@ export class UserSearchTransformerType {
   email: string
   roleUuids: string[]
   permissions: Permission[]
-}
 
-export class UserSearchTransformer
-  extends Transformer<User, UserSearchTransformerType> {
-  transform (user: User): UserSearchTransformerType {
+  constructor (user: User) {
     assert(user.userRoles != null)
 
-    const permissions = Array.from(new Set(
+    this.id = user.uuid
+    this.uuid = user.uuid
+    this.firstName = user.firstName ?? ''
+    this.lastName = user.lastName ?? ''
+    this.email = user.email ?? ''
+    this.roleUuids = user.userRoles.map(userRole => userRole.roleUuid)
+    this.permissions = Array.from(new Set(
       user.userRoles.flatMap((userRole) => {
         assert(userRole.role != null)
 
         return userRole.role.permissions
       })
     ))
-
-    return {
-      id: user.uuid,
-      uuid: user.uuid,
-      firstName: user.firstName ?? '',
-      lastName: user.lastName ?? '',
-      email: user.email ?? '',
-      roleUuids: user.userRoles.map(userRole => userRole.roleUuid),
-      permissions: permissions
-    }
   }
 }
+

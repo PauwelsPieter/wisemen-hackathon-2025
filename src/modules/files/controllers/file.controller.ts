@@ -3,7 +3,7 @@ import { ApiOAuth2, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Response } from 'express'
 import { UuidParam } from '@wisemen/decorators'
 import { CreateFileDto } from '../dtos/create-file.dto.js'
-import { type CreateFileResponse, CreateFileResponseTransformer } from '../transformers/file-created.transformer.js'
+import { CreateFileResponse } from '../transformers/file-created.transformer.js'
 import { FileFlowService } from '../services/file.flows.service.js'
 import { confirmFileUploadApiResponse, createFileApiResponse, downloadFileApiResponse, removeFileApiResponse } from '../docs/file-response.docs.js'
 import { AuthStorage } from '../../auth/auth.storage.js'
@@ -25,7 +25,7 @@ export class FileController {
     const userUuid = this.authStorage.getUserUuid()
     const { file, uploadUrl } = await this.fileFlowService.create(createFileDto, userUuid)
 
-    return new CreateFileResponseTransformer().item(file, uploadUrl)
+    return new CreateFileResponse(file, uploadUrl)
   }
 
   @Post('/:file/confirm-upload')
