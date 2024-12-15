@@ -1,4 +1,4 @@
-import '../utils/sentry/sentry.js'
+import '../modules/exceptions/sentry.js'
 
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'

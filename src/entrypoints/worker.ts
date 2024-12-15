@@ -1,4 +1,4 @@
-import '../utils/sentry/sentry.js'
+import '../modules/exceptions/sentry.js'
 
 import { NestFactory } from '@nestjs/core'
 import yargs from 'yargs'

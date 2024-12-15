@@ -1,8 +1,8 @@
 import type { ValidationError } from 'class-validator'
 import { plainToInstance } from 'class-transformer'
 import { HttpStatus } from '@nestjs/common'
+import { snakeCase } from 'change-case'
 import { JsonApiErrorContent, JsonApiError } from '../exceptions/types/json-api-error.type.js'
-import { camelToSnakeCase } from '../../utils/helpers/camel-to-snake-case.js'
 
 function convertValidationError (errors: ValidationError[], path = '$'): JsonApiErrorContent[] {
   const convertedErrors: JsonApiErrorContent[] = []
@@ -18,7 +18,7 @@ function convertValidationError (errors: ValidationError[], path = '$'): JsonApi
 
         convertedErrors.push({
           source: { pointer: jsonpath },
-          code: 'validation_error.' + camelToSnakeCase(validationConstraintName),
+          code: 'validation_error.' + snakeCase(validationConstraintName),
           detail: error.constraints !== undefined ? Object.values(error.constraints)[0] : undefined
         })
       }
