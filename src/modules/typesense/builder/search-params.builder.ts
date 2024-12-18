@@ -84,7 +84,8 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
       filter_by: this.filters.join(' && '),
       sort_by: this.sorting.join(','),
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      infix: 'fallback'
     }
 
     return searchParams
