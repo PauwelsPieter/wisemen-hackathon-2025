@@ -15,6 +15,7 @@ import { LocalizationModule } from '../modules/localization/modules/localization
 import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
+import { startTracers } from '../utils/opentelemetry/tracer.js'
 
 @Module({
   imports: [
@@ -41,6 +42,8 @@ class ApiModule {
 
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    startTracers('api')
+
     const app = await NestFactory.create(ApiModule, adapter)
 
     app.setGlobalPrefix('api', {
