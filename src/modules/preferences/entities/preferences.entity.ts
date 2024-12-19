@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm'
 import { Theme } from '../types/theme.enum.js'
 import { User } from '../../users/entities/user.entity.js'
 
@@ -13,12 +13,12 @@ export class Preferences {
   @UpdateDateColumn({ precision: 3 })
   updatedAt: Date
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', unique: true })
   userUuid: string
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, user => user.preferences)
   @JoinColumn({ name: 'userUuid' })
-  user: User
+  user: Relation<User>
 
   @Column({ type: 'enum', enum: Theme, default: Theme.SYSTEM })
   theme: Theme

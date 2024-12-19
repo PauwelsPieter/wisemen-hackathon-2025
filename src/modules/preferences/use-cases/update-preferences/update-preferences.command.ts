@@ -6,7 +6,7 @@ export class UpdatePreferencesCommand {
   @ApiProperty({ enum: Theme })
   @IsOptional()
   @IsEnum(Theme)
-  enum?: Theme
+  theme?: Theme
 
   @ApiProperty({ type: String, example: 'en' })
   @IsOptional()
