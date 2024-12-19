@@ -15,22 +15,14 @@ export class UpdatePreferencesUseCase {
     userUuid: string,
     command: UpdatePreferencesCommand
   ): Promise<void> {
-    let preference = await this.preferencesRepository.findOne({
-      where: {
-        userUuid
+    const preferences = this.preferencesRepository.create(command)
+
+    preferences.userUuid = userUuid
+
+    await this.preferencesRepository.upsert(preferences, {
+      conflictPaths: {
+        userUuid: true
       }
     })
-
-    if (preference == null) {
-      preference = this.preferencesRepository.create({
-        userUuid
-      })
-
-      await this.preferencesRepository.insert(preference)
-    } else {
-      await this.preferencesRepository.update({
-        uuid: preference.uuid
-      }, command)
-    }
   }
 }
