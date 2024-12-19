@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { InjectRepository, TypeOrmRepository } from '@wisemen/nestjs-typeorm'
 import { Preferences } from '../../entities/preferences.entity.js'
 import { ViewPreferencesResponse } from './view-preferences.response.js'
 
@@ -8,7 +7,7 @@ import { ViewPreferencesResponse } from './view-preferences.response.js'
 export class ViewPreferencesIndexUseCase {
   constructor (
     @InjectRepository(Preferences)
-    private preferencesRepository: Repository<Preferences>
+    private preferencesRepository: TypeOrmRepository<Preferences>
   ) { }
 
   public async execute (
