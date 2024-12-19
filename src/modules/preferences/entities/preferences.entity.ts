@@ -16,7 +16,7 @@ export class Preferences {
   @Column({ type: 'uuid', unique: true })
   userUuid: string
 
-  @OneToOne(() => User, user => user.preferences)
+  @OneToOne(() => User)
   @JoinColumn({ name: 'userUuid' })
   user: Relation<User>
 

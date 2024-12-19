@@ -6,11 +6,9 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   UpdateDateColumn, DeleteDateColumn,
-  OneToMany,
-  OneToOne
+  OneToMany
 } from 'typeorm'
 import { UserRole } from '../../roles/entities/user-role.entity.js'
-import { Preferences } from '../../preferences/entities/preferences.entity.js'
 
 @Entity()
 export class User {
@@ -41,7 +39,4 @@ export class User {
 
   @OneToMany(() => UserRole, role => role.user)
   userRoles?: Array<Relation<UserRole>>
-
-  @OneToOne(() => Preferences, preferences => preferences.user)
-  preferences: Relation<Preferences>
 }
