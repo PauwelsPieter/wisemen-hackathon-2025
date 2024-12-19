@@ -13,20 +13,20 @@ import { UpdatePreferencesUseCase } from './update-preferences.use-case.js'
 export class UpdatePreferencesController {
   constructor (
     private readonly authStorage: AuthStorage,
-    private readonly createPreferencesUseCase: UpdatePreferencesUseCase
+    private readonly updatePreferencesUseCase: UpdatePreferencesUseCase
   ) { }
 
   @Patch()
   @Permissions(Permission.READ_ONLY)
   @ApiOkResponse()
-  public async createPreferences (
+  public async updatePreferences (
     @UuidParam('userUuid') userUuid: string,
-    @Body() createPreferencesCommand: UpdatePreferencesCommand
+    @Body() updatePreferencesCommand: UpdatePreferencesCommand
   ): Promise<void> {
     if (userUuid !== this.authStorage.getUserUuid()) {
       throw new ForbiddenException()
     }
 
-    return this.createPreferencesUseCase.execute(userUuid, createPreferencesCommand)
+    return this.updatePreferencesUseCase.execute(userUuid, updatePreferencesCommand)
   }
 }
