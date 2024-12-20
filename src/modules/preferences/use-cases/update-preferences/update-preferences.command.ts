@@ -1,7 +1,7 @@
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator'
 import { ApiPropertyOptional } from '@nestjs/swagger'
+import { IsUndefinable } from '@wisemen/validators'
 import { Theme } from '../../types/theme.enum.js'
-import { IsUndefinable } from '../../../../utils/validators/is-undefinable.validator.js'
 
 export class UpdatePreferencesCommand {
   @ApiPropertyOptional({ enum: Theme })

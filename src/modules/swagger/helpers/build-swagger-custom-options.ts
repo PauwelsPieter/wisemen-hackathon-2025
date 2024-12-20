@@ -1,5 +1,5 @@
 import { SwaggerCustomOptions } from '@nestjs/swagger'
-import { EnvType } from '../../../utils/envs/env.enum.js'
+import { EnvType } from '../../config/env.enum.js'
 import { buildBaseUrl } from './build-base-url.js'
 
 function buildRedirectUrl (): string {

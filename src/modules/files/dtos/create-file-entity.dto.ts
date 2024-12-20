@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { IsNullable } from '@wisemen/validators'
 import { IsString, IsUUID, Max, Min } from 'class-validator'
-import { IsNullable } from '../../../utils/validators/is-nullable.validator.js'
 
 export class CreateFileLinkDto {
   @ApiProperty({ format: 'uuid' })
