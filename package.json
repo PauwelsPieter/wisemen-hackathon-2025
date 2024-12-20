@@ -18,7 +18,7 @@
     "test:run": "pnpm build && pnpm test",
     "test:pipeline": "pnpm test:setup && pnpm test",
     "test:setup": "pnpm build && node --env-file=.env.test dist/test/setup/global-setup.js",
-    "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/config/sql/sources/main.js"
+    "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/sql/sources/main.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.712.0",
@@ -37,7 +37,7 @@
     "@sentry/nestjs": "^8.45.0",
     "@wisemen/app-container": "^2.1.11",
     "@wisemen/decorators": "^0.0.3",
-    "@wisemen/nestjs-typeorm": "^0.0.3",
+    "@wisemen/nestjs-typeorm": "^0.0.4",
     "@wisemen/time": "^0.0.17",
     "@wisemen/validators": "^0.0.3",
     "axios": "^1.7.9",
