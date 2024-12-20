@@ -1,10 +1,11 @@
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator'
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Theme } from '../../types/theme.enum.js'
+import { IsUndefinable } from '../../../../utils/validators/is-undefinable.validator.js'
 
 export class UpdatePreferencesCommand {
   @ApiPropertyOptional({ enum: Theme })
-  @IsOptional()
+  @IsUndefinable()
   @IsEnum(Theme)
   theme?: Theme
 
@@ -19,17 +20,17 @@ export class UpdatePreferencesCommand {
   fontSize?: string | null
 
   @ApiPropertyOptional({ type: Boolean, example: false })
-  @IsOptional()
+  @IsUndefinable()
   @IsBoolean()
   showShortcuts?: boolean
 
   @ApiPropertyOptional({ type: Boolean, example: false })
-  @IsOptional()
+  @IsUndefinable()
   @IsBoolean()
   reduceMotion?: boolean
 
   @ApiPropertyOptional({ type: Boolean, example: false })
-  @IsOptional()
+  @IsUndefinable()
   @IsBoolean()
   highContrast?: boolean
 }
