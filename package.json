@@ -39,7 +39,7 @@
     "@wisemen/decorators": "^0.0.3",
     "@wisemen/nestjs-typeorm": "^0.0.3",
     "@wisemen/time": "^0.0.17",
-    "@wisemen/validators": "^0.0.2",
+    "@wisemen/validators": "^0.0.3",
     "axios": "^1.7.9",
     "change-case": "^5.4.4",
     "class-transformer": "^0.5.1",
