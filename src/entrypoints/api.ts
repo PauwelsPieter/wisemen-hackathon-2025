@@ -1,5 +1,4 @@
 import '../modules/exceptions/sentry.js'
-
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
