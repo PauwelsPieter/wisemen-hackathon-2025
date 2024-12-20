@@ -1,8 +1,6 @@
 import { Body, Controller, ForbiddenException, Patch } from '@nestjs/common'
 import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
-import { Permission } from '../../../permission/permission.enum.js'
-import { Permissions } from '../../../permission/permission.decorator.js'
 import { AuthStorage } from '../../../auth/auth.storage.js'
 import { UpdatePreferencesCommand } from './update-preferences.command.js'
 import { UpdatePreferencesUseCase } from './update-preferences.use-case.js'
@@ -17,7 +15,6 @@ export class UpdatePreferencesController {
   ) { }
 
   @Patch()
-  @Permissions(Permission.READ_ONLY)
   @ApiOkResponse()
   public async updatePreferences (
     @UuidParam('userUuid') userUuid: string,
