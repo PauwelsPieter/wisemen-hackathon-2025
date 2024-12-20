@@ -6,7 +6,7 @@ import {
   Validate,
   ValidatorConstraint
 } from 'class-validator'
-import { Time } from '@appwise/time'
+import { Time } from '@wisemen/time'
 
 /**
    * Validate that the value is a string with format hh:mm
