@@ -8,14 +8,14 @@ export class IgnoredSpansProcessor extends BatchSpanProcessor {
   ]
 
   onEnd (span: Span) {
-    if (this.ignorePgBossStatement(span)) {
+    if (this.containsIngoredPgBossStatement(span)) {
       return
     }
 
     super.onEnd(span)
   }
 
-  ignorePgBossStatement (span: Span): boolean {
+  containsIngoredPgBossStatement (span: Span): boolean {
     const dbStatement = span.attributes['db.statement']?.toString()
 
     if (dbStatement == null) {
