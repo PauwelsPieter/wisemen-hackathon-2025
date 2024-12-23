@@ -10,6 +10,7 @@ export interface TypesenseField {
   readonly optional?: boolean
   readonly type: FieldType
   readonly sort?: boolean
+  readonly infix?: boolean
 }
 
 export abstract class TypesenseCollection {
@@ -23,7 +24,8 @@ export abstract class TypesenseCollection {
         name: field.name,
         type: field.type,
         optional: field.optional,
-        sort: field.sort
+        sort: field.sort,
+        infix: field.infix
       })
     )
     const filterFields: CollectionFieldSchema[] = this.filterableFields.map(
