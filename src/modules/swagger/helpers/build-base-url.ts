@@ -1,4 +1,4 @@
-import { EnvType } from '../../../utils/envs/env.enum.js'
+import { EnvType } from '../../config/env.enum.js'
 
 export function buildBaseUrl (
   env: EnvType

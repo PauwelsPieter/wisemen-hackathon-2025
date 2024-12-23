@@ -1,6 +1,6 @@
 import { DocumentBuilder } from '@nestjs/swagger'
 import { OpenApiDocument } from '../types/open-api-document.js'
-import { EnvType } from '../../../utils/envs/env.enum.js'
+import { EnvType } from '../../config/env.enum.js'
 import { buildBaseUrl } from './build-base-url.js'
 
 export function buildApiDocumentation (): OpenApiDocument {

@@ -15,6 +15,7 @@ import { LocalizationModule } from '../modules/localization/modules/localization
 import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
+import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { SwaggerModule } from '../modules/swagger/swagger.module.js'
     PermissionModule,
     FileModule,
     LocalizationModule,
-    ContactModule
+    ContactModule,
+    PreferencesModule
   ]
 })
 class ApiModule {
