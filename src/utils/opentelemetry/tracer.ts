@@ -8,7 +8,6 @@ import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrum
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
 import { AwsInstrumentation } from '@opentelemetry/instrumentation-aws-sdk'
 import { RedisInstrumentation } from '@opentelemetry/instrumentation-redis-4'
-import * as Sentry from '@sentry/nestjs'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
 
