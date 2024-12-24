@@ -23,7 +23,7 @@ export class AppModule {
         ValidationModule,
 
         NatsModule.forRoot(),
-        EventModule.forRoot(),
+        EventModule,
 
         // Utils
         ...modules

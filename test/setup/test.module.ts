@@ -28,7 +28,7 @@ export class TestModule {
         ValidationModule,
 
         NatsModule.forRoot(),
-        EventModule.forRoot(),
+        EventModule,
 
         AuthModule,
         UserModule,
