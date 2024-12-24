@@ -1,4 +1,4 @@
-import '../modules/exceptions/sentry.js'
+// import '../modules/exceptions/sentry.js'
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
@@ -15,6 +15,7 @@ import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 import { startTracers } from '../utils/opentelemetry/tracer.js'
+import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { startTracers } from '../utils/opentelemetry/tracer.js'
     PermissionModule,
     FileModule,
     LocalizationModule,
-    ContactModule
+    ContactModule,
+    PreferencesModule
   ]
 })
 class ApiModule {

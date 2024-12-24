@@ -8,6 +8,7 @@ import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrum
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
 import { AwsInstrumentation } from '@opentelemetry/instrumentation-aws-sdk'
 import { RedisInstrumentation } from '@opentelemetry/instrumentation-redis-4'
+import * as Sentry from '@sentry/nestjs'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
 
@@ -19,6 +20,12 @@ export function startTracers (serviceName: string): void {
   const tracer = createTracer(serviceName)
 
   tracer?.start()
+
+  Sentry.init({
+    environment: process.env.NODE_ENV,
+    dsn: process.env.SENTRY_DSN,
+    tracesSampleRate: Number(process.env.SENTRY_ERROR_SAMPLE_RATE ?? '1')
+  })
 }
 
 function createTracer (serviceName: string): NodeSDK | null {

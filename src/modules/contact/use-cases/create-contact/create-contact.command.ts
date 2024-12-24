@@ -1,6 +1,6 @@
 import { IsEmail, IsPhoneNumber, IsString } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNullable } from '../../../../utils/validators/is-nullable.validator.js'
+import { IsNullable } from '@wisemen/validators'
 
 export class CreateContactCommand {
   @ApiProperty({ type: String, nullable: true, example: 'John' })

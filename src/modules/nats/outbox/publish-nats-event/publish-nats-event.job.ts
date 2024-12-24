@@ -1,4 +1,4 @@
-import { SECONDS_PER_MINUTE } from '@appwise/time'
+import { SECONDS_PER_MINUTE } from '@wisemen/time'
 import { BaseJobConfig } from '../../../pgboss/jobs/job.abstract.js'
 import type { NatsOutboxEvent } from '../nats-outbox-event.js'
 import { PgBossJob } from '../../../pgboss/jobs/job.decorator.js'

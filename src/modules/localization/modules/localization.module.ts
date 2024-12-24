@@ -4,7 +4,7 @@ import { AcceptLanguageResolver, I18nModule, I18nService } from 'nestjs-i18n'
 import { ModuleRef } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { DEFAULT_LANGUAGE } from '../constants/defaults.constant.js'
-import { EnvType } from '../../../utils/envs/env.enum.js'
+import { EnvType } from '../../config/env.enum.js'
 
 @Global()
 @Module({

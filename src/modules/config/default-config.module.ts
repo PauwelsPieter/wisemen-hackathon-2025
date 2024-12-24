@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
-import { envValidationSchema } from '../../config/env/env.validation.js'
+import { envValidationSchema } from './env.validation.js'
 
 @Module({})
 export class DefaultConfigModule {
