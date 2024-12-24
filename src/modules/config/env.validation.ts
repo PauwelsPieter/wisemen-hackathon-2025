@@ -19,5 +19,10 @@ export const envValidationSchema = Joi.object({
   ACCESS_TOKEN_LIFETIME: Joi.number().integer().positive().required(),
   REFRESH_TOKEN_LIFETIME: Joi.number().integer().positive().required(),
 
-  FRONTEND_URL: Joi.string().uri().required()
+  FRONTEND_URL: Joi.string().uri().required(),
+
+  AUTH_JWKS_ENDPOINT: Joi.string().uri().required(),
+  AUTH_ISSUER: Joi.string().uri().required(),
+  AUTH_PROJECT_ID: Joi.string().required()
+
 })
