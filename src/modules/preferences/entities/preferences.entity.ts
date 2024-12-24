@@ -17,7 +17,7 @@ export class Preferences {
   userUuid: string
 
   @OneToOne(() => User)
-  @JoinColumn({ name: 'userUuid' })
+  @JoinColumn({ name: 'user_uuid' })
   user: Relation<User>
 
   @Column({ type: 'enum', enum: Theme, default: Theme.SYSTEM })
