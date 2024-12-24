@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import type { User } from '../../entities/user.entity.js'
-import { UserRepository } from '../../repositories/user.repository.js'
+import { Repository } from 'typeorm'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { User } from '../../entities/user.entity.js'
 
 @Injectable()
 export class ViewUserUseCase {
   constructor (
-    private readonly userRepository: UserRepository
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}
 
   async viewUser (userUuid: string): Promise<User> {

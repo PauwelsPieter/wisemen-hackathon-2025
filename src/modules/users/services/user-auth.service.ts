@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { UserRepository } from '../repositories/user.repository.js'
+import { Repository } from 'typeorm'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { User } from '../entities/user.entity.js'
 import { RedisClient } from '../../redis/redis.client.js'
 import { TokenContent } from '../../auth/middleware/auth.middleware.js'
@@ -10,7 +11,8 @@ import { AuthContent } from '../../auth/auth.storage.js'
 @Injectable()
 export class UserAuthService {
   constructor (
-    private readonly userRepository: UserRepository,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly redisClient: RedisClient,
     private readonly typesenseService: TypesenseCollectionService
   ) { }
