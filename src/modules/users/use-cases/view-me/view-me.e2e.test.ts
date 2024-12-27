@@ -6,14 +6,15 @@ import { TestContext } from '../../../../../test/utils/test-context.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
 import { setupTest } from '../../../../../test/setup/test-setup.js'
+import { ViewMeModule } from './view-me.module.js'
 
-describe('View user e2e test', () => {
+describe('View me e2e test', () => {
   let app: NestExpressApplication
   let authorizedUser: TestUser
   let context: TestContext
 
   before(async () => {
-    ({ app, context } = await setupTest())
+    ({ app, context } = await setupTest([ViewMeModule]))
 
     const user = await context.getUser([Permission.USER_READ])
 
