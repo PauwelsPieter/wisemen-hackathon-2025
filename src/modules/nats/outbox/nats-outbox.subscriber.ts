@@ -13,7 +13,7 @@ export class NatsOutboxSubscriber {
     private readonly jobScheduler: PgBossScheduler
   ) {}
 
-  @Subscribe(UserRegisteredEvent.TYPE)
+  @Subscribe(UserRegisteredEvent)
   async handleEventFired (event: WiseEvent): Promise<void> {
     const mappedEvent = this.mapper.map(event)
 
