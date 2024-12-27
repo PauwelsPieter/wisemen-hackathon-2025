@@ -1,6 +1,5 @@
 import { User } from '../users/entities/user.entity.js'
 import { WiseEvent } from './wise-event.js'
-import { EventVisibility } from './event-visibility.enum.js'
 
 export class UserRegisteredEventContent {
   public readonly userUuid: string
@@ -21,7 +20,6 @@ export class UserRegisteredEvent extends WiseEvent<UserRegisteredEventContent> {
       topic: UserRegisteredEvent.createTopic(user),
       version: UserRegisteredEvent.VERSION,
       content: new UserRegisteredEventContent(user),
-      visibility: EventVisibility.EXTERNAL,
       type: UserRegisteredEvent.TYPE,
       source: 'api'
     })

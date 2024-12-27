@@ -30,6 +30,6 @@ export class UpdateRolesBulkUseCase {
 
     await this.cache.clearRolesPermissions(command.roles.map(role => role.uuid))
 
-    await this.typesenseCollectionService.importToTypesense(TypesenseCollectionName.USER)
+    await this.typesenseCollectionService.import(TypesenseCollectionName.USER)
   }
 }

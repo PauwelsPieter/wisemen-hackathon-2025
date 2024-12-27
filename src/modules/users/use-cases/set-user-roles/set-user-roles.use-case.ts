@@ -49,6 +49,6 @@ export class SetUserRolesUseCase {
     })
 
     await this.cache.setUserRoles(userUuid, dto.roleUuids)
-    await this.typesenseService.importManuallyToTypesense(TypesenseCollectionName.USER, [user])
+    await this.typesenseService.importManually(TypesenseCollectionName.USER, [user])
   }
 }

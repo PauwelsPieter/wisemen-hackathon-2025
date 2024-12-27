@@ -52,7 +52,7 @@ export class UserAuthService {
 
     await this.userRepository.insert(user)
 
-    await this.typesenseService.importManuallyToTypesense(TypesenseCollectionName.USER, [user])
+    await this.typesenseService.importManually(TypesenseCollectionName.USER, [user])
 
     return user
   }

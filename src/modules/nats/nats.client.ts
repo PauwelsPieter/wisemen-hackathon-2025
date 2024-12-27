@@ -37,7 +37,7 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
 
   async onModuleDestroy (): Promise<void> {
     if (this.client !== undefined) {
-      await this.client.close()
+      await this.client.drain()
     }
   }
 

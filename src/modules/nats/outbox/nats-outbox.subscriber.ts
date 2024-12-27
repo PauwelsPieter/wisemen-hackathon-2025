@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { WiseEvent } from '../../events/wise-event.js'
-import { SubscribeToAll } from '../../events/subscribe.decorator.js'
+import { Subscribe } from '../../events/subscribe.decorator.js'
 import { PgBossScheduler } from '../../pgboss/scheduler/pgboss-scheduler.service.js'
+import { UserRegisteredEvent } from '../../events/example-event.js'
 import { NatsOutboxEventMapper } from './nats-outbox-event.mapper.js'
 import { PublishNatsEventJob } from './publish-nats-event/publish-nats-event.job.js'
 
@@ -12,14 +13,12 @@ export class NatsOutboxSubscriber {
     private readonly jobScheduler: PgBossScheduler
   ) {}
 
-  @SubscribeToAll()
+  @Subscribe(UserRegisteredEvent)
   async handleEventFired (event: WiseEvent): Promise<void> {
-    if (event.isExternal) {
-      const mappedEvent = this.mapper.map(event)
+    const mappedEvent = this.mapper.map(event)
 
-      const job = new PublishNatsEventJob(mappedEvent)
+    const job = new PublishNatsEventJob(mappedEvent)
 
-      await this.jobScheduler.scheduleJob(job)
-    }
+    await this.jobScheduler.scheduleJob(job)
   }
 }

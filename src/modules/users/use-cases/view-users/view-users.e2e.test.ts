@@ -33,7 +33,7 @@ describe('View users e2e test', () => {
 
     const typesenseCollectionService = testModule.get(TypesenseCollectionService)
 
-    await typesenseCollectionService.importManuallyToTypesense(
+    await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
       [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
     )
