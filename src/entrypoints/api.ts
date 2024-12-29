@@ -1,5 +1,4 @@
 import '../modules/exceptions/sentry.js'
-
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
@@ -15,6 +14,7 @@ import { LocalizationModule } from '../modules/localization/modules/localization
 import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
+import { startTracers } from '../utils/opentelemetry/tracer.js'
 import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 
 @Module({
@@ -43,6 +43,8 @@ class ApiModule {
 
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    startTracers('api')
+
     const app = await NestFactory.create(ApiModule, adapter)
 
     app.setGlobalPrefix('api', {
