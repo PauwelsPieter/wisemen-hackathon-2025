@@ -14,8 +14,9 @@ import { LocalizationModule } from '../modules/localization/modules/localization
 import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
-import { startTracers } from '../utils/opentelemetry/tracer.js'
 import { PreferencesModule } from '../modules/preferences/preferences.module.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { registerInstruments } from '../utils/opentelemetry/instrumentations.js'
 
 @Module({
   imports: [
@@ -41,9 +42,11 @@ class ApiModule {
   }
 }
 
+registerInstruments()
+
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
-    startTracers('api')
+    startOpentelemetry('api')
 
     const app = await NestFactory.create(ApiModule, adapter)
 

@@ -8,7 +8,7 @@ import { WorkerContainer } from '@wisemen/app-container'
 import { QueueName } from '../modules/pgboss/queue-name.enum.js'
 import { AppModule } from '../app.module.js'
 import { PgBossWorkerModule } from '../modules/pgboss/worker/pgboss-worker.module.js'
-import { startTracers } from '../utils/opentelemetry/tracer.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 
 const args = await yargs(hideBin(process.argv))
   .option('queue', {
@@ -56,7 +56,7 @@ class WorkerModule {}
 
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {
-    startTracers(`worker:${queueName}`)
+    startOpentelemetry(`worker:${queueName}`)
 
     return await NestFactory.createApplicationContext(WorkerModule)
   }
