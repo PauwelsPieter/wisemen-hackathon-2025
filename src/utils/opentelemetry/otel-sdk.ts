@@ -7,6 +7,9 @@ import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto'
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
+import { registerInstruments } from './instrumentations.js'
+
+registerInstruments()
 
 export function startOpentelemetry (serviceName: string): void {
   if (process.env.NODE_ENV === 'test') return
