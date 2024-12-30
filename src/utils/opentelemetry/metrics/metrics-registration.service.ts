@@ -5,7 +5,7 @@ import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Job } from '../../../modules/pgboss/persistence/job.entity.js'
 
 @Injectable()
-export class MetricsService {
+export class MetricsRegistrationService {
   constructor (
     @InjectRepository(Job)
     private readonly jobRepository: Repository<Job<unknown>>

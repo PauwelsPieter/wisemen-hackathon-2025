@@ -16,11 +16,9 @@ import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
-import { MetricsModule } from '../utils/opentelemetry/metrics/metrics.module.js'
 
 @Module({
   imports: [
-    MetricsModule,
     AppModule.forRoot(),
     AuthModule,
     SwaggerModule,
