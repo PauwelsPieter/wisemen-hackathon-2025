@@ -26,7 +26,7 @@ export class Cronjob extends JobContainer {
 
     return await NestFactory.createApplicationContext(
       AppModule.forRoot([
-        CronjobModule.forRoot({
+        CronjobModule.forRootAsync({
           type: args.type
         })
       ])
