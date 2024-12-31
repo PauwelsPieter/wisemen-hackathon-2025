@@ -8,7 +8,7 @@ import { AppModule } from '../app.module.js'
 import { WSModule } from '../modules/websocket/ws.module.js'
 import { AuthenticatedWsAdapter } from '../modules/websocket/ws-adapter.js'
 import { AuthModule } from '../modules/auth/auth.module.js'
-import { startTracers } from '../utils/opentelemetry/tracer.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 
 @Module({
   imports: [
@@ -19,10 +19,10 @@ import { startTracers } from '../utils/opentelemetry/tracer.js'
 })
 class WssModule {}
 
+startOpentelemetry('websocket')
+
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
-    startTracers('websocket')
-
     const httpServer = adapter.getHttpServer()
 
     const app = await NestFactory.create(WssModule, adapter)

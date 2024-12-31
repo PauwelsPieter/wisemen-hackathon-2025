@@ -56,6 +56,12 @@
       "root": "src",
       "entryFile": "entrypoints/playground",
       "sourceRoot": "src"
+    },
+    "metrics": {
+      "type": "application",
+      "root": "src",
+      "entryFile": "entrypoints/metrics",
+      "sourceRoot": "src"
     }
   }
 }
