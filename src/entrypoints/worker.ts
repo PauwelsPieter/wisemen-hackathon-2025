@@ -54,10 +54,10 @@ const queueName = unvalidatedQueueName as QueueName
 })
 class WorkerModule {}
 
+startOpentelemetry(`worker:${queueName}`)
+
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {
-    startOpentelemetry(`worker:${queueName}`)
-
     return await NestFactory.createApplicationContext(WorkerModule)
   }
 }

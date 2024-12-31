@@ -16,7 +16,6 @@ import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
-import { registerInstruments } from '../utils/opentelemetry/instrumentations.js'
 
 @Module({
   imports: [
@@ -42,12 +41,10 @@ class ApiModule {
   }
 }
 
-registerInstruments()
+startOpentelemetry('api')
 
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
-    startOpentelemetry('api')
-
     const app = await NestFactory.create(ApiModule, adapter)
 
     app.setGlobalPrefix('api', {

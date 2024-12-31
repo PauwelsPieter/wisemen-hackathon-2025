@@ -19,10 +19,10 @@ import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 })
 class WssModule {}
 
+startOpentelemetry('websocket')
+
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
-    startOpentelemetry('websocket')
-
     const httpServer = adapter.getHttpServer()
 
     const app = await NestFactory.create(WssModule, adapter)
