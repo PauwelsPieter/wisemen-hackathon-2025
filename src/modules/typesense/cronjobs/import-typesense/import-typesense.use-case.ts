@@ -3,7 +3,7 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { DataSource } from 'typeorm'
 import { ImportTypesenseJob } from '../../../typesense/jobs/import-typesense/import-typesense.job.js'
 import { PgBossScheduler } from '../../../pgboss/scheduler/pgboss-scheduler.service.js'
-import { AbstractUseCase } from '../abstract-use-case.js'
+import { AbstractUseCase } from '../../../cronjobs/types/abstract-use-case.js'
 
 @Injectable()
 export class ImportTypesenseUseCase implements AbstractUseCase {
