@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common'
 import { Any, DataSource, Repository } from 'typeorm'
 import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
 import { CacheService } from '../../../cache/cache.service.js'
-import { UserRepository } from '../../repositories/user.repository.js'
 import { TypesenseCollectionName } from '../../../typesense/enums/typesense-collection-index.enum.js'
 import { TypesenseCollectionService } from '../../../typesense/services/typesense-collection.service.js'
 import { UserRole } from '../../../roles/entities/user-role.entity.js'
+import { User } from '../../entities/user.entity.js'
 import type { SetUserRolesCommand } from './set-user-roles.command.js'
 
 @Injectable()
@@ -14,7 +14,8 @@ export class SetUserRolesUseCase {
   constructor (
     @InjectRepository(UserRole)
     private userRoleRepository: Repository<UserRole>,
-    private readonly userRepository: UserRepository,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
     private readonly cache: CacheService,
     private readonly typesenseService: TypesenseCollectionService
@@ -48,6 +49,6 @@ export class SetUserRolesUseCase {
     })
 
     await this.cache.setUserRoles(userUuid, dto.roleUuids)
-    await this.typesenseService.importManuallyToTypesense(TypesenseCollectionName.USER, [user])
+    await this.typesenseService.importManually(TypesenseCollectionName.USER, [user])
   }
 }

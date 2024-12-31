@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { Resource } from '@opentelemetry/resources'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
@@ -24,7 +22,7 @@ function configure (serviceName: string): NodeSDK | null {
   const metricsUrl = process.env.SIGNOZ_METRICS_ENDPOINT
   const env = process.env.NODE_ENV
 
-  if (traceUrl == null || metricsUrl == null) {
+  if (traceUrl == null || traceUrl === '' || metricsUrl == null || metricsUrl == '') {
     return null
   }
 

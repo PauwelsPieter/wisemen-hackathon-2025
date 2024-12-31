@@ -12,7 +12,7 @@ export class ViewPreferencesController {
   constructor (
     private readonly authStorage: AuthStorage,
     private readonly viewPreferencesIndexUseCase: ViewPreferencesIndexUseCase
-  ) { }
+  ) {}
 
   @Get()
   @ApiOkResponse({ type: ViewPreferencesResponse })

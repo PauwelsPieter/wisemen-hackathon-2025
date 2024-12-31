@@ -13,6 +13,7 @@ import {
 import {
   TypesenseCollectionName
 } from '../../../typesense/enums/typesense-collection-index.enum.js'
+import { ViewUsersModule } from './view-users.module.js'
 
 describe('View users e2e test', () => {
   let app: NestExpressApplication
@@ -23,7 +24,7 @@ describe('View users e2e test', () => {
   let userWithUserDeletePermission: TestUser
 
   before(async () => {
-    ({ app, context, testModule } = await setupTest())
+    ({ app, context, testModule } = await setupTest([ViewUsersModule]))
 
     readonlyUser = await context.getReadonlyUser()
     adminUser = await context.getAdminUser()
@@ -32,7 +33,7 @@ describe('View users e2e test', () => {
 
     const typesenseCollectionService = testModule.get(TypesenseCollectionService)
 
-    await typesenseCollectionService.importManuallyToTypesense(
+    await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
       [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
     )

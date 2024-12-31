@@ -7,6 +7,7 @@ import { TestContext } from '../../../../../test/utils/test-context.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
 import { setupTest } from '../../../../../test/setup/test-setup.js'
+import { ViewUserModule } from './view-user.module.js'
 
 describe('View user e2e test', () => {
   let app: NestExpressApplication
@@ -15,7 +16,7 @@ describe('View user e2e test', () => {
   let context: TestContext
 
   before(async () => {
-    ({ app, context } = await setupTest())
+    ({ app, context } = await setupTest([ViewUserModule]))
 
     const [admin, user] = await Promise.all([
       context.getAdminUser(),
