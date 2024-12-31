@@ -10,7 +10,7 @@ import { DefaultConfigModule } from './modules/config/default-config.module.js'
 @Module({})
 export class AppModule {
   static forRoot (
-    modules: Array<DynamicModule | Type<unknown>> = []
+    modules: Array<DynamicModule | Promise<DynamicModule> | Type<unknown>> = []
   ): DynamicModule {
     return {
       module: AppModule,
