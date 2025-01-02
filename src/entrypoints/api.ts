@@ -1,61 +1,67 @@
-import fs from 'node:fs'
-import { HttpAdapterHost, NestFactory } from '@nestjs/core'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-import { ValidationPipe, VersioningType } from '@nestjs/common'
+import '../modules/exceptions/sentry.js'
+import { NestFactory } from '@nestjs/core'
+import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
+import { ExpressAdapter } from '@nestjs/platform-express'
+import { ApiContainer } from '@wisemen/app-container'
+import { AuthMiddleware } from '../modules/auth/middleware/auth.middleware.js'
+import { AuthModule } from '../modules/auth/auth.module.js'
+import { UserModule } from '../modules/users/user.module.js'
+import { RoleModule } from '../modules/roles/role.module.js'
+import { PermissionModule } from '../modules/permission/permission.module.js'
+import { StatusModule } from '../modules/status/modules/status.module.js'
+import { FileModule } from '../modules/files/modules/file.module.js'
+import { LocalizationModule } from '../modules/localization/modules/localization.module.js'
+import { ContactModule } from '../modules/contact/contact.module.js'
 import { AppModule } from '../app.module.js'
-import { initSentry } from '../helpers/sentry.js'
-import { HttpExceptionFilter } from '../utils/exceptions/http-exception.filter.js'
-import { WSModule } from '../modules/websocket/ws.module.js'
-import { buildDocumentationConfig } from '../helpers/documentation.js'
+import { SwaggerModule } from '../modules/swagger/swagger.module.js'
+import { PreferencesModule } from '../modules/preferences/preferences.module.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 
-async function bootstrap (): Promise<void> {
-  const app = await NestFactory.create(
-    AppModule.forRoot()
-  )
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true
-    })
-  )
-  app.setGlobalPrefix('api', {
-    exclude: []
-  })
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1'
-  })
-  app.enableCors()
-
-  const config = buildDocumentationConfig()
-  const document = SwaggerModule.createDocument(app, config)
-
-  SwaggerModule.setup('api/docs', app, document)
-
-  const configWs = new DocumentBuilder()
-    .setTitle('WS Documentation')
-    .setDescription(fs.readFileSync('./dist/src/modules/websocket/documentation.md').toString())
-    .setVersion('1.0')
-    .build()
-  const wsDocument = SwaggerModule.createDocument(app, configWs, {
-    include: [
-      WSModule
-    ]
-  })
-
-  SwaggerModule.setup('api/docs/websockets', app, wsDocument)
-
-  const httpAdapterHost = app.get(HttpAdapterHost)
-
-  app.useGlobalFilters(new HttpExceptionFilter(httpAdapterHost))
-
-  initSentry()
-
-  app.enableShutdownHooks()
-
-  await app.listen(3000)
+@Module({
+  imports: [
+    AppModule.forRoot(),
+    AuthModule,
+    SwaggerModule,
+    StatusModule,
+    UserModule,
+    RoleModule,
+    PermissionModule,
+    FileModule,
+    LocalizationModule,
+    ContactModule,
+    PreferencesModule
+  ]
+})
+class ApiModule {
+  configure (consumer: MiddlewareConsumer): void {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('auth/token')
+      .forRoutes('*')
+  }
 }
 
-await bootstrap()
+startOpentelemetry('api')
+
+class Api extends ApiContainer {
+  async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
+    const app = await NestFactory.create(ApiModule, adapter)
+
+    app.setGlobalPrefix('api', {
+      exclude: []
+    })
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1'
+    })
+    app.enableCors({
+      exposedHeaders: ['Content-Disposition']
+    })
+
+    SwaggerModule.addDocumentation(app)
+
+    return app
+  }
+}
+
+const _api = new Api()

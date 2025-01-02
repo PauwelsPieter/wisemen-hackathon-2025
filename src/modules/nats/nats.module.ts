@@ -1,8 +1,9 @@
 import { type DynamicModule, Module, type Provider } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import configuration from '../../config/env/configuration.js'
+import { PgBossSchedulerModule } from '../pgboss/scheduler/pgboss-scheduler.module.js'
 import { NatsClient } from './nats.client.js'
+import { NatsOutboxSubscriber } from './outbox/nats-outbox.subscriber.js'
 import { ExamplePublisher } from './publishers/example.publisher.js'
+import { NatsOutboxEventMapper } from './outbox/nats-outbox-event.mapper.js'
 
 @Module({})
 export class NatsModule {
@@ -10,14 +11,13 @@ export class NatsModule {
     return {
       module: NatsModule,
       imports: [
-        ConfigModule.forRoot({
-          envFilePath: process.env.ENV_FILE,
-          load: [configuration]
-        })
+        PgBossSchedulerModule
       ],
       providers: [
         NatsClient,
         ExamplePublisher,
+        NatsOutboxSubscriber,
+        NatsOutboxEventMapper,
         ...providers
       ],
       exports: [

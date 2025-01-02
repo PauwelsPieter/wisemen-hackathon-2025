@@ -1,7 +1,6 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
 import { type NatsConnection, connect, type KV, credsAuthenticator, type Authenticator, type Payload, type Subscription, type SubscriptionOptions } from 'nats'
 import { ConfigService } from '@nestjs/config'
-import { isLocalEnv, isTestEnv } from '../../utils/envs/env-checks.js'
 
 interface SubscribeOptions {
   loadBalance: boolean
@@ -16,12 +15,12 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
   constructor (
     private readonly configService: ConfigService
   ) {
-    this.queueName = 'nest-template-' + this.configService.get('NODE_ENV')
+    this.queueName = 'nest-template-' + this.configService.get<string>('NODE_ENV')
   }
 
   async onModuleInit (): Promise<void> {
-    const host = this.configService.get('NATS_HOST')
-    const port = this.configService.get('NATS_PORT')
+    const host = this.configService.get<string>('NATS_HOST')
+    const port = this.configService.get<string>('NATS_PORT')
 
     if (host == null || port == null) {
       throw new Error('NATS config variables are not set')
@@ -37,17 +36,17 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleDestroy (): Promise<void> {
-    await this.client.close()
+    if (this.client !== undefined) {
+      await this.client.drain()
+    }
   }
 
   private getAuthenticator (): Authenticator | undefined {
-    if (isTestEnv() || isLocalEnv()) {
+    const nkey = this.configService.get<string>('NATS_NKEY')
+
+    if (nkey == null) {
       return undefined
     } else {
-      const nkey = this.configService.get('NATS_NKEY')
-      if (nkey == null) {
-        throw new Error('NATS nkey is not set')
-      }
       return credsAuthenticator(new TextEncoder().encode(
         Buffer.from(nkey, 'base64').toString()
       ))
@@ -56,6 +55,7 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
 
   subscribe (subject: string, options?: SubscribeOptions): Subscription {
     const opts: SubscriptionOptions = {}
+
     if (options?.loadBalance != null) {
       opts.queue = this.queueName
     }

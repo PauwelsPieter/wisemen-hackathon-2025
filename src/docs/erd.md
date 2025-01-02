@@ -16,7 +16,6 @@ erDiagram
         string uuid PK
         Date createdAt
         Date updatedAt
-        Date deletedAt
         string fileUuid
         string entityType
         string entityUuid
@@ -25,18 +24,17 @@ erDiagram
     }
 
     User }o--|| Role : role
-    User o|--|{ Client : clients
-    User o|--|{ RefreshToken : tokens
 
     User {
         string uuid PK
+        string userId UK
         Date createdAt
         Date updatedAt
+        Date deletedAt
         string email UK
-        string password
         string firstName "nullable"
         string lastName "nullable"
-        string roleUuid FK "nullable"
+        Role[] userRoles FK "nullable"
     }
 
     Role{
@@ -44,29 +42,7 @@ erDiagram
         Date createdAt
         Date updatedAt
         string name
-    }
-
-    Client{
-        string uuid PK
-        Date createdAt
-        Date updatedAt
-        string name
-        string secret
-        string[] redirectUris
-        string[] scopes
-        string userUuid FK
-    }
-
-    RefreshToken }|--|{ Client : client
-
-    RefreshToken{
-        string uuid PK
-        Date createdAt
-        Date deletedAt
-        Date expiresAt
-        string userUuid FK "uuid"
-        string clientUuid FK "uuid"
-        string[] scope
+        Permission[] permissions
     }
 
 

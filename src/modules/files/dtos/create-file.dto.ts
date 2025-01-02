@@ -7,7 +7,7 @@ export class CreateFileDto {
   @ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
-  @Transform(({ value }) => value.toLowerCase())
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   name: string
 
   @ApiProperty({ type: 'string', enum: MimeType })

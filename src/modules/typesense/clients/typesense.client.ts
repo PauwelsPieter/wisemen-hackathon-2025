@@ -1,29 +1,25 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import Typesense from 'typesense'
 
 @Injectable()
 export class TypesenseClient {
   private _client: Typesense.Client
 
-  constructor () {
+  constructor (
+    private readonly configService: ConfigService
+  ) {
     this.initialize()
   }
 
   private initialize (): void {
-    if (
-      process.env.TYPESENSE_HOST == null ||
-      process.env.TYPESENSE_KEY == null
-    ) {
-      return
-    }
-
     this._client = new Typesense.Client({
       nodes: [{
-        host: process.env.TYPESENSE_HOST,
+        host: this.configService.getOrThrow('TYPESENSE_HOST'),
         port: 8108,
         protocol: 'http'
       }],
-      apiKey: process.env.TYPESENSE_KEY
+      apiKey: this.configService.getOrThrow('TYPESENSE_KEY')
     })
   }
 

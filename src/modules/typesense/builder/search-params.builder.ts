@@ -1,10 +1,17 @@
-import { type SearchParams } from 'typesense/lib/Typesense/Documents.js'
-import { type FilterField, type SearchField, type TypesenseCollection, type SortField } from '../collections/abstract-typesense.collection.js'
-import { type SortDirection } from '../../../utils/query/sort-direction.enum.js'
+import assert from 'assert'
+import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
+import type {
+  FilterField,
+  SearchField,
+  SortField,
+  TypesenseCollection
+} from '../collections/abstract-typesense.collection.js'
 import { FilterOptions } from '../enums/typesense-filter-options.enum.js'
+import type { SortDirection } from '../../pagination/search.query.js'
+import { TypesenseOperationMode } from '../enums/typesense-operation-mode.enum.js'
 
 export const DEFAULT_LIMIT = 10
-export const DEFAULT_OFFSET = 1
+export const DEFAULT_OFFSET = 0
 
 export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection> {
   private readonly filters: string[] = []
@@ -13,6 +20,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
   private query: string = ''
   private offset: number = DEFAULT_OFFSET
   private limit: number = DEFAULT_LIMIT
+  private infix: TypesenseOperationMode[] = []
 
   constructor (private readonly collection: Collection) {}
 
@@ -40,16 +48,39 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     return this
   }
 
-  addSearchOn (searchField: SearchField<Collection> | Array<SearchField<Collection>>): this {
-    if (searchField != null) {
-      if (Array.isArray(searchField)) {
-        this.queries = [...this.queries, ...searchField]
-      } else {
-        this.queries.push(searchField)
+  addSearchOn (searchField: SearchField<Collection>, infix?: TypesenseOperationMode): this
+  addSearchOn (
+    searchField: Array<SearchField<Collection>>,
+    infix?: Array<TypesenseOperationMode>
+  ): this
+  addSearchOn (
+    searchField: SearchField<Collection> | Array<SearchField<Collection>>,
+    infix?: TypesenseOperationMode | Array<TypesenseOperationMode>
+  ): this {
+    if (searchField == null) {
+      return this
+    }
+
+    if (Array.isArray(searchField)) {
+      assert(infix === undefined || Array.isArray(infix))
+
+      for (let i = 0; i < searchField.length; i++) {
+        this.addSearchOnField(searchField[i], infix?.[i])
       }
+    } else {
+      assert(infix === undefined || !Array.isArray(infix))
+      this.addSearchOnField(searchField, infix)
     }
 
     return this
+  }
+
+  private addSearchOnField (
+    searchField: SearchField<Collection>,
+    infix: TypesenseOperationMode = TypesenseOperationMode.OFF
+  ): void {
+    this.queries.push(searchField)
+    this.infix.push(infix)
   }
 
   addFilterOn (
@@ -78,16 +109,15 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
       queryBy = this.collection.searchableFields.join(',')
     }
 
-    const searchParams: SearchParams = {
+    return {
       q: this.query,
       query_by: queryBy,
       filter_by: this.filters.join(' && '),
       sort_by: this.sorting.join(','),
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      infix: this.infix
     }
-
-    return searchParams
   }
 
   private getOperator (options?: FilterOptions): string {

@@ -1,12 +1,14 @@
 import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
-import { type Permission } from '../../permissions/permission.enum.js'
+import type { Permission } from '../../permission/permission.enum.js'
 import { TypesenseCollection } from './abstract-typesense.collection.js'
 
 export interface UserSearchSchema {
   id: string
   uuid: string
+  email: string
   firstName: string
   lastName: string
+  roleUuids: string[]
   permissions: Permission[]
 }
 
@@ -19,6 +21,7 @@ export class UserTypesenseCollection extends TypesenseCollection {
   ] as const
 
   readonly filterableFields = [
-    { name: 'permissions', type: 'string[]', optional: true }
+    { name: 'permissions', type: 'string[]', optional: true },
+    { name: 'roleUuids', type: 'string[]', optional: true }
   ] as const
 }

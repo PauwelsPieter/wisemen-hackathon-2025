@@ -1,28 +1,42 @@
+import { INestApplicationContext } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { JobContainer } from '@wisemen/app-container'
 import yargs from 'yargs'
-import { initSentry } from '../helpers/sentry.js'
-import { CronjobFactory, CronJobType } from './cronjobs/factories/cronjob.factory.js'
+import { hideBin } from 'yargs/helpers'
+import { AppModule } from '../app.module.js'
+import { CronjobModule } from '../modules/cronjobs/cronjob.module.js'
+import { CronjobType } from '../modules/cronjobs/enums/cronjob-type.enum.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { AbstractUseCase } from '../modules/cronjobs/types/abstract-use-case.js'
 
-async function bootstrap (): Promise<void> {
-  initSentry()
-  const args = await yargs(process.argv)
-    .option('job', {
-      alias: 'j',
-      type: 'string',
-      description: 'The name of the cronjob to run',
-      choices: Object.values(CronJobType),
-      demandOption: true
-    })
-    .help()
-    .argv
+const args = await yargs(hideBin(process.argv))
+  .usage('$0 <type>', 'Run the specified cronjob')
+  .positional('type', {
+    describe: 'Type of cronjob to run',
+    type: 'string',
+    choices: Object.values(CronjobType),
+    demandOption: true
+  })
+  .help()
+  .argv
 
-  const jobName = args.job
-  if (!Object.values(CronJobType).includes(jobName as CronJobType)) {
-    throw new Error(`Job ${jobName} not found`)
+startOpentelemetry(`cronjob:${args.type}`)
+
+export class Cronjob extends JobContainer {
+  async bootstrap (): Promise<INestApplicationContext> {
+    return await NestFactory.createApplicationContext(
+      AppModule.forRoot([
+        CronjobModule.forRootAsync({
+          type: args.type
+        })
+      ])
+    )
   }
 
-  const cronjob = CronjobFactory.create(jobName)
+  async execute (app: INestApplicationContext): Promise<void> {
+    const cronjobUseCase = app.get<AbstractUseCase>('CronjobUseCase')
 
-  await cronjob.run()
+    await cronjobUseCase.execute()
+  }
 }
-
-await bootstrap()
+const _cronjob = new Cronjob()

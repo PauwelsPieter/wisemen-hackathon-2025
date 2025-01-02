@@ -1,32 +1,34 @@
 import { after, before, describe, it, mock } from 'node:test'
-import { type TestingModule } from '@nestjs/testing'
-import { type INestApplication } from '@nestjs/common'
+import type { TestingModule } from '@nestjs/testing'
 import { expect } from 'expect'
-import { ImportTypesenseJob } from '../jobs/import-typesense.job.js'
-import { globalTestSetup } from '../../../../test/setup/setup.js'
+import { NestExpressApplication } from '@nestjs/platform-express'
+import { setupTest } from '../../../../test/setup/test-setup.js'
 import { TypesenseInitializationService } from '../services/typesense-initialization.service.js'
+import { ImportTypesenseJobHandler } from '../jobs/import-typesense/import-typesense.handler.js'
+import { ImportTypesenseJobModule } from '../jobs/import-typesense/import-typesense.module.js'
 
 describe('Test import typesense job', () => {
-  let app: INestApplication
-  let job: ImportTypesenseJob
-  let moduleRef: TestingModule
+  let app: NestExpressApplication
+  let testModule: TestingModule
 
   before(async () => {
-    ({ app, moduleRef } = await globalTestSetup())
+    ({ app, testModule } = await setupTest([
+      ImportTypesenseJobModule
+    ]))
   })
 
   after(async () => {
     await app.close()
   })
 
-  describe('Test import typesense job', () => {
+  describe('Test import typesense job handler', () => {
     it('should migrate and import typesense', async () => {
       const spyImport = mock.method(TypesenseInitializationService.prototype, 'migrate', async () => { })
       const spyMigrate = mock.method(TypesenseInitializationService.prototype, 'import', async () => { })
 
-      job = ImportTypesenseJob.create()
+      const handler = testModule.get(ImportTypesenseJobHandler, { strict: false })
 
-      await job.execute(moduleRef)
+      await handler.run()
 
       expect(spyImport.mock.callCount()).toBe(1)
       expect(spyMigrate.mock.callCount()).toBe(1)
