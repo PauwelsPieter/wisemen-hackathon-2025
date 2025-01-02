@@ -21,31 +21,31 @@ export abstract class Job<T> {
   })
   state: JobState
 
-  @Column('int', { name: 'retrylimit' })
+  @Column('int', { name: 'retry_limit' })
   retryLimit: number
 
-  @Column('int', { name: 'retrycount' })
+  @Column('int', { name: 'retry_count' })
   retryCount: number
 
-  @Column('int', { name: 'retrydelay' })
+  @Column('int', { name: 'retry_delay' })
   retryDelay: number
 
-  @Column('boolean', { name: 'retrybackoff' })
+  @Column('boolean', { name: 'retry_backoff' })
   retryBackoff: boolean
 
-  @Column('timestamp', { name: 'startafter' })
+  @Column('timestamp', { name: 'start_after' })
   startAfter: Date
 
-  @Column('timestamp', { name: 'startedon', nullable: true })
+  @Column('timestamp', { name: 'started_on', nullable: true })
   startedAt: Date | null
 
-  @Column('text', { name: 'singletonkey', nullable: true })
+  @Column('text', { name: 'singleton_key', nullable: true })
   singletonKey: string | null
 
-  @Column('timestamp', { name: 'createdon' })
+  @Column('timestamp', { name: 'created_on' })
   createdAt: Date
 
-  @Column('timestamp', { name: 'completedon', nullable: true })
+  @Column('timestamp', { name: 'completed_on', nullable: true })
   completedAt: Date | null
 
   @Column('jsonb', { nullable: true })

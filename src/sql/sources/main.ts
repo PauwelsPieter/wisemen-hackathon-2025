@@ -11,6 +11,6 @@ export const mainDataSource = new DataSource({
   synchronize: false,
   migrationsRun: false,
   entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/src/config/sql/migrations/**/*.js'],
+  migrations: ['dist/src/sql/migrations/**/*.js'],
   namingStrategy: new SnakeNamingStrategy()
 })
