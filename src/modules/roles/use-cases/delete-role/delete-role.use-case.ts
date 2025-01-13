@@ -4,7 +4,7 @@ import { DataSource, Repository } from 'typeorm'
 import { Role } from '../../entities/role.entity.js'
 import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
 import { UserRole } from '../../entities/user-role.entity.js'
-import { CacheService } from '../../../cache/cache.service.js'
+import { RoleCache } from '../../cache/role-cache.service.js'
 
 @Injectable()
 export class DeleteRoleUseCase {
@@ -14,7 +14,7 @@ export class DeleteRoleUseCase {
     private roleRepository: Repository<Role>,
     @InjectRepository(UserRole)
     private userRoleRepository: Repository<UserRole>,
-    private readonly cache: CacheService
+    private readonly roleCache: RoleCache
   ) {}
 
   async execute (uuid: string): Promise<void> {
@@ -32,6 +32,6 @@ export class DeleteRoleUseCase {
       await this.roleRepository.remove(role)
     })
 
-    await this.cache.clearRolesPermissions([uuid])
+    await this.roleCache.clearRolesPermissions([uuid])
   }
 }

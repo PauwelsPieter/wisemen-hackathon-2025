@@ -4,8 +4,8 @@ import { Repository } from 'typeorm'
 import { Role } from '../../entities/role.entity.js'
 import { PermissionTransformer } from '../../../permission/transformers/permission.transformer.js'
 import { TypesenseCollectionName } from '../../../typesense/enums/typesense-collection-index.enum.js'
-import { CacheService } from '../../../cache/cache.service.js'
 import { TypesenseCollectionService } from '../../../typesense/services/typesense-collection.service.js'
+import { RoleCache } from '../../cache/role-cache.service.js'
 import { UpdateRoleTransformedType } from './update-roles-bulk-transformed.type.js'
 import { UpdateRolesBulkCommand } from './update-roles-bulk.command.js'
 
@@ -15,7 +15,7 @@ export class UpdateRolesBulkUseCase {
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
     private readonly typesenseCollectionService: TypesenseCollectionService,
-    private readonly cache: CacheService
+    private readonly roleCache: RoleCache
   ) {}
 
   async execute (command: UpdateRolesBulkCommand): Promise<void> {
@@ -28,7 +28,7 @@ export class UpdateRolesBulkUseCase {
 
     await this.roleRepository.upsert(roles, { conflictPaths: { uuid: true } })
 
-    await this.cache.clearRolesPermissions(command.roles.map(role => role.uuid))
+    await this.roleCache.clearRolesPermissions(command.roles.map(role => role.uuid))
 
     await this.typesenseCollectionService.import(TypesenseCollectionName.USER)
   }
