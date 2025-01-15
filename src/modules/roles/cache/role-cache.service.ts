@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
-import { Repository } from 'typeorm'
+import { Any, Repository } from 'typeorm'
 import { RedisClient } from '../../redis/redis.client.js'
 import { Permission } from '../../permission/permission.enum.js'
 import { Role } from '../entities/role.entity.js'
@@ -13,39 +13,74 @@ export class RoleCache {
     private readonly client: RedisClient,
     @InjectRepository(Role)
     private roleRepository: Repository<Role>
-    // private readonly userRepository: UserRepository
-  ) {}
+  ) { }
 
   async clearRolesPermissions (roleUuids: string[]): Promise<void> {
-    for (const roleUuid of roleUuids) {
-      await this.client.deleteCachedValue(`${rolePermissionsCache}.${roleUuid}`)
-    }
+    const keys = roleUuids.map(roleUuid => `${rolePermissionsCache}.${roleUuid}`)
+
+    await this.client.deleteCachedValues(keys)
   }
 
   async getRolesPermissions (roleUuids: string[]): Promise<Permission[]> {
     if (roleUuids.length == 0) return [Permission.READ_ONLY]
 
     const permissions: Permission[] = []
+    const missingRoleUuids: string[] = []
 
-    for (const roleUuid of roleUuids) {
-      const result = await this.client.getCachedValue(`${rolePermissionsCache}.${roleUuid}`)
+    const cacheKeys = roleUuids.map(roleUuid => `${rolePermissionsCache}.${roleUuid}`)
+    const cachedEntries = await this.getCachedPermissions(cacheKeys)
 
-      if (result != null) {
-        const test = JSON.parse(String(result)) as Permission[]
-
-        permissions.push(...test)
-
-        continue
+    for (const [index, cachedPermissions] of cachedEntries.entries()) {
+      if (cachedPermissions != null) {
+        permissions.push(...cachedPermissions)
+      } else {
+        missingRoleUuids.push(roleUuids[index])
       }
+    }
 
-      const role = await this.roleRepository.findOneBy({ uuid: roleUuid })
-      const rolePermissions = role?.permissions ?? []
+    if (missingRoleUuids.length > 0) {
+      const missingPermissions = await this.getMissingPermissions(missingRoleUuids)
 
-      permissions.push(...rolePermissions)
-
-      await this.client.putCachedValue(`${rolePermissionsCache}.${roleUuid}`, JSON.stringify(rolePermissions))
+      permissions.push(...missingPermissions)
     }
 
     return permissions
+  }
+
+  private async getMissingPermissions (uuids: string[]): Promise<Permission[]> {
+    const roles = await this.roleRepository.findBy({
+      uuid: Any(uuids)
+    })
+
+    const newPermissions = roles.map(role => role.permissions)
+    const newKeys = roles.map(role => `${rolePermissionsCache}.${role.uuid}`)
+
+    await this.setCachedPermissions(newKeys, newPermissions)
+
+    return roles.flatMap(role => role.permissions)
+  }
+
+  private async getCachedPermissions (keys: string[]): Promise<(Permission[] | null)[]> {
+    try {
+      const result = await this.client.getCachedValues(keys)
+
+      return result.map((value) => {
+        if (value != null) {
+          return JSON.parse(String(value)) as Permission[]
+        } else {
+          return null
+        }
+      })
+    } catch {
+      return new Array<(Permission[] | null)>(keys.length).fill(null)
+    }
+  }
+
+  private async setCachedPermissions (keys: string[], permissions: Permission[][]): Promise<void> {
+    const values = permissions.map(permissions => JSON.stringify(permissions))
+
+    try {
+      await this.client.putCachedValues(keys, values)
+    } catch { /* empty */ }
   }
 }

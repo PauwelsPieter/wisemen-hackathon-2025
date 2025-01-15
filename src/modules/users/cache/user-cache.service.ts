@@ -12,17 +12,18 @@ export class UserCache {
     private readonly client: RedisClient,
     @InjectRepository(User)
     private userRepository: Repository<User>
-  ) {}
+  ) { }
 
   async setUserRoles (userUuid: string, roleUuids: string[]): Promise<void> {
     await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(roleUuids))
   }
 
   async getUserRoles (userUuid: string): Promise<string[]> {
-    const result = await this.client.getCachedValue(`${userRoleCache}.${userUuid}`)
+    const cacheKey = `${userRoleCache}.${userUuid}`
+    const cachedRoleUuids = await this.getCachedRoles(cacheKey)
 
-    if (result != null) {
-      return JSON.parse(String(result)) as string[]
+    if (cachedRoleUuids != null) {
+      return cachedRoleUuids
     }
 
     const user = await this.userRepository.findOne({
@@ -32,8 +33,28 @@ export class UserCache {
 
     const roleUuids = user?.userRoles?.map(userRole => userRole.roleUuid) ?? []
 
-    await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(roleUuids))
+    await this.setCachedRoles(cacheKey, roleUuids)
 
     return roleUuids
+  }
+
+  private async getCachedRoles (key: string): Promise<string[] | null> {
+    try {
+      const result = await this.client.getCachedValue(key)
+
+      if (result != null) {
+        return JSON.parse(String(result)) as string[]
+      }
+
+      return null
+    } catch {
+      return null
+    }
+  }
+
+  private async setCachedRoles (key: string, roleUuids: string[]): Promise<void> {
+    try {
+      await this.client.putCachedValue(key, JSON.stringify(roleUuids))
+    } catch { /* empty */ }
   }
 }
