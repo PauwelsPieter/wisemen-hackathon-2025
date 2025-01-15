@@ -1,5 +1,6 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { captureException } from '@sentry/nestjs'
 import type { RedisClientType } from 'redis'
 import { createClient } from 'redis'
 
@@ -17,7 +18,12 @@ export class RedisClient implements OnModuleInit, OnModuleDestroy {
   async onModuleInit (): Promise<void> {
     this.client = createClient({
       url: this.configService.getOrThrow('REDIS_URL'),
-      pingInterval: 10000
+      pingInterval: 10_000,
+      disableOfflineQueue: true
+    })
+
+    this.client.on('error', (error) => {
+      captureException(error)
     })
 
     await this.client.connect()
@@ -39,5 +45,11 @@ export class RedisClient implements OnModuleInit, OnModuleDestroy {
 
   async deleteCachedValue (key: string): Promise<void> {
     await this.client.del(`${this.prefix}.${key}`)
+  }
+
+  async deleteCachedValues (keys: string[]): Promise<void> {
+    const transformedKeys = keys.map(key => `${this.prefix}.${key}`)
+
+    await this.client.del(transformedKeys)
   }
 }
