@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nestjs'
 import { Injectable } from '@nestjs/common'
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
+import type { MultiSearchRequestsSchema } from 'typesense/lib/Typesense/MultiSearch.js'
 import type { MultiSearchResult, TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { UserTypesenseCollection, type UserSearchSchema } from '../collections/user.collections.js'
@@ -16,18 +17,34 @@ export class TypesenseQueryService {
   ]
 
   public async searchAll (query: string): Promise<MultiSearchResult> {
-    const results = await Promise.all(
-      TypesenseQueryService.COLLECTIONS.map(async (collection) => {
-        return await this.search(collection.name as TypesenseCollectionName, {
+    const searchRequests: MultiSearchRequestsSchema = {
+      searches: TypesenseQueryService.COLLECTIONS.map((collection) => {
+        return {
+          collection: collection.name,
           q: query,
           query_by: collection.fields?.map(f => f.name).join(',') ?? ''
-        })
+        }
       })
-    )
+    }
 
-    return results.reduce((acc, curr) => {
-      return Object.assign(acc, curr)
-    }, {})
+    const { results } = await this.typesenseClient
+      .client
+      .multiSearch
+      .perform<[UserSearchSchema]>(searchRequests)
+
+    const result: MultiSearchResult = results.reduce((acc, collection, index) => ({
+      ...acc,
+      [TypesenseQueryService.COLLECTIONS[index].name]: {
+        items: collection.hits?.map(hit => hit.document) as UserSearchSchema[] ?? [],
+        meta: {
+          total: collection.found,
+          offset: collection.page - 1,
+          limit: collection.request_params.per_page ?? 0
+        }
+      }
+    }), {})
+
+    return result
   }
 
   public async search (
