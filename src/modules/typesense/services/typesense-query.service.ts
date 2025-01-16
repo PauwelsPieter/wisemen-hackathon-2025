@@ -35,7 +35,7 @@ export class TypesenseQueryService {
     const result: MultiSearchResult = results.reduce((acc, collection, index) => ({
       ...acc,
       [TypesenseQueryService.COLLECTIONS[index].name]: {
-        items: collection.hits?.map(hit => hit.document) as UserSearchSchema[] ?? [],
+        items: collection.hits?.map(hit => hit.document) as unknown[] ?? [],
         meta: {
           total: collection.found,
           offset: collection.page - 1,
