@@ -9,7 +9,7 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   lint-build-test:
-    uses: wisemen-digital/devops-github-actions/.github/workflows/node-build-and-test.yml@main
+    uses: wisemen-digital/devops-github-actions/.github/workflows/node-build-and-test.yml@feature/eng-2468-check-how-tests-are-ran-for-nodejs
     if: github.event.pull_request.draft == false
     with:
       test-typesense-enabled: true

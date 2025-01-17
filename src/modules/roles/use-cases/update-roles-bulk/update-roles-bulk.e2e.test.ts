@@ -2,39 +2,35 @@ import { before, describe, it, after } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import type { DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import { TypeOrmRepository } from '@wisemen/nestjs-typeorm'
 import { Role } from '../../entities/role.entity.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
 import { UpdateRolesBulkCommandBuilder, UpdateRolesBulkRoleCommandBuilder, PermissionObjectBuilder } from '../../tests/builders/commands/update-roles-bulk-command.builder.js'
 import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
 describe('Roles', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
-
-  let context: TestContext
-
+  let context: TestAuthContext
   let adminRole: Role
-
   let adminUser: TestUser
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest())
-
+    setup = await TestBench.setupEndToEndTest()
+    dataSource = setup.dataSource
+    context = setup.authContext
     adminRole = await context.getAdminRole()
 
     adminUser = await context.getAdminUser()
     readonlyUser = await context.getReadonlyUser()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Update role', () => {
     it('should return 401 when not authenticated', async () => {
@@ -56,7 +52,7 @@ describe('Roles', () => {
         )
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/bulk`)
         .send(roleDto)
 
@@ -82,7 +78,7 @@ describe('Roles', () => {
         )
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/bulk`)
         .set('Authorization', `Bearer ${readonlyUser.token}`)
         .send(roleDto)
@@ -127,7 +123,7 @@ describe('Roles', () => {
         )
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/bulk`)
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
