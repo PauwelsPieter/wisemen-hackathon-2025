@@ -34,14 +34,7 @@ export class TypesenseQueryService {
 
     const result: MultiSearchResult = results.reduce((acc, collection, index) => ({
       ...acc,
-      [TypesenseQueryService.COLLECTIONS[index].name]: {
-        items: collection.hits?.map(hit => hit.document) as unknown[] ?? [],
-        meta: {
-          total: collection.found,
-          offset: collection.page - 1,
-          limit: collection.request_params.per_page ?? 0
-        }
-      }
+      ...this.transformSearchResult(collection, TypesenseQueryService.COLLECTIONS[index].name)
     }), {})
 
     return result
@@ -57,20 +50,32 @@ export class TypesenseQueryService {
         .documents()
         .search(searchParams)
 
-      return {
-        [index]: {
-          items: result.hits?.map(hit => hit.document) as UserSearchSchema[] ?? [],
-          meta: {
-            total: result.found,
-            offset: result.page - 1,
-            limit: result.request_params.per_page ?? 0
-          }
-        }
-      }
+      return this.transformSearchResult(result, index)
     } catch (e) {
       captureException(e)
 
       return {}
+    }
+  }
+
+  private transformSearchResult (
+    result: {
+      hits?: Array<{ document: unknown }>
+      found: number
+      page: number
+      request_params: { per_page?: number }
+    },
+    index: string
+  ): MultiSearchResult {
+    return {
+      [index]: {
+        items: result.hits?.map(hit => hit.document) ?? [],
+        meta: {
+          total: result.found,
+          offset: result.page - 1,
+          limit: result.request_params.per_page ?? 0
+        }
+      }
     }
   }
 }
