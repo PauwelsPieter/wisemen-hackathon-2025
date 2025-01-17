@@ -9,12 +9,14 @@ import { expect } from 'expect'
 import { TestAuthContext } from '../utils/test-auth-context.js'
 import { AuthMiddleware } from '../../src/modules/auth/middleware/auth.middleware.js'
 import { S3Service } from '../../src/modules/files/services/s3.service.js'
-import { uuid } from '../expect/expectUuid.js'
-import { toHaveErrorCode } from '../expect/expectErrorCode.js'
-import { toHaveStatus } from '../expect/expectStatus.js'
-import { isEnumValue } from '../expect/expectEnum.js'
+import { uuid } from '../expect/expect-uuid.js'
+import { toHaveErrorCode } from '../expect/expect-error-code.js'
+import { toHaveStatus } from '../expect/expect-status.js'
+import { isEnumValue } from '../expect/expect-enum.js'
 import { toHaveApiError } from '../expect/expect-api-error.js'
 import { ApiModule } from '../../src/modules/api/api.module.js'
+import { toHaveValidationErrors } from '../expect/expect-validation-errors.js'
+import { toHaveEmitted } from '../expect/expect-to-have-emitted.js'
 import { RepositoryTestSetup } from './repository-test-setup.js'
 import { EndToEndTestSetup } from './end-to-end-test-setup.js'
 
@@ -138,7 +140,9 @@ export class TestBench {
       toHaveErrorCode,
       toHaveStatus,
       isEnumValue,
-      toHaveApiError
+      toHaveApiError,
+      toHaveValidationErrors,
+      toHaveEmitted
     })
   }
 }
