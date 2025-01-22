@@ -1,4 +1,4 @@
-import { BaseJobData } from '../../pgboss/jobs/job.abstract.js'
+import { BaseJobData } from '@wisemen/pgboss-nestjs-job'
 
 export interface NatsOutboxEvent extends BaseJobData {
   topic: string
