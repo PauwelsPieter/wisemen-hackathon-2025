@@ -11,7 +11,7 @@ import { User } from '../../src/modules/users/entities/user.entity.js'
 import { UserRoleEntityBuilder } from '../../src/modules/roles/tests/builders/entities/user-role-entity.builder.js'
 import { UserRoleSeeder } from '../../src/modules/roles/tests/seeders/user-role.seeder.js'
 
-export class TestContext {
+export class TestAuthContext {
   private readonly userSeeder: UserSeeder
   private readonly roleSeeder: RoleSeeder
   private readonly userRoleSeeder: UserRoleSeeder

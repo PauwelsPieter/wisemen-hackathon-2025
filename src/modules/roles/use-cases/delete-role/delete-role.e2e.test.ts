@@ -3,35 +3,33 @@ import { randomUUID } from 'node:crypto'
 import request from 'supertest'
 import { expect } from 'expect'
 import { Any, type DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import type { Role } from '../../entities/role.entity.js'
 import { UserRepository } from '../../../users/repositories/user.repository.js'
 import { UserSeeder } from '../../../users/tests/user.seeder.js'
 import { UserEntityBuilder } from '../../../users/tests/user-entity.builder.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { UserRole } from '../../entities/user-role.entity.js'
 import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
 import { UserRoleSeeder } from '../../tests/seeders/user-role.seeder.js'
 import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
 import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
-describe('Roles', () => {
-  let app: NestExpressApplication
+describe('Delete role end to end tests', () => {
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
-
-  let context: TestContext
-
+  let context: TestAuthContext
   let adminRole: Role
   let readonlyRole: Role
-
   let adminUser: TestUser
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest())
-
+    setup = await TestBench.setupEndToEndTest()
+    context = setup.authContext
+    dataSource = setup.dataSource
     adminRole = await context.getAdminRole()
     readonlyRole = await context.getReadonlyRole()
 
@@ -39,20 +37,18 @@ describe('Roles', () => {
     readonlyUser = await context.getReadonlyUser()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Delete role', () => {
     it('should return 401 when not authenticated', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/roles/${readonlyRole.uuid}`)
 
       expect(response).toHaveStatus(401)
     })
 
     it('should return 403 when not authorized', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/roles/${readonlyRole.uuid}`)
         .set('Authorization', `Bearer ${readonlyUser.token}`)
 
@@ -60,7 +56,7 @@ describe('Roles', () => {
     })
 
     it('should return 400 when deleting admin role', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/roles/${adminRole.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
@@ -99,7 +95,7 @@ describe('Roles', () => {
 
       await new UserRoleSeeder(dataSource.manager).seedUserRoles(userRoles)
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
