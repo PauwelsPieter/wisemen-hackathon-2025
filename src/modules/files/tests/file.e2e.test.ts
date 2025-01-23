@@ -2,44 +2,40 @@ import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import type { DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import type { File } from '../entities/file.entity.js'
-import { TestContext } from '../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../users/tests/setup-user.type.js'
-import { setupTest } from '../../../../test/setup/test-setup.js'
-import { FileModule } from '../modules/file.module.js'
+import { EndToEndTestSetup } from '../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../test/setup/test-bench.js'
 import { CreateFileDtoBuilder } from './builders/create-file-dto.builder.js'
 import { FileSeeder } from './seeders/file.seeder.js'
 import { FileBuilder } from './builders/file-link.builder.js'
 
 describe('File', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
-
-  let context: TestContext
-
+  let context: TestAuthContext
   let adminUser: TestUser
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest([FileModule]))
-
+    setup = await TestBench.setupEndToEndTest()
+    dataSource = setup.dataSource
+    context = setup.authContext
     adminUser = await context.getAdminUser()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Create file', () => {
     it('should return 401 when creating a file without a token', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/file')
 
       expect(response).toHaveStatus(401)
     })
 
     it('should return 400 when creating a file with an invalid body', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/file')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send({})
@@ -51,7 +47,7 @@ describe('File', () => {
       const fileDto = new CreateFileDtoBuilder()
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/file')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(fileDto)
@@ -69,14 +65,14 @@ describe('File', () => {
     })
 
     it('should return 401 when downloading a file without a token', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/file/${file.uuid}/download`)
 
       expect(response).toHaveStatus(401)
     })
 
     it('should redirect to s3 download link', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/file/${file.uuid}/download`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
@@ -93,14 +89,14 @@ describe('File', () => {
     })
 
     it('should return 401 when deleting a file when no token is provided', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/file/${file.uuid}`)
 
       expect(response).toHaveStatus(401)
     })
 
     it('should delete the file', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .delete(`/file/${file.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 

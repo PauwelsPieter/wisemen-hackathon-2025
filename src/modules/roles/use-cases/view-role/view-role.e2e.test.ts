@@ -2,11 +2,9 @@ import { before, describe, it, after } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import type { DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import { UserSeeder } from '../../../users/tests/user.seeder.js'
 import { UserEntityBuilder } from '../../../users/tests/user-entity.builder.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
 import { UserRoleSeeder } from '../../tests/seeders/user-role.seeder.js'
@@ -14,21 +12,21 @@ import { Role } from '../../entities/role.entity.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
 import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
 describe('Roles', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
-
-  let context: TestContext
-
+  let context: TestAuthContext
   let adminUser: TestUser
   let readonlyUser: TestUser
-
   let role: Role
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest())
-
+    setup = await TestBench.setupEndToEndTest()
+    dataSource = setup.dataSource
+    context = setup.authContext
     adminUser = await context.getAdminUser()
     readonlyUser = await context.getReadonlyUser()
 
@@ -39,20 +37,18 @@ describe('Roles', () => {
     )
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Get role', () => {
     it('should return 401 when not authenticated', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .get(`/roles/${role.uuid}`)
 
       expect(response).toHaveStatus(401)
     })
 
     it('should return 403 when not authorized', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .get(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${readonlyUser.token}`)
 
@@ -60,7 +56,7 @@ describe('Roles', () => {
     })
 
     it('should return role when admin', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .get(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
@@ -89,7 +85,7 @@ describe('Roles', () => {
 
       const token = context.getToken(user)
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .get(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${token}`)
 

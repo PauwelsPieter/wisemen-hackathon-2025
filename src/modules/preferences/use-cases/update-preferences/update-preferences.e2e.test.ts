@@ -1,36 +1,35 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import { DataSource } from 'typeorm'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../users/tests/setup-user.type.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { Theme } from '../../types/theme.enum.js'
 import { Preferences } from '../../entities/preferences.entity.js'
-import { UpdatePreferencesModule } from './update-preferences.module.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
 describe('Update preferences e2e', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
-  let context: TestContext
+  let context: TestAuthContext
 
   let user: TestUser
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest([UpdatePreferencesModule]))
+    setup = await TestBench.setupEndToEndTest()
+    dataSource = setup.dataSource
+    context = setup.authContext
 
     user = await context.getUser([Permission.READ_ONLY])
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Update preferences', () => {
     it('should return 401 when updating preferences without a token', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .patch(`/users/${user.user.uuid}/preferences`)
 
       expect(response).toHaveStatus(401)
@@ -39,7 +38,7 @@ describe('Update preferences e2e', () => {
     it('should return 403 when updating someone elses preferences', async () => {
       const someone = await context.getUser([Permission.READ_ONLY])
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .patch(`/users/${someone.user.uuid}/preferences`)
         .set('Authorization', `Bearer ${user.token}`)
 
@@ -47,7 +46,7 @@ describe('Update preferences e2e', () => {
     })
 
     it('should return 200 when updating own preferences', async () => {
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .patch(`/users/${user.user.uuid}/preferences`)
         .set('Authorization', `Bearer ${user.token}`)
 
@@ -55,7 +54,7 @@ describe('Update preferences e2e', () => {
     })
 
     it('should return 200 when updating perferences multiple times', async () => {
-      const response1 = await request(app.getHttpServer())
+      const response1 = await request(setup.httpServer)
         .patch(`/users/${user.user.uuid}/preferences`)
         .set('Authorization', `Bearer ${user.token}`)
         .send({
@@ -72,7 +71,7 @@ describe('Update preferences e2e', () => {
 
       expect(preferences.theme).toEqual(Theme.DARK)
 
-      const response2 = await request(app.getHttpServer())
+      const response2 = await request(setup.httpServer)
         .patch(`/users/${user.user.uuid}/preferences`)
         .set('Authorization', `Bearer ${user.token}`)
         .send({

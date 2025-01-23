@@ -1,45 +1,11 @@
 import '../modules/exceptions/sentry.js'
 import { NestFactory } from '@nestjs/core'
-import { INestApplicationContext, MiddlewareConsumer, Module, VersioningType } from '@nestjs/common'
+import { INestApplicationContext, VersioningType } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import { ApiContainer } from '@wisemen/app-container'
-import { AuthMiddleware } from '../modules/auth/middleware/auth.middleware.js'
-import { AuthModule } from '../modules/auth/auth.module.js'
-import { UserModule } from '../modules/users/user.module.js'
-import { RoleModule } from '../modules/roles/role.module.js'
-import { PermissionModule } from '../modules/permission/permission.module.js'
-import { StatusModule } from '../modules/status/modules/status.module.js'
-import { FileModule } from '../modules/files/modules/file.module.js'
-import { LocalizationModule } from '../modules/localization/modules/localization.module.js'
-import { ContactModule } from '../modules/contact/contact.module.js'
-import { AppModule } from '../app.module.js'
 import { SwaggerModule } from '../modules/swagger/swagger.module.js'
-import { PreferencesModule } from '../modules/preferences/preferences.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
-
-@Module({
-  imports: [
-    AppModule.forRoot(),
-    AuthModule,
-    SwaggerModule,
-    StatusModule,
-    UserModule,
-    RoleModule,
-    PermissionModule,
-    FileModule,
-    LocalizationModule,
-    ContactModule,
-    PreferencesModule
-  ]
-})
-class ApiModule {
-  configure (consumer: MiddlewareConsumer): void {
-    consumer
-      .apply(AuthMiddleware)
-      .exclude('auth/token')
-      .forRoutes('*')
-  }
-}
+import { ApiModule } from '../modules/api/api.module.js'
 
 startOpentelemetry('api')
 

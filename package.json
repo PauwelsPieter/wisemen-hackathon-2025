@@ -14,10 +14,10 @@
     "start:dev": "nest start --exec \"node --env-file=.env\" --watch",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint": "eslint",
-    "test": "node --env-file=.env.test --test --test-reporter=spec",
-    "test:run": "pnpm build && pnpm test",
-    "test:pipeline": "pnpm test:setup && pnpm test",
-    "test:setup": "pnpm build && node --env-file=.env.test dist/test/setup/global-setup.js",
+    "test:setup": "node --env-file=.env.test dist/test/setup/global-setup.js",
+    "test:run": "node --experimental-test-isolation=none --env-file=.env.test --test \"**/*.test.js\"",
+    "test:pipeline": "pnpm test:setup && pnpm test:run",
+    "test:one": "pnpm clean && pnpm build && node --test --env-file=.env.test --experimental-test-isolation=none --test-reporter=spec",
     "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/sql/sources/main.js"
   },
   "dependencies": {
@@ -102,6 +102,8 @@
     "expect": "^29.7.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "sinon": "^19.0.2",
+    "@types/sinon": "^17.0.3"
   }
 }
