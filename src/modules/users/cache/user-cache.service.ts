@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 import { RedisClient } from '../../redis/redis.client.js'
 import { User } from '../entities/user.entity.js'
 
-const userRoleCache = `user-role-cache`
+const USER_ROLE_CACHE = 'user-role-cache'
 
 @Injectable()
 export class UserCache {
@@ -15,11 +15,11 @@ export class UserCache {
   ) { }
 
   async setUserRoles (userUuid: string, roleUuids: string[]): Promise<void> {
-    await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(roleUuids))
+    await this.client.putCachedValue(`${USER_ROLE_CACHE}.${userUuid}`, JSON.stringify(roleUuids))
   }
 
   async getUserRoles (userUuid: string): Promise<string[]> {
-    const cacheKey = `${userRoleCache}.${userUuid}`
+    const cacheKey = `${USER_ROLE_CACHE}.${userUuid}`
     const cachedRoleUuids = await this.getCachedRoles(cacheKey)
 
     if (cachedRoleUuids != null) {

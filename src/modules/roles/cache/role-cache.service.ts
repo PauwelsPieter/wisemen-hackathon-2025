@@ -5,7 +5,7 @@ import { RedisClient } from '../../redis/redis.client.js'
 import { Permission } from '../../permission/permission.enum.js'
 import { Role } from '../entities/role.entity.js'
 
-const rolePermissionsCache = `role-permissions-cache`
+const ROLE_PERMISSIONS_CACHE = 'role-permissions-cache'
 
 @Injectable()
 export class RoleCache {
@@ -16,7 +16,7 @@ export class RoleCache {
   ) { }
 
   async clearRolesPermissions (roleUuids: string[]): Promise<void> {
-    const keys = roleUuids.map(roleUuid => `${rolePermissionsCache}.${roleUuid}`)
+    const keys = roleUuids.map(roleUuid => `${ROLE_PERMISSIONS_CACHE}.${roleUuid}`)
 
     await this.client.deleteCachedValues(keys)
   }
@@ -27,7 +27,7 @@ export class RoleCache {
     const permissions: Permission[] = []
     const missingRoleUuids: string[] = []
 
-    const cacheKeys = roleUuids.map(roleUuid => `${rolePermissionsCache}.${roleUuid}`)
+    const cacheKeys = roleUuids.map(roleUuid => `${ROLE_PERMISSIONS_CACHE}.${roleUuid}`)
     const cachedEntries = await this.getCachedPermissions(cacheKeys)
 
     for (const [index, cachedPermissions] of cachedEntries.entries()) {
@@ -53,7 +53,7 @@ export class RoleCache {
     })
 
     const newPermissions = roles.map(role => role.permissions)
-    const newKeys = roles.map(role => `${rolePermissionsCache}.${role.uuid}`)
+    const newKeys = roles.map(role => `${ROLE_PERMISSIONS_CACHE}.${role.uuid}`)
 
     await this.setCachedPermissions(newKeys, newPermissions)
 
