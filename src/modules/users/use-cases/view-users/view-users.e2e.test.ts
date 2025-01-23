@@ -1,37 +1,32 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { TestingModule } from '@nestjs/testing'
-import { TestContext } from '../../../../../test/utils/test-context.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
 import {
   TypesenseCollectionService
 } from '../../../typesense/services/typesense-collection.service.js'
 import {
   TypesenseCollectionName
 } from '../../../typesense/enums/typesense-collection-index.enum.js'
-import { ViewUsersModule } from './view-users.module.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 
 describe('View users e2e test', () => {
-  let app: NestExpressApplication
-  let testModule: TestingModule
-  let context: TestContext
+  let setup: EndToEndTestSetup
   let adminUser: TestUser
   let readonlyUser: TestUser
   let userWithUserDeletePermission: TestUser
 
   before(async () => {
-    ({ app, context, testModule } = await setupTest([ViewUsersModule]))
+    setup = await TestBench.setupEndToEndTest()
 
-    readonlyUser = await context.getReadonlyUser()
-    adminUser = await context.getAdminUser()
+    readonlyUser = await setup.authContext.getReadonlyUser()
+    adminUser = await setup.authContext.getAdminUser()
 
-    userWithUserDeletePermission = await context.getUser([Permission.USER_DELETE])
+    userWithUserDeletePermission = await setup.authContext.getUser([Permission.USER_DELETE])
 
-    const typesenseCollectionService = testModule.get(TypesenseCollectionService)
+    const typesenseCollectionService = setup.testModule.get(TypesenseCollectionService)
 
     await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
@@ -39,19 +34,17 @@ describe('View users e2e test', () => {
     )
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   it('returns 401 when not authenticated', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get('/users')
 
     expect(response).toHaveStatus(401)
   })
 
   it('returns users in a paginated format', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get('/users')
       .set('Authorization', `Bearer ${adminUser.token}`)
       .query({

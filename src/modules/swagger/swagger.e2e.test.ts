@@ -1,23 +1,20 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { setupTest } from '../../../test/setup/test-setup.js'
-import { SwaggerModule } from './swagger.module.js'
+import { EndToEndTestSetup } from '../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../test/setup/test-bench.js'
 
 describe('Swagger e2e tests', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
 
   before(async () => {
-    ({ app } = await setupTest([SwaggerModule]))
+    setup = await TestBench.setupEndToEndTest()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   it('returns 200 with html file', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get('/oauth2-redirect')
 
     expect(response.status).toBe(200)

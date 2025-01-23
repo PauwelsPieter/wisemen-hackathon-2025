@@ -1,39 +1,34 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { TestContext } from '../../../../../test/utils/test-context.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { ViewMeModule } from './view-me.module.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
 describe('View me e2e test', () => {
-  let app: NestExpressApplication
+  let setup: EndToEndTestSetup
   let authorizedUser: TestUser
-  let context: TestContext
 
   before(async () => {
-    ({ app, context } = await setupTest([ViewMeModule]))
+    setup = await TestBench.setupEndToEndTest()
 
-    const user = await context.getUser([Permission.USER_READ])
+    const user = await setup.authContext.getUser([Permission.USER_READ])
 
     authorizedUser = user
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   it('returns 401 when not authenticated', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get(`/users/me`)
 
     expect(response).toHaveStatus(401)
   })
 
   it('returns user data about themselves', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get(`/users/me`)
       .set('Authorization', `Bearer ${authorizedUser.token}`)
 
