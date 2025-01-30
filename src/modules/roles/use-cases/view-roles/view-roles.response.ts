@@ -15,7 +15,7 @@ export class RoleResponse {
   @ApiProperty()
   name: string
 
-  @ApiProperty({ enum: Permission, isArray: true })
+  @ApiProperty({ enum: Permission, enumName: 'Permission', isArray: true })
   permissions: Permission[]
 
   constructor (role: Role) {
@@ -27,7 +27,7 @@ export class RoleResponse {
   }
 }
 
-export class ViewContactIndexResponse {
+export class ViewRoleIndexResponse {
   @ApiProperty({ type: RoleResponse, isArray: true })
   declare items: RoleResponse[]
 

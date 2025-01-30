@@ -9,7 +9,7 @@ export class CreateFileResponse {
   @ApiProperty({ type: 'string' })
   name: string
 
-  @ApiProperty({ enum: MimeType, nullable: true })
+  @ApiProperty({ enum: MimeType, enumName: 'MimeType', nullable: true })
   mimeType: MimeType | null
 
   @ApiProperty({ type: 'string' })
