@@ -3,7 +3,7 @@ import { Preferences } from '../../entities/preferences.entity.js'
 import { Theme } from '../../types/theme.enum.js'
 
 export class ViewPreferencesResponse {
-  @ApiProperty({ enum: Theme })
+  @ApiProperty({ enum: Theme, enumName: 'Theme' })
   theme: Theme
 
   @ApiProperty({ type: String, nullable: true })

@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiTags, ApiOAuth2, ApiResponse } from '@nestjs/swagger'
+import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
@@ -15,8 +15,7 @@ export class ViewRoleController {
   ) {}
 
   @Get()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'The role has been successfully received.',
     type: RoleResponse
   })
