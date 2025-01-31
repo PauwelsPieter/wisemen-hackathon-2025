@@ -52,7 +52,7 @@
     "@opentelemetry/sdk-node": "^0.57.0",
     "@opentelemetry/sdk-trace-base": "^1.30.0",
     "@opentelemetry/sdk-trace-node": "^1.30.0",
-    "@sentry/nestjs": "^8.45.0",
+    "@sentry/nestjs": "^8.52.0",
     "@wisemen/app-container": "^2.1.11",
     "@wisemen/decorators": "^0.0.3",
     "@wisemen/nestjs-typeorm": "^0.0.4",
