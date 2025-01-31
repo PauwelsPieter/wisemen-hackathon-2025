@@ -1,5 +1,5 @@
 import { type DynamicModule, Module, type Provider } from '@nestjs/common'
-import { PgBossSchedulerModule } from '../pgboss/scheduler/pgboss-scheduler.module.js'
+import { PgBossSchedulerModule } from '@wisemen/pgboss-nestjs-job'
 import { NatsClient } from './nats.client.js'
 import { NatsOutboxSubscriber } from './outbox/nats-outbox.subscriber.js'
 import { ExamplePublisher } from './publishers/example.publisher.js'
