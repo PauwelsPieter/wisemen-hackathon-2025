@@ -6,7 +6,7 @@ import { PaginatedOffsetSearchQuery } from '../../../pagination/offset/paginated
 import { FilterQuery } from '../../../pagination/search.query.js'
 
 export class UsersFilterQuery extends FilterQuery {
-  @ApiProperty({ enum: Permission, required: false, isArray: true })
+  @ApiProperty({ enum: Permission, enumName: 'Permission', required: false, isArray: true })
   @IsOptional()
   @IsArray()
   @IsEnum(Permission, { each: true })
