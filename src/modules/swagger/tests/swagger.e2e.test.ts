@@ -1,8 +1,8 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { EndToEndTestSetup } from '../../../test/setup/end-to-end-test-setup.js'
-import { TestBench } from '../../../test/setup/test-bench.js'
+import { EndToEndTestSetup } from '../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../test/setup/test-bench.js'
 
 describe('Swagger e2e tests', () => {
   let setup: EndToEndTestSetup
