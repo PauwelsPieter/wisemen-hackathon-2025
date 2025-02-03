@@ -1,5 +1,5 @@
 import type { ApiResponseOptions } from '@nestjs/swagger'
-import { CreateFileResponse } from '../transformers/file-created.transformer.js'
+import { CreateFileResponse } from '../../src/modules/files/transformers/file-created.transformer.js'
 
 export const createFileApiResponse: ApiResponseOptions = {
   status: 201,

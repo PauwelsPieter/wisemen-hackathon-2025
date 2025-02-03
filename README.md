@@ -51,7 +51,7 @@ $ pnpm run test:run
 ```
 
 ## Documentation
-[ERD](src/docs/erd.md)
+[ERD](docs/erd.md)
 
-[File upload](src/modules/files/docs/upload-file.md)
+[File upload](docs/files/upload-file.md)
 
