@@ -4,7 +4,6 @@ import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import type { MultiSearchResult, TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { UserTypesenseCollection, type UserSearchSchema } from '../collections/user.collections.js'
-import { DEFAULT_LIMIT } from '../builder/search-params.builder.js'
 
 @Injectable()
 export class TypesenseQueryService {
@@ -46,8 +45,8 @@ export class TypesenseQueryService {
           items: result.hits?.map(hit => hit.document) as UserSearchSchema[] ?? [],
           meta: {
             total: result.found,
-            offset: (result.page - 1) * (result.request_params.per_page ?? 0),
-            limit: result.request_params.per_page ?? DEFAULT_LIMIT
+            offset: result.page - 1,
+            limit: result.request_params.per_page ?? 0
           }
         }
       }
