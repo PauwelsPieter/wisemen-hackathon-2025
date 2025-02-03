@@ -1,5 +1,6 @@
-import { INestApplication, Module } from '@nestjs/common'
+import { INestApplication, Logger, Module } from '@nestjs/common'
 import { SwaggerModule as NestSwaggerModule } from '@nestjs/swagger'
+import { captureException } from '@sentry/nestjs'
 import { WSModule } from '../websocket/ws.module.js'
 import { buildWebSocketDocumentation } from './helpers/build-websocket-documentation.js'
 import { SwaggerController } from './swagger.controller.js'
@@ -18,6 +19,14 @@ export class SwaggerModule {
   }
 
   private static addApiDocumentation (toApp: INestApplication<unknown>, onRoute: string): void {
+    try {
+      this.tryAddApiDocumentation(toApp, onRoute)
+    } catch (e) {
+      this.addFailurePage(onRoute, toApp, e)
+    }
+  }
+
+  private static tryAddApiDocumentation (toApp: INestApplication<unknown>, onRoute: string) {
     const clientId = process.env.ZITADEL_CLIENT_ID
 
     const documentation = buildApiDocumentation()
@@ -31,10 +40,38 @@ export class SwaggerModule {
     toApp: INestApplication<unknown>,
     onRoute: string
   ): void {
+    try {
+      this.tryAddWebSocketDocumentation(toApp, onRoute)
+    } catch (e) {
+      this.addFailurePage(onRoute, toApp, e)
+    }
+  }
+
+  private static tryAddWebSocketDocumentation (toApp: INestApplication<unknown>, onRoute: string) {
     const documentation = buildWebSocketDocumentation()
     const document = NestSwaggerModule.createDocument(
       toApp, documentation, { include: [WSModule] })
 
     NestSwaggerModule.setup(onRoute, toApp, document)
+  }
+
+  private static addFailurePage (onRoute: string, toApp: INestApplication<unknown>, e) {
+    captureException(e)
+    Logger.error(e)
+    NestSwaggerModule.setup(onRoute, toApp, {
+      info: {
+        title: 'Something went wrong',
+        version: '',
+        description: `An error occurred while generating the documentation:\n
+        ${(e as { message?: string }).message ?? 'Unknown error'} `
+      },
+      openapi: '3.1.0',
+      paths: {}
+    }, {
+      swaggerOptions: {
+        tagsSorter: 'alpha',
+        operationsSorter: 'alpha'
+      }
+    })
   }
 }

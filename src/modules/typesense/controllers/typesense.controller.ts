@@ -16,7 +16,13 @@ export class TypesenseController {
 
   @Get('migrate')
   @ApiQuery({ required: false, name: 'fresh', type: 'boolean' })
-  @ApiQuery({ required: false, name: 'collections', enum: TypesenseCollectionName, isArray: true })
+  @ApiQuery({
+    required: false,
+    name: 'collections',
+    enum: TypesenseCollectionName,
+    enumName: 'TypesenseCollectionName',
+    isArray: true
+  })
   @ApiResponse({
     status: 200,
     description: 'Successfully migrated collections'
@@ -29,7 +35,13 @@ export class TypesenseController {
   }
 
   @Get('import')
-  @ApiQuery({ required: false, name: 'collections', enum: TypesenseCollectionName, isArray: true })
+  @ApiQuery({
+    required: false,
+    name: 'collections',
+    enum: TypesenseCollectionName,
+    enumName: 'TypesenseCollectionName',
+    isArray: true
+  })
   @ApiResponse({
     status: 200,
     description: 'Successfully imported collections'

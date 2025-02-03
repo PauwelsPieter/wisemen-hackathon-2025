@@ -2,20 +2,20 @@ import { before, describe, it, after } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import type { DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
 import type { Role } from '../../entities/role.entity.js'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
 import { CreateRoleCommandBuilder } from '../../tests/builders/commands/create-role-command.builder.js'
 import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
-describe('Roles', () => {
-  let app: NestExpressApplication
+describe('Update role end to end tests', () => {
+  let setup: EndToEndTestSetup
   let dataSource: DataSource
 
-  let context: TestContext
+  let context: TestAuthContext
 
   let readonlyRole: Role
 
@@ -23,24 +23,23 @@ describe('Roles', () => {
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, dataSource, context } = await setupTest())
-
+    setup = await TestBench.setupEndToEndTest()
+    context = setup.authContext
+    dataSource = setup.dataSource
     readonlyRole = await context.getReadonlyRole()
 
     adminUser = await context.getAdminUser()
     readonlyUser = await context.getReadonlyUser()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Update role', () => {
     it('should return 401 when not authenticated', async () => {
       const roleDto = new CreateRoleCommandBuilder()
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/${readonlyRole.uuid}`)
         .send(roleDto)
 
@@ -51,7 +50,7 @@ describe('Roles', () => {
       const roleDto = new CreateRoleCommandBuilder()
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/${readonlyRole.uuid}`)
         .set('Authorization', `Bearer ${readonlyUser.token}`)
         .send(roleDto)
@@ -70,7 +69,7 @@ describe('Roles', () => {
         .withName('should-update-role-test')
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
@@ -84,7 +83,7 @@ describe('Roles', () => {
         .withName('')
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post(`/roles/${readonlyRole.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)

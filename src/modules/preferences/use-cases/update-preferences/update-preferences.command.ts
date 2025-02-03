@@ -4,7 +4,7 @@ import { IsUndefinable } from '@wisemen/validators'
 import { Theme } from '../../types/theme.enum.js'
 
 export class UpdatePreferencesCommand {
-  @ApiPropertyOptional({ enum: Theme })
+  @ApiPropertyOptional({ enum: Theme, enumName: 'Theme' })
   @IsUndefinable()
   @IsEnum(Theme)
   theme?: Theme

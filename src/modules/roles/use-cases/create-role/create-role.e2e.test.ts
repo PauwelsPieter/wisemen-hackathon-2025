@@ -1,31 +1,27 @@
 import { before, describe, it, after } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { setupTest } from '../../../../../test/setup/test-setup.js'
-import { TestContext } from '../../../../../test/utils/test-context.js'
+import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { CreateRoleCommandBuilder } from '../../tests/builders/commands/create-role-command.builder.js'
-import { RoleModule } from '../../role.module.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
 
-describe('Roles', () => {
-  let app: NestExpressApplication
-
-  let context: TestContext
-
+describe('Create role end to end tests', () => {
+  let setup: EndToEndTestSetup
+  let context: TestAuthContext
   let adminUser: TestUser
   let readonlyUser: TestUser
 
   before(async () => {
-    ({ app, context } = await setupTest([RoleModule]))
+    setup = await TestBench.setupEndToEndTest()
+    context = setup.authContext
 
     adminUser = await context.getAdminUser()
     readonlyUser = await context.getReadonlyUser()
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   describe('Create role', () => {
     it('should return 401 when not authenticated', async () => {
@@ -33,7 +29,7 @@ describe('Roles', () => {
         .withName('should-return-401-when-not-authenticated')
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/roles')
         .send(roleDto)
 
@@ -44,7 +40,7 @@ describe('Roles', () => {
       const roleDto = new CreateRoleCommandBuilder()
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/roles')
         .set('Authorization', `Bearer ${readonlyUser.token}`)
         .send(roleDto)
@@ -57,7 +53,7 @@ describe('Roles', () => {
         .withName('should-create-role-test')
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/roles')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
@@ -68,12 +64,12 @@ describe('Roles', () => {
     it('should create role not a second time', async () => {
       const roleDto = new CreateRoleCommandBuilder().build()
 
-      await request(app.getHttpServer())
+      await request(setup.httpServer)
         .post('/roles')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/roles')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
@@ -87,7 +83,7 @@ describe('Roles', () => {
         .withName('')
         .build()
 
-      const response = await request(app.getHttpServer())
+      const response = await request(setup.httpServer)
         .post('/roles')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)

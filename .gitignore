@@ -4,6 +4,7 @@ node_modules
 /typesense-data
 .typesense/
 .postgres
+.minio
 _build
 
 # Logs
