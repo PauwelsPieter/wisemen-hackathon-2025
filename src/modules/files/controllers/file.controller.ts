@@ -5,7 +5,7 @@ import { UuidParam } from '@wisemen/decorators'
 import { CreateFileDto } from '../dtos/create-file.dto.js'
 import { CreateFileResponse } from '../transformers/file-created.transformer.js'
 import { FileFlowService } from '../services/file.flows.service.js'
-import { confirmFileUploadApiResponse, createFileApiResponse, downloadFileApiResponse, removeFileApiResponse } from '../docs/file-response.docs.js'
+import { confirmFileUploadApiResponse, createFileApiResponse, downloadFileApiResponse, removeFileApiResponse } from '../../../../docs/files/file-response.docs.js'
 import { AuthStorage } from '../../auth/auth.storage.js'
 
 @ApiTags('File')
