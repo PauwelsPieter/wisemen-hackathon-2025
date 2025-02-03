@@ -24,9 +24,9 @@ export class S3Service {
     const region: string = this.configService.get('S3_REGION', 'nl-ams')
 
     this.s3 = new S3Client({
-      forcePathStyle: false,
+      forcePathStyle: true,
       region,
-      endpoint: 'https://' + this.configService.getOrThrow('S3_ENDPOINT'),
+      endpoint: this.configService.getOrThrow('S3_ENDPOINT'),
       credentials: {
         accessKeyId: this.configService.getOrThrow('S3_ACCESS_KEY'),
         secretAccessKey: this.configService.getOrThrow('S3_SECRET_KEY')
@@ -36,13 +36,13 @@ export class S3Service {
 
   public async createTemporaryDownloadUrl (
     name: string,
-    fileUuid: string,
+    key: string,
     mimeType?: MimeType | null,
     expiresInSeconds?: number
   ): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
-      Key: this.createKey(fileUuid),
+      Key: this.prependEnvKey(key),
       ResponseContentType: mimeType ?? 'application/octet-stream',
       ResponseContentDisposition: `attachment; filename=${name}`
     })
@@ -62,7 +62,7 @@ export class S3Service {
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
-      Key: this.createKey(file.uuid),
+      Key: this.prependEnvKey(file.uuid),
       ContentType: file.mimeType,
       ACL: 'private'
     })
@@ -73,12 +73,12 @@ export class S3Service {
   }
 
   public async upload (
-    fileUuid: string,
+    key: string,
     content: Buffer
   ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
-      Key: this.createKey(fileUuid),
+      Key: this.prependEnvKey(key),
       Body: content,
       ACL: 'private'
     })
@@ -87,14 +87,14 @@ export class S3Service {
   }
 
   public async uploadStream (
-    fileUuid: string,
+    key: string,
     stream: Readable
   ): Promise<void> {
     const parallelUploads = new Upload({
       client: this.s3,
       params: {
         Bucket: this.bucketName,
-        Key: this.createKey(fileUuid),
+        Key: this.prependEnvKey(key),
         Body: stream,
         ACL: 'private'
       },
@@ -106,11 +106,11 @@ export class S3Service {
   }
 
   public async list (
-    fileUuid: string
+    key: string
   ): Promise<ListObjectsV2Output['Contents']> {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
-      Prefix: this.createKey(fileUuid)
+      Prefix: this.prependEnvKey(key)
     })
 
     const result = await this.s3.send(command)
@@ -119,11 +119,11 @@ export class S3Service {
   }
 
   public async delete (
-    fileUuid: string
+    key: string
   ): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
-      Key: this.createKey(fileUuid)
+      Key: this.prependEnvKey(key)
     })
 
     await this.s3.send(command)
@@ -133,11 +133,11 @@ export class S3Service {
     return this.configService.getOrThrow('S3_BUCKET')
   }
 
-  private createKey (
-    fileUuid: string
+  private prependEnvKey (
+    key: string
   ): string {
     const env: string = this.configService.get('NODE_ENV', 'local')
 
-    return `${env}/${fileUuid}`
+    return `${env}/${key}`
   }
 }
