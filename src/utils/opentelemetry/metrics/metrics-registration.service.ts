@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { Attributes, metrics, ObservableResult } from '@opentelemetry/api'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
-import { Job } from '../../../modules/pgboss/persistence/job.entity.js'
+import { Job } from '@wisemen/pgboss-nestjs-job'
 
 @Injectable()
 export class MetricsRegistrationService {
