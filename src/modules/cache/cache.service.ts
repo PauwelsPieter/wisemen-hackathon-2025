@@ -1,38 +1,49 @@
 import { Injectable } from '@nestjs/common'
-import { RoleRepository } from '../roles/repositories/role.repository.js'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { Repository } from 'typeorm'
 import { UserRepository } from '../users/repositories/user.repository.js'
-import { Permission } from '../permissions/permission.enum.js'
+import { Permission } from '../permission/permission.enum.js'
 import { RedisClient } from '../redis/redis.client.js'
+import { Role } from '../roles/entities/role.entity.js'
 
-const prefix = `${process.env.NODE_ENV ?? 'local'}`
-
-const rolePermissionsCache = `${prefix}.role-permissions-cache`
-const userRoleCache = `${prefix}.user-role-cache`
+const rolePermissionsCache = `role-permissions-cache`
+const userRoleCache = `user-role-cache`
 
 @Injectable()
 export class CacheService {
   constructor (
     // private readonly client: NatsClient,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
     private readonly client: RedisClient,
-    private readonly roleRepository: RoleRepository,
     private readonly userRepository: UserRepository
   ) {
 
   }
 
-  async getRolePermissions (roleUuid: string | null): Promise<Permission[]> {
-    if (roleUuid == null) return []
+  async getRolesPermissions (roleUuids: string[]): Promise<Permission[]> {
+    if (roleUuids.length == 0) return [Permission.READ_ONLY]
 
-    const result = await this.client.getCachedValue(`${rolePermissionsCache}.${roleUuid}`)
+    const permissions: Permission[] = []
 
-    if (result != null) {
-      return JSON.parse(String(result)) as Permission[]
+    for (const roleUuid of roleUuids) {
+      const result = await this.client.getCachedValue(`${rolePermissionsCache}.${roleUuid}`)
+
+      if (result != null) {
+        const test = JSON.parse(String(result)) as Permission[]
+
+        permissions.push(...test)
+
+        continue
+      }
+
+      const role = await this.roleRepository.findOneBy({ uuid: roleUuid })
+      const rolePermissions = role?.permissions ?? []
+
+      permissions.push(...rolePermissions)
+
+      await this.client.putCachedValue(`${rolePermissionsCache}.${roleUuid}`, JSON.stringify(rolePermissions))
     }
-
-    const role = await this.roleRepository.findOneBy({ uuid: roleUuid })
-    const permissions = role?.permissions ?? []
-
-    await this.client.putCachedValue(`${rolePermissionsCache}.${roleUuid}`, JSON.stringify(permissions))
 
     return permissions
   }
@@ -43,19 +54,27 @@ export class CacheService {
     }
   }
 
-  async getUserRole (userUuid: string): Promise<string | null> {
+  async getUserRoles (userUuid: string): Promise<string[]> {
     const result = await this.client.getCachedValue(`${userRoleCache}.${userUuid}`)
 
     if (result != null) {
-      return JSON.parse(String(result)) as string
+      return JSON.parse(String(result)) as string[]
     }
 
-    const user = await this.userRepository.findOneBy({ uuid: userUuid })
-    const roleUuid = user?.roleUuid ?? null
+    const user = await this.userRepository.findOne({
+      where: { uuid: userUuid },
+      relations: { userRoles: true }
+    })
 
-    await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(user?.roleUuid ?? null))
+    const roleUuids = user?.userRoles?.map(userRole => userRole.roleUuid) ?? []
 
-    return roleUuid
+    await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(roleUuids))
+
+    return roleUuids
+  }
+
+  async setUserRoles (userUuid: string, roleUuids: string[]): Promise<void> {
+    await this.client.putCachedValue(`${userRoleCache}.${userUuid}`, JSON.stringify(roleUuids))
   }
 
   async clearUserRole (userUuid: string): Promise<void> {
@@ -63,14 +82,12 @@ export class CacheService {
   }
 
   async getUserPermissions (userUuid: string): Promise<Permission[]> {
-    const roleUuid = await this.getUserRole(userUuid)
+    const roleUuids = await this.getUserRoles(userUuid)
 
-    return await this.getRolePermissions(roleUuid)
+    return await this.getRolesPermissions(roleUuids)
   }
 
-  async hasAdminPermission (userUuid: string): Promise<boolean> {
-    const userPermissions = await this.getUserPermissions(userUuid)
-
+  hasAdminPermission (userPermissions: Permission[]): boolean {
     return userPermissions.includes(Permission.ADMIN)
   }
 
@@ -79,13 +96,13 @@ export class CacheService {
       return true
     }
 
-    const hasAdminPermission = await this.hasAdminPermission(userUuid)
+    const userPermissions = await this.getUserPermissions(userUuid)
+
+    const hasAdminPermission = this.hasAdminPermission(userPermissions)
 
     if (hasAdminPermission) {
       return true
     }
-
-    const userPermissions = await this.getUserPermissions(userUuid)
 
     return permissions.some(permission => userPermissions.includes(permission))
   }

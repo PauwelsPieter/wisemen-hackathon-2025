@@ -1,12 +1,12 @@
 import type { EntityManager } from 'typeorm'
-import type { Role } from '../../entities/role.entity.js'
-import { RoleRepository } from '../../repositories/role.repository.js'
-import { Permission } from '../../../permissions/permission.enum.js'
+import { TypeOrmRepository } from '@wisemen/nestjs-typeorm'
+import { Role } from '../../entities/role.entity.js'
+import { Permission } from '../../../permission/permission.enum.js'
 import { AbstractSeeder } from '../../../../../test/seeders/abstract-seeder.js'
 
 export class RoleSeeder extends AbstractSeeder<Role> {
   constructor (manager: EntityManager) {
-    super(new RoleRepository(manager))
+    super(new TypeOrmRepository(Role, manager))
   }
 
   async seedAdminRole (): Promise<Role> {
@@ -20,9 +20,7 @@ export class RoleSeeder extends AbstractSeeder<Role> {
   }
 
   private async findRoleByName (name: string): Promise<Role | null> {
-    return await this.repository.findOne({
-      where: { name }
-    })
+    return await this.repository.findOneBy({ name })
   }
 
   private async seedRole (name: string, permissions: Permission[]): Promise<Role> {

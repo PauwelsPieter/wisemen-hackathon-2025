@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
+import { v4 } from 'uuid'
 import { User } from '../entities/user.entity.js'
-import type { Role } from '../../roles/entities/role.entity.js'
 
 export class UserEntityBuilder {
   private user: User
@@ -13,10 +13,10 @@ export class UserEntityBuilder {
     this.user = new User()
 
     this.user.uuid = randomUUID()
+    this.user.userId = v4()
     this.user.createdAt = new Date()
     this.user.updatedAt = new Date()
     this.user.email = 'test@mail.com'
-    this.user.password = 'Password123'
     this.user.firstName = 'John'
     this.user.lastName = 'Doe'
 
@@ -35,12 +35,6 @@ export class UserEntityBuilder {
     return this
   }
 
-  withPassword (password: string): this {
-    this.user.password = password
-
-    return this
-  }
-
   withFirstName (firstName: string): this {
     this.user.firstName = firstName
 
@@ -49,12 +43,6 @@ export class UserEntityBuilder {
 
   withLastName (lastName: string): this {
     this.user.lastName = lastName
-
-    return this
-  }
-
-  withRole (role: Role): this {
-    this.user.role = role
 
     return this
   }

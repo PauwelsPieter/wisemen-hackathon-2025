@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common'
-import { RoleRepository } from '../roles/repositories/role.repository.js'
+import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { UserRepository } from '../users/repositories/user.repository.js'
 import { CacheService } from '../cache/cache.service.js'
 import { RedisModule } from '../redis/redis.module.js'
+import { Role } from '../roles/entities/role.entity.js'
 
 @Module({
   imports: [
     // NatsModule.forRoot(),
-    RedisModule.forRoot()
+    RedisModule.forRoot(),
+    TypeOrmModule.forFeature([Role])
   ],
   controllers: [],
   providers: [
     CacheService,
-    RoleRepository,
     UserRepository
   ],
   exports: [

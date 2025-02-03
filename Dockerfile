@@ -5,7 +5,7 @@ ARG NODE_VERSION=lts
 # --- Stage 1: Build ---
 #
 
-FROM node:${NODE_VERSION} as build
+FROM node:${NODE_VERSION} AS build
 RUN corepack enable
 
 # Install dependencies
@@ -24,7 +24,7 @@ RUN pnpm prune --prod
 # --- Stage 2: Run ---
 #
 
-FROM node:${NODE_VERSION}-alpine as final
+FROM node:${NODE_VERSION}-alpine AS final
 
 WORKDIR /usr/src/app
 
@@ -36,8 +36,8 @@ ARG BUILD_COMMIT
 ARG BUILD_NUMBER
 ARG BUILD_TIMESTAMP
 
-ENV BUILD_COMMIT $BUILD_COMMIT
-ENV BUILD_NUMBER $BUILD_NUMBER
-ENV BUILD_TIMESTAMP $BUILD_TIMESTAMP
+ENV BUILD_COMMIT=$BUILD_COMMIT
+ENV BUILD_NUMBER=$BUILD_NUMBER
+ENV BUILD_TIMESTAMP=$BUILD_TIMESTAMP
 
 EXPOSE 3000

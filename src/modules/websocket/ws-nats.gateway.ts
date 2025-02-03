@@ -1,20 +1,18 @@
-import type { IncomingMessage } from 'http'
 import { WebSocketGateway, SubscribeMessage, type OnGatewayConnection, type OnGatewayDisconnect, WebSocketServer, WsException, BaseWsExceptionFilter } from '@nestjs/websockets'
-// import { AuthGuard } from './auth.guard'
 import { WebSocket, WebSocketServer as WSS } from 'ws'
 import type { Subscription } from 'nats'
 import { type ArgumentsHost, Catch, UsePipes, ValidationPipe, UseFilters, UnauthorizedException } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import { captureException } from '@sentry/node'
+import { captureException } from '@sentry/nestjs'
 import { NatsClient } from '../nats/nats.client.js'
-import { SubscribeDto } from './dtos/subscribe.dto.js'
-import { UnsubscribeDto } from './dtos/unsubscribe.dto.js'
+import { SubscribeCommand } from './commands/subscribe.command.js'
+import { UnsubscribeCommand } from './commands/unsubscribe.command.js'
 import { WsTopicValidator } from './ws-topic.validator.js'
+import { PingPongCommand } from './commands/ping-pong.command.js'
 
 declare module 'ws' {
   interface WebSocket {
     uuid: string
-    userUuid: string
   }
 }
 
@@ -34,9 +32,10 @@ export class WsExceptionFilter extends BaseWsExceptionFilter {
     }))
   }
 }
-@WebSocketGateway(3002, {
+@WebSocketGateway(Number(process.env.PORT ?? 3000), {
   wsEngine: 'ws',
-  transports: ['websocket']
+  transports: ['websocket'],
+  path: '/websockets'
 })
 export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly clients = new Map<string, WebSocket>()
@@ -50,9 +49,8 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: WSS
 
-  handleConnection (client: WebSocket, ...args: IncomingMessage[]): void {
+  handleConnection (client: WebSocket): void {
     client.uuid = uuidv4()
-    client.userUuid = args[0].userUuid
     this.clients.set(client.uuid, client)
     this.subscriptions.set(client.uuid, new Map<string, Subscription>())
   }
@@ -75,22 +73,31 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }))
   @UseFilters(new WsExceptionFilter())
   @SubscribeMessage('subscribe')
-  async handleSubscribe (client: WebSocket, payload: SubscribeDto): Promise<void> {
+  async handleSubscribe (client: WebSocket, payload: SubscribeCommand): Promise<void> {
     const clientSubscriptions = this.subscriptions.get(client.uuid)
 
     if (clientSubscriptions == null || clientSubscriptions.has(payload.topic)) {
       return
     }
 
-    this.topicValidator.validate(payload.topic, client)
+    this.topicValidator.validate(payload.topic)
 
     const subscription = this.natsClient.subscribe(payload.topic)
 
     clientSubscriptions.set(payload.topic, subscription)
 
+    client.send(JSON.stringify({
+      event: 'subscribed',
+      data: {
+        topic: payload.topic
+      }
+    }))
+
     for await (const msg of subscription) {
       try {
-        client.send(msg.data.toString())
+        const data = new TextDecoder().decode(msg.data)
+
+        client.send(data)
       } catch (e) {
         captureException(e)
       }
@@ -99,7 +106,7 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @UsePipes(new ValidationPipe())
   @SubscribeMessage('unsubscribe')
-  handleUnsubscribe (client: WebSocket, payload: UnsubscribeDto): void {
+  handleUnsubscribe (client: WebSocket, payload: UnsubscribeCommand): void {
     const clientSubscriptions = this.subscriptions.get(client.uuid)
 
     if (clientSubscriptions == null) {
@@ -112,5 +119,16 @@ export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       subscription.unsubscribe()
       clientSubscriptions.delete(payload.topic)
     }
+  }
+
+  @UsePipes(new ValidationPipe())
+  @SubscribeMessage('ping')
+  handlePing (client: WebSocket, payload: PingPongCommand): void {
+    client.send(JSON.stringify({
+      event: 'pong',
+      data: {
+        uuid: payload.uuid
+      }
+    }))
   }
 }

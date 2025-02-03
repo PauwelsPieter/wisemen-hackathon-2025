@@ -1,59 +1,50 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import type { DataSource } from 'typeorm'
-import { NestExpressApplication } from '@nestjs/platform-express'
-import { TestContext } from '../../../../../test/utils/test-context.js'
-import { Permission } from '../../../permissions/permission.enum.js'
+import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import { setupTest } from '../../../../utils/test-setup/setup.js'
 import {
   TypesenseCollectionService
 } from '../../../typesense/services/typesense-collection.service.js'
 import {
   TypesenseCollectionName
 } from '../../../typesense/enums/typesense-collection-index.enum.js'
+import { TestBench } from '../../../../../test/setup/test-bench.js'
+import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 
-describe('View user e2e test', () => {
-  let app: NestExpressApplication
-  let dataSource: DataSource
+describe('View users e2e test', () => {
+  let setup: EndToEndTestSetup
   let adminUser: TestUser
   let readonlyUser: TestUser
+  let userWithUserDeletePermission: TestUser
 
   before(async () => {
-    const setup = await setupTest()
+    setup = await TestBench.setupEndToEndTest()
 
-    dataSource = setup.dataSource
-    app = setup.app
+    readonlyUser = await setup.authContext.getReadonlyUser()
+    adminUser = await setup.authContext.getAdminUser()
 
-    const moduleRef = setup.moduleRef
+    userWithUserDeletePermission = await setup.authContext.getUser([Permission.USER_DELETE])
 
-    const context = new TestContext(dataSource.manager)
+    const typesenseCollectionService = setup.testModule.get(TypesenseCollectionService)
 
-    readonlyUser = await context.getReadonlyUser()
-    adminUser = await context.getAdminUser()
-
-    const typesenseCollectionService = moduleRef.get(TypesenseCollectionService)
-
-    await typesenseCollectionService.importManuallyToTypesense(
+    await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
-      [adminUser.user, readonlyUser.user]
+      [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
     )
   })
 
-  after(async () => {
-    await app.close()
-  })
+  after(async () => await setup.teardown())
 
   it('returns 401 when not authenticated', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get('/users')
 
     expect(response).toHaveStatus(401)
   })
 
   it('returns users in a paginated format', async () => {
-    const response = await request(app.getHttpServer())
+    const response = await request(setup.httpServer)
       .get('/users')
       .set('Authorization', `Bearer ${adminUser.token}`)
       .query({
@@ -61,16 +52,16 @@ describe('View user e2e test', () => {
           limit: 10,
           offset: 0
         },
-        'filter[permissions][0]': Permission.READ_ONLY
+        'filter[permissions][0]': Permission.USER_DELETE
       })
 
     expect(response).toHaveStatus(200)
     expect(response.body).toStrictEqual(expect.objectContaining({
       items: [expect.objectContaining({
-        email: readonlyUser.user.email,
-        firstName: readonlyUser.user.firstName,
-        lastName: readonlyUser.user.lastName,
-        uuid: readonlyUser.user.uuid
+        email: userWithUserDeletePermission.user.email,
+        firstName: userWithUserDeletePermission.user.firstName,
+        lastName: userWithUserDeletePermission.user.lastName,
+        uuid: userWithUserDeletePermission.user.uuid
       })],
       meta: {
         total: 1,

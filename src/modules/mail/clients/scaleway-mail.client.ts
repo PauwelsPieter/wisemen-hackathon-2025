@@ -1,24 +1,34 @@
 import { Injectable } from '@nestjs/common'
 import axios, { type AxiosInstance } from 'axios'
+import { ConfigService } from '@nestjs/config'
 import type { SendMailOptions, MailClient } from './mail.client.js'
 
 @Injectable()
 export class ScalewayMailClient implements MailClient {
+  private readonly region: string
+  private readonly projectId: string
+  private readonly from: string
   private readonly api: AxiosInstance
-  private readonly region: string = process.env.SCW_REGION ?? 'fr-par'
 
-  constructor () {
+  constructor (
+    private readonly configService: ConfigService
+  ) {
+    this.region = this.configService.getOrThrow<string>('SCW_REGION')
+    this.projectId = this.configService.getOrThrow<string>('SCW_PROJECT_ID')
+    this.from = this.configService.getOrThrow<string>('MAIL_FROM_NAME')
     this.api = axios.create({
       headers: {
-        'X-Auth-Token': process.env.SCW_API_KEY
+        'X-Auth-Token': this.configService.getOrThrow<string>('SCW_API_KEY')
       }
     })
   }
 
   public async sendMail (options: SendMailOptions): Promise<void> {
-    if (process.env.NODE_ENV === 'test') return
+    if (this.configService.getOrThrow('NODE_ENV') === 'test') {
+      return
+    }
 
-    const from = { email: options.from ?? process.env.MAIL_FROM_NAME }
+    const from = { email: options.from ?? this.from }
     const to = options.to instanceof Array
       ? options.to.map(email => ({ email }))
       : [{ email: options.to }]
@@ -37,7 +47,7 @@ export class ScalewayMailClient implements MailClient {
       subject: options.subject,
       text: options.text,
       html: options.html,
-      project_id: process.env.SCW_PROJECT_ID
+      project_id: this.projectId
     }
 
     await this.api.post(`https://api.scaleway.com/transactional-email/v1alpha1/regions/${this.region}/emails`, body)
