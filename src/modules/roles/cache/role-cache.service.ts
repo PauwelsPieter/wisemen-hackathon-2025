@@ -22,7 +22,7 @@ export class RoleCache {
   }
 
   async getRolesPermissions (roleUuids: string[]): Promise<Permission[]> {
-    if (roleUuids.length == 0) return [Permission.READ_ONLY]
+    if (roleUuids.length == 0) return []
 
     const permissions: Permission[] = []
     const missingRoleUuids: string[] = []
