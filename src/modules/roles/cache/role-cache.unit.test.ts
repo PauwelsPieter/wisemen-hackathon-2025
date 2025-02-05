@@ -39,7 +39,7 @@ describe('Role cache unit test', () => {
   })
 
   describe('Retrieving role permissions', () => {
-    it('Should return permissions when redis throws an error', async () => {
+    it('Should return permissions when redis has no cache', async () => {
       const redisClient = createStubInstance(RedisClient)
       const roleRepository = createStubInstance(Repository<Role>)
 
@@ -49,7 +49,7 @@ describe('Role cache unit test', () => {
         .withPermissions([Permission.READ_ONLY])
         .build()
 
-      redisClient.getCachedValues.rejects(new Error('Redis is down'))
+      redisClient.getCachedValues.resolves([null])
       roleRepository.findBy.resolves([role])
 
       const permissions = await roleCache.getRolesPermissions([role.uuid])

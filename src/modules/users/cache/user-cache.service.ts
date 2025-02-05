@@ -33,28 +33,18 @@ export class UserCache {
 
     const roleUuids = user?.userRoles?.map(userRole => userRole.roleUuid) ?? []
 
-    await this.setCachedRoles(cacheKey, roleUuids)
+    await this.client.putCachedValue(cacheKey, JSON.stringify(roleUuids))
 
     return roleUuids
   }
 
   private async getCachedRoles (key: string): Promise<string[] | null> {
-    try {
-      const result = await this.client.getCachedValue(key)
+    const result = await this.client.getCachedValue(key)
 
-      if (result != null) {
-        return JSON.parse(String(result)) as string[]
-      }
-
-      return null
-    } catch {
+    if (result != null) {
+      return JSON.parse(String(result)) as string[]
+    } else {
       return null
     }
-  }
-
-  private async setCachedRoles (key: string, roleUuids: string[]): Promise<void> {
-    try {
-      await this.client.putCachedValue(key, JSON.stringify(roleUuids))
-    } catch { /* empty */ }
   }
 }

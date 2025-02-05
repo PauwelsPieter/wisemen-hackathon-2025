@@ -54,33 +54,22 @@ export class RoleCache {
 
     const newPermissions = roles.map(role => role.permissions)
     const newKeys = roles.map(role => `${ROLE_PERMISSIONS_CACHE}.${role.uuid}`)
+    const values = newPermissions.map(permissions => JSON.stringify(permissions))
 
-    await this.setCachedPermissions(newKeys, newPermissions)
+    await this.client.putCachedValues(newKeys, values)
 
     return roles.flatMap(role => role.permissions)
   }
 
   private async getCachedPermissions (keys: string[]): Promise<(Permission[] | null)[]> {
-    try {
-      const result = await this.client.getCachedValues(keys)
+    const result = await this.client.getCachedValues(keys)
 
-      return result.map((value) => {
-        if (value != null) {
-          return JSON.parse(String(value)) as Permission[]
-        } else {
-          return null
-        }
-      })
-    } catch {
-      return new Array<(Permission[] | null)>(keys.length).fill(null)
-    }
-  }
-
-  private async setCachedPermissions (keys: string[], permissions: Permission[][]): Promise<void> {
-    const values = permissions.map(permissions => JSON.stringify(permissions))
-
-    try {
-      await this.client.putCachedValues(keys, values)
-    } catch { /* empty */ }
+    return result.map((value) => {
+      if (value != null) {
+        return JSON.parse(String(value)) as Permission[]
+      } else {
+        return null
+      }
+    })
   }
 }

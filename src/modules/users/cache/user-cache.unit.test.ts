@@ -39,7 +39,7 @@ describe('User cache unit test', () => {
   })
 
   describe('Get user roles', () => {
-    it('Should return roles when redis throws an error', async () => {
+    it('Should return roles when redis has no cache', async () => {
       const redisClient = createStubInstance(RedisClient)
       const userRepository = createStubInstance(Repository<User>)
 
@@ -50,7 +50,7 @@ describe('User cache unit test', () => {
 
       user.userRoles = [userRole]
 
-      redisClient.getCachedValue.rejects(new Error('Redis is down'))
+      redisClient.getCachedValue.resolves(null)
       userRepository.findOne.resolves(user)
 
       const roles = await userCache.getUserRoles(user.uuid)
