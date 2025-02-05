@@ -1,4 +1,4 @@
-import { assert } from 'node:console'
+import assert from 'assert'
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { captureException } from '@sentry/nestjs'

@@ -9,7 +9,7 @@ import { RoleEntityBuilder } from '../tests/builders/entities/role-entity.builde
 import { Permission } from '../../permission/permission.enum.js'
 import { RoleCache } from './role-cache.service.js'
 
-describe('User cache unit test', () => {
+describe('Role cache unit test', () => {
   describe('Resetting role permissions', () => {
     it('Should fail when redis throws an error', () => {
       const redisClient = createStubInstance(RedisClient)
