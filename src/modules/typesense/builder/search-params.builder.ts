@@ -106,7 +106,9 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     if (this.queries.length > 0) {
       queryBy = this.queries.join(',')
     } else {
-      queryBy = this.collection.searchableFields.join(',')
+      queryBy = this.collection.searchableFields
+        .map(field => field.name)
+        .join(',')
     }
 
     return {

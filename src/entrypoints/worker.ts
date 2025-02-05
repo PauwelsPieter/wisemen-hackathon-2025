@@ -5,10 +5,10 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { INestApplicationContext, Module } from '@nestjs/common'
 import { WorkerContainer } from '@wisemen/app-container'
-import { QueueName } from '../modules/pgboss/queue-name.enum.js'
+import { PgBossWorkerModule } from '@wisemen/pgboss-nestjs-job'
 import { AppModule } from '../app.module.js'
-import { PgBossWorkerModule } from '../modules/pgboss/worker/pgboss-worker.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { QueueName } from '../modules/pgboss/enums/queue-name.enum.js'
 
 const args = await yargs(hideBin(process.argv))
   .option('queue', {

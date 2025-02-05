@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { DataSource } from 'typeorm'
+import { PgBossScheduler } from '@wisemen/pgboss-nestjs-job'
 import { ImportTypesenseJob } from '../../../typesense/jobs/import-typesense/import-typesense.job.js'
-import { PgBossScheduler } from '../../../pgboss/scheduler/pgboss-scheduler.service.js'
 import { AbstractUseCase } from '../../../cronjobs/types/abstract-use-case.js'
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { PgBossSchedulerModule } from '../../../pgboss/scheduler/pgboss-scheduler.module.js'
+import { PgBossSchedulerModule } from '@wisemen/pgboss-nestjs-job'
 import { ImportTypesenseUseCase } from './import-typesense.use-case.js'
 
 @Module({

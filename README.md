@@ -49,3 +49,9 @@ $ pnpm run start:dev
 # unit tests
 $ pnpm run test:run
 ```
+
+## Documentation
+[ERD](docs/erd.md)
+
+[File upload](docs/files/upload-file.md)
+
