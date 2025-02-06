@@ -9,7 +9,7 @@ import { confirmFileUploadApiResponse, createFileApiResponse, downloadFileApiRes
 import { AuthStorage } from '../../auth/auth.storage.js'
 
 @ApiTags('File')
-@Controller('file')
+@Controller('files')
 @ApiOAuth2([])
 export class FileController {
   constructor (
