@@ -4,7 +4,6 @@ import { expect } from 'expect'
 import { DataSource } from 'typeorm'
 import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../users/tests/setup-user.type.js'
-import { Permission } from '../../../permission/permission.enum.js'
 import { Theme } from '../../types/theme.enum.js'
 import { Preferences } from '../../entities/preferences.entity.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
@@ -22,7 +21,7 @@ describe('Update preferences e2e', () => {
     dataSource = setup.dataSource
     context = setup.authContext
 
-    user = await context.getUser([Permission.READ_ONLY])
+    user = await context.getUser([])
   })
 
   after(async () => await setup.teardown())
@@ -36,7 +35,7 @@ describe('Update preferences e2e', () => {
     })
 
     it('should return 403 when updating someone elses preferences', async () => {
-      const someone = await context.getUser([Permission.READ_ONLY])
+      const someone = await context.getUser([])
 
       const response = await request(setup.httpServer)
         .patch(`/users/${someone.user.uuid}/preferences`)

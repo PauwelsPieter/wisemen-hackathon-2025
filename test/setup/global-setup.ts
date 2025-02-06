@@ -34,8 +34,8 @@ async function migrateDatabase (testingModule: TestingModule): Promise<void> {
 
   const roleRepository = dataSource.getRepository(Role)
 
-  const adminRole = { name: 'admin', permissions: [Permission.ADMIN] }
-  const readonlyRole = { name: 'readonly', permissions: [Permission.READ_ONLY] }
+  const adminRole = { name: 'admin', permissions: [Permission.ALL_PERMISSIONS] }
+  const readonlyRole = { name: 'readonly', permissions: [] }
 
   await roleRepository.upsert([adminRole, readonlyRole], { conflictPaths: { name: true } })
 }

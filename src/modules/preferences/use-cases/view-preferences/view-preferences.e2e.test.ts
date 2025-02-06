@@ -3,7 +3,6 @@ import request from 'supertest'
 import { expect } from 'expect'
 import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../users/tests/setup-user.type.js'
-import { Permission } from '../../../permission/permission.enum.js'
 import { Theme } from '../../types/theme.enum.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
@@ -16,7 +15,7 @@ describe('View preferences e2e', () => {
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     context = setup.authContext
-    user = await context.getUser([Permission.READ_ONLY])
+    user = await context.getUser([])
   })
 
   after(async () => await setup.teardown())
@@ -30,7 +29,7 @@ describe('View preferences e2e', () => {
     })
 
     it('should return 403 for someone elses preferences', async () => {
-      const someone = await context.getUser([Permission.READ_ONLY])
+      const someone = await context.getUser([])
 
       const response = await request(setup.httpServer)
         .get(`/users/${someone.user.uuid}/preferences`)

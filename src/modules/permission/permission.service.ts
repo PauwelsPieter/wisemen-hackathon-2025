@@ -23,9 +23,9 @@ export class PermissionService {
 
     const userPermissions = await this.getUserPermissions(userUuid)
 
-    const hasAdminPermission = userPermissions.includes(Permission.ADMIN)
+    const hasAllPermission = userPermissions.includes(Permission.ALL_PERMISSIONS)
 
-    if (hasAdminPermission) {
+    if (hasAllPermission) {
       return true
     }
 

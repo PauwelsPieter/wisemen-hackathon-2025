@@ -100,7 +100,7 @@ describe('Roles', () => {
             .withName('admin')
             .withPermissions([
               new PermissionObjectBuilder()
-                .withId('admin')
+                .withId('all_permissions')
                 .build(),
               new PermissionObjectBuilder()
                 .withId('role')
@@ -138,7 +138,7 @@ describe('Roles', () => {
       const updatedRole = rolesAfter.find(r => r.uuid === role.uuid)
 
       expect(updatedAdminRole?.name).toEqual('admin')
-      expect(updatedAdminRole?.permissions).toEqual(['admin', 'role.create', 'role.read', 'role.update', 'role.delete'])
+      expect(updatedAdminRole?.permissions).toEqual(['all_permissions', 'role.create', 'role.read', 'role.update', 'role.delete'])
 
       expect(updatedRole?.name).toEqual('should-update-role-is-updated')
       expect(updatedRole?.permissions).toEqual(['role.create', 'role.read', 'role.update', 'role.delete'])

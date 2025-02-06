@@ -27,7 +27,7 @@ export class TypesenseController {
     status: 200,
     description: 'Successfully migrated collections'
   })
-  @Permissions(Permission.ADMIN)
+  @Permissions(Permission.COLLECTION_UPDATE)
   async migrate (
     @Query() query: MigrateTypesenseQuery
   ): Promise<void> {
@@ -46,7 +46,7 @@ export class TypesenseController {
     status: 200,
     description: 'Successfully imported collections'
   })
-  @Permissions(Permission.ADMIN)
+  @Permissions(Permission.COLLECTION_CREATE)
   async import (
     @Query() query: ImportTypesenseQuery
   ): Promise<void> {
@@ -58,7 +58,7 @@ export class TypesenseController {
     status: 200,
     description: 'Successfully returned collections'
   })
-  @Permissions(Permission.ADMIN)
+  @Permissions(Permission.COLLECTION_READ)
   async getCollections (): Promise<CollectionSchema[]> {
     return await this.typesenseImportService.retrieveCollections()
   }

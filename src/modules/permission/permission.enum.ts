@@ -1,6 +1,5 @@
 export enum Permission {
-  ADMIN = 'admin',
-  READ_ONLY = 'read_only',
+  ALL_PERMISSIONS = 'all_permissions',
 
   USER_READ = 'user.read',
   USER_CREATE = 'user.create',
@@ -15,5 +14,9 @@ export enum Permission {
   CONTACT_CREATE = 'contact.create',
   CONTACT_READ = 'contact.read',
   CONTACT_UPDATE = 'contact.update',
-  CONTACT_DELETE = 'contact.delete'
+  CONTACT_DELETE = 'contact.delete',
+
+  COLLECTION_READ = 'collection.read',
+  COLLECTION_CREATE = 'collection.create',
+  COLLECTION_UPDATE = 'collection.update'
 }

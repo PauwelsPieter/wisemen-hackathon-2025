@@ -15,7 +15,7 @@ export class SetUserRolesController {
   ) {}
 
   @Post()
-  @Permissions(Permission.ADMIN)
+  @Permissions(Permission.USER_UPDATE)
   async updateUser (
     @UuidParam('user') userUuid: string,
     @Body() dto: SetUserRolesCommand

@@ -2,7 +2,6 @@ import { after, before, describe, it } from 'node:test'
 import { randomUUID } from 'crypto'
 import request from 'supertest'
 import { expect } from 'expect'
-import { Permission } from '../../../permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
@@ -17,7 +16,7 @@ describe('View user e2e test', () => {
 
     const [admin, user] = await Promise.all([
       setup.authContext.getAdminUser(),
-      setup.authContext.getUser([Permission.READ_ONLY])
+      setup.authContext.getUser([])
     ])
 
     adminUser = admin

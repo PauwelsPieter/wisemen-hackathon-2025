@@ -46,7 +46,7 @@ describe('Role cache unit test', () => {
       const roleCache = new RoleCache(redisClient, roleRepository)
 
       const role = new RoleEntityBuilder()
-        .withPermissions([Permission.READ_ONLY])
+        .withPermissions([])
         .build()
 
       redisClient.getCachedValues.resolves([null])
@@ -64,7 +64,7 @@ describe('Role cache unit test', () => {
       const roleCache = new RoleCache(redisClient, roleRepository)
 
       const role = new RoleEntityBuilder()
-        .withPermissions([Permission.READ_ONLY])
+        .withPermissions([])
         .build()
 
       redisClient.getCachedValues.resolves([JSON.stringify(role.permissions)])
