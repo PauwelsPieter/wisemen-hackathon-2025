@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { TypesenseController } from '../controllers/typesense.controller.js'
 import { TypesenseQueryService } from '../services/typesense-query.service.js'
 import { TypesenseInitializationService } from '../services/typesense-initialization.service.js'
 import { TypesenseDocumentService } from '../services/typesense-document.service.js'
@@ -8,9 +7,11 @@ import { TypesenseCollectorFactory } from '../services/collectors/typesense-coll
 import { UserTypesenseCollector } from '../services/collectors/user-typesense.collector.js'
 import { UserRepository } from '../../users/repositories/user.repository.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
+import { MigrateCollectionsModule } from '../use-cases/migrate-collections/migrate-collections.module.js'
+import { ImportCollectionsModule } from '../use-cases/import-collections/import-collections.module.js'
+import { ViewCollectionsModule } from '../use-cases/view-collections/view-collections.module.js'
 
 @Module({
-  controllers: [TypesenseController],
   providers: [
     TypesenseClient,
     TypesenseQueryService,
@@ -20,6 +21,11 @@ import { TypesenseClient } from '../clients/typesense.client.js'
     TypesenseCollectorFactory,
     UserTypesenseCollector,
     UserRepository
+  ],
+  imports: [
+    MigrateCollectionsModule,
+    ImportCollectionsModule,
+    ViewCollectionsModule
   ],
   exports: [
     TypesenseQueryService,

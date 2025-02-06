@@ -16,7 +16,5 @@ export enum Permission {
   CONTACT_UPDATE = 'contact.update',
   CONTACT_DELETE = 'contact.delete',
 
-  COLLECTION_READ = 'collection.read',
-  COLLECTION_CREATE = 'collection.create',
-  COLLECTION_UPDATE = 'collection.update'
+  TYPESENSE = 'typesense'
 }
