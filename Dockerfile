@@ -6,7 +6,7 @@ ARG NODE_VERSION=lts
 #
 
 FROM node:${NODE_VERSION} AS build
-RUN corepack enable
+RUN npm install -g corepack@0.31.0 && corepack enable
 
 # Install dependencies
 WORKDIR /app
