@@ -1,29 +1,30 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 import { Permission } from '../../modules/permission/permission.enum.js'
+import { Role } from '../../modules/roles/entities/role.entity.js'
 
-export const rolePermissions: Record<string, Permission[]> = {
-  admin: [Permission.ALL_PERMISSIONS],
-  readonly: []
-}
+export const roles = [
+  {
+    name: 'system admin',
+    permissions: [Permission.ALL_PERMISSIONS],
+    isDefault: false,
+    isSystemAdmin: true
+  },
+  {
+    name: 'default',
+    permissions: [],
+    isDefault: true,
+    isSystemAdmin: false
+  }
+]
 
 export class RolePermissions1738686978864 implements MigrationInterface {
   name = 'RolePermissions1738686978864'
 
   public async up (queryRunner: QueryRunner): Promise<void> {
-    for (const [name, permissions] of Object.entries(rolePermissions)) {
-      await queryRunner.query(
-        `INSERT INTO "role" ("name", "permissions")
-         VALUES ($1, $2)
-         ON CONFLICT ("name")
-         DO UPDATE SET "permissions" = $2`,
-        [name, permissions]
-      )
-    }
+    await queryRunner.manager.upsert(Role, roles, ['name'])
   }
 
   public async down (queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `DELETE FROM "role" WHERE "name" IN (${Object.keys(rolePermissions).map(role => `'${role}'`).join(', ')})`
-    )
+    await queryRunner.manager.delete(Role, [{ isDefault: true }, { isSystemAdmin: true }])
   }
 }

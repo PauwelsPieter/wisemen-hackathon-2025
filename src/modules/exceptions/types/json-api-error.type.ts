@@ -34,4 +34,10 @@ export class JsonApiError extends Error {
 
   @ApiProperty({ type: JsonApiErrorContent, isArray: true })
   errors: JsonApiErrorContent[]
+
+  constructor (status: number, errors: JsonApiErrorContent[]) {
+    super()
+    this.status = status
+    this.errors = errors
+  }
 }

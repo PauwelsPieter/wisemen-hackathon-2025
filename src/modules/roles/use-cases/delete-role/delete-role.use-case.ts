@@ -20,8 +20,8 @@ export class DeleteRoleUseCase {
   async execute (uuid: string): Promise<void> {
     const role = await this.roleRepository.findOneByOrFail({ uuid })
 
-    if (role.name === 'admin' || role.name === 'readonly') {
-      throw new RoleNotEditableError()
+    if (role.isSystemAdmin) {
+      throw new RoleNotEditableError(role)
     }
 
     await transaction(this.dataSource, async () => {

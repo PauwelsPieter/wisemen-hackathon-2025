@@ -11,14 +11,14 @@ describe('Create role end to end tests', () => {
   let setup: EndToEndTestSetup
   let context: TestAuthContext
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     context = setup.authContext
 
     adminUser = await context.getAdminUser()
-    readonlyUser = await context.getReadonlyUser()
+    defaultUser = await context.getDefaultUser()
   })
 
   after(async () => await setup.teardown())
@@ -42,7 +42,7 @@ describe('Create role end to end tests', () => {
 
       const response = await request(setup.httpServer)
         .post('/roles')
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
         .send(roleDto)
 
       expect(response).toHaveStatus(403)

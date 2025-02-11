@@ -50,14 +50,18 @@ export class InitialMigration1733385371621 implements MigrationInterface {
     await queryRunner.query(`
         CREATE TABLE "role"
         (
-            "uuid"        uuid                    NOT NULL DEFAULT uuid_generate_v4(),
-            "created_at"  TIMESTAMP(3)            NOT NULL DEFAULT now(),
-            "updated_at"  TIMESTAMP(3)            NOT NULL DEFAULT now(),
-            "name"        character varying       NOT NULL,
-            "permissions" character varying array NOT NULL DEFAULT '{}',
+            "uuid"            uuid                    NOT NULL DEFAULT uuid_generate_v4(),
+            "created_at"      TIMESTAMP(3)            NOT NULL DEFAULT now(),
+            "updated_at"      TIMESTAMP(3)            NOT NULL DEFAULT now(),
+            "name"            character varying       NOT NULL,
+            "permissions"     character varying array NOT NULL DEFAULT '{}',
+            "is_default"      boolean                 NOT NULL DEFAULT false,
+            "is_system_admin" boolean                 NOT NULL DEFAULT false,
             CONSTRAINT "UQ_ae4578dcaed5adff96595e61660" UNIQUE ("name"),
             CONSTRAINT "PK_16fc336b9576146aa1f03fdc7c5" PRIMARY KEY ("uuid")
         )`)
+    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_5bb93473490b5242438d084657" ON "role" ("is_default") WHERE is_default`)
+    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_10d436bd7d959948e1a78da9a3" ON "role" ("is_system_admin") WHERE is_system_admin`)
     await queryRunner.query(`
         CREATE TABLE "user"
         (
@@ -101,6 +105,8 @@ export class InitialMigration1733385371621 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "public"."IDX_e12875dfb3b1d92d7d7c5377e2"`)
     await queryRunner.query(`DROP TABLE "user"`)
     await queryRunner.query(`DROP TABLE "role"`)
+    await queryRunner.query(`DROP INDEX "public"."IDX_10d436bd7d959948e1a78da9a3"`)
+    await queryRunner.query(`DROP INDEX "public"."IDX_5bb93473490b5242438d084657"`)
     await queryRunner.query(`DROP TABLE "contact"`)
     await queryRunner.query(`DROP TABLE "file"`)
     await queryRunner.query(`DROP INDEX "public"."IDX_fe44eb53fd9da12f87f1b11697"`)

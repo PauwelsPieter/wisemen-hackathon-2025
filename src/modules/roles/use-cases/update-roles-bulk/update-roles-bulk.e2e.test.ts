@@ -16,18 +16,18 @@ describe('Roles', () => {
   let setup: EndToEndTestSetup
   let dataSource: DataSource
   let context: TestAuthContext
-  let adminRole: Role
+  let defaultRole: Role
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     dataSource = setup.dataSource
     context = setup.authContext
-    adminRole = await context.getAdminRole()
+    defaultRole = await context.getDefaultRole()
 
     adminUser = await context.getAdminUser()
-    readonlyUser = await context.getReadonlyUser()
+    defaultUser = await context.getDefaultUser()
   })
 
   after(async () => await setup.teardown())
@@ -37,7 +37,7 @@ describe('Roles', () => {
       const roleDto = new UpdateRolesBulkCommandBuilder()
         .withUpdateRolesBulkRoleCommand(
           new UpdateRolesBulkRoleCommandBuilder()
-            .withRoleUuid(adminRole.uuid)
+            .withRoleUuid(defaultRole.uuid)
             .withName('should-update-role')
             .withPermissions([
               new PermissionObjectBuilder()
@@ -63,7 +63,7 @@ describe('Roles', () => {
       const roleDto = new UpdateRolesBulkCommandBuilder()
         .withUpdateRolesBulkRoleCommand(
           new UpdateRolesBulkRoleCommandBuilder()
-            .withRoleUuid(adminRole.uuid)
+            .withRoleUuid(defaultRole.uuid)
             .withName('should-update-role')
             .withPermissions([
               new PermissionObjectBuilder()
@@ -80,7 +80,7 @@ describe('Roles', () => {
 
       const response = await request(setup.httpServer)
         .post(`/roles/bulk`)
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
         .send(roleDto)
 
       expect(response).toHaveStatus(403)
@@ -96,7 +96,7 @@ describe('Roles', () => {
       const roleDto = new UpdateRolesBulkCommandBuilder()
         .withUpdateRolesBulkRoleCommand(
           new UpdateRolesBulkRoleCommandBuilder()
-            .withRoleUuid(adminRole.uuid)
+            .withRoleUuid(defaultRole.uuid)
             .withName('admin')
             .withPermissions([
               new PermissionObjectBuilder()
@@ -134,11 +134,11 @@ describe('Roles', () => {
         where: { }
       })
 
-      const updatedAdminRole = rolesAfter.find(r => r.uuid === adminRole.uuid)
+      const updatedDefaultRole = rolesAfter.find(r => r.uuid === defaultRole.uuid)
       const updatedRole = rolesAfter.find(r => r.uuid === role.uuid)
 
-      expect(updatedAdminRole?.name).toEqual('admin')
-      expect(updatedAdminRole?.permissions).toEqual(['all_permissions', 'role.create', 'role.read', 'role.update', 'role.delete'])
+      expect(updatedDefaultRole?.name).toEqual('admin')
+      expect(updatedDefaultRole?.permissions).toEqual(['all_permissions', 'role.create', 'role.read', 'role.update', 'role.delete'])
 
       expect(updatedRole?.name).toEqual('should-update-role-is-updated')
       expect(updatedRole?.permissions).toEqual(['role.create', 'role.read', 'role.update', 'role.delete'])

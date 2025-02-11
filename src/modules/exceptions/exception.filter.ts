@@ -1,6 +1,5 @@
 import { type ExceptionFilter, Catch, type ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
-import { plainToInstance } from 'class-transformer'
 import { EntityNotFoundError } from 'typeorm'
 import { captureException } from '@sentry/nestjs'
 import { JsonApiError } from './types/json-api-error.type.js'
@@ -55,45 +54,45 @@ export class CustomExceptionFilter implements ExceptionFilter {
   }
 
   private mapCompositeApiErrorToJsonApiError (error: CompositeApiError) {
-    return plainToInstance(JsonApiError, {
-      status: error.status,
-      errors: error.errors
-    })
+    return new JsonApiError(
+      error.status,
+      error.errors
+    )
   }
 
   private mapApiErrorToJsonApiError (exception: ApiError): JsonApiError {
-    return plainToInstance(JsonApiError, {
-      status: Number(exception.status),
-      errors: [{
+    return new JsonApiError(
+      Number(exception.status),
+      [{
         code: exception.code,
         detail: exception.detail,
         status: exception.status,
         meta: exception.meta
       }]
-    })
+    )
   }
 
   private mapHttpExceptionToJsonApiError (exception: HttpException): JsonApiError {
-    return plainToInstance(JsonApiError, {
-      status: exception.getStatus(),
-      errors: [{
+    return new JsonApiError(
+      exception.getStatus(),
+      [{
         status: exception.getStatus().toString(),
         code: exception.name,
         detail: exception.message
       }]
-    })
+    )
   }
 
   private mapUnknownErrorToJsonApiError (exception: Error): JsonApiError {
     const id = captureException(exception)
 
-    return plainToInstance(JsonApiError, {
-      status: HttpStatus.INTERNAL_SERVER_ERROR,
-      errors: [{
+    return new JsonApiError(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      [{
         id,
         code: exception?.name,
         detail: exception?.message
       }]
-    })
+    )
   }
 }

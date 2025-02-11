@@ -3,6 +3,8 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
 import { RedisModule } from '../redis/redis.module.js'
 import { TypesenseModule } from '../typesense/modules/typesense.module.js'
+import { Role } from '../roles/entities/role.entity.js'
+import { UserRole } from '../roles/entities/user-role.entity.js'
 import { UserAuthService } from './services/user-auth.service.js'
 import { SetUserRolesModule } from './use-cases/set-user-roles/set-user-roles.module.js'
 import { ViewMeModule } from './use-cases/view-me/view-me.module.js'
@@ -13,7 +15,7 @@ import { User } from './entities/user.entity.js'
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      User
+      User, Role, UserRole
     ]),
     RedisModule.forRoot(),
     TypesenseModule,

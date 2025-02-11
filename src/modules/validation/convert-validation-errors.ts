@@ -1,5 +1,4 @@
 import type { ValidationError } from 'class-validator'
-import { plainToInstance } from 'class-transformer'
 import { HttpStatus } from '@nestjs/common'
 import { snakeCase } from 'change-case'
 import { JsonApiErrorContent, JsonApiError } from '../exceptions/types/json-api-error.type.js'
@@ -33,8 +32,8 @@ function convertValidationError (errors: ValidationError[], path = '$'): JsonApi
 export function convertValidationErrorToJsonApiError (errors: ValidationError[]): JsonApiError {
   const errorContents = convertValidationError(errors)
 
-  return plainToInstance(JsonApiError, {
-    status: HttpStatus.BAD_REQUEST,
-    errors: errorContents
-  })
+  return new JsonApiError(
+    HttpStatus.BAD_REQUEST,
+    errorContents
+  )
 }

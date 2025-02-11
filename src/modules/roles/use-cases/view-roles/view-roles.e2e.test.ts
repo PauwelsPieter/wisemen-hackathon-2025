@@ -17,14 +17,14 @@ describe('View roles end to end tests', () => {
   let setup: EndToEndTestSetup
   let dataSource: DataSource
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     dataSource = setup.dataSource
 
     adminUser = await setup.authContext.getAdminUser()
-    readonlyUser = await setup.authContext.getReadonlyUser()
+    defaultUser = await setup.authContext.getDefaultUser()
   })
 
   after(async () => await setup.teardown())
@@ -40,7 +40,7 @@ describe('View roles end to end tests', () => {
     it('should return 403 when not authorized', async () => {
       const response = await request(setup.httpServer)
         .get('/roles')
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
 
       expect(response).toHaveStatus(403)
     })

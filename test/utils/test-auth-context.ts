@@ -3,7 +3,7 @@ import type { EntityManager } from 'typeorm'
 import type { Permission } from 'src/modules/permission/permission.enum.js'
 import { UserSeeder } from '../../src/modules/users/tests/user.seeder.js'
 import { RoleSeeder } from '../../src/modules/roles/tests/seeders/role.seeder.js'
-import type { Role } from '../../src/modules/roles/entities/role.entity.js'
+import { Role } from '../../src/modules/roles/entities/role.entity.js'
 import { UserEntityBuilder } from '../../src/modules/users/tests/user-entity.builder.js'
 import type { TestUser } from '../../src/modules/users/tests/setup-user.type.js'
 import { RoleEntityBuilder } from '../../src/modules/roles/tests/builders/entities/role-entity.builder.js'
@@ -17,7 +17,7 @@ export class TestAuthContext {
   private readonly userRoleSeeder: UserRoleSeeder
 
   private adminRole?: Role
-  private readonlyRole?: Role
+  private defaultRole?: Role
 
   private users: Map<string, User> = new Map()
 
@@ -31,18 +31,22 @@ export class TestAuthContext {
 
   public async getAdminRole (): Promise<Role> {
     if (this.adminRole == null) {
-      this.adminRole = await this.roleSeeder.seedAdminRole()
+      this.adminRole = await this.manager.findOneByOrFail(Role, {
+        isSystemAdmin: true
+      })
     }
 
     return this.adminRole
   }
 
-  public async getReadonlyRole (): Promise<Role> {
-    if (this.readonlyRole == null) {
-      this.readonlyRole = await this.roleSeeder.seedReadonlyRole()
+  public async getDefaultRole (): Promise<Role> {
+    if (this.defaultRole == null) {
+      this.defaultRole = await this.manager.findOneByOrFail(Role, {
+        isDefault: true
+      })
     }
 
-    return this.readonlyRole
+    return this.defaultRole
   }
 
   public async getRole (withPermissions: Permission[]): Promise<Role> {
@@ -100,27 +104,27 @@ export class TestAuthContext {
     return { user: adminUser, token }
   }
 
-  public async getReadonlyUser (): Promise<TestUser> {
-    const readonlyRole = await this.getReadonlyRole()
-    const readonlyUser = await this.userSeeder.seedOne(
+  public async getDefaultUser (): Promise<TestUser> {
+    const defaultRole = await this.getDefaultRole()
+    const defaultUser = await this.userSeeder.seedOne(
       new UserEntityBuilder()
         .withEmail(randomUUID() + '@mail.com')
         .build()
     )
 
-    const readonlyUserRole = await this.userRoleSeeder.seedOne(
+    const defaultUserRole = await this.userRoleSeeder.seedOne(
       new UserRoleEntityBuilder()
-        .withUserUuid(readonlyUser.uuid)
-        .withRoleUuid(readonlyRole.uuid)
+        .withUserUuid(defaultUser.uuid)
+        .withRoleUuid(defaultRole.uuid)
         .build()
     )
 
-    const token = this.getToken(readonlyUser)
+    const token = this.getToken(defaultUser)
 
-    readonlyUserRole.role = readonlyRole
-    readonlyUser.userRoles = [readonlyUserRole]
+    defaultUserRole.role = defaultRole
+    defaultUser.userRoles = [defaultUserRole]
 
-    return { user: readonlyUser, token }
+    return { user: defaultUser, token }
   }
 
   public async getRandomUser (): Promise<TestUser> {

@@ -22,19 +22,19 @@ describe('Delete role end to end tests', () => {
   let dataSource: DataSource
   let context: TestAuthContext
   let adminRole: Role
-  let readonlyRole: Role
+  let defaultRole: Role
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     context = setup.authContext
     dataSource = setup.dataSource
     adminRole = await context.getAdminRole()
-    readonlyRole = await context.getReadonlyRole()
+    defaultRole = await context.getDefaultRole()
 
     adminUser = await context.getAdminUser()
-    readonlyUser = await context.getReadonlyUser()
+    defaultUser = await context.getDefaultUser()
   })
 
   after(async () => await setup.teardown())
@@ -42,15 +42,15 @@ describe('Delete role end to end tests', () => {
   describe('Delete role', () => {
     it('should return 401 when not authenticated', async () => {
       const response = await request(setup.httpServer)
-        .delete(`/roles/${readonlyRole.uuid}`)
+        .delete(`/roles/${defaultRole.uuid}`)
 
       expect(response).toHaveStatus(401)
     })
 
     it('should return 403 when not authorized', async () => {
       const response = await request(setup.httpServer)
-        .delete(`/roles/${readonlyRole.uuid}`)
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .delete(`/roles/${defaultRole.uuid}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
 
       expect(response).toHaveStatus(403)
     })

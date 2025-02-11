@@ -17,19 +17,19 @@ describe('Update role end to end tests', () => {
 
   let context: TestAuthContext
 
-  let readonlyRole: Role
+  let defaultRole: Role
 
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
     context = setup.authContext
     dataSource = setup.dataSource
-    readonlyRole = await context.getReadonlyRole()
+    defaultRole = await context.getDefaultRole()
 
     adminUser = await context.getAdminUser()
-    readonlyUser = await context.getReadonlyUser()
+    defaultUser = await context.getDefaultUser()
   })
 
   after(async () => await setup.teardown())
@@ -40,7 +40,7 @@ describe('Update role end to end tests', () => {
         .build()
 
       const response = await request(setup.httpServer)
-        .post(`/roles/${readonlyRole.uuid}`)
+        .post(`/roles/${defaultRole.uuid}`)
         .send(roleDto)
 
       expect(response).toHaveStatus(401)
@@ -51,8 +51,8 @@ describe('Update role end to end tests', () => {
         .build()
 
       const response = await request(setup.httpServer)
-        .post(`/roles/${readonlyRole.uuid}`)
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .post(`/roles/${defaultRole.uuid}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
         .send(roleDto)
 
       expect(response).toHaveStatus(403)
@@ -84,7 +84,7 @@ describe('Update role end to end tests', () => {
         .build()
 
       const response = await request(setup.httpServer)
-        .post(`/roles/${readonlyRole.uuid}`)
+        .post(`/roles/${defaultRole.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(roleDto)
 

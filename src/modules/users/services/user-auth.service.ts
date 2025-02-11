@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { UserRole } from '../../../modules/roles/entities/user-role.entity.js'
+import { Role } from '../../../modules/roles/entities/role.entity.js'
 import { User } from '../entities/user.entity.js'
 import { RedisClient } from '../../redis/redis.client.js'
 import { TokenContent } from '../../auth/middleware/auth.middleware.js'
@@ -13,6 +15,10 @@ export class UserAuthService {
   constructor (
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
+    @InjectRepository(UserRole)
+    private readonly userRoleRepository: Repository<UserRole>,
     private readonly redisClient: RedisClient,
     private readonly typesenseService: TypesenseCollectionService
   ) { }
@@ -51,6 +57,15 @@ export class UserAuthService {
     })
 
     await this.userRepository.insert(user)
+
+    const defaultRole = await this.roleRepository.findOneByOrFail({
+      isDefault: true
+    })
+
+    await this.userRoleRepository.insert({
+      userUuid: user.uuid,
+      roleUuid: defaultRole.uuid
+    })
 
     await this.typesenseService.importManually(TypesenseCollectionName.USER, [user])
 

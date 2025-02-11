@@ -1,7 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common'
-import { ApiTags, ApiOAuth2 } from '@nestjs/swagger'
+import { ApiTags, ApiOAuth2, ApiCreatedResponse, ApiBadRequestResponse } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
+import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
 import { UpdateRolesBulkCommand } from './update-roles-bulk.command.js'
 import { UpdateRolesBulkUseCase } from './update-roles-bulk.use-case.js'
 
@@ -15,6 +16,8 @@ export class UpdateRolesBulkController {
 
   @Post()
   @Permissions(Permission.ROLE_UPDATE)
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse({ type: RoleNotEditableError })
   async updateRolesBulk (
     @Body() updateRolesBulkCommand: UpdateRolesBulkCommand
   ): Promise<void> {

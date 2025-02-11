@@ -15,13 +15,13 @@ import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-set
 describe('View users e2e test', () => {
   let setup: EndToEndTestSetup
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
   let userWithUserDeletePermission: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
 
-    readonlyUser = await setup.authContext.getReadonlyUser()
+    defaultUser = await setup.authContext.getDefaultUser()
     adminUser = await setup.authContext.getAdminUser()
 
     userWithUserDeletePermission = await setup.authContext.getUser([Permission.USER_DELETE])
@@ -30,7 +30,7 @@ describe('View users e2e test', () => {
 
     await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
-      [adminUser.user, readonlyUser.user, userWithUserDeletePermission.user]
+      [adminUser.user, defaultUser.user, userWithUserDeletePermission.user]
     )
   })
 

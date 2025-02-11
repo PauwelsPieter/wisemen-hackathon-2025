@@ -20,7 +20,7 @@ describe('Roles', () => {
   let dataSource: DataSource
   let context: TestAuthContext
   let adminUser: TestUser
-  let readonlyUser: TestUser
+  let defaultUser: TestUser
   let role: Role
 
   before(async () => {
@@ -28,7 +28,7 @@ describe('Roles', () => {
     dataSource = setup.dataSource
     context = setup.authContext
     adminUser = await context.getAdminUser()
-    readonlyUser = await context.getReadonlyUser()
+    defaultUser = await context.getDefaultUser()
 
     role = await new RoleSeeder(dataSource.manager).seedOne(
       new RoleEntityBuilder()
@@ -50,7 +50,7 @@ describe('Roles', () => {
     it('should return 403 when not authorized', async () => {
       const response = await request(setup.httpServer)
         .get(`/roles/${role.uuid}`)
-        .set('Authorization', `Bearer ${readonlyUser.token}`)
+        .set('Authorization', `Bearer ${defaultUser.token}`)
 
       expect(response).toHaveStatus(403)
     })
