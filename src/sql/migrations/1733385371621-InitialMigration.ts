@@ -60,8 +60,8 @@ export class InitialMigration1733385371621 implements MigrationInterface {
             CONSTRAINT "UQ_ae4578dcaed5adff96595e61660" UNIQUE ("name"),
             CONSTRAINT "PK_16fc336b9576146aa1f03fdc7c5" PRIMARY KEY ("uuid")
         )`)
-    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_5bb93473490b5242438d084657" ON "role" ("is_default") WHERE is_default`)
-    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_10d436bd7d959948e1a78da9a3" ON "role" ("is_system_admin") WHERE is_system_admin`)
+    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_d3f193e20c60bec11775df7480" ON "role" ("is_default") WHERE is_default`)
+    await queryRunner.query(`CREATE UNIQUE INDEX "IDX_787e150ba4204750939225fcec" ON "role" ("is_system_admin") WHERE is_system_admin`)
     await queryRunner.query(`
         CREATE TABLE "user"
         (
