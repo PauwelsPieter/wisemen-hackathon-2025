@@ -21,7 +21,7 @@ export class DefaultTypeOrmModule {
         synchronize: false,
         migrations: migrationsRun ? ['dist/src/sql/migrations/**/*.js'] : [],
         migrationsRun,
-        autoLoadEntities: true,
+        entities: ['dist/src/**/*.entity.js'],
         namingStrategy: new SnakeNamingStrategy()
       }),
       inject: [ConfigService]
