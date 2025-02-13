@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import type { User } from '../../users/entities/user.entity.js'
-import { ScalewayMailClient } from '../clients/scaleway-mail.client.js'
 import { MjmlRenderer } from '../renderer/mjml.renderer.js'
 import type { ForgotPasswordMailContent } from '../content/forgot-password-mail.content.js'
 import { PASSWORD_TOKEN_HOURS_VALID } from '../constants/password-reset.constant.js'
 import { translate } from '../../localization/helpers/translate.helper.js'
+import { MailClient } from '../clients/mail.client.js'
 
 @Injectable()
 export class MailService {
   constructor (
-    private readonly mailClient: ScalewayMailClient,
+    @Inject('MailClient') private readonly mailClient: MailClient,
     private readonly mjmlRenderer: MjmlRenderer,
     private readonly configService: ConfigService
   ) {}

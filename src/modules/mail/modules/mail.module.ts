@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common'
-import { MailService } from '../services/mail.service.js'
-import { ScalewayMailClient } from '../clients/scaleway-mail.client.js'
+import { ConfigService } from '@nestjs/config'
 import { MjmlRenderer } from '../renderer/mjml.renderer.js'
+import { MailService } from '../services/mail.service.js'
+import { mailClientFactory } from '../clients/mail-client.factory.js'
 
 @Module({
   providers: [
+    {
+      provide: 'MailClient',
+      useFactory: mailClientFactory,
+      inject: [ConfigService]
+    },
     MjmlRenderer,
-    ScalewayMailClient,
     MailService
   ],
-  exports: [
-    MailService
-  ]
+  exports: [MailService]
 })
 export class MailModule {}
