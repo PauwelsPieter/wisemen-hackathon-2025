@@ -22,7 +22,7 @@ export class RoleResponse {
   isDefault: boolean
 
   @ApiProperty()
-  isSytemAdmin: boolean
+  isSystemAdmin: boolean
 
   constructor (role: Role) {
     this.uuid = role.uuid
@@ -31,7 +31,7 @@ export class RoleResponse {
     this.name = role.name
     this.permissions = role.permissions
     this.isDefault = role.isDefault
-    this.isSytemAdmin = role.isSystemAdmin
+    this.isSystemAdmin = role.isSystemAdmin
   }
 }
 
