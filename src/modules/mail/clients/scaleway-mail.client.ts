@@ -13,7 +13,7 @@ export class ScalewayMailClient implements MailClient {
   constructor (
     private readonly configService: ConfigService
   ) {
-    this.region = this.configService.getOrThrow<string>('SCW_REGION')
+    this.region = this.configService.get<string>('SCW_MAIL_REGION') ?? 'fr-par'
     this.projectId = this.configService.getOrThrow<string>('SCW_PROJECT_ID')
     this.from = this.configService.getOrThrow<string>('MAIL_FROM_NAME')
     this.api = axios.create({

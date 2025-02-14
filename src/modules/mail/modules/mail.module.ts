@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { MjmlRenderer } from '../renderer/mjml.renderer.js'
 import { MailService } from '../services/mail.service.js'
 import { mailClientFactory } from '../clients/mail-client.factory.js'
+import { HandlebarsRenderer } from '../renderer/handlebars.renderer.js'
 
 @Module({
   providers: [
@@ -11,7 +11,7 @@ import { mailClientFactory } from '../clients/mail-client.factory.js'
       useFactory: mailClientFactory,
       inject: [ConfigService]
     },
-    MjmlRenderer,
+    HandlebarsRenderer,
     MailService
   ],
   exports: [MailService]

@@ -1,1 +1,0 @@
-export const PASSWORD_TOKEN_HOURS_VALID = 24

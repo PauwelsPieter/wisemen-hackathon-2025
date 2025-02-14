@@ -7,7 +7,7 @@
   "compilerOptions": {
     "assets": [
       {
-        "include": "**/*.mjml",
+        "include": "**/*.hbs",
         "outDir": "dist/src"
       },
       {
