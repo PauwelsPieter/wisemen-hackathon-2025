@@ -13,7 +13,7 @@
     "start": "node dist/src/entrypoints/api.js",
     "start:dev": "nest start --exec \"node --env-file=.env\" --watch",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "lint": "eslint",
+    "lint": "eslint --cache",
     "test:setup": "node --env-file=.env.test dist/test/setup/global-setup.js",
     "test:run": "node --experimental-test-isolation=none --env-file=.env.test --test \"**/*.test.js\"",
     "test:pipeline": "pnpm test:setup && pnpm test:run",
