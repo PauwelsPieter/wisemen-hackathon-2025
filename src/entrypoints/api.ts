@@ -7,7 +7,7 @@ import { SwaggerModule } from '../modules/swagger/swagger.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { ApiModule } from '../modules/api/api.module.js'
 
-startOpentelemetry('api')
+startOpentelemetry('[Project template] api')
 
 class Api extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {

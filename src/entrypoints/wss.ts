@@ -19,7 +19,7 @@ import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 })
 class WssModule {}
 
-startOpentelemetry('websocket')
+startOpentelemetry('[Project template] websocket')
 
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {

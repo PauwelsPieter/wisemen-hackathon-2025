@@ -54,7 +54,7 @@ const queueName = unvalidatedQueueName as QueueName
 })
 class WorkerModule {}
 
-startOpentelemetry(`worker:${queueName}`)
+startOpentelemetry(`[Project template] worker:${queueName}`)
 
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {

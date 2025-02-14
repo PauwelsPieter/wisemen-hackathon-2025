@@ -20,7 +20,7 @@ const args = await yargs(hideBin(process.argv))
   .help()
   .argv
 
-startOpentelemetry(`cronjob:${args.type}`)
+startOpentelemetry(`[Project template] cronjob:${args.type}`)
 
 export class Cronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {

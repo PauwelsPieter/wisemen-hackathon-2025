@@ -14,7 +14,7 @@ import { MetricsRegistrationModule } from '../utils/opentelemetry/metrics/metric
 })
 class MetricsModule {}
 
-startOpentelemetry('metrics')
+startOpentelemetry('[Project template] metrics')
 
 class Metrics extends ProbedContainer {
   async bootstrap (): Promise<INestApplicationContext> {
