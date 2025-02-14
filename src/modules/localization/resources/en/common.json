@@ -1,5 +1,5 @@
 {
-  "duration.hours": {
+  "duration": {
     "hours": {
       "one": "{count} hour",
       "other": "{count} hours"
