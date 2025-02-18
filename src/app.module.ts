@@ -1,11 +1,11 @@
 import { DynamicModule, Module, Type } from '@nestjs/common'
 import { SentryModule } from '@sentry/nestjs/setup'
 import { NatsModule } from './modules/nats/nats.module.js'
-import { ValidationModule } from './modules/validation/validation.module.js'
 import { ExceptionModule } from './modules/exceptions/exception.module.js'
 import { EventModule } from './modules/events/event.module.js'
 import { DefaultTypeOrmModule } from './modules/typeorm/default-typeorm.module.js'
 import { DefaultConfigModule } from './modules/config/default-config.module.js'
+import { GlobalPipesModule } from './modules/global-pipes/global-pipes.module.js'
 
 @Module({})
 export class AppModule {
@@ -20,7 +20,7 @@ export class AppModule {
         DefaultTypeOrmModule.forRootAsync({ migrationsRun: true }),
 
         ExceptionModule,
-        ValidationModule,
+        GlobalPipesModule,
 
         NatsModule,
         EventModule,

@@ -9,7 +9,6 @@ import { NatsModule } from '../../src/modules/nats/nats.module.js'
 import { RoleModule } from '../../src/modules/roles/role.module.js'
 import { DefaultTypeOrmModule } from '../../src/modules/typeorm/default-typeorm.module.js'
 import { UserModule } from '../../src/modules/users/user.module.js'
-import { ValidationModule } from '../../src/modules/validation/validation.module.js'
 
 @Module({})
 export class TestModule {
@@ -25,7 +24,6 @@ export class TestModule {
         DefaultTypeOrmModule.forRootAsync({ migrationsRun }),
 
         ExceptionModule,
-        ValidationModule,
 
         NatsModule,
         EventModule,

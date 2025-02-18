@@ -7,9 +7,6 @@ export class CustomValidationPipe extends ValidationPipe {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      // transformOptions: {
-      //   enableImplicitConversion: true
-      // },
       exceptionFactory: errors => convertValidationErrorToJsonApiError(errors)
     })
   }

@@ -1,7 +1,7 @@
 import type { ValidationError } from 'class-validator'
 import { HttpStatus } from '@nestjs/common'
 import { snakeCase } from 'change-case'
-import { JsonApiErrorContent, JsonApiError } from '../exceptions/types/json-api-error.type.js'
+import { JsonApiError, JsonApiErrorContent } from '../../exceptions/types/json-api-error.type.js'
 
 function convertValidationError (errors: ValidationError[], path = '$'): JsonApiErrorContent[] {
   const convertedErrors: JsonApiErrorContent[] = []

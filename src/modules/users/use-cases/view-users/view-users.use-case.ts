@@ -15,8 +15,8 @@ export class ViewUsersUseCase {
     return new ViewUsersResponse(
       users,
       count,
-      query.pagination?.limit ?? 0,
-      query.pagination?.offset ?? 0
+      Number(query.pagination?.limit ?? 0),
+      Number(query.pagination?.offset ?? 0)
     )
   }
 }

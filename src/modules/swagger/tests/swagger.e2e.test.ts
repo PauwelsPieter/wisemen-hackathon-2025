@@ -18,6 +18,6 @@ describe('Swagger e2e tests', () => {
       .get('/oauth2-redirect')
 
     expect(response.status).toBe(200)
-    expect(response.get('Content-Type')).toBe('text/html; charset=UTF-8')
+    expect(response.get('Content-Type')).toBe('text/html; charset=utf-8')
   })
 })
