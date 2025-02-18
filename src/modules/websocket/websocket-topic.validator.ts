@@ -3,7 +3,7 @@ import { AuthStorage } from '../auth/auth.storage.js'
 import { NatsTopics } from './topic.enum.js'
 
 @Injectable()
-export class WsTopicValidator {
+export class WebsocketTopicValidator {
   constructor (
     private readonly authStorage: AuthStorage
   ) {}

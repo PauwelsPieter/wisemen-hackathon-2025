@@ -1,7 +1,7 @@
 import { INestApplication, Logger, Module } from '@nestjs/common'
 import { SwaggerModule as NestSwaggerModule } from '@nestjs/swagger'
 import { captureException } from '@sentry/nestjs'
-import { WSModule } from '../websocket/ws.module.js'
+import { WebsocketModule } from '../websocket/websocket.module.js'
 import { buildWebSocketDocumentation } from './helpers/build-websocket-documentation.js'
 import { SwaggerController } from './swagger.controller.js'
 import { buildApiDocumentation } from './helpers/build-api-documentation.js'
@@ -50,7 +50,7 @@ export class SwaggerModule {
   private static tryAddWebSocketDocumentation (toApp: INestApplication<unknown>, onRoute: string) {
     const documentation = buildWebSocketDocumentation()
     const document = NestSwaggerModule.createDocument(
-      toApp, documentation, { include: [WSModule] })
+      toApp, documentation, { include: [WebsocketModule] })
 
     NestSwaggerModule.setup(onRoute, toApp, document)
   }

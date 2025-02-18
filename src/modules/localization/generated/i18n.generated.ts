@@ -6,7 +6,7 @@ import { Path } from "nestjs-i18n";
 /* prettier-ignore */
 export type I18nTranslations = {
     "common": {
-        "duration.hours": {
+        "duration": {
             "hours": {
                 "one": string;
                 "other": string;

@@ -5,8 +5,8 @@ import { INestApplicationContext, Module } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
 import { ApiContainer } from '@wisemen/app-container'
 import { AppModule } from '../app.module.js'
-import { WSModule } from '../modules/websocket/ws.module.js'
-import { AuthenticatedWsAdapter } from '../modules/websocket/ws-adapter.js'
+import { WebsocketModule } from '../modules/websocket/websocket.module.js'
+import { AuthenticatedWsAdapter } from '../modules/websocket/websocket-adapter.js'
 import { AuthModule } from '../modules/auth/auth.module.js'
 import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 
@@ -14,10 +14,10 @@ import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
   imports: [
     AppModule.forRoot(),
     AuthModule,
-    WSModule.register()
+    WebsocketModule
   ]
 })
-class WssModule {}
+class WebsocketServerModule {}
 
 startOpentelemetry('[Project template] websocket')
 
@@ -25,7 +25,7 @@ class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {
     const httpServer = adapter.getHttpServer()
 
-    const app = await NestFactory.create(WssModule, adapter)
+    const app = await NestFactory.create(WebsocketServerModule, adapter)
 
     adapter.setHttpServer(httpServer)
 

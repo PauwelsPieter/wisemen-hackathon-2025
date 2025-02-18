@@ -7,7 +7,7 @@ import { captureException } from '@sentry/nestjs'
 import { NatsClient } from '../nats/nats.client.js'
 import { SubscribeCommand } from './commands/subscribe.command.js'
 import { UnsubscribeCommand } from './commands/unsubscribe.command.js'
-import { WsTopicValidator } from './ws-topic.validator.js'
+import { WebsocketTopicValidator } from './websocket-topic.validator.js'
 import { PingPongCommand } from './commands/ping-pong.command.js'
 
 declare module 'ws' {
@@ -37,13 +37,13 @@ export class WsExceptionFilter extends BaseWsExceptionFilter {
   transports: ['websocket'],
   path: '/websockets'
 })
-export class WSNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class WebsocketNatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly clients = new Map<string, WebSocket>()
   private readonly subscriptions = new Map<string, Map<string, Subscription>>()
 
   constructor (
     private readonly natsClient: NatsClient,
-    private readonly topicValidator: WsTopicValidator
+    private readonly topicValidator: WebsocketTopicValidator
   ) {}
 
   @WebSocketServer()
