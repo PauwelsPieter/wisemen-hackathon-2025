@@ -2,6 +2,7 @@ import { type ExceptionFilter, Catch, type ArgumentsHost, HttpStatus, HttpExcept
 import { HttpAdapterHost } from '@nestjs/core'
 import { EntityNotFoundError } from 'typeorm'
 import { captureException } from '@sentry/nestjs'
+import { trace } from '@opentelemetry/api'
 import { JsonApiError } from './types/json-api-error.type.js'
 import { NotFoundError } from './generic/not-found.error.js'
 import { ApiError } from './api-errors/api-error.js'
@@ -22,7 +23,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     httpAdapter.reply(
       ctx.getResponse(),
-      { errors },
+      { errors, traceId: trace.getActiveSpan()?.spanContext()?.traceId },
       status
     )
   }
