@@ -4,7 +4,7 @@ import { PublishNatsEventJobHandler } from './publish-nats-event.handler.js'
 
 @Module({
   imports: [
-    NatsModule.forRoot()
+    NatsModule
   ],
   providers: [
     PublishNatsEventJobHandler
