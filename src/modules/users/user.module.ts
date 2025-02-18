@@ -17,7 +17,7 @@ import { User } from './entities/user.entity.js'
     TypeOrmModule.forFeature([
       User, Role, UserRole
     ]),
-    RedisModule.forRoot(),
+    RedisModule,
     TypesenseModule,
     SetUserRolesModule,
     ViewMeModule,

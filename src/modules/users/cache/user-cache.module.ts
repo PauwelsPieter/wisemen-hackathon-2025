@@ -6,7 +6,7 @@ import { UserCache } from './user-cache.service.js'
 
 @Module({
   imports: [
-    RedisModule.forRoot(),
+    RedisModule,
     TypeOrmModule.forFeature([User])
   ],
   controllers: [],

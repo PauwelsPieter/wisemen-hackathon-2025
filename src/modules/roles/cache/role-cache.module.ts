@@ -6,7 +6,7 @@ import { RoleCache } from './role-cache.service.js'
 
 @Module({
   imports: [
-    RedisModule.forRoot(),
+    RedisModule,
     TypeOrmModule.forFeature([Role])
   ],
   controllers: [],
