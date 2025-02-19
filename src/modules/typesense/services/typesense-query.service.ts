@@ -1,10 +1,23 @@
 import { captureException } from '@sentry/nestjs'
 import { Injectable } from '@nestjs/common'
-import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
+import type {
+  DocumentSchema,
+  SearchParams,
+  SearchResponse
+} from 'typesense/lib/Typesense/Documents.js'
 import type { MultiSearchRequestsSchema } from 'typesense/lib/Typesense/MultiSearch.js'
-import type { MultiSearchResult, TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
+import { MultiSearchRequestSchema } from 'typesense/src/Typesense/MultiSearch.js'
+import type {
+  MultiSearchResult,
+  TypesenseCollectionName
+} from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
-import { UserTypesenseCollection, type UserSearchSchema } from '../collections/user.collections.js'
+import { type UserSearchSchema, UserTypesenseCollection } from '../collections/user.collections.js'
+import {
+  PaginatedOffsetResponse,
+  PaginatedOffsetResponseMeta
+} from '../../pagination/offset/paginated-offset.response.js'
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../builder/search-params.builder.js'
 
 @Injectable()
 export class TypesenseQueryService {
@@ -13,31 +26,21 @@ export class TypesenseQueryService {
   ) {}
 
   static COLLECTIONS = [
-    new UserTypesenseCollection().getSchema()
+    new UserTypesenseCollection()
   ]
 
   public async searchAll (query: string): Promise<MultiSearchResult> {
-    const searchRequests: MultiSearchRequestsSchema = {
-      searches: TypesenseQueryService.COLLECTIONS.map((collection) => {
-        return {
-          collection: collection.name,
-          q: query,
-          query_by: collection.fields?.map(f => f.name).join(',') ?? ''
-        }
-      })
-    }
+    const searchRequests = this.buildMultiSearchRequest(query)
 
     const { results } = await this.typesenseClient
       .client
       .multiSearch
       .perform<[UserSearchSchema]>(searchRequests)
 
-    const result: MultiSearchResult = results.reduce((acc, collection, index) => ({
+    return results.reduce((acc, collection, index) => ({
       ...acc,
       ...this.transformSearchResult(collection, TypesenseQueryService.COLLECTIONS[index].name)
     }), {})
-
-    return result
   }
 
   public async search (
@@ -58,24 +61,40 @@ export class TypesenseQueryService {
     }
   }
 
-  private transformSearchResult (
-    result: {
-      hits?: Array<{ document: unknown }>
-      found: number
-      page: number
-      request_params: { per_page?: number }
-    },
+  public async searchIn<T extends TypesenseCollectionName>(
+    index: T,
+    searchParams: SearchParams
+  ): Promise<Exclude<MultiSearchResult[T], undefined>> {
+    const multiSearchResult = await this.search(index, searchParams)
+
+    return multiSearchResult[index] as Exclude<MultiSearchResult[T], undefined>
+  }
+
+  private buildMultiSearchRequest (query: string): MultiSearchRequestsSchema {
+    const searchRequestSchemas: MultiSearchRequestSchema[] = []
+
+    for (const collection of TypesenseQueryService.COLLECTIONS) {
+      searchRequestSchemas.push({
+        collection: collection.name,
+        q: query,
+        query_by: collection.searchableFields.map(f => f.name).join(',') ?? ''
+      })
+    }
+
+    return { searches: searchRequestSchemas }
+  }
+
+  private transformSearchResult<T extends DocumentSchema>(
+    result: SearchResponse<T>,
     index: string
   ): MultiSearchResult {
-    return {
-      [index]: {
-        items: result.hits?.map(hit => hit.document) ?? [],
-        meta: {
-          total: result.found,
-          offset: result.page - 1,
-          limit: result.request_params.per_page ?? 0
-        }
-      }
-    }
+    const items = result.hits?.map(hit => hit.document) ?? []
+    const meta = new PaginatedOffsetResponseMeta(
+      result.found,
+      result.request_params.limit ?? DEFAULT_LIMIT,
+      result.request_params.offset ?? DEFAULT_OFFSET
+    )
+
+    return { [index]: new PaginatedOffsetResponse(items, meta) }
   }
 }

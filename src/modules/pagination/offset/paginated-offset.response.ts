@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { isObject } from '@nestjs/common/utils/shared.utils.js'
 
-class PaginatedOffsetResponseMeta {
+export class PaginatedOffsetResponseMeta {
   @ApiProperty({ description: 'the total amount of items that exist' })
   total: number
 
@@ -24,8 +25,20 @@ export class PaginatedOffsetResponse<T> {
   @ApiProperty({ type: PaginatedOffsetResponseMeta })
   meta: PaginatedOffsetResponseMeta
 
-  constructor (items: T[], total: number, limit: number, offset: number) {
+  constructor (items: T[], meta: PaginatedOffsetResponseMeta)
+  constructor (items: T[], total: number, limit: number, offset: number)
+  constructor (
+    items: T[],
+    totalOrMeta: number | PaginatedOffsetResponseMeta,
+    limit?: number,
+    offset?: number
+  ) {
     this.items = items
-    this.meta = new PaginatedOffsetResponseMeta(total, offset, limit)
+
+    if (totalOrMeta instanceof PaginatedOffsetResponseMeta || isObject(totalOrMeta)) {
+      this.meta = totalOrMeta
+    } else {
+      this.meta = new PaginatedOffsetResponseMeta(totalOrMeta, offset as number, limit as number)
+    }
   }
 }

@@ -18,16 +18,14 @@ export class UserTypesenseRepository {
   ): Promise<[items: UserSearchSchema[], count: number] > {
     const typesenseSearchParams = this.createTypesenseSearchParams(query)
 
-    const typesenseSearchedValues = await this.typesenseService.search(
+    const users = await this.typesenseService.searchIn(
       TypesenseCollectionName.USER,
       typesenseSearchParams
     )
 
-    const usersResponse = typesenseSearchedValues[TypesenseCollectionName.USER]
-
     return [
-      usersResponse?.items ?? [],
-      usersResponse?.meta.total ?? 0
+      users.items ?? [],
+      users.meta.total ?? 0
     ]
   }
 
