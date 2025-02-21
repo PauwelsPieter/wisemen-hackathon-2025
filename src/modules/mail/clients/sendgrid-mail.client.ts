@@ -24,11 +24,7 @@ export class SendGridMailClient implements MailClient {
     const payload = {
       personalizations: [
         {
-          to: [
-            {
-              email: params.to
-            }
-          ],
+          to: [params.to].flat().map(email => ({ email })),
           subject: params.subject
         }
       ],
