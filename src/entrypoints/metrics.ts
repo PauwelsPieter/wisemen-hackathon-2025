@@ -1,9 +1,9 @@
 import '../modules/exceptions/sentry.js'
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, Module } from '@nestjs/common'
 import { ProbedContainer } from '@wisemen/app-container/dist/containers/default.js'
 import { AppModule } from '../app.module.js'
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { MetricsRegistrationModule } from '../utils/opentelemetry/metrics/metrics-registration.module.js'
 
 @Module({
@@ -14,7 +14,7 @@ import { MetricsRegistrationModule } from '../utils/opentelemetry/metrics/metric
 })
 class MetricsModule {}
 
-startOpentelemetry('[Project template] metrics')
+startOpentelemetry()
 
 class Metrics extends ProbedContainer {
   async bootstrap (): Promise<INestApplicationContext> {

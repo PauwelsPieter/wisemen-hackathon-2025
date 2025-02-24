@@ -6,5 +6,26 @@ export default [
     ignores: [
       'src/modules/localization/generated/i18n.generated.ts'
     ]
+  },
+  {
+    rules: {
+      'import/order': [
+        'error',
+        {
+          pathGroups: [
+            {
+              pattern: '../**/otel-sdk.js',
+              group: 'builtin',
+              position: 'before'
+            },
+            {
+              pattern: './**/otel-sdk.js',
+              group: 'builtin',
+              position: 'before'
+            }
+          ]
+        }
+      ]
+    }
   }
 ]

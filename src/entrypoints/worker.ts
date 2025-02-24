@@ -1,5 +1,5 @@
 import '../modules/exceptions/sentry.js'
-
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { NestFactory } from '@nestjs/core'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
@@ -7,7 +7,6 @@ import { INestApplicationContext, Module } from '@nestjs/common'
 import { WorkerContainer } from '@wisemen/app-container'
 import { PgBossWorkerModule } from '@wisemen/pgboss-nestjs-job'
 import { AppModule } from '../app.module.js'
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { QueueName } from '../modules/pgboss/enums/queue-name.enum.js'
 
 const args = await yargs(hideBin(process.argv))
@@ -54,7 +53,7 @@ const queueName = unvalidatedQueueName as QueueName
 })
 class WorkerModule {}
 
-startOpentelemetry(`[Project template] worker:${queueName}`)
+startOpentelemetry()
 
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {

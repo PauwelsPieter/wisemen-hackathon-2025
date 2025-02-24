@@ -6,11 +6,13 @@ import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
 import { registerInstruments } from './instrumentations.js'
+import { getOtelServiceName } from './get-otel-service-name.js'
 
 registerInstruments()
 
-export function startOpentelemetry (serviceName: string): void {
+export function startOpentelemetry (serviceName: string = getOtelServiceName()): void {
   if (process.env.NODE_ENV === 'test') return
+  if (process.env.NODE_ENV === 'local') return
 
   const sdk = configure(serviceName)
 

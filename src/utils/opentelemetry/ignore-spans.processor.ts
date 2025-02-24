@@ -1,28 +1,23 @@
 import { BatchSpanProcessor, type Span } from '@opentelemetry/sdk-trace-base'
 
 export class IgnoredSpansProcessor extends BatchSpanProcessor {
-  private readonly IGNORED_PG_BOSS_QUERIES = [
-    'WITH nextJob as',
-    'INSERT INTO pgboss.job',
-    'SELECT cron_on, EXTRACT'
-  ]
+  private readonly IGNORED_PG_BOSS_QUERIES = new Map([
+    ['SELECT round(date_part(\'epoch\', now()) * 1000) as time', true],
+    ['SELECT cron_on, EXTRACT', true]
+  ])
 
   onEnd (span: Span) {
-    if (this.containsIngoredPgBossStatement(span)) {
+    if (this.containsIgnoredPgBossStatement(span)) {
       return
     }
 
     super.onEnd(span)
   }
 
-  containsIngoredPgBossStatement (span: Span): boolean {
+  containsIgnoredPgBossStatement (span: Span): boolean {
     const dbStatement = span.attributes['db.statement']?.toString()
 
-    if (dbStatement == null) {
-      return false
-    }
-
-    // Check if the db.statement starts with any of the ignored prefixes
-    return this.IGNORED_PG_BOSS_QUERIES.some(queryPrefix => dbStatement.includes(queryPrefix))
+    return dbStatement !== undefined
+      && (this.IGNORED_PG_BOSS_QUERIES.has(dbStatement) || dbStatement.includes('pgboss'))
   }
 }

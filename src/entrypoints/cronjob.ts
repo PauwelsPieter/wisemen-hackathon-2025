@@ -1,3 +1,4 @@
+import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'
@@ -6,7 +7,6 @@ import { hideBin } from 'yargs/helpers'
 import { AppModule } from '../app.module.js'
 import { CronjobModule } from '../modules/cronjobs/cronjob.module.js'
 import { CronjobType } from '../modules/cronjobs/enums/cronjob-type.enum.js'
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
 import { AbstractUseCase } from '../modules/cronjobs/types/abstract-use-case.js'
 
 const args = await yargs(hideBin(process.argv))
@@ -20,7 +20,7 @@ const args = await yargs(hideBin(process.argv))
   .help()
   .argv
 
-startOpentelemetry(`[Project template] cronjob:${args.type}`)
+startOpentelemetry()
 
 export class Cronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {
