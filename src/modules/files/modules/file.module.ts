@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { UserModule } from '../../users/user.module.js'
+import { UserModule } from '../../../app/users/user.module.js'
 import { S3Service } from '../services/s3.service.js'
 import { FileRepository } from '../repositories/file.repository.js'
 import { FileController } from '../controllers/file.controller.js'

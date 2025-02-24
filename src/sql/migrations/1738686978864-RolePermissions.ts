@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 import { Permission } from '../../modules/permission/permission.enum.js'
-import { Role } from '../../modules/roles/entities/role.entity.js'
+import { Role } from '../../app/roles/entities/role.entity.js'
 
 export const roles = [
   {

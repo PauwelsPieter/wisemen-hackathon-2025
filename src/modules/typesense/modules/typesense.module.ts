@@ -5,7 +5,7 @@ import { TypesenseDocumentService } from '../services/typesense-document.service
 import { TypesenseCollectionService } from '../services/typesense-collection.service.js'
 import { TypesenseCollectorFactory } from '../services/collectors/typesense-collector.factory.js'
 import { UserTypesenseCollector } from '../services/collectors/user-typesense.collector.js'
-import { UserRepository } from '../../users/repositories/user.repository.js'
+import { UserRepository } from '../../../app/users/repositories/user.repository.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { MigrateCollectionsModule } from '../use-cases/migrate-collections/migrate-collections.module.js'
 import { ImportCollectionsModule } from '../use-cases/import-collections/import-collections.module.js'

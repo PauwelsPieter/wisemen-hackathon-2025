@@ -1,4 +1,4 @@
-import { User } from '../users/entities/user.entity.js'
+import { User } from '../../app/users/entities/user.entity.js'
 import { WiseEvent } from './wise-event.js'
 
 export class UserRegisteredEventContent {

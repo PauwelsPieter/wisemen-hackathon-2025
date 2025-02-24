@@ -6,9 +6,9 @@ import { DefaultConfigModule } from '../../src/modules/config/default-config.mod
 import { EventModule } from '../../src/modules/events/event.module.js'
 import { ExceptionModule } from '../../src/modules/exceptions/exception.module.js'
 import { NatsModule } from '../../src/modules/nats/nats.module.js'
-import { RoleModule } from '../../src/modules/roles/role.module.js'
+import { RoleModule } from '../../src/app/roles/role.module.js'
 import { DefaultTypeOrmModule } from '../../src/modules/typeorm/default-typeorm.module.js'
-import { UserModule } from '../../src/modules/users/user.module.js'
+import { UserModule } from '../../src/app/users/user.module.js'
 
 @Module({})
 export class TestModule {

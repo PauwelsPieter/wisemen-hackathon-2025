@@ -1,5 +1,5 @@
 import assert from 'assert'
-import type { User } from '../../users/entities/user.entity.js'
+import type { User } from '../../../app/users/entities/user.entity.js'
 import type { Permission } from '../../permission/permission.enum.js'
 
 export class UserSearchTransformer {

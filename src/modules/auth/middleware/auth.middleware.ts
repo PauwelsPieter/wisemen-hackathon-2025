@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from 'express'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { ConfigService } from '@nestjs/config'
 import { UnauthorizedError } from '../../exceptions/generic/unauthorized.error.js'
-import { UserAuthService } from '../../users/services/user-auth.service.js'
+import { UserAuthService } from '../../../app/users/services/user-auth.service.js'
 import { AuthContent, AuthStorage } from '../auth.storage.js'
 
 export interface TokenContent {

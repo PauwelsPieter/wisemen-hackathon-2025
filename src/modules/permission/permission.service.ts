@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { UserCache } from '../users/cache/user-cache.service.js'
-import { RoleCache } from '../roles/cache/role-cache.service.js'
+import { UserCache } from '../../app/users/cache/user-cache.service.js'
+import { RoleCache } from '../../app/roles/cache/role-cache.service.js'
 import { Permission } from './permission.enum.js'
 
 @Injectable()
