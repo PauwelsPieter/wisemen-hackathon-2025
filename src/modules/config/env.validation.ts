@@ -10,10 +10,6 @@ export const envValidationSchema = Joi.object({
   DATABASE_URI: Joi.string().uri().required(),
   DATABASE_SSL: Joi.string().valid(...validSslTypes).required(),
 
-  RSA_PRIVATE: Joi.string().required(),
-  RSA_PUBLIC: Joi.string().required(),
-  RSA_PASSPHRASE: Joi.string().required(),
-
   REDIS_URL: Joi.string().uri().required(),
 
   FRONTEND_URL: Joi.string().uri().required(),
@@ -21,5 +17,4 @@ export const envValidationSchema = Joi.object({
   AUTH_JWKS_ENDPOINT: Joi.string().uri().required(),
   AUTH_ISSUER: Joi.string().uri().required(),
   AUTH_PROJECT_ID: Joi.string().required()
-
 })
