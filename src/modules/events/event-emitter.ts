@@ -1,14 +1,33 @@
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2 } from '@nestjs/event-emitter'
 import { WiseEvent } from './wise-event.js'
+
+export type EventSubscriberMethod = (event: WiseEvent) => Promise<void>
 
 @Injectable()
 export class EventEmitter {
-  constructor (
-    private readonly emitter: EventEmitter2
-  ) {}
+  private static subscribers = new Map<string, EventSubscriberMethod[]>()
+  private static globalSubscribers: EventSubscriberMethod[] = []
 
-  async emit (event: WiseEvent): Promise<unknown[]> {
-    return await this.emitter.emitAsync(event.type, event) as unknown[]
+  static addSubscriber (toEvent: string, observer: EventSubscriberMethod): void {
+    const eventSubscribers = this.subscribers.get(toEvent) ?? []
+
+    eventSubscribers.push(observer)
+    this.subscribers.set(toEvent, eventSubscribers)
+  }
+
+  static addGlobalSubscriber (observer: EventSubscriberMethod): void {
+    this.globalSubscribers.push(observer)
+  }
+
+  async emit (event: WiseEvent): Promise<void> {
+    const subscribers = EventEmitter.subscribers.get(event.type) ?? []
+
+    for (const subscriberCallback of subscribers) {
+      await subscriberCallback(event)
+    }
+
+    for (const subscriberCallback of EventEmitter.globalSubscribers) {
+      await subscriberCallback(event)
+    }
   }
 }

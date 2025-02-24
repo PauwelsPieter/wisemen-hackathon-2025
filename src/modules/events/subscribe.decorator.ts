@@ -1,25 +1,22 @@
-import { applyDecorators } from '@nestjs/common'
-import { OnEvent } from '@nestjs/event-emitter'
 import { ClassConstructor } from 'class-transformer'
-import { ALL_TYPES } from './constants.js'
 import { WiseEvent } from './wise-event.js'
 
-export function Subscribe (toTopic: string): MethodDecorator
-export function Subscribe<T extends ClassConstructor<WiseEvent> & { TYPE: string } > (
-  toEvent: T
-): MethodDecorator
-export function Subscribe (toTopic: string | { TYPE: string }): MethodDecorator {
-  let topic: string
+export const SUBSCRIBE_KEY = 'wisemen.subscribe'
 
-  if (typeof toTopic === 'string') {
-    topic = toTopic
-  } else {
-    topic = toTopic.TYPE
+type SubScribingMethodName = string
+export type EventsMap = Map<string, SubScribingMethodName[]>
+type TypedEvent = ClassConstructor<WiseEvent> & { TYPE: string }
+
+export function Subscribe<EventType extends TypedEvent> (event: EventType): MethodDecorator {
+  return (target: object, methodName: string) => {
+    const observedEventsMap = Reflect.getMetadata(SUBSCRIBE_KEY, target) as EventsMap | undefined
+      ?? new Map<string, SubScribingMethodName[]>()
+
+    const observingMethods = observedEventsMap.get(event.TYPE) ?? []
+
+    observingMethods.push(methodName)
+
+    observedEventsMap.set(event.TYPE, observingMethods)
+    Reflect.defineMetadata(SUBSCRIBE_KEY, observedEventsMap, target)
   }
-
-  return applyDecorators(OnEvent(topic, { suppressErrors: false }))
-}
-
-export function SubscribeToAll (): MethodDecorator {
-  return applyDecorators(OnEvent(ALL_TYPES, { suppressErrors: false }))
 }
