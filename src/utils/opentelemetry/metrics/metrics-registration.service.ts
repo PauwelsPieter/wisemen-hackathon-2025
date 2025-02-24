@@ -43,6 +43,7 @@ export class MetricsRegistrationService {
         observer.observe(countValue, { job_name: name, job_state: state })
       })
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error updating pg boss job metrics:', error)
     }
   }

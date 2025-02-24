@@ -1,7 +1,7 @@
 import type { FieldType, CollectionFieldSchema } from 'typesense/lib/Typesense/Collection.js'
 import type { CollectionCreateSchema } from 'typesense/lib/Typesense/Collections.js'
 
-export type SearchField<T extends TypesenseCollection > = T['searchableFields'][number]['name']
+export type SearchField<T extends TypesenseCollection> = T['searchableFields'][number]['name']
 export type FilterField<T extends TypesenseCollection> = T['filterableFields'][number]['name'] | SearchField<T>
 export type SortField<T extends TypesenseCollection> = Extract<T['searchableFields'][number] | T['filterableFields'][number], { sort: true }>['name']
 

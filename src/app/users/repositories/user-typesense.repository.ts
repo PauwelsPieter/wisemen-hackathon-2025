@@ -15,7 +15,7 @@ export class UserTypesenseRepository {
 
   async findPaginated (
     query: ViewUsersQuery
-  ): Promise<[items: UserSearchSchema[], count: number] > {
+  ): Promise<[items: UserSearchSchema[], count: number]> {
     const typesenseSearchParams = this.createTypesenseSearchParams(query)
 
     const users = await this.typesenseService.searchIn(

@@ -89,10 +89,15 @@ export class TypesenseQueryService {
     index: string
   ): MultiSearchResult {
     const items = result.hits?.map(hit => hit.document) ?? []
+
+    const limit = result.request_params.per_page ?? DEFAULT_LIMIT
+    const page = result.request_params.page ?? DEFAULT_OFFSET
+    const offset = page * limit
+
     const meta = new PaginatedOffsetResponseMeta(
       result.found,
-      result.request_params.limit ?? DEFAULT_LIMIT,
-      result.request_params.offset ?? DEFAULT_OFFSET
+      offset,
+      limit
     )
 
     return { [index]: new PaginatedOffsetResponse(items, meta) }
