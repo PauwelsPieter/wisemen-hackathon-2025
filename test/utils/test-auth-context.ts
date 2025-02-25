@@ -6,10 +6,10 @@ import { RoleSeeder } from '../../src/app/roles/tests/seeders/role.seeder.js'
 import { Role } from '../../src/app/roles/entities/role.entity.js'
 import { UserEntityBuilder } from '../../src/app/users/tests/user-entity.builder.js'
 import type { TestUser } from '../../src/app/users/tests/setup-user.type.js'
-import { RoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/role-entity.builder.js'
 import { User } from '../../src/app/users/entities/user.entity.js'
-import { UserRoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/user-role-entity.builder.js'
 import { UserRoleSeeder } from '../../src/app/roles/tests/seeders/user-role.seeder.js'
+import { RoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/role-entity.builder.js'
+import { UserRoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/user-role-entity.builder.js'
 
 export class TestAuthContext {
   private readonly userSeeder: UserSeeder

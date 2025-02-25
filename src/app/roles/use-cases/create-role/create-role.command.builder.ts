@@ -1,11 +1,11 @@
-import { CreateRoleCommand } from '../../../use-cases/create-role/create-role.command.js'
+import { CreateRoleCommand } from './create-role.command.js'
 
 export class CreateRoleCommandBuilder {
-  private command: CreateRoleCommand
+  private readonly command: CreateRoleCommand
 
   constructor () {
     this.command = new CreateRoleCommand()
-    this.command.name = 'test-role'
+    this.command.name = 'roleName'
   }
 
   withName (name: string): this {

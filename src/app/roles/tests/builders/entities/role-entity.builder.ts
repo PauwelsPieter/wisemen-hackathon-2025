@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { Role } from '../../../entities/role.entity.js'
-import type { Permission } from '../../../../../modules/permission/permission.enum.js'
+import { Permission } from '../../../../../modules/permission/permission.enum.js'
 
 export class RoleEntityBuilder {
   private roleEntity: Role
@@ -15,6 +15,8 @@ export class RoleEntityBuilder {
     this.roleEntity.uuid = randomUUID()
     this.roleEntity.name = 'test-role'
     this.roleEntity.permissions = []
+    this.roleEntity.isSystemAdmin = false
+    this.roleEntity.isDefault = false
 
     return this
   }
@@ -33,6 +35,18 @@ export class RoleEntityBuilder {
 
   withPermissions (permissions: Permission[]): this {
     this.roleEntity.permissions = permissions
+
+    return this
+  }
+
+  withIsDefault (isDefault: boolean): this {
+    this.roleEntity.isDefault = isDefault
+
+    return this
+  }
+
+  withIsSystemAdmin (isSystemAdmin: boolean): this {
+    this.roleEntity.isSystemAdmin = isSystemAdmin
 
     return this
   }

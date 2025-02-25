@@ -6,7 +6,9 @@ import { Repository } from 'typeorm'
 import { RedisClient } from '../../../modules/redis/redis.client.js'
 import { User } from '../entities/user.entity.js'
 import { UserEntityBuilder } from '../tests/user-entity.builder.js'
-import { UserRoleEntityBuilder } from '../../roles/tests/builders/entities/user-role-entity.builder.js'
+import {
+  UserRoleEntityBuilder
+} from '../../roles/tests/builders/entities/user-role-entity.builder.js'
 import { UserCache } from './user-cache.service.js'
 
 describe('User cache unit test', () => {

@@ -4,6 +4,13 @@ import type { ClassConstructor } from 'class-transformer'
 import type { ApiError } from './api-error.js'
 import type { ConflictApiError } from './conflict.api-error.js'
 import type { BadRequestApiError } from './bad-request.api-error.js'
+import { NotFoundApiError } from './not-found.api-error.js'
+
+export function ApiNotFoundErrorResponse (
+  ...errors: Array<ClassConstructor<NotFoundApiError>>
+): MethodDecorator {
+  return ApiErrorResponse(HttpStatus.NOT_FOUND, errors)
+}
 
 export function ApiBadRequestErrorResponse (
   ...errors: Array<ClassConstructor<BadRequestApiError>>

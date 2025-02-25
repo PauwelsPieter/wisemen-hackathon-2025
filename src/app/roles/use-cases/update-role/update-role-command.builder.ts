@@ -1,11 +1,11 @@
-import { UpdateRoleCommand } from '../../../use-cases/update-role/update-role.command.js'
+import { UpdateRoleCommand } from './update-role.command.js'
 
 export class UpdateRoleCommandBuilder {
   private command: UpdateRoleCommand
 
   constructor () {
     this.command = new UpdateRoleCommand()
-    this.command.name = 'test-role'
+    this.command.name = 'roleName'
   }
 
   withName (name: string): this {

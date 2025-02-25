@@ -8,10 +8,10 @@ import { UserEntityBuilder } from '../../../users/tests/user-entity.builder.js'
 import type { TestUser } from '../../../users/tests/setup-user.type.js'
 import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
 import { UserRoleSeeder } from '../../tests/seeders/user-role.seeder.js'
-import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
-import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
+import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
+import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
 
 describe('View roles end to end tests', () => {
   let setup: EndToEndTestSetup
