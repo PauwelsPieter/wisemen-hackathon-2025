@@ -105,11 +105,11 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@wisemen/nestjs-typeorm':
-        specifier: ^0.0.7
-        version: 0.0.7(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))
+        specifier: ^0.0.8
+        version: 0.0.8(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))
       '@wisemen/pgboss-nestjs-job':
         specifier: ^0.2.2
-        version: 0.2.2(ebfjdsdvnn5yjjmpu6nc7zjscq)
+        version: 0.2.2(elxg6653bmsp73nvpelmq3iaju)
       '@wisemen/time':
         specifier: ^0.0.18
         version: 0.0.18
@@ -1955,8 +1955,8 @@ packages:
     peerDependencies:
       eslint: 9.21.0
 
-  '@wisemen/nestjs-typeorm@0.0.7':
-    resolution: {integrity: sha512-Z5IT35V7GtNag1rj2/xFwZkpWygOcuIZaxlN9MznvUGys0RLM7o7lA5vW3GJDUDb+vQPavx8IItMeER/vTMMeA==}
+  '@wisemen/nestjs-typeorm@0.0.8':
+    resolution: {integrity: sha512-RTy3DHB0SL0cPmSqJWU8qg19fw4hcxkvL8KsYxbb11SUr2GU7UoatPKSnB98D7EpDwCKDIAfNhL1CIXjUe4aFQ==}
     peerDependencies:
       '@nestjs/common': ^10.4.12
       '@nestjs/config': ^3.3.0
@@ -6574,7 +6574,7 @@ snapshots:
       - '@typescript-eslint/eslint-plugin'
       - supports-color
 
-  '@wisemen/nestjs-typeorm@0.0.7(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))':
+  '@wisemen/nestjs-typeorm@0.0.8(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))':
     dependencies:
       '@nestjs/common': 11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/config': 4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2)
@@ -6609,12 +6609,12 @@ snapshots:
       - ts-node
       - typeorm-aurora-data-api-driver
 
-  '@wisemen/pgboss-nestjs-job@0.2.2(ebfjdsdvnn5yjjmpu6nc7zjscq)':
+  '@wisemen/pgboss-nestjs-job@0.2.2(elxg6653bmsp73nvpelmq3iaju)':
     dependencies:
       '@nestjs/common': 11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@sentry/nestjs': 8.55.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))
-      '@wisemen/nestjs-typeorm': 0.0.7(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))
+      '@wisemen/nestjs-typeorm': 0.0.8(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/config@4.0.0(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(rxjs@7.8.2))(@nestjs/core@11.0.10(@nestjs/common@11.0.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.0.10)(@nestjs/websockets@11.0.10)(reflect-metadata@0.2.2)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.1)(pg@8.13.3)(redis@4.7.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.20(pg@8.13.3)(redis@4.7.0))
       colors: 1.4.0
       pg-boss: 10.1.6
       rxjs: 7.8.2
