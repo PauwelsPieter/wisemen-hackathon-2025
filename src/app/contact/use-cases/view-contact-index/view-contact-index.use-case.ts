@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
+import { SortDirection, typeormPagination } from '@wisemen/pagination'
 import { Contact } from '../../entities/contact.entity.js'
-import { typeormPagination } from '../../../../modules/pagination/pagination-mapper.js'
-import { SortDirection } from '../../../../modules/pagination/search.query.js'
 import { ViewContactIndexQuery } from './view-contact-index.query.js'
 import { ViewContactIndexResponse } from './view-contact-index.response.js'
 

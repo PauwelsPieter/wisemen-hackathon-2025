@@ -7,16 +7,13 @@ import type {
 } from 'typesense/lib/Typesense/Documents.js'
 import type { MultiSearchRequestsSchema } from 'typesense/lib/Typesense/MultiSearch.js'
 import { MultiSearchRequestSchema } from 'typesense/src/Typesense/MultiSearch.js'
+import { PaginatedOffsetResponseMeta, PaginatedOffsetResponse } from '@wisemen/pagination'
 import type {
   MultiSearchResult,
   TypesenseCollectionName
 } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { type UserSearchSchema, UserTypesenseCollection } from '../collections/user.collections.js'
-import {
-  PaginatedOffsetResponse,
-  PaginatedOffsetResponseMeta
-} from '../../pagination/offset/paginated-offset.response.js'
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../builder/search-params.builder.js'
 
 @Injectable()

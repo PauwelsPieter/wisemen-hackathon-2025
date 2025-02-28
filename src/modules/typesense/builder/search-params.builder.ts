@@ -1,5 +1,6 @@
 import assert from 'assert'
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
+import { SortDirection } from '@wisemen/pagination'
 import type {
   FilterField,
   SearchField,
@@ -7,7 +8,6 @@ import type {
   TypesenseCollection
 } from '../collections/abstract-typesense.collection.js'
 import { FilterOptions } from '../enums/typesense-filter-options.enum.js'
-import type { SortDirection } from '../../pagination/search.query.js'
 import { TypesenseOperationMode } from '../enums/typesense-operation-mode.enum.js'
 
 export const DEFAULT_LIMIT = 10

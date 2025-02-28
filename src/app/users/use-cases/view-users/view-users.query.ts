@@ -1,9 +1,8 @@
 import { Equals, IsArray, IsEnum, IsOptional, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
 import { ApiProperty } from '@nestjs/swagger'
+import { FilterQuery, PaginatedOffsetSearchQuery } from '@wisemen/pagination'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
-import { PaginatedOffsetSearchQuery } from '../../../../modules/pagination/offset/paginated-offset.query.js'
-import { FilterQuery } from '../../../../modules/pagination/search.query.js'
 
 export class UsersFilterQuery extends FilterQuery {
   @ApiProperty({ enum: Permission, enumName: 'Permission', required: false, isArray: true })

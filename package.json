@@ -55,6 +55,7 @@
     "@wisemen/app-container": "^2.1.13",
     "@wisemen/decorators": "^0.0.3",
     "@wisemen/nestjs-typeorm": "^0.0.8",
+    "@wisemen/pagination": "^0.0.1",
     "@wisemen/pgboss-nestjs-job": "^0.2.2",
     "@wisemen/time": "^0.0.18",
     "@wisemen/validators": "^0.0.3",

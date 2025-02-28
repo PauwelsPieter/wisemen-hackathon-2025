@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { PaginatedOffsetResponse } from '@wisemen/pagination'
 import { Contact } from '../../entities/contact.entity.js'
-import { PaginatedOffsetResponse } from '../../../../modules/pagination/offset/paginated-offset.response.js'
 
 export class ContactResponse {
   @ApiProperty({ type: String, format: 'uuid' })

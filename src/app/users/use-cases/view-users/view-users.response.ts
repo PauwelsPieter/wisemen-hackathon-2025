@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { PaginatedOffsetResponse } from '@wisemen/pagination'
 import { UserSearchSchema } from '../../../../modules/typesense/collections/user.collections.js'
-import { PaginatedOffsetResponse } from '../../../../modules/pagination/offset/paginated-offset.response.js'
 
 class UserIndexView {
   @ApiProperty({ type: String, format: 'uuid' })
