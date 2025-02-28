@@ -6,6 +6,7 @@ import type { CollectionAliasSchema } from 'typesense/lib/Typesense/Aliases.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { UserTypesenseCollection } from '../collections/user.collections.js'
+import { exhaustiveCheck } from '../../../utils/helpers/exhaustive-check.helper.js'
 import { TypesenseCollectionService } from './typesense-collection.service.js'
 
 @Injectable()
@@ -60,12 +61,8 @@ export class TypesenseInitializationService {
   }
 
   public async migrate (fresh: boolean, indexes: TypesenseCollectionName[]): Promise<void> {
-    if (indexes.includes(TypesenseCollectionName.USER)) {
-      await this.migrateCollection(
-        TypesenseCollectionName.USER,
-        new UserTypesenseCollection().getSchema(),
-        fresh
-      )
+    for (const index of indexes) {
+      await this.migrateCollection(index, this.getCollectionSchema(index), fresh)
     }
   }
 
@@ -86,9 +83,15 @@ export class TypesenseInitializationService {
   }
 
   public async import (indexes: TypesenseCollectionName[]): Promise<void> {
-    if (indexes.includes(TypesenseCollectionName.USER)) {
-      await this.typesenseCollectionService
-        .import(TypesenseCollectionName.USER)
+    for (const index of indexes) {
+      await this.typesenseCollectionService.import(index)
+    }
+  }
+
+  private getCollectionSchema (collection: TypesenseCollectionName): CollectionCreateSchema {
+    switch (collection) {
+      case TypesenseCollectionName.USER: return new UserTypesenseCollection().getSchema()
+      default: exhaustiveCheck(collection)
     }
   }
 }
