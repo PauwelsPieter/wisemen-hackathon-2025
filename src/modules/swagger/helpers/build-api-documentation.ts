@@ -10,6 +10,11 @@ export function buildApiDocumentation (): OpenApiDocument {
     .setVersion('1.0')
 
   const environments = Object.values(EnvType)
+  const currentEnv = process.env.NODE_ENV
+
+  const currentEnvironmentIndex = environments.findIndex(environment => environment === currentEnv)
+
+  environments.unshift(...environments.splice(currentEnvironmentIndex, 1))
 
   for (const environment of environments) {
     builder.addServer(buildBaseUrl(environment))
