@@ -1,7 +1,6 @@
 import { WiseEvent } from '../../../../modules/events/wise-event.js'
 import { Role } from '../../entities/role.entity.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
-import { API_EVENT_SOURCE } from '../../../../modules/events/constants.js'
 
 class UpdatedRole {
   constructor (
@@ -28,8 +27,7 @@ export class RolesPermissionsUpdatedEvent
       topic: RolesPermissionsUpdatedEvent.createTopic(),
       version: RolesPermissionsUpdatedEvent.VERSION,
       content: new RolePermissionsUpdatedEventContent(roles),
-      type: RolesPermissionsUpdatedEvent.TYPE,
-      source: API_EVENT_SOURCE
+      type: RolesPermissionsUpdatedEvent.TYPE
     })
   }
 

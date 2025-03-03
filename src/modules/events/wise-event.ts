@@ -1,4 +1,5 @@
 import { v4 as generateUuid } from 'uuid'
+import { API_EVENT_SOURCE } from './constants.js'
 
 export class WiseEvent<Content extends object = object> {
   public readonly id: string
@@ -13,7 +14,6 @@ export class WiseEvent<Content extends object = object> {
     topic: string
     content: Content
     version: number
-    source: string
     type: string
   }) {
     this.id = generateUuid()
@@ -21,7 +21,7 @@ export class WiseEvent<Content extends object = object> {
     this.topic = options.topic
     this.content = options.content
     this.version = options.version
-    this.source = options.source
+    this.source = API_EVENT_SOURCE
     this.type = options.type
   }
 }

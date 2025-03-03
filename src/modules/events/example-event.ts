@@ -20,8 +20,7 @@ export class UserRegisteredEvent extends WiseEvent<UserRegisteredEventContent> {
       topic: UserRegisteredEvent.createTopic(user),
       version: UserRegisteredEvent.VERSION,
       content: new UserRegisteredEventContent(user),
-      type: UserRegisteredEvent.TYPE,
-      source: 'api'
+      type: UserRegisteredEvent.TYPE
     })
   }
 

@@ -35,14 +35,20 @@ export class UserEntityBuilder {
     return this
   }
 
-  withFirstName (firstName: string): this {
+  withFirstName (firstName: string | null): this {
     this.user.firstName = firstName
 
     return this
   }
 
-  withLastName (lastName: string): this {
+  withLastName (lastName: string | null): this {
     this.user.lastName = lastName
+
+    return this
+  }
+
+  withId (id: string): this {
+    this.user.userId = id
 
     return this
   }

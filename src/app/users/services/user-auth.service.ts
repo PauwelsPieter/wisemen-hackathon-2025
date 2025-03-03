@@ -1,27 +1,21 @@
 import { Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@wisemen/nestjs-typeorm'
-import { UserRole } from '../../roles/entities/user-role.entity.js'
-import { Role } from '../../roles/entities/role.entity.js'
 import { User } from '../entities/user.entity.js'
 import { RedisClient } from '../../../modules/redis/redis.client.js'
 import { TokenContent } from '../../../modules/auth/middleware/auth.middleware.js'
-import { TypesenseCollectionName } from '../../../modules/typesense/enums/typesense-collection-index.enum.js'
-import { TypesenseCollectionService } from '../../../modules/typesense/services/typesense-collection.service.js'
 import { AuthContent } from '../../../modules/auth/auth.storage.js'
+import {
+  GetOrCreateUserCommandBuilder
+} from '../use-cases/get-or-create-user/get-or-create-user.command.builder.js'
+import {
+  GetOrCreateUserUseCase
+} from '../use-cases/get-or-create-user/get-or-create-user.use-case.js'
 
 @Injectable()
 export class UserAuthService {
   constructor (
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
-    @InjectRepository(UserRole)
-    private readonly userRoleRepository: Repository<UserRole>,
     private readonly redisClient: RedisClient,
-    private readonly typesenseService: TypesenseCollectionService
-  ) { }
+    private readonly getOrCreateUserUseCase: GetOrCreateUserUseCase
+  ) {}
 
   async findOneByUserId (token: TokenContent): Promise<AuthContent> {
     const cacheKey = `auth:${token.sub}`
@@ -45,30 +39,11 @@ export class UserAuthService {
   }
 
   private async fetchOrCreateUser (token: TokenContent): Promise<User> {
-    let user = await this.userRepository.findOne({ where: { userId: token.sub } })
+    const command = new GetOrCreateUserCommandBuilder()
+      .withEmail(token.email)
+      .withId(token.sub)
+      .build()
 
-    if (user != null) {
-      return user
-    }
-
-    user = this.userRepository.create({
-      userId: token.sub,
-      email: token.email
-    })
-
-    await this.userRepository.insert(user)
-
-    const defaultRole = await this.roleRepository.findOneByOrFail({
-      isDefault: true
-    })
-
-    await this.userRoleRepository.insert({
-      userUuid: user.uuid,
-      roleUuid: defaultRole.uuid
-    })
-
-    await this.typesenseService.importManually(TypesenseCollectionName.USER, [user])
-
-    return user
+    return await this.getOrCreateUserUseCase.getOrCreateUser(command)
   }
 }
