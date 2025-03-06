@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
+import dayjs from 'dayjs'
 import { AuthStorage } from '../../../auth/auth.storage.js'
 import { CreateOneSignalTokenResponse } from './create-one-signal-token.response.js'
 
@@ -17,7 +18,7 @@ export class CreateOneSignalTokenUseCase {
 
     const token = this.jwtService.sign({
       iss: this.configService.getOrThrow<string>('ONE_SIGNAL_APP_ID'),
-      exp: Math.floor(Date.now() / 1000) + 3600,
+      exp: dayjs().add(1, 'hour').unix(),
       identity: {
         external_id: userUuid
       }
