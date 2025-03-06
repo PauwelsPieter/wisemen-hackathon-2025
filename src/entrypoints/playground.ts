@@ -11,7 +11,7 @@ import { DefaultTypeOrmModule } from '../modules/typeorm/default-typeorm.module.
 @Module({
   imports: [
     SentryModule.forRoot(),
-    DefaultConfigModule.forRoot(),
+    DefaultConfigModule,
     DefaultTypeOrmModule.forRootAsync({ migrationsRun: false }),
     ExceptionModule
   ]

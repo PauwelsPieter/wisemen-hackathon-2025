@@ -16,7 +16,7 @@ export class AppModule {
       module: AppModule,
       imports: [
         SentryModule.forRoot(),
-        DefaultConfigModule.forRoot(),
+        DefaultConfigModule,
         DefaultTypeOrmModule.forRootAsync({ migrationsRun: true }),
 
         ExceptionModule,

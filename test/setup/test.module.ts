@@ -20,7 +20,7 @@ export class TestModule {
       module: TestModule,
       imports: [
         SentryModule.forRoot(),
-        DefaultConfigModule.forRoot(),
+        DefaultConfigModule,
         DefaultTypeOrmModule.forRootAsync({ migrationsRun }),
 
         ExceptionModule,
