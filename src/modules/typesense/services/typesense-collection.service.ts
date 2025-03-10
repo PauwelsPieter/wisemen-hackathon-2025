@@ -22,10 +22,7 @@ export class TypesenseCollectionService {
     )
   }
 
-  async import (
-    collection: TypesenseCollectionName,
-    uuids?: string[]
-  ): Promise<void> {
+  async import (collection: TypesenseCollectionName, uuids?: string[]): Promise<void> {
     const collector = this.collectorFactory.create(collection)
 
     const entities = await collector.fetch(uuids)
@@ -34,6 +31,23 @@ export class TypesenseCollectionService {
       collection,
       collector.transform(entities)
     )
+  }
+
+  async importChanged (collection: TypesenseCollectionName, since: Date): Promise<void> {
+    const collector = this.collectorFactory.create(collection)
+    const entities = await collector.fetchChanged(since)
+
+    await this.typesenseDocumentService.addDocuments(
+      collection,
+      collector.transform(entities)
+    )
+  }
+
+  async deleteRemoved (collection: TypesenseCollectionName, since: Date): Promise<void> {
+    const collector = this.collectorFactory.create(collection)
+    const uuids = await collector.fetchRemoved(since)
+
+    await this.typesenseDocumentService.deleteDocuments(collection, uuids)
   }
 
   async delete (collection: TypesenseCollectionName, uuid: string): Promise<void> {

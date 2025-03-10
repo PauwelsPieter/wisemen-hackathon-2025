@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { captureException } from '@sentry/nestjs'
 import type { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 
@@ -14,27 +13,38 @@ export class TypesenseDocumentService {
     documents: T[],
     collectionName?: string
   ): Promise<void> {
-    for (let i = 0; i < documents.length; i += 100) {
-      const documentsChunk = documents.slice(i, i + 100)
-
-      try {
-        if (collectionName == null) {
-          collectionName = (await this.typesenseClient.client.aliases(index).retrieve())
-            .collection_name
-        }
-
-        await this.typesenseClient.client.collections(collectionName).documents().import(documentsChunk, { action: 'upsert' })
-      } catch (e) {
-        captureException(e)
-      }
+    if (documents.length === 0) {
+      return
     }
+
+    if (collectionName == null) {
+      const alias = await this.typesenseClient.client.aliases(index).retrieve()
+
+      collectionName = alias.collection_name
+    }
+
+    await this.typesenseClient.client
+      .collections(collectionName)
+      .documents()
+      .import(documents, { batch_size: 100, action: 'upsert' })
+  }
+
+  async deleteDocuments (index: TypesenseCollectionName, uuids: string[]): Promise<void> {
+    if (uuids.length === 0) {
+      return
+    }
+
+    await this.typesenseClient.client
+      .collections(index)
+      .documents()
+      .delete({
+        filter_by: `uuid: [${uuids.join(',')}]`,
+        batch_size: 100,
+        ignore_not_found: true
+      })
   }
 
   public async deleteDocument (index: TypesenseCollectionName, uuid: string): Promise<void> {
-    try {
-      await this.typesenseClient.client.collections(index).documents(uuid).delete()
-    } catch {
-      // Ignore
-    }
+    await this.typesenseClient.client.collections(index).documents(uuid).delete()
   }
 }

@@ -13,14 +13,16 @@ import type {
   TypesenseCollectionName
 } from '../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
-import { type UserSearchSchema, UserTypesenseCollection } from '../collections/user.collections.js'
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../builder/search-params.builder.js'
+import { UserTypesenseCollection } from '../../../app/users/typesense/user.collections.js'
+import { TypesenseUser } from '../../../app/users/typesense/typesense-user.js'
 
 @Injectable()
 export class TypesenseQueryService {
   constructor (
     private readonly typesenseClient: TypesenseClient
-  ) {}
+  ) {
+  }
 
   static COLLECTIONS = [
     new UserTypesenseCollection()
@@ -32,7 +34,7 @@ export class TypesenseQueryService {
     const { results } = await this.typesenseClient
       .client
       .multiSearch
-      .perform<[UserSearchSchema]>(searchRequests)
+      .perform<[TypesenseUser]>(searchRequests)
 
     return results.reduce((acc, collection, index) => ({
       ...acc,

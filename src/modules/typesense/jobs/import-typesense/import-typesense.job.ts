@@ -1,8 +1,8 @@
-import { BaseJobConfig, PgBossJob } from '@wisemen/pgboss-nestjs-job'
+import { BaseJob, PgBossJob } from '@wisemen/pgboss-nestjs-job'
 import { QueueName } from '../../../pgboss/enums/queue-name.enum.js'
 
-@PgBossJob(QueueName.TYPESENSE)
-export class ImportTypesenseJob extends BaseJobConfig {
+@PgBossJob(QueueName.SYSTEM)
+export class ImportTypesenseJob extends BaseJob {
   uniqueBy (): string {
     return 'import-typesense'
   }

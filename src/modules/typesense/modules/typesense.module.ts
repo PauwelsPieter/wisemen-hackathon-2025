@@ -4,12 +4,11 @@ import { TypesenseInitializationService } from '../services/typesense-initializa
 import { TypesenseDocumentService } from '../services/typesense-document.service.js'
 import { TypesenseCollectionService } from '../services/typesense-collection.service.js'
 import { TypesenseCollectorFactory } from '../services/collectors/typesense-collector.factory.js'
-import { UserTypesenseCollector } from '../services/collectors/user-typesense.collector.js'
-import { UserRepository } from '../../../app/users/repositories/user.repository.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { MigrateCollectionsModule } from '../use-cases/migrate-collections/migrate-collections.module.js'
 import { ImportCollectionsModule } from '../use-cases/import-collections/import-collections.module.js'
 import { ViewCollectionsModule } from '../use-cases/view-collections/view-collections.module.js'
+import { UserTypesenseModule } from '../../../app/users/typesense/user-typesense.module.js'
 
 @Module({
   providers: [
@@ -18,22 +17,20 @@ import { ViewCollectionsModule } from '../use-cases/view-collections/view-collec
     TypesenseDocumentService,
     TypesenseInitializationService,
     TypesenseCollectionService,
-    TypesenseCollectorFactory,
-    UserTypesenseCollector,
-    UserRepository
+    TypesenseCollectorFactory
   ],
   imports: [
     MigrateCollectionsModule,
     ImportCollectionsModule,
-    ViewCollectionsModule
+    ViewCollectionsModule,
+    UserTypesenseModule
   ],
   exports: [
     TypesenseQueryService,
     TypesenseDocumentService,
     TypesenseInitializationService,
     TypesenseCollectionService,
-    TypesenseCollectorFactory,
-    UserTypesenseCollector
+    TypesenseCollectorFactory
   ]
 })
 export class TypesenseModule {}

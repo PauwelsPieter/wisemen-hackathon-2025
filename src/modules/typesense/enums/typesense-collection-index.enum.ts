@@ -1,10 +1,10 @@
 import { PaginatedOffsetResponse } from '@wisemen/pagination'
-import type { UserSearchSchema } from '../collections/user.collections.js'
+import { TypesenseUser } from '../../../app/users/typesense/typesense-user.js'
 
 export enum TypesenseCollectionName {
   USER = 'user'
 }
 
 export interface MultiSearchResult {
-  [TypesenseCollectionName.USER]?: PaginatedOffsetResponse<UserSearchSchema>
+  [TypesenseCollectionName.USER]?: PaginatedOffsetResponse<TypesenseUser>
 }

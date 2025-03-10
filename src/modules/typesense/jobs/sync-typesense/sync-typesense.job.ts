@@ -1,0 +1,21 @@
+import { BaseJob, BaseJobData, PgBossJob } from '@wisemen/pgboss-nestjs-job'
+import dayjs from 'dayjs'
+import { QueueName } from '../../../pgboss/enums/queue-name.enum.js'
+import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
+
+export interface SyncTypesenseJobData extends BaseJobData {
+  collectionName: TypesenseCollectionName
+}
+
+@PgBossJob(QueueName.SYSTEM)
+export class SyncTypesenseJob extends BaseJob<SyncTypesenseJobData> {
+  constructor (collectionName: TypesenseCollectionName) {
+    const startAfter = dayjs().add(2, 'seconds').toDate()
+
+    super({ collectionName }, { startAfter })
+  }
+
+  uniqueBy (data: SyncTypesenseJobData): string {
+    return `sync-typesense-${data.collectionName}`
+  }
+}

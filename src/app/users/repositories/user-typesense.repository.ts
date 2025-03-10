@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common'
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import { TypesenseQueryService } from '../../../modules/typesense/services/typesense-query.service.js'
 import { TypesenseSearchParamsBuilder } from '../../../modules/typesense/builder/search-params.builder.js'
-import { UserSearchSchema, UserTypesenseCollection } from '../../../modules/typesense/collections/user.collections.js'
 import { TypesenseCollectionName } from '../../../modules/typesense/enums/typesense-collection-index.enum.js'
-
 import type { ViewUsersQuery } from '../use-cases/view-users/view-users.query.js'
+import { TypesenseUser } from '../typesense/typesense-user.js'
+import { UserTypesenseCollection } from '../typesense/user.collections.js'
 
 @Injectable()
 export class UserTypesenseRepository {
@@ -15,7 +15,7 @@ export class UserTypesenseRepository {
 
   async findPaginated (
     query: ViewUsersQuery
-  ): Promise<[items: UserSearchSchema[], count: number]> {
+  ): Promise<[items: TypesenseUser[], count: number]> {
     const typesenseSearchParams = this.createTypesenseSearchParams(query)
 
     const users = await this.typesenseService.searchIn(

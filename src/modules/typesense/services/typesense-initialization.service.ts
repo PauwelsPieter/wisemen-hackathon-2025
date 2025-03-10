@@ -5,8 +5,8 @@ import type { CollectionSchema } from 'typesense/lib/Typesense/Collection.js'
 import type { CollectionAliasSchema } from 'typesense/lib/Typesense/Aliases.js'
 import { TypesenseClient } from '../clients/typesense.client.js'
 import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
-import { UserTypesenseCollection } from '../collections/user.collections.js'
 import { exhaustiveCheck } from '../../../utils/helpers/exhaustive-check.helper.js'
+import { UserTypesenseCollection } from '../../../app/users/typesense/user.collections.js'
 import { TypesenseCollectionService } from './typesense-collection.service.js'
 
 @Injectable()

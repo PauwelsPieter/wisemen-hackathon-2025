@@ -2,25 +2,30 @@ import { Injectable } from '@nestjs/common'
 import dayjs from 'dayjs'
 import type { CollectionCreateSchema } from 'typesense/lib/Typesense/Collections.js'
 import { captureException } from '@sentry/nestjs'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { Repository } from 'typeorm'
 import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
 import { TypesenseClient } from '../../clients/typesense.client.js'
 import { TypesenseCollectorFactory } from '../../services/collectors/typesense-collector.factory.js'
-import { UserTypesenseCollection } from '../../collections/user.collections.js'
+import { UserTypesenseCollection } from '../../../../app/users/typesense/user.collections.js'
+import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
+import { TypesenseSync } from '../../jobs/sync-typesense/typesense-sync.entity.js'
 
 @Injectable()
 export class MigrateCollectionsUseCase {
   constructor (
     private readonly typesenseClient: TypesenseClient,
-    private readonly collectorFactory: TypesenseCollectorFactory
+    private readonly collectorFactory: TypesenseCollectorFactory,
+    @InjectRepository(TypesenseSync) private readonly syncRepository: Repository<TypesenseSync>
   ) {}
 
   async execute (fresh: boolean, indexes: TypesenseCollectionName[]): Promise<void> {
-    if (indexes.includes(TypesenseCollectionName.USER)) {
-      await this.migrateCollection(
-        TypesenseCollectionName.USER,
-        new UserTypesenseCollection().getSchema(),
-        fresh
-      )
+    for (const collectionName of Object.values(TypesenseCollectionName)) {
+      if (indexes.includes(collectionName)) {
+        const schema = this.getCollectionSchema(collectionName)
+
+        await this.migrateCollection(collectionName, schema, fresh)
+      }
     }
   }
 
@@ -32,11 +37,13 @@ export class MigrateCollectionsUseCase {
     const exists = await this.aliasExists(aliasName)
 
     if (fresh || !exists) {
+      const syncedAt = new Date()
       const collection = await this.createCollection(createCollection)
 
       await this.linkAlias(aliasName, collection.name)
       await this.import(aliasName)
       await this.deleteUnusedCollections()
+      await this.registerSynced(aliasName, syncedAt)
     }
   }
 
@@ -117,5 +124,19 @@ export class MigrateCollectionsUseCase {
     await this.typesenseClient.client.aliases().upsert(aliasName, {
       collection_name: collectionName
     })
+  }
+
+  private getCollectionSchema (collection: TypesenseCollectionName): CollectionCreateSchema {
+    switch (collection) {
+      case TypesenseCollectionName.USER: return new UserTypesenseCollection().getSchema()
+      default: exhaustiveCheck(collection)
+    }
+  }
+
+  private async registerSynced (collection: TypesenseCollectionName, on: Date): Promise<void> {
+    await this.syncRepository.upsert(
+      { collection, lastSyncedAt: on },
+      { conflictPaths: { collection: true } }
+    )
   }
 }

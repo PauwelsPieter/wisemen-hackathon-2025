@@ -1,6 +1,6 @@
 import { StringCodec } from 'nats'
 import { Injectable } from '@nestjs/common'
-import { BaseJobHandler, PgBossJobHandler } from '@wisemen/pgboss-nestjs-job'
+import { JobHandler, PgBossJobHandler } from '@wisemen/pgboss-nestjs-job'
 import { NatsClient } from '../../nats.client.js'
 
 import type { NatsOutboxEvent } from '../nats-outbox-event.js'
@@ -8,7 +8,7 @@ import { PublishNatsEventJob } from './publish-nats-event.job.js'
 
 @Injectable()
 @PgBossJobHandler(PublishNatsEventJob)
-export class PublishNatsEventJobHandler extends BaseJobHandler<NatsOutboxEvent> {
+export class PublishNatsEventJobHandler extends JobHandler<PublishNatsEventJob> {
   constructor (
     private readonly natsClient: NatsClient
   ) {
