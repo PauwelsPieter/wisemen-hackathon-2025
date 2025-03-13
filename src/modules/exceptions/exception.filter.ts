@@ -1,12 +1,13 @@
 import { type ExceptionFilter, Catch, type ArgumentsHost, HttpStatus, HttpException } from '@nestjs/common'
 import { HttpAdapterHost } from '@nestjs/core'
 import { EntityNotFoundError } from 'typeorm'
-import { captureException } from '@sentry/nestjs'
 import { trace } from '@opentelemetry/api'
 import { JsonApiError } from './types/json-api-error.type.js'
 import { NotFoundError } from './generic/not-found.error.js'
 import { ApiError } from './api-errors/api-error.js'
 import { CompositeApiError } from './api-errors/composite.api-error.js'
+import { ServiceUnavailableApiError, ServiceUnavailableErrorContent } from './api-errors/service-unavailable.api-error.js'
+import { InternalServerErrorContent } from './api-errors/internal-server.api-error.js'
 
 @Catch()
 export class CustomExceptionFilter implements ExceptionFilter {
@@ -61,14 +62,18 @@ export class CustomExceptionFilter implements ExceptionFilter {
     )
   }
 
-  private mapApiErrorToJsonApiError (exception: ApiError): JsonApiError {
+  private mapApiErrorToJsonApiError (error: ApiError): JsonApiError {
+    if (error instanceof ServiceUnavailableApiError) {
+      return this.mapServiceUnavailableError(error)
+    }
+
     return new JsonApiError(
-      Number(exception.status),
+      Number(error.status),
       [{
-        code: exception.code,
-        detail: exception.detail,
-        status: exception.status,
-        meta: exception.meta
+        code: error.code,
+        detail: error.detail,
+        status: error.status,
+        meta: error.meta
       }]
     )
   }
@@ -84,16 +89,17 @@ export class CustomExceptionFilter implements ExceptionFilter {
     )
   }
 
-  private mapUnknownErrorToJsonApiError (exception: Error): JsonApiError {
-    const id = captureException(exception)
+  private mapServiceUnavailableError (error: ApiError): JsonApiError {
+    return new JsonApiError(
+      HttpStatus.SERVICE_UNAVAILABLE,
+      [new ServiceUnavailableErrorContent(error)]
+    )
+  }
 
+  private mapUnknownErrorToJsonApiError (error: Error): JsonApiError {
     return new JsonApiError(
       HttpStatus.INTERNAL_SERVER_ERROR,
-      [{
-        id,
-        code: exception?.name,
-        detail: exception?.message
-      }]
+      [new InternalServerErrorContent(error)]
     )
   }
 }
