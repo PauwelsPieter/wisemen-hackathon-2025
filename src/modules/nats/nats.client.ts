@@ -1,6 +1,8 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
 import { type NatsConnection, connect, type KV, credsAuthenticator, type Authenticator, type Payload, type Subscription, type SubscriptionOptions } from 'nats'
 import { ConfigService } from '@nestjs/config'
+import { captureError } from 'rxjs/internal/util/errorContext'
+import { NatsUnavailableError } from './nats-unavailable.error.js'
 
 interface SubscribeOptions {
   loadBalance: boolean
@@ -8,36 +10,52 @@ interface SubscribeOptions {
 
 @Injectable()
 export class NatsClient implements OnModuleInit, OnModuleDestroy {
-  public client: NatsConnection
-  public cache: KV
+  private _client?: NatsConnection
+  private _cache?: KV
   private readonly queueName: string
 
   constructor (
     private readonly configService: ConfigService
   ) {
-    this.queueName = 'nest-template-' + this.configService.get<string>('NODE_ENV')
+    this.queueName = 'nest-template-' + this.configService.get<string>('NODE_ENV', 'local')
+  }
+
+  public get client (): NatsConnection {
+    if (this._client == null) {
+      throw new NatsUnavailableError('The NATS client is not configured')
+    } else {
+      return this._client
+    }
+  }
+
+  public get cache (): KV {
+    if (this._cache == null) {
+      throw new NatsUnavailableError('The NATS cache is not configured')
+    } else {
+      return this._cache
+    }
   }
 
   async onModuleInit (): Promise<void> {
-    const host = this.configService.get<string>('NATS_HOST')
-    const port = this.configService.get<string>('NATS_PORT')
+    try {
+      const host = this.configService.getOrThrow<string>('NATS_HOST')
+      const port = this.configService.getOrThrow<string>('NATS_PORT')
 
-    if (host == null || port == null) {
-      throw new Error('NATS config variables are not set')
+      this._client = await connect({
+        servers: `nats://${host}:${port}`,
+        authenticator: this.getAuthenticator(),
+        timeout: 3000
+      })
+
+      this._cache = await this.client.jetstream().views.kv('cache')
+    } catch (error) {
+      captureError(error)
     }
-
-    this.client = await connect({
-      servers: `nats://${host}:${port}`,
-      authenticator: this.getAuthenticator(),
-      timeout: 3000
-    })
-
-    this.cache = await this.client.jetstream().views.kv('cache')
   }
 
   async onModuleDestroy (): Promise<void> {
-    if (this.client !== undefined) {
-      await this.client.drain()
+    if (this._client !== undefined) {
+      await this._client.drain()
     }
   }
 

@@ -11,27 +11,41 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Upload } from '@aws-sdk/lib-storage'
+import { captureError } from 'rxjs/internal/util/errorContext'
 import type { MimeType } from '../enums/mime-type.enum.js'
 import type { File } from '../entities/file.entity.js'
+import { S3UnavailableError } from '../errors/s3-unavailable.error.js'
 
 @Injectable()
 export class S3Service {
-  private readonly s3: S3Client
+  private readonly _client?: S3Client
 
   constructor (
     private readonly configService: ConfigService
   ) {
     const region: string = this.configService.get('S3_REGION', 'nl-ams')
 
-    this.s3 = new S3Client({
-      forcePathStyle: true,
-      region,
-      endpoint: this.configService.getOrThrow('S3_ENDPOINT'),
-      credentials: {
-        accessKeyId: this.configService.getOrThrow('S3_ACCESS_KEY'),
-        secretAccessKey: this.configService.getOrThrow('S3_SECRET_KEY')
-      }
-    })
+    try {
+      this._client = new S3Client({
+        forcePathStyle: true,
+        region,
+        endpoint: this.configService.getOrThrow('S3_ENDPOINT'),
+        credentials: {
+          accessKeyId: this.configService.getOrThrow('S3_ACCESS_KEY'),
+          secretAccessKey: this.configService.getOrThrow('S3_SECRET_KEY')
+        }
+      })
+    } catch (error) {
+      captureError(error)
+    }
+  }
+
+  private get client (): S3Client {
+    if (this._client == null) {
+      throw new S3UnavailableError('The S3 client is not configured')
+    } else {
+      return this._client
+    }
   }
 
   public async createTemporaryDownloadUrl (
@@ -49,7 +63,7 @@ export class S3Service {
 
     const expiresIn = expiresInSeconds ?? 1800
 
-    return await getSignedUrl(this.s3, command, { expiresIn })
+    return await getSignedUrl(this.client, command, { expiresIn })
   }
 
   public async createTemporaryUploadUrl (
@@ -69,7 +83,7 @@ export class S3Service {
 
     const expiresIn = expiresInSeconds ?? 180
 
-    return await getSignedUrl(this.s3, command, { expiresIn })
+    return await getSignedUrl(this.client, command, { expiresIn })
   }
 
   public async upload (
@@ -83,7 +97,7 @@ export class S3Service {
       ACL: 'private'
     })
 
-    await this.s3.send(command)
+    await this.client.send(command)
   }
 
   public async uploadStream (
@@ -91,7 +105,7 @@ export class S3Service {
     stream: Readable
   ): Promise<void> {
     const parallelUploads = new Upload({
-      client: this.s3,
+      client: this.client,
       params: {
         Bucket: this.bucketName,
         Key: this.prependEnvKey(key),
@@ -113,7 +127,7 @@ export class S3Service {
       Prefix: this.prependEnvKey(key)
     })
 
-    const result = await this.s3.send(command)
+    const result = await this.client.send(command)
 
     return result.Contents
   }
@@ -126,11 +140,17 @@ export class S3Service {
       Key: this.prependEnvKey(key)
     })
 
-    await this.s3.send(command)
+    await this.client.send(command)
   }
 
   private get bucketName (): string {
-    return this.configService.getOrThrow('S3_BUCKET')
+    try {
+      return this.configService.getOrThrow('S3_BUCKET')
+    } catch (error) {
+      captureError(error)
+
+      throw new S3UnavailableError('The S3 bucket is not configured')
+    }
   }
 
   private prependEnvKey (

@@ -5,7 +5,7 @@ import { SendGridMailClient } from '../clients/sendgrid-mail.client.js'
 import { MockMailService } from '../clients/mock-mail.client.js'
 
 export function mailClientFactory (configService: ConfigService): MailClient {
-  const env = configService.get<string>('NODE_ENV')
+  const env = configService.get<string>('NODE_ENV', 'local')
 
   switch (env) {
     case 'local':

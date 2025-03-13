@@ -15,7 +15,7 @@ import { EnvType } from '../../config/env.enum.js'
         fallbackLanguage: DEFAULT_LANGUAGE,
         loaderOptions: {
           path: join(process.cwd(), '/dist/src/modules/localization/resources/'),
-          watch: configService.getOrThrow('NODE_ENV') === EnvType.LOCAL
+          watch: configService.get('NODE_ENV', 'local') === EnvType.LOCAL
         },
         typesOutputPath: join(process.cwd(), '/src/modules/localization/generated/i18n.generated.ts')
       }),

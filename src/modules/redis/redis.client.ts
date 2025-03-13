@@ -4,10 +4,11 @@ import { ConfigService } from '@nestjs/config'
 import { captureException } from '@sentry/nestjs'
 import type { RedisClientType } from 'redis'
 import { createClient } from 'redis'
+import { RedisUnavailableError } from './redis-unavailable.error.js'
 
 @Injectable()
 export class RedisClient implements OnModuleInit, OnModuleDestroy {
-  public client: RedisClientType
+  private _client?: RedisClientType
   private readonly prefix: string
 
   constructor (
@@ -16,23 +17,35 @@ export class RedisClient implements OnModuleInit, OnModuleDestroy {
     this.prefix = this.configService.getOrThrow('NODE_ENV')
   }
 
-  onModuleInit (): void {
-    this.client = createClient({
-      url: this.configService.getOrThrow('REDIS_URL'),
-      pingInterval: 10_000,
-      disableOfflineQueue: true
-    })
+  public get client (): RedisClientType {
+    if (this._client == null) {
+      throw new RedisUnavailableError('The Redis client is not configured')
+    } else {
+      return this._client
+    }
+  }
 
-    this.client.on('error', (error) => {
+  onModuleInit (): void {
+    try {
+      this._client = createClient({
+        url: this.configService.getOrThrow('REDIS_URL'),
+        pingInterval: 10_000,
+        disableOfflineQueue: true
+      })
+    } catch (error) {
+      captureException(error)
+    }
+
+    this._client?.on('error', (error) => {
       captureException(error)
     })
 
-    void this.client.connect()
+    void this._client?.connect()
   }
 
   async onModuleDestroy (): Promise<void> {
-    if (this.client !== undefined) {
-      await this.client.quit()
+    if (this._client !== undefined) {
+      await this._client.quit()
     }
   }
 
