@@ -19,11 +19,11 @@ export function registerInstruments (): void {
       new HttpInstrumentation({
         requestHook: (span: Span, request: ClientRequest | IncomingMessage): void => {
           if (request instanceof ClientRequest) {
-            const route = request.path.substring(0, request.path.indexOf('?'))
+            const route = request.path.split('?')[0]
 
             span.updateName(`${request.method} ${route}`)
           } else {
-            const route = request.url?.substring(0, request.url.indexOf('?'))
+            const route = request.url?.split('?')[0]
 
             span.updateName(`${request.method} ${route}`)
           }
