@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { OneSignalClient } from './clients/one-signal.client.js'
-import { CreateOneSignalTokenModule } from './use-cases/create-one-signal-token/create-one-singal-token.module.js'
+import { CreateOneSignalTokenModule } from './use-cases/create-one-signal-token/create-one-signal-token.module.js'
 
 @Module({
   imports: [CreateOneSignalTokenModule],
