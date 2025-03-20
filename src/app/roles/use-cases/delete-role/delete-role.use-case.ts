@@ -25,11 +25,8 @@ export class DeleteRoleUseCase {
     }
 
     await transaction(this.dataSource, async () => {
-      await this.userRoleRepository.delete({
-        roleUuid: uuid
-      })
-
-      await this.roleRepository.remove(role)
+      await this.userRoleRepository.delete({ roleUuid: uuid })
+      await this.roleRepository.delete({ uuid })
     })
 
     await this.roleCache.clearRolesPermissions([uuid])
