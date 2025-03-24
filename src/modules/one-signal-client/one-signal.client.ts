@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import * as OneSignal from '@onesignal/node-onesignal'
 import { captureError } from 'rxjs/internal/util/errorContext'
-import { OneSignalUnavailableError } from '../errors/one-signal-unavailable.error.js'
+import { OneSignalUnavailableError } from './errors/one-signal-unavailable.error.js'
 
 @Injectable()
 export class OneSignalClient {
@@ -52,6 +52,7 @@ export class OneSignalClient {
     notification.name = name
     notification.headings = headings
     notification.contents = contents
+    notification.target_channel = 'push'
     notification.include_aliases = {
       external_id: userUuids
     }

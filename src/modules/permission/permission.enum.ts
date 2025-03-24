@@ -16,5 +16,7 @@ export enum Permission {
   CONTACT_UPDATE = 'contact.update',
   CONTACT_DELETE = 'contact.delete',
 
+  SEND_PUSH_NOTIFICATION = 'send_push_notification',
+
   TYPESENSE = 'typesense'
 }

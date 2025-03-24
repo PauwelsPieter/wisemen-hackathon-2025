@@ -24,6 +24,6 @@ export class CreateOneSignalTokenUseCase {
       }
     })
 
-    return new CreateOneSignalTokenResponse(token)
+    return new CreateOneSignalTokenResponse(token, userUuid)
   }
 }
