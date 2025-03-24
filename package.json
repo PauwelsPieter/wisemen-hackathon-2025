@@ -60,7 +60,7 @@
     "@wisemen/pgboss-nestjs-job": "^0.3.2",
     "@wisemen/time": "^0.0.18",
     "@wisemen/validators": "^0.0.3",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "change-case": "^5.4.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
