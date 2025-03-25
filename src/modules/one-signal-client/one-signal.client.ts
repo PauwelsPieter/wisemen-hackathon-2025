@@ -26,7 +26,7 @@ export class OneSignalClient {
     if (!this._client) {
       throw new OneSignalUnavailableError('OneSignal client is not configured')
     } else {
-      return this.client
+      return this._client
     }
   }
 
@@ -44,7 +44,8 @@ export class OneSignalClient {
     name: string,
     headings: OneSignal.LanguageStringMap,
     contents: OneSignal.LanguageStringMap,
-    userUuids: string[]
+    userUuids: string[],
+    data?: Record<string, unknown>
   ): Promise<void> {
     const notification = new OneSignal.Notification()
 
@@ -56,6 +57,7 @@ export class OneSignalClient {
     notification.include_aliases = {
       external_id: userUuids
     }
+    notification.data = data
 
     await this.client.createNotification(notification)
   }
