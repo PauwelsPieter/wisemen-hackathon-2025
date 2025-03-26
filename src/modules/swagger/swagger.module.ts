@@ -30,7 +30,17 @@ export class SwaggerModule {
     const clientId = process.env.ZITADEL_CLIENT_ID
 
     const documentation = buildApiDocumentation()
-    const document = NestSwaggerModule.createDocument(toApp, documentation)
+    const document = NestSwaggerModule.createDocument(toApp, documentation, {
+      operationIdFactory: (controllerKey, _methodKey, version) => {
+        let opId = controllerKey.replace('Controller', '')
+
+        if (version !== undefined) {
+          opId = opId + `${version.toUpperCase()}`
+        }
+
+        return opId
+      }
+    })
     const customOptions = buildExtraOptions(clientId)
 
     NestSwaggerModule.setup(onRoute, toApp, document, customOptions)

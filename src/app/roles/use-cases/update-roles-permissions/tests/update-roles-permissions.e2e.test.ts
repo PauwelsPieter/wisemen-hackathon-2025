@@ -3,10 +3,10 @@ import request from 'supertest'
 import { expect } from 'expect'
 import { HttpStatus } from '@nestjs/common'
 import { Role } from '../../../entities/role.entity.js'
-import { UpdateRolesPermissionsCommandBuilder } from '../update-roles-permissions.command.builder.js'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { RoleEntityBuilder } from '../../../tests/builders/entities/role-entity.builder.js'
+import { UpdateRolesPermissionsCommandBuilder } from './update-roles-permissions.command.builder.js'
 
 describe('Update roles permissions e2e test', () => {
   let setup: EndToEndTestSetup

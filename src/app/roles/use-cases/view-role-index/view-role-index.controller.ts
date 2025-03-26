@@ -2,15 +2,15 @@ import { Controller, Get } from '@nestjs/common'
 import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
-import { ViewRoleIndexResponse } from './view-roles.response.js'
-import { ViewRolesUseCase } from './view-roles.use-case.js'
+import { ViewRoleIndexResponse } from './view-role-index.response.js'
+import { ViewRoleIndexUseCase } from './view-role-index.use-case.js'
 
-@ApiTags('Roles')
+@ApiTags('Role')
 @Controller('roles')
 @ApiOAuth2([])
-export class ViewRolesController {
+export class ViewRoleIndexController {
   constructor (
-    private readonly useCase: ViewRolesUseCase
+    private readonly useCase: ViewRoleIndexUseCase
   ) {}
 
   @Get()

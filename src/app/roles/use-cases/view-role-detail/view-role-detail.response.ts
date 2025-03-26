@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { Role } from '../../entities/role.entity.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 
-export class RoleResponse {
+export class ViewRoleDetailResponse {
   @ApiProperty({ type: String, format: 'uuid' })
   uuid: string
 

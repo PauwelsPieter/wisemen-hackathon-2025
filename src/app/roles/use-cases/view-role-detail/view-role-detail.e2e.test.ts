@@ -15,7 +15,7 @@ import { TestBench } from '../../../../../test/setup/test-bench.js'
 import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
 import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
 
-describe('Roles', () => {
+describe('View role end to end test', () => {
   let setup: EndToEndTestSetup
   let dataSource: DataSource
   let context: TestAuthContext

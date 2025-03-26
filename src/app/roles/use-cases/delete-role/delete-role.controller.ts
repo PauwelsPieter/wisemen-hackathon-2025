@@ -5,7 +5,7 @@ import { Permissions } from '../../../../modules/permission/permission.decorator
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { DeleteRoleUseCase } from './delete-role.use-case.js'
 
-@ApiTags('Roles')
+@ApiTags('Role')
 @Controller('roles/:role')
 @ApiOAuth2([])
 export class DeleteRoleController {

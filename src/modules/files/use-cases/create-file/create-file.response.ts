@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import type { File } from '../entities/file.entity.js'
-import { MimeType } from '../enums/mime-type.enum.js'
+import { MimeType } from '../../enums/mime-type.enum.js'
+import { File } from '../../entities/file.entity.js'
 
 export class CreateFileResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })

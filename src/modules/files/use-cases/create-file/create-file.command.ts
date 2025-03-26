@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator'
-import { MimeType } from '../enums/mime-type.enum.js'
+import { MimeType } from '../../enums/mime-type.enum.js'
 
-export class CreateFileDto {
+export class CreateFileCommand {
   @ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()

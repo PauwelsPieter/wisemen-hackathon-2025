@@ -1,35 +1,15 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { UserModule } from '../../../app/users/user.module.js'
-import { S3Service } from '../services/s3.service.js'
-import { FileRepository } from '../repositories/file.repository.js'
-import { FileController } from '../controllers/file.controller.js'
-import { FileService } from '../services/file.service.js'
-import { File } from '../entities/file.entity.js'
-import { FileLink } from '../entities/file-link.entity.js'
-import { FileLinkRepository } from '../repositories/file-link.repository.js'
-import { FileLinkService } from '../services/file-link.service.js'
-import { FileFlowService } from '../services/file.flows.service.js'
+import { CreateFileModule } from '../use-cases/create-file/create-file.module.js'
+import { ConfirmFileUploadModule } from '../use-cases/confirm-file-upload/confirm-file-upload.module.js'
+import { DeleteFileModule } from '../use-cases/delete-file/delete-file.module.js'
+import { DownloadFileModule } from '../use-cases/download-file/download-file.module.js'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([File, FileLink]),
-    UserModule
-  ],
-  controllers: [FileController],
-  providers: [
-    FileRepository,
-    FileLinkRepository,
-    FileFlowService,
-    FileService,
-    FileLinkService,
-    S3Service
-
-    // RemoveUnusedMediaJobHandler,
-    // RemoveUnusedMediaCron
-  ],
-  exports: [
-    FileFlowService
+    CreateFileModule,
+    ConfirmFileUploadModule,
+    DeleteFileModule,
+    DownloadFileModule
   ]
 })
 export class FileModule {}

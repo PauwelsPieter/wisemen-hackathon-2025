@@ -5,7 +5,7 @@ import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-err
 import { UpdateRolesPermissionsUseCase } from './update-roles-permissions.use-case.js'
 import { UpdateRolesPermissionsCommand } from './update-roles-permissions.command.js'
 
-@ApiTags('Roles')
+@ApiTags('Role')
 @Controller('/roles')
 export class UpdateRolesPermissionsController {
   constructor (

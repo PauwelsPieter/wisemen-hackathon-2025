@@ -5,7 +5,6 @@ import { v4 } from 'uuid'
 import { UpdateRolesPermissionsUseCase } from '../update-roles-permissions.use-case.js'
 import { EventEmitter } from '../../../../../modules/events/event-emitter.js'
 import { UpdateRolesPermissionsRepository } from '../update-roles-permissions.repository.js'
-import { UpdateRolesPermissionsCommandBuilder } from '../update-roles-permissions.command.builder.js'
 import { NotFoundCompositeApiError } from '../../../../../modules/exceptions/api-errors/not-found-composite.api-error.js'
 import { RoleNotFoundError } from '../../../errors/role-not-found.error.js'
 import { RolesPermissionsUpdatedEvent } from '../roles-permissions-updated.event.js'
@@ -16,6 +15,7 @@ import {
   TypesenseCollectionService
 } from '../../../../../modules/typesense/services/typesense-collection.service.js'
 import { RoleEntityBuilder } from '../../../tests/builders/entities/role-entity.builder.js'
+import { UpdateRolesPermissionsCommandBuilder } from './update-roles-permissions.command.builder.js'
 
 describe('Update role permissions use case unit tests', () => {
   before(() => TestBench.setupUnitTest())

@@ -6,7 +6,7 @@ import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { UpdateRoleUseCase } from './update-role.use-case.js'
 import { UpdateRoleCommand } from './update-role.command.js'
 
-@ApiTags('Roles')
+@ApiTags('Role')
 @Controller('roles/:role')
 @ApiOAuth2([])
 export class UpdateRoleController {

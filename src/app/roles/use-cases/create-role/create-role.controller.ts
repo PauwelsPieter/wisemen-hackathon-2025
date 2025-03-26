@@ -5,7 +5,7 @@ import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { CreateRoleCommand } from './create-role.command.js'
 import { CreateRoleUseCase } from './create-role.use-case.js'
 
-@ApiTags('Roles')
+@ApiTags('Role')
 @Controller('roles')
 @ApiOAuth2([])
 export class CreateRoleController {
