@@ -12,8 +12,8 @@ export class ImportCollectionsUseCase {
   ) {}
 
   public async execute (indexes: TypesenseCollectionName[]): Promise<void> {
-    if (indexes.includes(TypesenseCollectionName.USER)) {
-      await this.importCollection(TypesenseCollectionName.USER)
+    for (const collection of indexes) {
+      await this.importCollection(collection)
     }
   }
 

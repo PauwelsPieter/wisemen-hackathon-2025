@@ -20,12 +20,10 @@ export class MigrateCollectionsUseCase {
   ) {}
 
   async execute (fresh: boolean, indexes: TypesenseCollectionName[]): Promise<void> {
-    for (const collectionName of Object.values(TypesenseCollectionName)) {
-      if (indexes.includes(collectionName)) {
-        const schema = this.getCollectionSchema(collectionName)
+    for (const collection of indexes) {
+      const schema = this.getCollectionSchema(collection)
 
-        await this.migrateCollection(collectionName, schema, fresh)
-      }
+      await this.migrateCollection(collection, schema, fresh)
     }
   }
 
