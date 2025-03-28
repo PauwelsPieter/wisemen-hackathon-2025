@@ -29,6 +29,7 @@ yarn-error.log*
 .c9/
 .classpath
 .fleet
+.cursor/
 .idea
 .project
 .settings/
@@ -40,7 +41,6 @@ yarn-error.log*
 *.sln
 *.sublime-workspace
 *.sw?
-
 # Local env files
 .env
 .env.*

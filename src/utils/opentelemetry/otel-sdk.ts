@@ -1,5 +1,5 @@
 import { NodeSDK } from '@opentelemetry/sdk-node'
-import { Resource } from '@opentelemetry/resources'
+import { resourceFromAttributes } from '@opentelemetry/resources'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto'
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
@@ -55,7 +55,7 @@ function configure (serviceName: string): NodeSDK | null {
         maxExportBatchSize: 512
       })
     ],
-    resource: new Resource({
+    resource: resourceFromAttributes({
       'service.name': `${serviceName}`,
       'deployment.environment': `${env}`
     })
