@@ -8,7 +8,7 @@ export interface AuthContent {
 }
 
 @Injectable()
-export class AuthStorage {
+export class AuthContext {
   private readonly authStorage = new AsyncLocalStorage<AuthContent>()
 
   public getAuthOrFail (): AuthContent {
@@ -21,8 +21,16 @@ export class AuthStorage {
     return token
   }
 
-  public getUserUuid (): string {
+  public getAuth (): AuthContent | undefined {
+    return this.authStorage.getStore()
+  }
+
+  public getUserUuidOrFail (): string {
     return this.getAuthOrFail().uuid
+  }
+
+  public getUserUuid (): string | null {
+    return this.getAuth()?.uuid ?? null
   }
 
   public run (content: AuthContent, callback: () => void): void {

@@ -6,4 +6,4 @@ import { ClearRolePermissionsCacheSubscriber } from './clear-role-permissions-ca
   imports: [RoleCacheModule],
   providers: [ClearRolePermissionsCacheSubscriber]
 })
-export class ClearRolePermissionsCacheModule {}
+export class ClearRolePermissionsCacheSubscriberModule {}

@@ -13,7 +13,7 @@ import {
 import { WebSocket } from 'ws'
 import { isNil } from '@nestjs/common/utils/shared.utils.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
-import { AuthContent, AuthStorage } from '../auth/auth.storage.js'
+import { AuthContent, AuthContext } from '../auth/auth.context.js'
 
 declare module 'http' {
   interface IncomingMessage {
@@ -31,13 +31,13 @@ enum READY_STATE {
 @Injectable()
 export class AuthenticatedWsAdapter extends WsAdapter {
   private readonly authMiddleware: AuthMiddleware
-  private readonly authStorage: AuthStorage
+  private readonly authContext: AuthContext
 
   constructor (appOrHttpServer: INestApplicationContext) {
     super(appOrHttpServer)
 
     this.authMiddleware = appOrHttpServer.get(AuthMiddleware)
-    this.authStorage = appOrHttpServer.get(AuthStorage)
+    this.authContext = appOrHttpServer.get(AuthContext)
   }
 
   public override create (
@@ -79,7 +79,7 @@ export class AuthenticatedWsAdapter extends WsAdapter {
       } else {
         this.verifyAuthorization(authToken)
           .then((auth) => {
-            this.authStorage.run(auth, () => {
+            this.authContext.run(auth, () => {
               cb(true)
             })
           })

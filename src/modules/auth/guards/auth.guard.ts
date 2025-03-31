@@ -5,13 +5,13 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { IS_PUBLIC_KEY } from '../../permission/permission.decorator.js'
-import { AuthStorage } from '../auth.storage.js'
+import { AuthContext } from '../auth.context.js'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor (
     private readonly reflector: Reflector,
-    private readonly authStorage: AuthStorage
+    private readonly authContext: AuthContext
   ) {}
 
   canActivate (context: ExecutionContext): boolean {
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
       return true
     }
 
-    this.authStorage.getAuthOrFail()
+    this.authContext.getAuthOrFail()
 
     return true
   }

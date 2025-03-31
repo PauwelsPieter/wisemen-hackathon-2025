@@ -5,7 +5,7 @@ import { UpdateRoleModule } from './use-cases/update-role/update-role.module.js'
 import { ViewRoleDetailModule } from './use-cases/view-role-detail/view-role-detail.module.js'
 import { ViewRoleIndexModule } from './use-cases/view-role-index/view-role-index.module.js'
 import { UpdateRolesPermissionsModule } from './use-cases/update-roles-permissions/update-roles-permissions.module.js'
-import { ClearRolePermissionsCacheModule } from './use-cases/clear-role-permissions-cache/clear-role-permissions-cache.module.js'
+import { ClearRolePermissionsCacheSubscriberModule } from './use-cases/clear-role-permissions-cache/clear-role-permissions-cache-subscriber.module.js'
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ClearRolePermissionsCacheModule } from './use-cases/clear-role-permissi
     ViewRoleDetailModule,
     ViewRoleIndexModule,
     UpdateRolesPermissionsModule,
-    ClearRolePermissionsCacheModule
+    ClearRolePermissionsCacheSubscriberModule
   ]
 })
 export class RoleModule {}

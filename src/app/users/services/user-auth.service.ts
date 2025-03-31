@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { User } from '../entities/user.entity.js'
 import { RedisClient } from '../../../modules/redis/redis.client.js'
 import { TokenContent } from '../../../modules/auth/middleware/auth.middleware.js'
-import { AuthContent } from '../../../modules/auth/auth.storage.js'
+import { AuthContent } from '../../../modules/auth/auth.context.js'
 import {
   GetOrCreateUserCommandBuilder
 } from '../use-cases/get-or-create-user/get-or-create-user.command.builder.js'

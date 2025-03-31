@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { EventModule } from '../../../../modules/events/event.module.js'
+import { EventEmitterModule } from '../../../../modules/events/eventEmitterModule.js'
 import { Role } from '../../entities/role.entity.js'
 import { TypesenseModule } from '../../../../modules/typesense/modules/typesense.module.js'
 import { UpdateRolesPermissionsController } from './update-roles-permissions.controller.js'
@@ -10,7 +10,7 @@ import { UpdateRolesPermissionsRepository } from './update-roles-permissions.rep
 @Module({
   imports: [
     TypeOrmModule.forFeature([Role]),
-    EventModule,
+    EventEmitterModule,
     TypesenseModule
   ],
   controllers: [UpdateRolesPermissionsController],

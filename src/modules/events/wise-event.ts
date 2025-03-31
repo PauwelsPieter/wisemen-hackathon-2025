@@ -1,5 +1,16 @@
 import { v4 as generateUuid } from 'uuid'
 import { API_EVENT_SOURCE } from './constants.js'
+import { EventType } from './event-type.js'
+import { EventSubjectType } from './event-subject-type.enum.js'
+
+export type WiseEventOptions<Content extends object = object> = {
+  topic: string
+  content: Content
+  version: number
+  type: EventType
+  subjectType?: EventSubjectType
+  subjectId?: string
+}
 
 export class WiseEvent<Content extends object = object> {
   public readonly id: string
@@ -8,14 +19,11 @@ export class WiseEvent<Content extends object = object> {
   public readonly content: Content
   public readonly version: number
   public readonly source: string
-  public readonly type: string
+  public readonly type: EventType
+  public readonly subjectType?: EventSubjectType
+  public readonly subjectId?: string
 
-  constructor (options: {
-    topic: string
-    content: Content
-    version: number
-    type: string
-  }) {
+  constructor (options: WiseEventOptions<Content>) {
     this.id = generateUuid()
     this.createdAt = new Date()
     this.topic = options.topic
@@ -23,5 +31,7 @@ export class WiseEvent<Content extends object = object> {
     this.version = options.version
     this.source = API_EVENT_SOURCE
     this.type = options.type
+    this.subjectId = options.subjectId
+    this.subjectType = options.subjectType
   }
 }

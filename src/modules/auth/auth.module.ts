@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { PermissionModule } from '../permission/permission.module.js'
 import { PermissionsGuard } from '../permission/permission.guard.js'
 import { AuthGuard } from './guards/auth.guard.js'
-import { AuthStorage } from './auth.storage.js'
+import { AuthContext } from './auth.context.js'
 
 @Global()
 @Module({
@@ -11,7 +11,7 @@ import { AuthStorage } from './auth.storage.js'
     PermissionModule
   ],
   providers: [
-    AuthStorage,
+    AuthContext,
     {
       provide: APP_GUARD,
       useClass: AuthGuard
@@ -22,7 +22,7 @@ import { AuthStorage } from './auth.storage.js'
     }
   ],
   exports: [
-    AuthStorage
+    AuthContext
   ]
 })
 

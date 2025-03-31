@@ -5,9 +5,9 @@ import { v4 } from 'uuid'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
-import { AuthStorage } from '../../../../auth/auth.storage.js'
 import { DownloadFileUseCase } from '../download-file.use-case.js'
 import { S3Service } from '../../../services/s3.service.js'
+import { AuthContext } from '../../../../auth/auth.context.js'
 
 describe('Download file use case unit tests', () => {
   let useCase: DownloadFileUseCase
@@ -22,7 +22,7 @@ describe('Download file use case unit tests', () => {
 
     userUuid = v4()
 
-    const authStorage = createStubInstance(AuthStorage, {
+    const authStorage = createStubInstance(AuthContext, {
       getUserUuid: userUuid
     })
 

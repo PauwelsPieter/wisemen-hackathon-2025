@@ -1,6 +1,6 @@
 import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthStorage } from '../auth/auth.storage.js'
+import { AuthContext } from '../auth/auth.context.js'
 import type { Permission } from './permission.enum.js'
 import { PERMISSIONS_KEY } from './permission.decorator.js'
 import { PermissionService } from './permission.service.js'
@@ -10,7 +10,7 @@ export class PermissionsGuard implements CanActivate {
   constructor (
     private readonly reflector: Reflector,
     private readonly permissionService: PermissionService,
-    private readonly authStorage: AuthStorage
+    private readonly authContext: AuthContext
   ) {}
 
   async canActivate (context: ExecutionContext): Promise<boolean> {
@@ -23,7 +23,7 @@ export class PermissionsGuard implements CanActivate {
       return true
     }
 
-    const userUuid = this.authStorage.getUserUuid()
+    const userUuid = this.authContext.getUserUuidOrFail()
 
     return await this.permissionService.hasPermissions(userUuid, requiredPermissions)
   }

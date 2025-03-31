@@ -1,7 +1,7 @@
 import { Controller, ForbiddenException, Get } from '@nestjs/common'
 import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
-import { AuthStorage } from '../../../../modules/auth/auth.storage.js'
+import { AuthContext } from '../../../../modules/auth/auth.context.js'
 import { ViewPreferencesResponse } from './view-preferences.response.js'
 import { ViewPreferencesIndexUseCase } from './view-preferences.use-case.js'
 
@@ -10,7 +10,7 @@ import { ViewPreferencesIndexUseCase } from './view-preferences.use-case.js'
 @Controller('users/:userUuid/preferences')
 export class ViewPreferencesController {
   constructor (
-    private readonly authStorage: AuthStorage,
+    private readonly authContext: AuthContext,
     private readonly viewPreferencesIndexUseCase: ViewPreferencesIndexUseCase
   ) {}
 
@@ -19,7 +19,7 @@ export class ViewPreferencesController {
   public async viewPreferencesIndex (
     @UuidParam('userUuid') userUuid: string
   ): Promise<ViewPreferencesResponse> {
-    if (userUuid !== this.authStorage.getUserUuid()) {
+    if (userUuid !== this.authContext.getUserUuid()) {
       throw new ForbiddenException()
     }
 

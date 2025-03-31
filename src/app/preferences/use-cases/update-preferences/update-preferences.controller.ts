@@ -1,7 +1,7 @@
 import { Body, Controller, ForbiddenException, Patch } from '@nestjs/common'
 import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
-import { AuthStorage } from '../../../../modules/auth/auth.storage.js'
+import { AuthContext } from '../../../../modules/auth/auth.context.js'
 import { UpdatePreferencesCommand } from './update-preferences.command.js'
 import { UpdatePreferencesUseCase } from './update-preferences.use-case.js'
 
@@ -10,7 +10,7 @@ import { UpdatePreferencesUseCase } from './update-preferences.use-case.js'
 @Controller('users/:userUuid/preferences')
 export class UpdatePreferencesController {
   constructor (
-    private readonly authStorage: AuthStorage,
+    private readonly authContext: AuthContext,
     private readonly updatePreferencesUseCase: UpdatePreferencesUseCase
   ) { }
 
@@ -20,7 +20,7 @@ export class UpdatePreferencesController {
     @UuidParam('userUuid') userUuid: string,
     @Body() updatePreferencesCommand: UpdatePreferencesCommand
   ): Promise<void> {
-    if (userUuid !== this.authStorage.getUserUuid()) {
+    if (userUuid !== this.authContext.getUserUuid()) {
       throw new ForbiddenException()
     }
 

@@ -5,8 +5,8 @@ import { v4 } from 'uuid'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
-import { AuthStorage } from '../../../../auth/auth.storage.js'
 import { DeleteFileUseCase } from '../delete-file.use-case.js'
+import { AuthContext } from '../../../../auth/auth.context.js'
 
 describe('Delete file use case unit tests', () => {
   let useCase: DeleteFileUseCase
@@ -20,9 +20,7 @@ describe('Delete file use case unit tests', () => {
 
     userUuid = v4()
 
-    const authStorage = createStubInstance(AuthStorage, {
-      getUserUuid: userUuid
-    })
+    const authStorage = createStubInstance(AuthContext, { getUserUuid: userUuid })
 
     fileRepository = createStubInstance<Repository<File>>(
       Repository<File>

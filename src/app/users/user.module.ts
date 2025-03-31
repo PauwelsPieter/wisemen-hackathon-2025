@@ -9,8 +9,8 @@ import { ViewUserModule } from './use-cases/view-user/view-user.module.js'
 import { ViewUsersModule } from './use-cases/view-users/view-users.module.js'
 import { GetOrCreateUserModule } from './use-cases/get-or-create-user/get-or-create-user.module.js'
 import {
-  AssignDefaultRoleToUserModule
-} from './use-cases/assign-default-role-to-user/assign-default-role-to-user.module.js'
+  AssignDefaultRoleToUserSubscriberModule
+} from './use-cases/assign-default-role-to-user/assign-default-role-to-user-subscriber.module.js'
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import {
     ViewUserModule,
     ViewUsersModule,
     GetOrCreateUserModule,
-    AssignDefaultRoleToUserModule
+    AssignDefaultRoleToUserSubscriberModule
   ],
   providers: [UserAuthService],
   exports: [UserAuthService]

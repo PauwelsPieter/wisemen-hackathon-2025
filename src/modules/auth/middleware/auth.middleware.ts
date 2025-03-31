@@ -4,7 +4,7 @@ import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { ConfigService } from '@nestjs/config'
 import { UnauthorizedError } from '../../exceptions/generic/unauthorized.error.js'
 import { UserAuthService } from '../../../app/users/services/user-auth.service.js'
-import { AuthContent, AuthStorage } from '../auth.storage.js'
+import { AuthContent, AuthContext } from '../auth.context.js'
 
 export interface TokenContent {
   sub: string
@@ -17,7 +17,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   constructor (
     private readonly configService: ConfigService,
-    private readonly authStorage: AuthStorage,
+    private readonly authContext: AuthContext,
     private readonly userAuthService: UserAuthService
   ) {
     this.jwks = createRemoteJWKSet(
@@ -41,7 +41,7 @@ export class AuthMiddleware implements NestMiddleware {
     try {
       const content = await this.verify(token)
 
-      this.authStorage.run(content, next)
+      this.authContext.run(content, next)
     } catch (_error) {
       next()
     }

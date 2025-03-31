@@ -10,7 +10,7 @@ import { SUBSCRIBE_ALL_KEY, SubscribeAllMethodNames } from './subscribe-all.deco
   providers: [EventEmitter],
   exports: [EventEmitter]
 })
-export class EventModule implements OnApplicationBootstrap {
+export class EventEmitterModule implements OnApplicationBootstrap {
   constructor (private readonly modulesContainer: ModulesContainer) {}
 
   onApplicationBootstrap () {

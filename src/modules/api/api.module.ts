@@ -11,6 +11,7 @@ import { LocalizationModule } from '../localization/modules/localization.module.
 import { ContactModule } from '../../app/contact/contact.module.js'
 import { PreferencesModule } from '../../app/preferences/preferences.module.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
+import { EventLogModule } from '../event-log/event-log.module.js'
 import { OneSignalModule } from '../one-signal/one-signal.module.js'
 
 @Module({
@@ -26,7 +27,8 @@ import { OneSignalModule } from '../one-signal/one-signal.module.js'
     LocalizationModule,
     ContactModule,
     PreferencesModule,
-    OneSignalModule
+    OneSignalModule,
+    EventLogModule
   ]
 })
 export class ApiModule {

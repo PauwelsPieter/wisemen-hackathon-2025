@@ -6,6 +6,8 @@ export enum Permission {
   CONTACT_UPDATE = 'contact.update',
   CONTACT_DELETE = 'contact.delete',
 
+  EVENT_LOG_READ = 'event-log.read',
+
   FILE_READ = 'file.read',
   FILE_CREATE = 'file.create',
   FILE_DELETE = 'file.delete',

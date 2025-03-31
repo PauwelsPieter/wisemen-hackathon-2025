@@ -3,7 +3,7 @@ import { SentryModule } from '@sentry/nestjs/setup'
 import { AuthModule } from '../../src/modules/auth/auth.module.js'
 import { AuthMiddleware } from '../../src/modules/auth/middleware/auth.middleware.js'
 import { DefaultConfigModule } from '../../src/modules/config/default-config.module.js'
-import { EventModule } from '../../src/modules/events/event.module.js'
+import { EventEmitterModule } from '../../src/modules/events/eventEmitterModule.js'
 import { ExceptionModule } from '../../src/modules/exceptions/exception.module.js'
 import { NatsModule } from '../../src/modules/nats/nats.module.js'
 import { RoleModule } from '../../src/app/roles/role.module.js'
@@ -26,7 +26,7 @@ export class TestModule {
         ExceptionModule,
 
         NatsModule,
-        EventModule,
+        EventEmitterModule,
 
         AuthModule,
         UserModule,

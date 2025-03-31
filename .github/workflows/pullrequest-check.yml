@@ -12,6 +12,7 @@ jobs:
     uses: wisemen-digital/devops-github-actions/.github/workflows/node-build-and-test.yml@main
     if: github.event.pull_request.draft == false
     with:
+      test-postgres-image: timescale/timescaledb-ha:pg16
       test-typesense-enabled: true
       test-redis-enabled: true
       test-nats-enabled: true
