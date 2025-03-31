@@ -16,7 +16,7 @@ class UserIndexView {
   lastName: string | null
 
   constructor (user: TypesenseUser) {
-    this.uuid = user.uuid
+    this.uuid = user.id
     this.email = user.email
     this.firstName = user.firstName
     this.lastName = user.lastName

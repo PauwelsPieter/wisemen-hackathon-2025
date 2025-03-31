@@ -13,6 +13,7 @@ import { PreferencesModule } from '../../app/preferences/preferences.module.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
 import { EventLogModule } from '../event-log/event-log.module.js'
 import { OneSignalModule } from '../one-signal/one-signal.module.js'
+import { GlobalSearchModule } from '../global-search/global-search.module.js'
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { OneSignalModule } from '../one-signal/one-signal.module.js'
     ContactModule,
     PreferencesModule,
     OneSignalModule,
-    EventLogModule
+    EventLogModule,
+    GlobalSearchModule
   ]
 })
 export class ApiModule {

@@ -53,4 +53,10 @@ export class TypesenseCollectionService {
   async delete (collection: TypesenseCollectionName, uuid: string): Promise<void> {
     await this.typesenseDocumentService.deleteDocument(collection, uuid)
   }
+
+  async truncate (collections: TypesenseCollectionName[]): Promise<void> {
+    for (const collection of collections) {
+      await this.typesenseDocumentService.truncateCollection(collection)
+    }
+  }
 }

@@ -18,7 +18,7 @@ export class UserTypesenseRepository {
   ): Promise<[items: TypesenseUser[], count: number]> {
     const typesenseSearchParams = this.createTypesenseSearchParams(query)
 
-    const users = await this.typesenseService.searchIn(
+    const users = await this.typesenseService.search(
       TypesenseCollectionName.USER,
       typesenseSearchParams
     )
@@ -36,7 +36,6 @@ export class UserTypesenseRepository {
         .withOffset(query.pagination?.offset)
         .withLimit(query.pagination?.limit)
         .addSearchOn(['firstName', 'lastName'])
-        .addFilterOn('permissions', query.filter?.permissions)
 
     return searchParamBuilder.build()
   }

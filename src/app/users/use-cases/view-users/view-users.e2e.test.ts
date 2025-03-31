@@ -1,7 +1,6 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { Permission } from '../../../../modules/permission/permission.enum.js'
 import type { TestUser } from '../../tests/setup-user.type.js'
 import {
   TypesenseCollectionService
@@ -11,12 +10,12 @@ import {
 } from '../../../../modules/typesense/enums/typesense-collection-index.enum.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
+import { TypesenseInitializationService } from '../../../../modules/typesense/services/typesense-initialization.service.js'
 
 describe('View users e2e test', () => {
   let setup: EndToEndTestSetup
   let adminUser: TestUser
   let defaultUser: TestUser
-  let userWithUserDeletePermission: TestUser
 
   before(async () => {
     setup = await TestBench.setupEndToEndTest()
@@ -24,13 +23,19 @@ describe('View users e2e test', () => {
     defaultUser = await setup.authContext.getDefaultUser()
     adminUser = await setup.authContext.getAdminUser()
 
-    userWithUserDeletePermission = await setup.authContext.getUser([Permission.USER_DELETE])
-
     const typesenseCollectionService = setup.testModule.get(TypesenseCollectionService)
+
+    const typesenseMigrator = setup.testModule.get(
+      TypesenseInitializationService, { strict: false })
+
+    await typesenseMigrator.migrate(true, [TypesenseCollectionName.USER])
+
+    // wait for fix in v29 of typesense to use truncate instead of remigrate
+    // await typesenseCollectionService.truncate([TypesenseCollectionName.USER])
 
     await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
-      [adminUser.user, defaultUser.user, userWithUserDeletePermission.user]
+      [adminUser.user, defaultUser.user]
     )
   })
 
@@ -48,26 +53,13 @@ describe('View users e2e test', () => {
       .get('/users')
       .set('Authorization', `Bearer ${adminUser.token}`)
       .query({
-        'pagination': {
+        pagination: {
           limit: 10,
           offset: 0
-        },
-        'filter[permissions][0]': Permission.USER_DELETE
+        }
       })
 
     expect(response).toHaveStatus(200)
-    expect(response.body).toStrictEqual(expect.objectContaining({
-      items: [expect.objectContaining({
-        email: userWithUserDeletePermission.user.email,
-        firstName: userWithUserDeletePermission.user.firstName,
-        lastName: userWithUserDeletePermission.user.lastName,
-        uuid: userWithUserDeletePermission.user.uuid
-      })],
-      meta: {
-        total: 1,
-        offset: 0,
-        limit: 10
-      }
-    }))
+    expect(response.body.items).toHaveLength(2)
   })
 })

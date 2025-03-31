@@ -6,12 +6,7 @@ export class UserEntityBuilder {
   private user: User
 
   constructor () {
-    this.reset()
-  }
-
-  reset (): this {
     this.user = new User()
-
     this.user.uuid = randomUUID()
     this.user.userId = v4()
     this.user.createdAt = new Date()
@@ -19,8 +14,6 @@ export class UserEntityBuilder {
     this.user.email = 'test@mail.com'
     this.user.firstName = 'John'
     this.user.lastName = 'Doe'
-
-    return this
   }
 
   withUuid (uuid: string): this {
@@ -54,10 +47,6 @@ export class UserEntityBuilder {
   }
 
   build (): User {
-    const result = this.user
-
-    this.reset()
-
-    return result
+    return this.user
   }
 }

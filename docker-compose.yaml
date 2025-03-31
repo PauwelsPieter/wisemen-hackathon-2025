@@ -19,6 +19,14 @@ services:
     environment:
       TYPESENSE_DATA_DIR: /data
       TYPESENSE_API_KEY: api_key
+  
+  typesense_dashboard:
+    image: ghcr.io/bfritscher/typesense-dashboard:latest
+    restart: on-failure
+    volumes:
+      - ./.typesense-dashboard/config.json:/srv/config.json
+    ports:
+      - '8188:80'
 
   nats:
     image: nats:latest

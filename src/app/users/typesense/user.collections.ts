@@ -6,12 +6,11 @@ export class UserTypesenseCollection extends TypesenseCollection {
 
   readonly searchableFields = [
     { name: 'firstName', type: 'string', sort: true, infix: true },
-    { name: 'lastName', type: 'string', sort: true, infix: true }
+    { name: 'lastName', type: 'string', sort: true, infix: true },
+    { name: 'email', type: 'string', sort: true, infix: true }
   ] as const
 
-  readonly filterableFields = [
-    { name: 'permissions', type: 'string[]', optional: true }
-  ] as const
+  readonly filterableFields = [] as const
 
   readonly referenceFields = [] as const
 }

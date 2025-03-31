@@ -47,4 +47,11 @@ export class TypesenseDocumentService {
   public async deleteDocument (index: TypesenseCollectionName, uuid: string): Promise<void> {
     await this.typesenseClient.client.collections(index).documents(uuid).delete()
   }
+
+  public async truncateCollection (index: TypesenseCollectionName): Promise<void> {
+    await this.typesenseClient.client
+      .collections(index)
+      .documents()
+      .delete({ truncate: true })
+  }
 }
