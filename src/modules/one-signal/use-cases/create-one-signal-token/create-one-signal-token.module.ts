@@ -11,10 +11,10 @@ import { CreateOneSignalTokenUseCase } from './create-one-signal-token.use-case.
       useFactory: (configService: ConfigService) => {
         return {
           privateKey: {
-            key: Buffer.from(configService.getOrThrow<string>('ONESIGNAL_PRIVATE_KEY'), 'base64'),
-            passphrase: configService.getOrThrow('ONESIGNAL_PASSPHRASE')
+            key: Buffer.from(configService.get<string>('ONESIGNAL_PRIVATE_KEY', ''), 'base64'),
+            passphrase: configService.get<string>('ONESIGNAL_PASSPHRASE', '')
           },
-          publicKey: Buffer.from(configService.getOrThrow<string>('ONESIGNAL_PUBLIC_KEY'), 'base64'),
+          publicKey: Buffer.from(configService.get<string>('ONESIGNAL_PUBLIC_KEY', ''), 'base64'),
           signOptions: {
             algorithm: 'ES256'
           }
