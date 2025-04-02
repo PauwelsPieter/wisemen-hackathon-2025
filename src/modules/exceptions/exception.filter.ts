@@ -13,7 +13,8 @@ import { InternalServerErrorContent } from './api-errors/internal-server.api-err
 export class CustomExceptionFilter implements ExceptionFilter {
   constructor (
     private readonly httpAdapterHost: HttpAdapterHost
-  ) {}
+  ) {
+  }
 
   public catch (exception: Error, host: ArgumentsHost): void {
     const { status, errors } = this.handleException(exception)
@@ -24,7 +25,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     httpAdapter.reply(
       ctx.getResponse(),
-      { errors, traceId: trace.getActiveSpan()?.spanContext()?.traceId },
+      { errors, traceId: trace.getActiveSpan()?.spanContext()?.traceId ?? null },
       status
     )
   }
@@ -69,23 +70,27 @@ export class CustomExceptionFilter implements ExceptionFilter {
 
     return new JsonApiError(
       Number(error.status),
-      [{
-        code: error.code,
-        detail: error.detail,
-        status: error.status,
-        meta: error.meta
-      }]
+      [
+        {
+          code: error.code,
+          detail: error.detail,
+          status: error.status,
+          meta: error.meta
+        }
+      ]
     )
   }
 
   private mapHttpExceptionToJsonApiError (exception: HttpException): JsonApiError {
     return new JsonApiError(
       exception.getStatus(),
-      [{
-        status: exception.getStatus().toString(),
-        code: exception.name,
-        detail: exception.message
-      }]
+      [
+        {
+          status: exception.getStatus().toString(),
+          code: exception.name,
+          detail: exception.message
+        }
+      ]
     )
   }
 

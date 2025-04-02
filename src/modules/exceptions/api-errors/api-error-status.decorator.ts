@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger'
 export function ApiErrorStatus (status: HttpStatus): PropertyDecorator {
   return ApiProperty({
     required: true,
-    type: String,
+    enum: [String(status)],
     example: status.toString()
   })
 }

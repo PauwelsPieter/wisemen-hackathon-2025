@@ -14,6 +14,7 @@ export abstract class ServiceUnavailableApiError extends ApiError {
     this.status = '503'
   }
 }
+
 export class ServiceUnavailableErrorContent extends JsonApiErrorContent {
   code = 'service_unavailable'
   message = 'The server was unable to complete your request. Please try again later.'

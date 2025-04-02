@@ -45,6 +45,7 @@ function createApiResponseDecorator (
     schema: {
       type: 'object',
       properties: {
+        traceId: { type: 'string', nullable: true },
         errors: {
           type: 'array',
           items: { anyOf: errorDocs }

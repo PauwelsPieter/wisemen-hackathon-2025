@@ -2,6 +2,7 @@ import { INestApplication, Logger, Module } from '@nestjs/common'
 import { SwaggerModule as NestSwaggerModule } from '@nestjs/swagger'
 import { captureException } from '@sentry/nestjs'
 import { WebsocketModule } from '../websocket/websocket.module.js'
+import { InternalServerApiError } from '../exceptions/api-errors/internal-server.api-error.js'
 import { buildWebSocketDocumentation } from './helpers/build-websocket-documentation.js'
 import { SwaggerController } from './swagger.controller.js'
 import { buildApiDocumentation } from './helpers/build-api-documentation.js'
@@ -39,7 +40,8 @@ export class SwaggerModule {
         }
 
         return opId
-      }
+      },
+      extraModels: [InternalServerApiError]
     })
     const customOptions = buildExtraOptions(clientId)
 
