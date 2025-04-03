@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import * as OneSignal from '@onesignal/node-onesignal'
-import { captureError } from 'rxjs/internal/util/errorContext'
+import { captureException } from '@sentry/nestjs'
 import { OneSignalUnavailableError } from './errors/one-signal-unavailable.error.js'
 
 @Injectable()
@@ -18,7 +18,7 @@ export class OneSignalClient {
 
       this._client = new OneSignal.DefaultApi(configuration)
     } catch (error) {
-      captureError(error)
+      captureException(error)
     }
   }
 
@@ -34,7 +34,7 @@ export class OneSignalClient {
     try {
       return this.configService.getOrThrow<string>('ONESIGNAL_APP_ID')
     } catch (error) {
-      captureError(error)
+      captureException(error)
 
       throw new OneSignalUnavailableError('OneSignal app id is not configured')
     }

@@ -11,7 +11,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Upload } from '@aws-sdk/lib-storage'
-import { captureError } from 'rxjs/internal/util/errorContext'
+import { captureException } from '@sentry/nestjs'
 import type { MimeType } from '../enums/mime-type.enum.js'
 import type { File } from '../entities/file.entity.js'
 import { S3UnavailableError } from '../errors/s3-unavailable.error.js'
@@ -36,7 +36,7 @@ export class S3Service {
         }
       })
     } catch (error) {
-      captureError(error)
+      captureException(error)
     }
   }
 
@@ -147,7 +147,7 @@ export class S3Service {
     try {
       return this.configService.getOrThrow('S3_BUCKET')
     } catch (error) {
-      captureError(error)
+      captureException(error)
 
       throw new S3UnavailableError('The S3 bucket is not configured')
     }

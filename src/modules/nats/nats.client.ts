@@ -1,7 +1,7 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
 import { type NatsConnection, connect, type KV, credsAuthenticator, type Authenticator, type Payload, type Subscription, type SubscriptionOptions } from 'nats'
 import { ConfigService } from '@nestjs/config'
-import { captureError } from 'rxjs/internal/util/errorContext'
+import { captureException } from '@sentry/nestjs'
 import { NatsUnavailableError } from './nats-unavailable.error.js'
 
 interface SubscribeOptions {
@@ -49,7 +49,7 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
 
       this._cache = await this.client.jetstream().views.kv('cache')
     } catch (error) {
-      captureError(error)
+      captureException(error)
     }
   }
 

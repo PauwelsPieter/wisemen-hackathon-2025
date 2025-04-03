@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import axios, { type AxiosInstance } from 'axios'
 import { ConfigService } from '@nestjs/config'
-import { captureError } from 'rxjs/internal/util/errorContext'
+import { captureException } from '@sentry/nestjs'
 import { MailUnavailableError } from '../errors/mail-client-unavailable.error.js'
 import type { SendMailOptions, MailClient } from './mail.client.js'
 
@@ -27,7 +27,7 @@ export class ScalewayMailClient implements MailClient {
         }
       })
     } catch (error) {
-      captureError(error)
+      captureException(error)
     }
   }
 

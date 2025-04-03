@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import axios, { AxiosInstance } from 'axios'
 import { ConfigService } from '@nestjs/config'
-import { captureError } from 'rxjs/internal/util/errorContext'
+import { captureException } from '@sentry/nestjs'
 import { MailUnavailableError } from '../errors/mail-client-unavailable.error.js'
 import { MailClient, SendMailOptions } from './mail.client.js'
 
@@ -22,7 +22,7 @@ export class SendGridMailClient implements MailClient {
 
       this.from = this.configService.getOrThrow<string>('MAIL_FROM_NAME')
     } catch (error) {
-      captureError(error)
+      captureException(error)
     }
   }
 
