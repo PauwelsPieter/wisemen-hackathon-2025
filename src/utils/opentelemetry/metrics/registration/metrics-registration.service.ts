@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { DataSource } from 'typeorm'
 import { Attributes, metrics, ObservableResult } from '@opentelemetry/api'
-import { InjectRepository } from '@wisemen/nestjs-typeorm'
-import { Job } from '@wisemen/pgboss-nestjs-job'
 
 @Injectable()
 export class MetricsRegistrationService {
   constructor (
-    @InjectRepository(Job)
-    private readonly jobRepository: Repository<Job<unknown>>
+    private readonly dataSource: DataSource
   ) {
     this.registerPgBossMetrics()
   }
@@ -26,21 +23,22 @@ export class MetricsRegistrationService {
 
   async updatePgBossMetrics (observer: ObservableResult<Attributes>): Promise<void> {
     try {
-      const result: { name: string, state: string, count: string }[]
-        = await this.jobRepository
-          .createQueryBuilder('job')
-          .select('job.state', 'state')
-          .addSelect('job.name', 'name')
-          .addSelect('COUNT(job.id)', 'count')
-          .groupBy('job.name')
-          .addGroupBy('job.state')
-          .getRawMany()
+      const result: { name: string, state: string, count: number }[]
+
+        = await this.dataSource
+          .query(`
+            SELECT 
+              job.state, 
+              job.name, 
+              COUNT(job.id)::int as count 
+            FROM pgboss.job 
+            GROUP BY job.name, job.state
+          `)
 
       result.forEach((row) => {
         const { name, state, count } = row
-        const countValue = parseInt(count, 10)
 
-        observer.observe(countValue, { job_name: name, job_state: state })
+        observer.observe(count, { job_name: name, job_state: state })
       })
     } catch (error) {
       // eslint-disable-next-line no-console
