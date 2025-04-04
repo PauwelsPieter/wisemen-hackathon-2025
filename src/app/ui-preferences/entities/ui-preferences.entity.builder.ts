@@ -1,4 +1,4 @@
-import { v4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import { UiTheme } from '../enums/theme.enum.js'
 import { FontSize } from '../enums/font-size.enum.js'
 import { Locale } from '../../../modules/localization/enums/locale.enum.js'
@@ -10,7 +10,7 @@ export class UIPreferencesEntityBuilder {
   constructor () {
     this.preference = new UiPreferences()
 
-    this.preference.userUuid = v4()
+    this.preference.userUuid = randomUUID()
     this.preference.createdAt = new Date()
     this.preference.updatedAt = new Date()
     this.preference.fontSize = FontSize.DEFAULT
