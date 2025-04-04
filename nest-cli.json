@@ -57,10 +57,10 @@
       "entryFile": "entrypoints/playground",
       "sourceRoot": "src"
     },
-    "metrics": {
+    "opentelemetry-metrics": {
       "type": "application",
       "root": "src",
-      "entryFile": "entrypoints/metrics",
+      "entryFile": "entrypoints/opentelemetry-metrics",
       "sourceRoot": "src"
     }
   }

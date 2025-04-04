@@ -1,12 +1,12 @@
 import { describe, it } from 'node:test'
 import { Test } from '@nestjs/testing'
 import { expect } from 'expect'
-import { MetricsModule } from '../../utils/opentelemetry/metrics/metrics.module.js'
+import { OpentelemetryMetricsModule } from '../../utils/opentelemetry/metrics/opentelemetry-metrics.module.js'
 
 describe('Metrics tests', () => {
   async function testMetricsStartup (): Promise<void> {
     const module = await Test.createTestingModule({
-      imports: [MetricsModule]
+      imports: [OpentelemetryMetricsModule]
     }).compile()
 
     return module.close()

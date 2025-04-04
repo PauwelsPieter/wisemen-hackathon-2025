@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm'
 import { Attributes, metrics, ObservableResult } from '@opentelemetry/api'
 
 @Injectable()
-export class MetricsRegistrationService {
+export class MetricsObserverService {
   constructor (
     private readonly dataSource: DataSource
   ) {
@@ -17,14 +17,13 @@ export class MetricsRegistrationService {
       description: 'Tracks the number of PgBoss jobs by state and name'
     })
       .addCallback(async (observableResult) => {
-        await this.updatePgBossMetrics(observableResult)
+        await this.observePgBossMetrics(observableResult)
       })
   }
 
-  async updatePgBossMetrics (observer: ObservableResult<Attributes>): Promise<void> {
+  async observePgBossMetrics (observer: ObservableResult<Attributes>): Promise<void> {
     try {
       const result: { name: string, state: string, count: number }[]
-
         = await this.dataSource
           .query(`
             SELECT 

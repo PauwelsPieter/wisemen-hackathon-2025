@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { DefaultConfigModule } from '../../../modules/config/default-config.module.js'
 import { DefaultTypeOrmModule } from '../../../modules/typeorm/default-typeorm.module.js'
-import { MetricsRegistrationModule } from './registration/metrics-registration.module.js'
+import { MetricsObserverModule } from './registration/metrics-observer.module.js'
 
 @Module({
   imports: [
@@ -9,7 +9,7 @@ import { MetricsRegistrationModule } from './registration/metrics-registration.m
     DefaultTypeOrmModule.forRootAsync({
       migrationsRun: false
     }),
-    MetricsRegistrationModule
+    MetricsObserverModule
   ]
 })
-export class MetricsModule {}
+export class OpentelemetryMetricsModule {}
