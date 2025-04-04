@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto'
 import type { EntityManager } from 'typeorm'
-import type { Permission } from 'src/modules/permission/permission.enum.js'
 import { UserSeeder } from '../../src/app/users/tests/user.seeder.js'
 import { RoleSeeder } from '../../src/app/roles/tests/seeders/role.seeder.js'
 import { Role } from '../../src/app/roles/entities/role.entity.js'
@@ -10,6 +9,7 @@ import { User } from '../../src/app/users/entities/user.entity.js'
 import { UserRoleSeeder } from '../../src/app/roles/tests/seeders/user-role.seeder.js'
 import { RoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/role-entity.builder.js'
 import { UserRoleEntityBuilder } from '../../src/app/roles/tests/builders/entities/user-role-entity.builder.js'
+import { Permission } from '../../src/modules/permission/permission.enum.js'
 
 export class TestAuthContext {
   private readonly userSeeder: UserSeeder

@@ -3,11 +3,13 @@ import request from 'supertest'
 import { expect } from 'expect'
 import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../users/tests/setup-user.type.js'
-import { Theme } from '../../types/theme.enum.js'
+import { UiTheme } from '../../enums/theme.enum.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
+import { FontSize } from '../../enums/font-size.enum.js'
+import { Locale } from '../../../../modules/localization/enums/locale.enum.js'
 
-describe('View preferences e2e', () => {
+describe('View ui preferences e2e', () => {
   let setup: EndToEndTestSetup
   let context: TestAuthContext
   let user: TestUser
@@ -23,31 +25,22 @@ describe('View preferences e2e', () => {
   describe('View preferences', () => {
     it('should return 401 when viewing preferences without a token', async () => {
       const response = await request(setup.httpServer)
-        .get(`/users/${user.user.uuid}/preferences`)
+        .get('/me/ui-preferences')
 
       expect(response).toHaveStatus(401)
     })
 
-    it('should return 403 for someone elses preferences', async () => {
-      const someone = await context.getUser([])
-
-      const response = await request(setup.httpServer)
-        .get(`/users/${someone.user.uuid}/preferences`)
-        .set('Authorization', `Bearer ${user.token}`)
-
-      expect(response).toHaveStatus(403)
-    })
-
     it('should return 200 for own preferences', async () => {
       const response = await request(setup.httpServer)
-        .get(`/users/${user.user.uuid}/preferences`)
+        .get('/me/ui-preferences')
         .set('Authorization', `Bearer ${user.token}`)
+        .set('Accept-Language', 'en-US')
 
       expect(response).toHaveStatus(200)
       expect(response.body).toEqual({
-        theme: Theme.SYSTEM,
-        language: null,
-        fontSize: null,
+        theme: UiTheme.SYSTEM,
+        language: Locale.EN_US,
+        fontSize: FontSize.DEFAULT,
         showShortcuts: false,
         reduceMotion: false,
         highContrast: false

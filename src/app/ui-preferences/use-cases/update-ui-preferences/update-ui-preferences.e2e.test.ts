@@ -4,12 +4,12 @@ import { expect } from 'expect'
 import { DataSource } from 'typeorm'
 import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../users/tests/setup-user.type.js'
-import { Theme } from '../../types/theme.enum.js'
-import { Preferences } from '../../entities/preferences.entity.js'
+import { UiTheme } from '../../enums/theme.enum.js'
+import { UiPreferences } from '../../entities/ui-preferences.entity.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 
-describe('Update preferences e2e', () => {
+describe('Update ui preferences e2e', () => {
   let setup: EndToEndTestSetup
   let dataSource: DataSource
   let context: TestAuthContext
@@ -29,24 +29,14 @@ describe('Update preferences e2e', () => {
   describe('Update preferences', () => {
     it('should return 401 when updating preferences without a token', async () => {
       const response = await request(setup.httpServer)
-        .patch(`/users/${user.user.uuid}/preferences`)
+        .patch('/me/ui-preferences')
 
       expect(response).toHaveStatus(401)
     })
 
-    it('should return 403 when updating someone elses preferences', async () => {
-      const someone = await context.getUser([])
-
-      const response = await request(setup.httpServer)
-        .patch(`/users/${someone.user.uuid}/preferences`)
-        .set('Authorization', `Bearer ${user.token}`)
-
-      expect(response).toHaveStatus(403)
-    })
-
     it('should return 200 when updating own preferences', async () => {
       const response = await request(setup.httpServer)
-        .patch(`/users/${user.user.uuid}/preferences`)
+        .patch('/me/ui-preferences')
         .set('Authorization', `Bearer ${user.token}`)
 
       expect(response).toHaveStatus(200)
@@ -54,24 +44,24 @@ describe('Update preferences e2e', () => {
 
     it('should return 200 when updating perferences multiple times', async () => {
       const response1 = await request(setup.httpServer)
-        .patch(`/users/${user.user.uuid}/preferences`)
+        .patch('/me/ui-preferences')
         .set('Authorization', `Bearer ${user.token}`)
         .send({
-          theme: Theme.DARK
+          theme: UiTheme.DARK
         })
 
       expect(response1).toHaveStatus(200)
 
-      let preferences = await dataSource.getRepository(Preferences).findOneOrFail({
+      let preferences = await dataSource.getRepository(UiPreferences).findOneOrFail({
         where: {
           userUuid: user.user.uuid
         }
       })
 
-      expect(preferences.theme).toEqual(Theme.DARK)
+      expect(preferences.theme).toEqual(UiTheme.DARK)
 
       const response2 = await request(setup.httpServer)
-        .patch(`/users/${user.user.uuid}/preferences`)
+        .patch('/me/ui-preferences')
         .set('Authorization', `Bearer ${user.token}`)
         .send({
           reduceMotion: true
@@ -79,13 +69,13 @@ describe('Update preferences e2e', () => {
 
       expect(response2).toHaveStatus(200)
 
-      preferences = await dataSource.getRepository(Preferences).findOneOrFail({
+      preferences = await dataSource.getRepository(UiPreferences).findOneOrFail({
         where: {
           userUuid: user.user.uuid
         }
       })
 
-      expect(preferences.theme).toEqual(Theme.DARK)
+      expect(preferences.theme).toEqual(UiTheme.DARK)
       expect(preferences.reduceMotion).toEqual(true)
     })
   })

@@ -9,6 +9,8 @@ export default [
   },
   {
     rules: {
+      '@typescript-eslint/no-unsafe-enum-comparison': 'off',
+      '@stylistic/padding-line-between-statements': ['off'],
       'import/order': [
         'error',
         {

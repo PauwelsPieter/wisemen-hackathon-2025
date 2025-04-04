@@ -1,33 +1,32 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm'
-import { Theme } from '../types/theme.enum.js'
+import { UiTheme } from '../enums/theme.enum.js'
 import { User } from '../../users/entities/user.entity.js'
+import { FontSize } from '../enums/font-size.enum.js'
+import { Locale } from '../../../modules/localization/enums/locale.enum.js'
 
 @Entity()
-export class Preferences {
+export class UiPreferences {
   @PrimaryGeneratedColumn('uuid')
-  uuid: string
+  userUuid: string
 
-  @CreateDateColumn({ precision: 3 })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date
 
-  @UpdateDateColumn({ precision: 3 })
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date
-
-  @Column({ type: 'uuid', unique: true })
-  userUuid: string
 
   @OneToOne(() => User)
   @JoinColumn({ name: 'user_uuid' })
   user: Relation<User>
 
-  @Column({ type: 'enum', enum: Theme, default: Theme.SYSTEM })
-  theme: Theme
+  @Column({ type: 'enum', enum: UiTheme, default: UiTheme.SYSTEM })
+  theme: UiTheme
 
-  @Column({ type: 'varchar', nullable: true })
-  language: string | null
+  @Column({ type: 'varchar' })
+  language: Locale
 
-  @Column({ type: 'varchar', nullable: true })
-  fontSize: string | null
+  @Column({ type: 'enum', enum: FontSize, default: FontSize.DEFAULT })
+  fontSize: FontSize
 
   @Column({ type: 'boolean', default: false })
   showShortcuts: boolean

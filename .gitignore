@@ -24,7 +24,6 @@ yarn-error.log*
 .vscode/*
 !.vscode/extensions.json
 !.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
 .c9/
 .classpath

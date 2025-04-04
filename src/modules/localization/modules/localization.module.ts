@@ -5,6 +5,7 @@ import { ModuleRef } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { DEFAULT_LANGUAGE } from '../constants/defaults.constant.js'
 import { EnvType } from '../../config/env.enum.js'
+import { LocalizationContext } from '../localization-context.js'
 
 @Global()
 @Module({
@@ -23,7 +24,9 @@ import { EnvType } from '../../config/env.enum.js'
         AcceptLanguageResolver
       ]
     })
-  ]
+  ],
+  providers: [LocalizationContext],
+  exports: [LocalizationContext]
 })
 export class LocalizationModule implements OnModuleInit {
   private static i18nService: I18nService | undefined
