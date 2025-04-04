@@ -97,7 +97,9 @@ export class S3Service {
       ACL: 'private'
     })
 
-    await this.client.send(command)
+    await this.client.send(command, {
+      requestTimeout: 60_000
+    })
   }
 
   public async uploadStream (
