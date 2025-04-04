@@ -21,13 +21,6 @@ declare module 'http' {
   }
 }
 
-enum READY_STATE {
-  CONNECTING_STATE = 0,
-  OPEN_STATE = 1,
-  CLOSING_STATE = 2,
-  CLOSED_STATE = 3
-}
-
 @Injectable()
 export class AuthenticatedWsAdapter extends WsAdapter {
   private readonly authMiddleware: AuthMiddleware
@@ -116,7 +109,7 @@ export class AuthenticatedWsAdapter extends WsAdapter {
       takeUntil(close$)
     )
     const onMessage = (response: any) => {
-      if (client.readyState !== READY_STATE.OPEN_STATE) {
+      if (client.readyState !== WebSocket.OPEN) {
         return
       }
 
