@@ -26,10 +26,11 @@ export class InternalServerErrorContent extends JsonApiErrorContent {
 
     if (process.env.NODE_ENV !== EnvType.PRODUCTION) {
       this.detail = error.message
+    } else {
+      this.detail = 'The server was unable to complete your request. Please try again later.'
     }
 
     this.code = 'internal_server_error'
-    this.detail = 'The server was unable to complete your request. Please try again later.'
     this.status = String(HttpStatus.INTERNAL_SERVER_ERROR)
     this.id = captureException(error)
   }

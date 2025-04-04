@@ -38,6 +38,6 @@ export class ApiModule {
     consumer
       .apply(AuthMiddleware)
       .exclude('auth/token')
-      .forRoutes('*')
+      .forRoutes('{*all}')
   }
 }

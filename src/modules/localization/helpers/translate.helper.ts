@@ -1,6 +1,7 @@
 import { I18nContext, type TranslateOptions } from 'nestjs-i18n'
 import type { I18nPath } from '../generated/i18n.generated.js'
 import { LocalizationModule } from '../modules/localization.module.js'
+import { MISSING_TRANSLATION_KEY } from '../constants/defaults.constant.js'
 
 /*
 * Context aware translation functions
@@ -18,7 +19,17 @@ export function tc (key: I18nPath, options?: TranslateOptions): string {
 export function translateCurrentRaw (key: string, options?: TranslateOptions): string {
   const context = I18nContext.current()
 
-  if (context === undefined) return key
+  if (context === undefined) {
+    throw new Error(
+      'Attempting to translate with context in a contextless environment. '
+      + 'Did you mean to call translate instead of translateCurrent?'
+    )
+  }
+
+  if (options?.defaultValue === undefined && key !== MISSING_TRANSLATION_KEY) {
+    options ??= {}
+    options.defaultValue = tc(MISSING_TRANSLATION_KEY, { args: { key } })
+  }
 
   return context.translate(key, options)
 }
@@ -53,6 +64,11 @@ export function translateRaw (key: string, options?: TranslateOptions): string {
   const service = LocalizationModule.default()
 
   if (service === undefined) return key
+
+  if (options?.defaultValue === undefined && key !== MISSING_TRANSLATION_KEY) {
+    options ??= {}
+    options.defaultValue = t(MISSING_TRANSLATION_KEY, { args: { key } })
+  }
 
   return service.translate(key, options)
 }

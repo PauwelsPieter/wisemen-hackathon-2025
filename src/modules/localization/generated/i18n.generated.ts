@@ -12,6 +12,24 @@ export type I18nTranslations = {
                 "other": string;
             };
         };
+        "missing-translation": string;
+    };
+    "event-log": {
+        "user": {
+            "created": {
+                "v1": string;
+            };
+            "role-assigned": {
+                "v1": string;
+            };
+        };
+        "roles": {
+            "permissions": {
+                "updated": {
+                    "v1": string;
+                };
+            };
+        };
     };
     "mail": {
         "password-reset": {

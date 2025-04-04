@@ -42,6 +42,6 @@ export class TestModule {
     consumer
       .apply(AuthMiddleware)
       .exclude('auth/token')
-      .forRoutes('*')
+      .forRoutes('{*all}')
   }
 }

@@ -19,7 +19,8 @@
     "test:pipeline": "pnpm test:setup && pnpm test:run",
     "test:all": "pnpm clean && pnpm build && pnpm test:setup && pnpm test:run",
     "test:one": "pnpm clean && pnpm build && node --test --env-file=.env.test --experimental-test-isolation=none --test-reporter=spec",
-    "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/sql/sources/main.js"
+    "typeorm": "pnpm clean && pnpm build && node --env-file=.env ./node_modules/typeorm/cli -d ./dist/src/sql/sources/main.js",
+    "translate": "tsc --build tsconfig.translate.json && node --env-file=.env.test dist/entrypoints/generate-translations.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.777.0",

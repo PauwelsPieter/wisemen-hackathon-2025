@@ -1,0 +1,17 @@
+{
+    "user": {
+        "created": {
+            "v1": "User created"
+        },
+        "role-assigned": {
+            "v1": "Role assigned to user"
+        }
+    },
+    "roles": {
+        "permissions": {
+            "updated": {
+                "v1": "Permissions of roles updated"
+            }
+        }
+    }
+}
