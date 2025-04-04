@@ -1,4 +1,4 @@
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { EventType } from '../events/event-type.js'
 import { EventLog } from './event-log.entity.js'
 
@@ -7,7 +7,7 @@ export class EventLogEntityBuilder {
 
   constructor () {
     this.log = new EventLog()
-    this.log.uuid = v4()
+    this.log.uuid = randomUUID()
     this.log.createdAt = new Date()
     this.log.userUuid = null
     this.log.type = EventType.USER_CREATED

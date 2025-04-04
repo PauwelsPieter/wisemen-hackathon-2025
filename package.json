@@ -82,7 +82,6 @@
     "twilio": "^5.5.1",
     "typeorm": "^0.3.21",
     "typesense": "^2.0.3",
-    "uuid": "^11.1.0",
     "ws": "^8.18.1",
     "yargs": "^17.7.2"
   },
@@ -98,7 +97,6 @@
     "@types/qs": "^6.9.18",
     "@types/sinon": "^17.0.4",
     "@types/supertest": "^6.0.3",
-    "@types/uuid": "^10.0.0",
     "@types/ws": "^8.18.0",
     "@types/yargs": "^17.0.33",
     "@wisemen/eslint-config-nestjs": "^0.1.7",

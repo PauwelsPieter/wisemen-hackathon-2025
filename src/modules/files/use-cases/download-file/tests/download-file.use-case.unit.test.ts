@@ -1,7 +1,7 @@
 import { before, describe, it } from 'node:test'
+import { randomUUID } from 'node:crypto'
 import { assert, createStubInstance, SinonStubbedInstance } from 'sinon'
 import { expect } from 'expect'
-import { v4 } from 'uuid'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
@@ -20,7 +20,7 @@ describe('Download file use case unit tests', () => {
   before(() => {
     TestBench.setupUnitTest()
 
-    userUuid = v4()
+    userUuid = randomUUID()
 
     const authStorage = createStubInstance(AuthContext, {
       getUserUuid: userUuid
@@ -42,7 +42,7 @@ describe('Download file use case unit tests', () => {
   it('should return 404 when file not uploaded by customer', async () => {
     fileRepository.findOneByOrFail.throws(new EntityNotFoundError(File, {}))
 
-    await expect(useCase.execute(v4())).rejects.toThrow()
+    await expect(useCase.execute(randomUUID())).rejects.toThrow()
     assert.notCalled(s3Service.createTemporaryDownloadUrl)
   })
 })

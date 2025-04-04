@@ -1,7 +1,7 @@
 import { before, describe, it } from 'node:test'
+import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
-import { v4 } from 'uuid'
 import { UpdateRolesPermissionsUseCase } from '../update-roles-permissions.use-case.js'
 import { EventEmitter } from '../../../../../modules/events/event-emitter.js'
 import { UpdateRolesPermissionsRepository } from '../update-roles-permissions.repository.js'
@@ -32,7 +32,7 @@ describe('Update role permissions use case unit tests', () => {
       createStubInstance(TypesenseCollectionService)
     )
 
-    const roleUuid = v4()
+    const roleUuid = randomUUID()
     const command = new UpdateRolesPermissionsCommandBuilder()
       .addRole(roleUuid, [])
       .build()
@@ -68,8 +68,8 @@ describe('Update role permissions use case unit tests', () => {
   })
 
   it('emits an event for each role', async () => {
-    const role1Uuid = v4()
-    const role2Uuid = v4()
+    const role1Uuid = randomUUID()
+    const role2Uuid = randomUUID()
 
     const repository = createStubInstance(UpdateRolesPermissionsRepository)
     const roles = [

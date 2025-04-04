@@ -1,8 +1,8 @@
+import { randomUUID } from 'node:crypto'
 import { WebSocketGateway, SubscribeMessage, type OnGatewayConnection, type OnGatewayDisconnect, WebSocketServer, WsException, BaseWsExceptionFilter } from '@nestjs/websockets'
 import { WebSocket, WebSocketServer as WSS } from 'ws'
 import type { Subscription } from 'nats'
 import { type ArgumentsHost, Catch, UsePipes, ValidationPipe, UseFilters, UnauthorizedException } from '@nestjs/common'
-import { v4 as uuidv4 } from 'uuid'
 import { captureException } from '@sentry/nestjs'
 import { NatsClient } from '../nats/nats.client.js'
 import { SubscribeCommand } from './commands/subscribe.command.js'
@@ -50,7 +50,7 @@ export class WebsocketNatsGateway implements OnGatewayConnection, OnGatewayDisco
   server: WSS
 
   handleConnection (client: WebSocket): void {
-    client.uuid = uuidv4()
+    client.uuid = randomUUID()
     this.clients.set(client.uuid, client)
     this.subscriptions.set(client.uuid, new Map<string, Subscription>())
   }

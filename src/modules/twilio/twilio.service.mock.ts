@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable no-console */
+import { randomUUID } from 'node:crypto'
 import { Injectable } from '@nestjs/common'
-import { v4 } from 'uuid'
 
 @Injectable()
 export class TwilioMockService {
@@ -11,7 +11,7 @@ export class TwilioMockService {
   ): Promise<string> {
     console.log('message sent', to, body)
 
-    return v4()
+    return randomUUID()
   }
 
   public async createCall (
@@ -20,6 +20,6 @@ export class TwilioMockService {
   ): Promise<string> {
     console.log('call sent', to, body)
 
-    return v4()
+    return randomUUID()
   }
 }

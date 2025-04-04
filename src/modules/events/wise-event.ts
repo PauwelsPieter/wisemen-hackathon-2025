@@ -1,4 +1,4 @@
-import { v4 as generateUuid } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { API_EVENT_SOURCE } from './constants.js'
 import { EventType } from './event-type.js'
 import { EventSubjectType } from './event-subject-type.enum.js'
@@ -24,7 +24,7 @@ export class WiseEvent<Content extends object = object> {
   public readonly subjectId?: string
 
   constructor (options: WiseEventOptions<Content>) {
-    this.id = generateUuid()
+    this.id = randomUUID()
     this.createdAt = new Date()
     this.topic = options.topic
     this.content = options.content

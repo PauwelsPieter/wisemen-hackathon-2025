@@ -1,7 +1,7 @@
 import { before, describe, it } from 'node:test'
+import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
-import { v4 } from 'uuid'
 import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { AssignDefaultRoleToUserUseCase } from '../assign-default-role-to-user.use-case.js'
 import { AssignDefaultRoleToUserRepository } from '../assign-default-role-to-user.repository.js'
@@ -24,7 +24,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = v4()
+    const userUuid = randomUUID()
 
     await useCase.assignDefaultRole(userUuid)
 
@@ -45,7 +45,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = v4()
+    const userUuid = randomUUID()
 
     await useCase.assignDefaultRole(userUuid)
 
