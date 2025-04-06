@@ -48,7 +48,7 @@
     "wss": {
       "type": "application",
       "root": "src",
-      "entryFile": "entrypoints/wss",
+      "entryFile": "entrypoints/websocket-server",
       "sourceRoot": "src"
     },
     "playground": {
