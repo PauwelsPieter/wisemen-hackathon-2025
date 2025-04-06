@@ -58,7 +58,7 @@
     "@wisemen/decorators": "^0.0.3",
     "@wisemen/nestjs-typeorm": "^0.0.11",
     "@wisemen/pagination": "^0.0.3",
-    "@wisemen/pgboss-nestjs-job": "^0.3.2",
+    "@wisemen/pgboss-nestjs-job": "^0.3.4",
     "@wisemen/time": "^0.0.20",
     "@wisemen/validators": "^0.0.3",
     "@wisemen/one-of": "^0.0.2",
