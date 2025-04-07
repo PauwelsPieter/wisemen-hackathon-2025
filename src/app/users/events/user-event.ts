@@ -1,14 +1,14 @@
-import { WiseEvent, WiseEventOptions } from '../../../modules/events/wise-event.js'
-import { EventSubjectType } from '../../../modules/events/event-subject-type.enum.js'
+import { DomainEvent, DomainEventOptions } from '../../../modules/domain-events/domain-event.js'
+import { DomainEventSubjectType } from '../../../modules/domain-events/domain-event-subject-type.enum.js'
 
-export class UserEvent<Content extends object> extends WiseEvent<Content> {
+export class UserEvent<Content extends object> extends DomainEvent<Content> {
   constructor (
-    options: Omit<WiseEventOptions<Content>, 'subjectType' | 'subjectId'> & { userUuid: string }
+    options: Omit<DomainEventOptions<Content>, 'subjectType' | 'subjectId'> & { userUuid: string }
   ) {
     super({
       ...options,
       subjectId: options.userUuid,
-      subjectType: EventSubjectType.USER
+      subjectType: DomainEventSubjectType.USER
     })
   }
 }

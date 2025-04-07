@@ -8,7 +8,7 @@ import { UserEntityBuilder } from '../../../tests/user-entity.builder.js'
 import { GetOrCreateUserCommandBuilder } from '../get-or-create-user.command.builder.js'
 import { UserCreatedEvent } from '../user-created.event.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
-import { EventEmitter } from '../../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
 
 describe('Get or create user use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -20,7 +20,7 @@ describe('Get or create user use case unit tests', () => {
 
     const useCase = new GetOrCreateUserUseCase(
       stubDataSource(),
-      createStubInstance(EventEmitter),
+      createStubInstance(DomainEventEmitter),
       repository
     )
 
@@ -38,7 +38,7 @@ describe('Get or create user use case unit tests', () => {
 
     const useCase = new GetOrCreateUserUseCase(
       stubDataSource(),
-      createStubInstance(EventEmitter),
+      createStubInstance(DomainEventEmitter),
       repository
     )
 
@@ -54,7 +54,7 @@ describe('Get or create user use case unit tests', () => {
 
     repository.findById.resolves(null)
 
-    const eventEmitter = createStubInstance(EventEmitter)
+    const eventEmitter = createStubInstance(DomainEventEmitter)
     const useCase = new GetOrCreateUserUseCase(
       stubDataSource(),
       eventEmitter,

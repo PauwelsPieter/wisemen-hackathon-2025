@@ -11,7 +11,7 @@ import { LocalizationModule } from '../localization/modules/localization.module.
 import { ContactModule } from '../../app/contact/contact.module.js'
 import { UiPreferencesModule } from '../../app/ui-preferences/ui-preferences.module.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
-import { EventLogModule } from '../event-log/event-log.module.js'
+import { DomainEventLogModule } from '../domain-event-log/domain-event-log.module.js'
 import { OneSignalModule } from '../one-signal/one-signal.module.js'
 import { GlobalSearchModule } from '../global-search/global-search.module.js'
 
@@ -29,7 +29,7 @@ import { GlobalSearchModule } from '../global-search/global-search.module.js'
     ContactModule,
     UiPreferencesModule,
     OneSignalModule,
-    EventLogModule,
+    DomainEventLogModule,
     GlobalSearchModule
   ]
 })

@@ -4,7 +4,7 @@ import { ExceptionModule } from './modules/exceptions/exception.module.js'
 import { DefaultTypeOrmModule } from './modules/typeorm/default-typeorm.module.js'
 import { DefaultConfigModule } from './modules/config/default-config.module.js'
 import { GlobalPipesModule } from './modules/global-pipes/global-pipes.module.js'
-import { EventSubscribersModule } from './modules/events/event-subscribers.module.js'
+import { DomainEventSubscribersModule } from './modules/domain-events/domain-event-subscribers.module.js'
 
 @Module({})
 export class AppModule {
@@ -21,7 +21,7 @@ export class AppModule {
         ExceptionModule,
         GlobalPipesModule,
 
-        EventSubscribersModule,
+        DomainEventSubscribersModule,
 
         // Utils
         ...modules

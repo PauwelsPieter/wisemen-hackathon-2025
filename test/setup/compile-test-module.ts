@@ -2,7 +2,7 @@ import { Test, type TestingModule } from '@nestjs/testing'
 import { DynamicModule, Type } from '@nestjs/common'
 import { TwilioService } from '../../src/modules/twilio/twilio.service.js'
 import { TwilioMockService } from '../../src/modules/twilio/twilio.service.mock.js'
-import { EventEmitter } from '../../src/modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../src/modules/domain-events/domain-event-emitter.js'
 import { TestModule } from './test.module.js'
 
 export async function compileTestModule (
@@ -16,7 +16,7 @@ export async function compileTestModule (
   })
     .overrideProvider(TwilioService)
     .useClass(TwilioMockService)
-    .overrideProvider(EventEmitter)
-    .useClass(EventEmitter)
+    .overrideProvider(DomainEventEmitter)
+    .useClass(DomainEventEmitter)
     .compile()
 }

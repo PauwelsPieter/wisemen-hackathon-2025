@@ -1,4 +1,5 @@
 import eslintNestJSConfig from '@wisemen/eslint-config-nestjs'
+import unicorn from 'eslint-plugin-unicorn'
 
 export default [
   ...eslintNestJSConfig,
@@ -6,6 +7,19 @@ export default [
     ignores: [
       'src/modules/localization/generated/i18n.generated.ts'
     ]
+  },
+  {
+    plugins: {
+      unicorn
+    },
+    rules: {
+      'unicorn/filename-case': [
+        'error',
+        {
+          case: 'kebabCase'
+        }
+      ]
+    }
   },
   {
     rules: {

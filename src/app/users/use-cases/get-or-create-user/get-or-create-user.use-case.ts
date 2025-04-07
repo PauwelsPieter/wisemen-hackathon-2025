@@ -3,7 +3,7 @@ import { DataSource, TypeORMError } from 'typeorm'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { User } from '../../entities/user.entity.js'
 import { UserEntityBuilder } from '../../tests/user-entity.builder.js'
-import { EventEmitter } from '../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { UnauthorizedError } from '../../../../modules/exceptions/generic/unauthorized.error.js'
 import { GetOrCreateUserCommand } from './get-or-create-user.command.js'
 import { GetOrCreateUserRepository } from './get-or-create-user.repository.js'
@@ -13,7 +13,7 @@ import { UserCreatedEvent } from './user-created.event.js'
 export class GetOrCreateUserUseCase {
   constructor (
     private dataSource: DataSource,
-    private eventEmitter: EventEmitter,
+    private eventEmitter: DomainEventEmitter,
     private readonly repository: GetOrCreateUserRepository
   ) {}
 

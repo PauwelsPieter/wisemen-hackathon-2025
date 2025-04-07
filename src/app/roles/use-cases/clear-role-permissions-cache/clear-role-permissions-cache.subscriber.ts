@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { RoleCache } from '../../cache/role-cache.service.js'
-import { Subscribe } from '../../../../modules/events/subscribe.decorator.js'
+import { Subscribe } from '../../../../modules/domain-events/subscribe.decorator.js'
 import {
   RolesPermissionsUpdatedEvent
 } from '../update-roles-permissions/roles-permissions-updated.event.js'

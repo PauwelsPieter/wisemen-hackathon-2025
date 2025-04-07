@@ -1,10 +1,10 @@
 import { OneOfMeta } from '@wisemen/one-of'
 import { ApiProperty } from '@nestjs/swagger'
-import { EventLog } from '../../../../modules/event-log/event-log.entity.js'
-import { EventType } from '../../../../modules/events/event-type.js'
+import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
+import { DomainEventType } from '../../../../modules/domain-events/domain-event-type.js'
 import { UserEvent } from '../../events/user-event.js'
 
-@OneOfMeta(EventLog, EventType.USER_CREATED)
+@OneOfMeta(DomainEventLog, DomainEventType.USER_CREATED)
 export class UserCreatedEventContent {
   @ApiProperty({ type: 'string', format: 'uuid' })
   readonly userUuid: string
@@ -16,7 +16,7 @@ export class UserCreatedEventContent {
 
 export class UserCreatedEvent extends UserEvent<UserCreatedEventContent> {
   static VERSION = 1
-  static TYPE = EventType.USER_CREATED
+  static TYPE = DomainEventType.USER_CREATED
 
   constructor (userUuid: string) {
     super({

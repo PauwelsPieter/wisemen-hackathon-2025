@@ -8,7 +8,7 @@ import { AssignDefaultRoleToUserRepository } from '../assign-default-role-to-use
 import { RoleEntityBuilder } from '../../../../roles/tests/builders/entities/role-entity.builder.js'
 import { RoleAssignedToUserEvent } from '../role-assigned-to-user.event.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
-import { EventEmitter } from '../../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
 
 describe('Assign default tole to user use case', () => {
   before(() => TestBench.setupUnitTest())
@@ -20,7 +20,7 @@ describe('Assign default tole to user use case', () => {
 
     const useCase = new AssignDefaultRoleToUserUseCase(
       stubDataSource(),
-      createStubInstance(EventEmitter),
+      createStubInstance(DomainEventEmitter),
       repository
     )
 
@@ -37,7 +37,7 @@ describe('Assign default tole to user use case', () => {
 
     repository.getDefaultRole.resolves(role)
 
-    const eventEmitter = createStubInstance(EventEmitter)
+    const eventEmitter = createStubInstance(DomainEventEmitter)
 
     const useCase = new AssignDefaultRoleToUserUseCase(
       stubDataSource(),

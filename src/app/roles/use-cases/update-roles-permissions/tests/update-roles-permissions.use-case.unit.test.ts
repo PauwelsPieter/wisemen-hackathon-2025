@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { UpdateRolesPermissionsUseCase } from '../update-roles-permissions.use-case.js'
-import { EventEmitter } from '../../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
 import { UpdateRolesPermissionsRepository } from '../update-roles-permissions.repository.js'
 import { NotFoundCompositeApiError } from '../../../../../modules/exceptions/api-errors/not-found-composite.api-error.js'
 import { RoleNotFoundError } from '../../../errors/role-not-found.error.js'
@@ -27,7 +27,7 @@ describe('Update role permissions use case unit tests', () => {
 
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),
-      createStubInstance(EventEmitter),
+      createStubInstance(DomainEventEmitter),
       repository,
       createStubInstance(TypesenseCollectionService)
     )
@@ -53,7 +53,7 @@ describe('Update role permissions use case unit tests', () => {
 
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),
-      createStubInstance(EventEmitter),
+      createStubInstance(DomainEventEmitter),
       repository,
       createStubInstance(TypesenseCollectionService)
     )
@@ -83,7 +83,7 @@ describe('Update role permissions use case unit tests', () => {
 
     repository.findRoles.resolves(roles)
 
-    const eventEmitter = createStubInstance(EventEmitter)
+    const eventEmitter = createStubInstance(DomainEventEmitter)
 
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),

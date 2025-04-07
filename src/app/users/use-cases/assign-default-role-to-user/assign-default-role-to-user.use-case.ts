@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { UserRoleEntityBuilder } from '../../../roles/tests/builders/entities/user-role-entity.builder.js'
-import { EventEmitter } from '../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { AssignDefaultRoleToUserRepository } from './assign-default-role-to-user.repository.js'
 import { RoleAssignedToUserEvent } from './role-assigned-to-user.event.js'
 
@@ -10,7 +10,7 @@ import { RoleAssignedToUserEvent } from './role-assigned-to-user.event.js'
 export class AssignDefaultRoleToUserUseCase {
   constructor (
     private readonly dataSource: DataSource,
-    private readonly eventEmitter: EventEmitter,
+    private readonly eventEmitter: DomainEventEmitter,
     private readonly repository: AssignDefaultRoleToUserRepository
   ) {}
 

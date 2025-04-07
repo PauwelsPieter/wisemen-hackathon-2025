@@ -1,10 +1,10 @@
 import { OneOfMeta } from '@wisemen/one-of'
 import { ApiProperty } from '@nestjs/swagger'
-import { WiseEvent } from '../../../../modules/events/wise-event.js'
+import { DomainEvent } from '../../../../modules/domain-events/domain-event.js'
 import { Role } from '../../entities/role.entity.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
-import { EventLog } from '../../../../modules/event-log/event-log.entity.js'
-import { EventType } from '../../../../modules/events/event-type.js'
+import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
+import { DomainEventType } from '../../../../modules/domain-events/domain-event-type.js'
 import { PermissionApiProperty } from '../../../../modules/permission/permission.api-property.js'
 
 class UpdatedRole {
@@ -20,7 +20,7 @@ class UpdatedRole {
   }
 }
 
-@OneOfMeta(EventLog, EventType.ROLES_PERMISSIONS_UPDATED)
+@OneOfMeta(DomainEventLog, DomainEventType.ROLES_PERMISSIONS_UPDATED)
 export class RolePermissionsUpdatedEventContent {
   @ApiProperty({ type: UpdatedRole, isArray: true })
   readonly roles: UpdatedRole[]
@@ -30,9 +30,9 @@ export class RolePermissionsUpdatedEventContent {
   }
 }
 
-export class RolesPermissionsUpdatedEvent extends WiseEvent<RolePermissionsUpdatedEventContent> {
+export class RolesPermissionsUpdatedEvent extends DomainEvent<RolePermissionsUpdatedEventContent> {
   static VERSION = 1
-  static TYPE = EventType.ROLES_PERMISSIONS_UPDATED
+  static TYPE = DomainEventType.ROLES_PERMISSIONS_UPDATED
 
   constructor (roles: Role[]) {
     super({

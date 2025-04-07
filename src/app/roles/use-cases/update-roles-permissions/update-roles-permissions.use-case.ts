@@ -2,7 +2,7 @@ import assert from 'assert'
 import { Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { transaction } from '@wisemen/nestjs-typeorm'
-import { EventEmitter } from '../../../../modules/events/event-emitter.js'
+import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { NotFoundCompositeApiError } from '../../../../modules/exceptions/api-errors/not-found-composite.api-error.js'
 import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
 import { TypesenseCollectionName } from '../../../../modules/typesense/enums/typesense-collection-index.enum.js'
@@ -16,7 +16,7 @@ import { RolesPermissionsUpdatedEvent } from './roles-permissions-updated.event.
 export class UpdateRolesPermissionsUseCase {
   constructor (
     private readonly dataSource: DataSource,
-    private readonly eventEmitter: EventEmitter,
+    private readonly eventEmitter: DomainEventEmitter,
     private readonly repository: UpdateRolesPermissionsRepository,
     private readonly typesense: TypesenseCollectionService
   ) {}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UserCreatedEvent } from '../get-or-create-user/user-created.event.js'
-import { Subscribe } from '../../../../modules/events/subscribe.decorator.js'
+import { Subscribe } from '../../../../modules/domain-events/subscribe.decorator.js'
 import { AssignDefaultRoleToUserUseCase } from './assign-default-role-to-user.use-case.js'
 
 @Injectable()
