@@ -7,7 +7,7 @@ export class DomainEventLog {
   @CreateDateColumn({ type: 'timestamptz', primary: true })
   createdAt: Date
 
-  @Column({ type: 'uuid', generated: 'uuid' })
+  @Column({ type: 'uuid', generated: 'uuid', primary: true })
   uuid: string
 
   @Column({ type: 'varchar' })
