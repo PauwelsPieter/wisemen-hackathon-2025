@@ -22,7 +22,6 @@ export class DomainEventLogSubscriber {
       uuid: event.id,
       createdAt: event.createdAt,
       source: event.source,
-      topic: event.topic,
       type: event.type,
       version: event.version,
       content: event.content,

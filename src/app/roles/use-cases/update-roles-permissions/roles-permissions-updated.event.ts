@@ -36,14 +36,9 @@ export class RolesPermissionsUpdatedEvent extends DomainEvent<RolePermissionsUpd
 
   constructor (roles: Role[]) {
     super({
-      topic: RolesPermissionsUpdatedEvent.createTopic(),
       version: RolesPermissionsUpdatedEvent.VERSION,
       content: new RolePermissionsUpdatedEventContent(roles),
       type: RolesPermissionsUpdatedEvent.TYPE
     })
-  }
-
-  private static createTopic (): string {
-    return `roles.permissions.updated`
   }
 }

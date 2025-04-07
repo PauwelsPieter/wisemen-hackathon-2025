@@ -9,9 +9,6 @@ export class DomainEventLogResponse {
   @ApiProperty({ type: 'string', format: 'uuid' })
   uuid: string
 
-  @ApiProperty({ type: 'string' })
-  topic: string
-
   @ApiProperty({ type: 'string', format: 'date-time' })
   createdAt: string
 
@@ -35,7 +32,6 @@ export class DomainEventLogResponse {
 
   constructor (log: DomainEventLog) {
     this.uuid = log.uuid
-    this.topic = log.topic
     this.createdAt = log.createdAt.toISOString()
     this.version = log.version
     this.source = log.source

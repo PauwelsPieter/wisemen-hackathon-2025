@@ -13,18 +13,11 @@ export class DomainEventLogEntityBuilder {
     this.log.type = DomainEventType.USER_CREATED
     this.log.source = 'tests'
     this.log.content = {}
-    this.log.topic = ''
     this.log.version = 0
   }
 
   withUuid (uuid: string): this {
     this.log.uuid = uuid
-
-    return this
-  }
-
-  withTopic (topic: string): this {
-    this.log.topic = topic
 
     return this
   }

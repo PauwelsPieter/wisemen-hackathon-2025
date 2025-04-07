@@ -10,7 +10,6 @@ export const toHaveEmitted: MatcherFunction<[DomainEvent]> = function (
   const expectedEvent = expect.objectContaining({
     content: event.content,
     source: event.source,
-    topic: event.topic,
     type: event.type,
     version: event.version
   })

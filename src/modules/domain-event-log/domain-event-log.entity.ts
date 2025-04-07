@@ -10,9 +10,6 @@ export class DomainEventLog {
   @Column({ type: 'uuid', generated: 'uuid', primary: true })
   uuid: string
 
-  @Column({ type: 'varchar' })
-  topic: string
-
   @Column({ type: 'int4' })
   version: number
 

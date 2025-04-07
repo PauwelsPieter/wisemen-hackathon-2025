@@ -25,14 +25,9 @@ export class RoleAssignedToUserEvent extends UserEvent<RoleAssignedToUserEventCo
   constructor (userUuid: string, roleUuid: string) {
     super({
       userUuid,
-      topic: RoleAssignedToUserEvent.createTopic(userUuid, roleUuid),
       version: RoleAssignedToUserEvent.VERSION,
       content: new RoleAssignedToUserEventContent(userUuid, roleUuid),
       type: RoleAssignedToUserEvent.TYPE
     })
-  }
-
-  private static createTopic (userUuid: string, roleUuid: string): string {
-    return `user.${userUuid}.role.${roleUuid}.assigned`
   }
 }

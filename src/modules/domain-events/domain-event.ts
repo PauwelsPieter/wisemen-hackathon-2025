@@ -4,7 +4,6 @@ import { DomainEventType } from './domain-event-type.js'
 import { DomainEventSubjectType } from './domain-event-subject-type.enum.js'
 
 export type DomainEventOptions<Content extends object = object> = {
-  topic: string
   content: Content
   version: number
   type: DomainEventType
@@ -14,7 +13,6 @@ export type DomainEventOptions<Content extends object = object> = {
 
 export class DomainEvent<Content extends object = object> {
   public readonly id: string
-  public readonly topic: string
   public readonly createdAt: Date
   public readonly content: Content
   public readonly version: number
@@ -26,7 +24,6 @@ export class DomainEvent<Content extends object = object> {
   constructor (options: DomainEventOptions<Content>) {
     this.id = randomUUID()
     this.createdAt = new Date()
-    this.topic = options.topic
     this.content = options.content
     this.version = options.version
     this.source = os.hostname()

@@ -21,14 +21,9 @@ export class UserCreatedEvent extends UserEvent<UserCreatedEventContent> {
   constructor (userUuid: string) {
     super({
       userUuid,
-      topic: UserCreatedEvent.createTopic(userUuid),
       version: UserCreatedEvent.VERSION,
       content: new UserCreatedEventContent(userUuid),
       type: UserCreatedEvent.TYPE
     })
-  }
-
-  private static createTopic (userUuid: string): string {
-    return `user.${userUuid}.created`
   }
 }
