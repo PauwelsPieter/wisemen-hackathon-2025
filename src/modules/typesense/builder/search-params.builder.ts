@@ -7,8 +7,10 @@ import type {
   SortField,
   TypesenseCollection
 } from '../collections/abstract-typesense.collection.js'
-import { FilterOptions } from '../enums/typesense-filter-options.enum.js'
+import { TypesenseFilterOptions } from '../enums/typesense-filter-options.enum.js'
 import { TypesenseOperationMode } from '../enums/typesense-operation-mode.enum.js'
+import { TypesenseLogicOperator } from '../enums/typesense-logic-operator.enum.js'
+import { TypesenseFilterParamsBuilder } from './filter-params.builder.js'
 
 export const DEFAULT_LIMIT = 10
 export const DEFAULT_OFFSET = 0
@@ -86,9 +88,28 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
   addFilterOn (
     filterField: FilterField<Collection>,
     values: string[] | undefined,
-    options?: FilterOptions): this {
+    options?: TypesenseFilterOptions): this {
     if (values !== undefined) {
-      this.filters.push(`${filterField}:${this.getOperator(options)}[${values.join(',')}]`)
+      const joinedValue = values.join(',')
+      const value = values.length > 1 ? `[${joinedValue}]` : joinedValue
+
+      this.filters.push(`${filterField}:${this.getOperator(options)}${value}`)
+    }
+
+    return this
+  }
+
+  addGroupFilter (
+    callback: (builder: TypesenseFilterParamsBuilder<Collection>) => void
+  ): this {
+    const builder = new TypesenseFilterParamsBuilder<Collection>()
+
+    callback(builder)
+
+    const filter = `(${builder.build()})`
+
+    if (filter) {
+      this.filters.push(filter)
     }
 
     return this
@@ -114,7 +135,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     return {
       q: this.query,
       query_by: queryBy,
-      filter_by: this.filters.join(' && '),
+      filter_by: this.filters.join(` ${TypesenseLogicOperator.AND} `),
       sort_by: this.sorting.join(','),
       offset: this.offset,
       limit: this.limit,
@@ -122,7 +143,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     }
   }
 
-  private getOperator (options?: FilterOptions): string {
-    return options ?? FilterOptions.EQUALS
+  private getOperator (options?: TypesenseFilterOptions): string {
+    return options ?? TypesenseFilterOptions.EQUALS
   }
 }

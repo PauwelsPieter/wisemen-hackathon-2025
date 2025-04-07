@@ -1,4 +1,4 @@
-export enum FilterOptions {
+export enum TypesenseFilterOptions {
   GREATER_THAN_OR_EQUALS = '>=',
   LESS_THAN_OR_EQUALS = '<=',
   GREATER_THAN = '>',
