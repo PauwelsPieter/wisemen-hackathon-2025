@@ -5,20 +5,16 @@ import { captureException } from '@sentry/nestjs'
 import { NatsUnavailableError } from './nats-unavailable.error.js'
 
 interface SubscribeOptions {
-  loadBalance: boolean
+  queueName: string
 }
 
 @Injectable()
 export class NatsClient implements OnModuleInit, OnModuleDestroy {
   private _client?: NatsConnection
   private _cache?: KV
-  private readonly queueName: string
-
   constructor (
     private readonly configService: ConfigService
-  ) {
-    this.queueName = 'nest-template-' + this.configService.get<string>('NODE_ENV', 'local')
-  }
+  ) {}
 
   public get client (): NatsConnection {
     if (this._client == null) {
@@ -74,9 +70,7 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
   subscribe (subject: string, options?: SubscribeOptions): Subscription {
     const opts: SubscriptionOptions = {}
 
-    if (options?.loadBalance != null) {
-      opts.queue = this.queueName
-    }
+    opts.queue = options?.queueName
 
     return this.client.subscribe(subject, opts)
   }
