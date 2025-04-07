@@ -10,7 +10,9 @@ export class AssignDefaultRoleToUserSubscriber {
   ) {}
 
   @Subscribe(UserCreatedEvent)
-  async assignDefaultRole (event: UserCreatedEvent): Promise<void> {
-    await this.useCase.assignDefaultRole(event.content.userUuid)
+  async assignDefaultRole (events: UserCreatedEvent[]): Promise<void> {
+    for (const event of events) {
+      await this.useCase.assignDefaultRole(event.content.userUuid)
+    }
   }
 }

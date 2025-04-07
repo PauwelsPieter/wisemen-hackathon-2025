@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DomainEvent } from './domain-event.js'
 
-export type EventSubscriberMethod = (event: DomainEvent) => Promise<void>
+export type EventSubscriberMethod = (event: DomainEvent[]) => Promise<void>
 
 @Injectable()
 export class DomainEventEmitter {
@@ -19,15 +19,23 @@ export class DomainEventEmitter {
     this.globalSubscribers.push(observer)
   }
 
-  async emit (event: DomainEvent): Promise<void> {
-    const subscribers = DomainEventEmitter.subscribers.get(event.type) ?? []
+  async emitOne (event: DomainEvent): Promise<void> {
+    await this.emit([event])
+  }
+
+  async emit<Event extends DomainEvent>(events: Event[]): Promise<void> {
+    if (events.length === 0) {
+      return
+    }
+
+    const subscribers = DomainEventEmitter.subscribers.get(events[0].type) ?? []
 
     for (const subscriberCallback of subscribers) {
-      await subscriberCallback(event)
+      await subscriberCallback(events)
     }
 
     for (const subscriberCallback of DomainEventEmitter.globalSubscribers) {
-      await subscriberCallback(event)
+      await subscriberCallback(events)
     }
   }
 }

@@ -25,7 +25,7 @@ export class AssignDefaultRoleToUserUseCase {
 
     await transaction(this.dataSource, async () => {
       await this.repository.insert(userRole)
-      await this.eventEmitter.emit(event)
+      await this.eventEmitter.emit([event])
     })
   }
 }

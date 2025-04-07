@@ -15,18 +15,23 @@ export class DomainEventLogSubscriber {
   ) {}
 
   @SubscribeToAll()
-  async handle (event: DomainEvent): Promise<void> {
+  async handle (events: DomainEvent[]): Promise<void> {
     const span = trace.getActiveSpan()
+    const logs: DomainEventLog[] = []
 
-    await this.eventLog.insert({
-      uuid: event.id,
-      createdAt: event.createdAt,
-      source: event.source,
-      type: event.type,
-      version: event.version,
-      content: event.content,
-      userUuid: this.authContext.getUserUuid(),
-      traceId: span?.spanContext().traceId ?? null
-    })
+    for (const event of events) {
+      logs.push(this.eventLog.create({
+        uuid: event.id,
+        createdAt: event.createdAt,
+        source: event.source,
+        type: event.type,
+        version: event.version,
+        content: event.content,
+        userUuid: this.authContext.getUserUuid(),
+        traceId: span?.spanContext().traceId ?? null
+      }))
+    }
+
+    await this.eventLog.insert(logs)
   }
 }

@@ -34,7 +34,7 @@ export class GetOrCreateUserUseCase {
     try {
       await transaction(this.dataSource, async () => {
         await this.repository.insert(user)
-        await this.eventEmitter.emit(new UserCreatedEvent(user.uuid))
+        await this.eventEmitter.emitOne(new UserCreatedEvent(user.uuid))
       })
     } catch (e) {
       if (this.userHasBeenCreatedSimultaneously(e)) {

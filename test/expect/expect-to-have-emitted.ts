@@ -14,8 +14,8 @@ export const toHaveEmitted: MatcherFunction<[DomainEvent]> = function (
     version: event.version
   })
 
-  const calls = received?.emit?.getCalls()
-  const events = calls.map(call => call?.firstArg as DomainEvent | undefined)
+  const calls = [...received.emit.getCalls(), ...received.emitOne.getCalls()]
+  const events = calls.flatMap(call => call?.firstArg as DomainEvent[] | DomainEvent | undefined)
   const emitted = events?.some(event => this.equals(event, expectedEvent))
 
   if (emitted) {

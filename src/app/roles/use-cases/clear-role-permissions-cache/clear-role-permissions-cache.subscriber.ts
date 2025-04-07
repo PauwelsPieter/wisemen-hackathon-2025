@@ -12,8 +12,8 @@ export class ClearRolePermissionsCacheSubscriber {
   ) {}
 
   @Subscribe(RolesPermissionsUpdatedEvent)
-  async onEvent (event: RolesPermissionsUpdatedEvent): Promise<void> {
-    const roleUuids = event.content.roles.map(role => role.uuid)
+  async onEvent (events: RolesPermissionsUpdatedEvent[]): Promise<void> {
+    const roleUuids = events.flatMap(event => event.content.roles.map(role => role.uuid))
 
     await this.roleCache.clearRolesPermissions(roleUuids)
   }

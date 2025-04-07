@@ -52,7 +52,7 @@ export class UpdateRolesPermissionsUseCase {
 
     await transaction(this.dataSource, async () => {
       await this.repository.updateRoles(roles)
-      await this.eventEmitter.emit(new RolesPermissionsUpdatedEvent(roles))
+      await this.eventEmitter.emitOne(new RolesPermissionsUpdatedEvent(roles))
 
       // TODO: Remove this CBN-123
       await this.typesense.import(TypesenseCollectionName.USER)
