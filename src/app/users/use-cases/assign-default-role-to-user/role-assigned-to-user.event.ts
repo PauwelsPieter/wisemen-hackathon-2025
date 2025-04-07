@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { DomainEventType } from '../../../../modules/domain-events/domain-event-type.js'
 import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
 import { UserEvent } from '../../events/user-event.js'
+import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.USER_ROLE_ASSIGNED)
 export class RoleAssignedToUserEventContent {
@@ -18,16 +19,12 @@ export class RoleAssignedToUserEventContent {
   }
 }
 
+@RegisterDomainEvent(DomainEventType.USER_ROLE_ASSIGNED, 1)
 export class RoleAssignedToUserEvent extends UserEvent<RoleAssignedToUserEventContent> {
-  static VERSION = 1
-  static TYPE = DomainEventType.USER_ROLE_ASSIGNED
-
   constructor (userUuid: string, roleUuid: string) {
     super({
       userUuid,
-      version: RoleAssignedToUserEvent.VERSION,
-      content: new RoleAssignedToUserEventContent(userUuid, roleUuid),
-      type: RoleAssignedToUserEvent.TYPE
+      content: new RoleAssignedToUserEventContent(userUuid, roleUuid)
     })
   }
 }

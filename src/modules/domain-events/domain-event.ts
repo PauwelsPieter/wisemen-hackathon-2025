@@ -5,8 +5,6 @@ import { DomainEventSubjectType } from './domain-event-subject-type.enum.js'
 
 export type DomainEventOptions<Content extends object = object> = {
   content: Content
-  version: number
-  type: DomainEventType
   subjectType?: DomainEventSubjectType
   subjectId?: string
 }
@@ -25,9 +23,7 @@ export class DomainEvent<Content extends object = object> {
     this.id = randomUUID()
     this.createdAt = new Date()
     this.content = options.content
-    this.version = options.version
     this.source = os.hostname()
-    this.type = options.type
     this.subjectId = options.subjectId
     this.subjectType = options.subjectType
   }

@@ -8,15 +8,15 @@ export class DomainEventEmitter {
   private static subscribers = new Map<string, EventSubscriberMethod[]>()
   private static globalSubscribers: EventSubscriberMethod[] = []
 
-  static addSubscriber (toEvent: string, observer: EventSubscriberMethod): void {
+  static addSubscriber (toEvent: string, subscriber: EventSubscriberMethod): void {
     const eventSubscribers = this.subscribers.get(toEvent) ?? []
 
-    eventSubscribers.push(observer)
+    eventSubscribers.push(subscriber)
     this.subscribers.set(toEvent, eventSubscribers)
   }
 
-  static addGlobalSubscriber (observer: EventSubscriberMethod): void {
-    this.globalSubscribers.push(observer)
+  static addGlobalSubscriber (subscriber: EventSubscriberMethod): void {
+    this.globalSubscribers.push(subscriber)
   }
 
   async emitOne (event: DomainEvent): Promise<void> {
