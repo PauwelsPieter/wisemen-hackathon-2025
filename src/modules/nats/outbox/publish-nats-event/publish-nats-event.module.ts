@@ -3,11 +3,7 @@ import { NatsModule } from '../../nats.module.js'
 import { PublishNatsEventJobHandler } from './publish-nats-event.handler.js'
 
 @Module({
-  imports: [
-    NatsModule
-  ],
-  providers: [
-    PublishNatsEventJobHandler
-  ]
+  imports: [NatsModule],
+  providers: [PublishNatsEventJobHandler]
 })
 export class PublishNatsEventJobModule {}

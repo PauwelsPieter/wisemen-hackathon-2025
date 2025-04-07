@@ -1,13 +1,15 @@
 import { SECONDS_PER_MINUTE } from '@wisemen/time'
-import { BaseJob, PgBossJob } from '@wisemen/pgboss-nestjs-job'
-import type { NatsOutboxEvent } from '../nats-outbox-event.js'
+import { BaseJob, BaseJobData, PgBossJob } from '@wisemen/pgboss-nestjs-job'
 import { QueueName } from '../../../pgboss/enums/queue-name.enum.js'
+
+export interface NatsOutboxEvent extends BaseJobData {
+  topic: string
+  serializedMessage: string
+}
 
 @PgBossJob(QueueName.SYSTEM)
 export class PublishNatsEventJob extends BaseJob<NatsOutboxEvent> {
-  constructor (
-    data: NatsOutboxEvent
-  ) {
+  constructor (data: NatsOutboxEvent) {
     super(data, {
       priority: 0,
       retryLimit: 3,
