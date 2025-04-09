@@ -1,6 +1,8 @@
 import { IsBoolean, IsEmail, IsPhoneNumber, IsString } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNullable } from '@wisemen/validators'
+import { AddressCommand } from '../../../../utils/address/address-command.js'
+import { IsAddress } from '../../../../utils/address/is-address.validator.js'
 
 export class UpdateContactCommand {
   @ApiProperty({ type: String, nullable: true, example: 'John' })
@@ -26,4 +28,9 @@ export class UpdateContactCommand {
   @ApiProperty({ type: Boolean })
   @IsBoolean()
   isActive: boolean
+
+  @ApiProperty({ type: AddressCommand, nullable: true })
+  @IsNullable()
+  @IsAddress()
+  address: AddressCommand | null
 }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Contact } from '../../entities/contact.entity.js'
+import { AddressResponse } from '../../../../utils/address/address-response.js'
 
 export class ViewContactDetailResponse {
   @ApiProperty({ type: String, format: 'uuid' })
@@ -26,6 +27,9 @@ export class ViewContactDetailResponse {
   @ApiProperty({ type: String, format: 'phone', nullable: true })
   phone: string | null
 
+  @ApiProperty({ type: AddressResponse, nullable: true })
+  address: AddressResponse | null
+
   constructor (contact: Contact) {
     this.uuid = contact.uuid
     this.createdAt = contact.createdAt.toISOString()
@@ -35,5 +39,6 @@ export class ViewContactDetailResponse {
     this.lastName = contact.lastName
     this.email = contact.email
     this.phone = contact.phone
+    this.address = contact.address ? new AddressResponse(contact.address) : null
   }
 }

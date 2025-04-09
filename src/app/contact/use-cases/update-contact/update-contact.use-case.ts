@@ -24,7 +24,8 @@ export class UpdateContactUseCase {
       lastName: command.lastName,
       email: command.email,
       phone: command.phone,
-      isActive: command.isActive
+      isActive: command.isActive,
+      address: command.address?.parse()
     })
   }
 }

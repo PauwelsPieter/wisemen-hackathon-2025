@@ -19,7 +19,8 @@ export class CreateContactUseCase {
       firstName: command.firstName,
       lastName: command.lastName,
       email: command.email,
-      phone: command.phone
+      phone: command.phone,
+      address: command.address?.parse() ?? null
     })
 
     await this.contactRepository.insert(contact)

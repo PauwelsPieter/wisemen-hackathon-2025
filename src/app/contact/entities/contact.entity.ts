@@ -1,4 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { AddressColumn } from '../../../utils/address/address-column.js'
+import { Address } from '../../../utils/address/address.js'
 
 @Entity()
 export class Contact {
@@ -25,4 +27,7 @@ export class Contact {
 
   @Column({ type: 'varchar', nullable: true })
   phone: string | null
+
+  @AddressColumn({ nullable: true })
+  address: Address | null
 }
