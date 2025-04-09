@@ -12,6 +12,8 @@ export enum Permission {
   FILE_CREATE = 'file.create',
   FILE_DELETE = 'file.delete',
 
+  JOBS_READ_INDEX = 'jobs.read.index',
+
   ROLE_READ = 'role.read',
   ROLE_CREATE = 'role.create',
   ROLE_UPDATE = 'role.update',

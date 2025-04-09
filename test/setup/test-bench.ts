@@ -18,6 +18,7 @@ import { ApiModule } from '../../src/modules/api/api.module.js'
 import { toHaveValidationErrors } from '../expect/expect-validation-errors.js'
 import { toHaveEmitted } from '../expect/expect-to-have-emitted.js'
 
+import { ISO8601 } from '../expect/expect-iso-8601.js'
 import { RepositoryTestSetup } from './repository-test-setup.js'
 import { EndToEndTestSetup } from './end-to-end-test-setup.js'
 
@@ -143,7 +144,8 @@ export class TestBench {
       isEnumValue,
       toHaveApiError,
       toHaveValidationErrors,
-      toHaveEmitted
+      toHaveEmitted,
+      ISO8601
     })
   }
 }
