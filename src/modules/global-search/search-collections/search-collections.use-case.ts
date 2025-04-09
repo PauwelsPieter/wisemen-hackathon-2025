@@ -40,7 +40,7 @@ export class SearchCollectionsUseCase {
         return {
           collection: collection,
           q: search,
-          query_by: 'firstName,lastName',
+          query_by: 'firstName,lastName,email',
           infix: 'always'
         }
       }

@@ -10,7 +10,7 @@ export class UserEntityBuilder {
     this.user.userId = randomUUID()
     this.user.createdAt = new Date()
     this.user.updatedAt = new Date()
-    this.user.email = 'test@mail.com'
+    this.user.email = `${randomUUID()}@mail.com`
     this.user.firstName = 'John'
     this.user.lastName = 'Doe'
   }

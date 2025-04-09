@@ -35,7 +35,7 @@ export class UserTypesenseRepository {
         .withQuery(query.search)
         .withOffset(query.pagination?.offset)
         .withLimit(query.pagination?.limit)
-        .addSearchOn(['firstName', 'lastName'])
+        .addSearchOn(['firstName', 'lastName', 'email'])
 
     return searchParamBuilder.build()
   }
