@@ -45,8 +45,8 @@ export class AddressBuilder {
     return this
   }
 
-  withCoordinates (coordinates: Coordinates): this {
-    this.address.coordinates = coordinates
+  withCoordinates (coordinates?: Coordinates | null): this {
+    this.address.coordinates = coordinates ?? null
     return this
   }
 
