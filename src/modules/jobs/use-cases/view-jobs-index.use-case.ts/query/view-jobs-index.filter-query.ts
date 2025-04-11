@@ -12,7 +12,7 @@ export class ViewJobsIndexFilterQuery extends FilterQuery {
   @ArrayMinSize(1)
   queueNames?: QueueName[]
 
-  @ApiProperty({ type: 'string', required: false, default: 'false' })
+  @ApiProperty({ type: 'boolean', required: false, default: false })
   @IsUndefinable()
   @IsQueryBoolean()
   archived?: string

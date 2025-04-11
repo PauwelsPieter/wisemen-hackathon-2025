@@ -12,5 +12,6 @@ export class ViewJobsIndexSortQuery extends SortQuery {
   key: ViewJobsIndexSortQueryKey
 
   @SortDirectionApiProperty()
+  @IsEnum(SortDirection)
   order: SortDirection
 }
