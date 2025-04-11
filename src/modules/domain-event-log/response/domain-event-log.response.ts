@@ -3,6 +3,8 @@ import { OneOfMetaApiProperty, OneOfResponse, OneOfTypeApiProperty } from '@wise
 import { DomainEventLog } from '../domain-event-log.entity.js'
 import { DomainEventType } from '../../domain-events/domain-event-type.js'
 import { tcr } from '../../localization/helpers/translate.helper.js'
+import { DomainEventSubjectType } from '../../domain-events/domain-event-subject-type.enum.js'
+import { DomainEventSubjectTypeApiProperty } from '../../domain-events/domain-event-subject-type.api-property.js'
 
 @OneOfResponse(DomainEventLog)
 export class DomainEventLogResponse {
@@ -27,6 +29,12 @@ export class DomainEventLogResponse {
   @OneOfTypeApiProperty()
   type: DomainEventType
 
+  @DomainEventSubjectTypeApiProperty({ nullable: true })
+  subjectType: DomainEventSubjectType | null
+
+  @ApiProperty({ type: 'string', format: 'uuid', nullable: true })
+  subjectId: string | null
+
   @OneOfMetaApiProperty()
   content: unknown
 
@@ -38,6 +46,8 @@ export class DomainEventLogResponse {
     this.userUuid = log.userUuid
     this.type = log.type
     this.content = log.content
+    this.subjectType = log.subjectType
+    this.subjectId = log.subjectId
     this.message = tcr(`event-log.${log.type}.v${log.version}`)
   }
 }

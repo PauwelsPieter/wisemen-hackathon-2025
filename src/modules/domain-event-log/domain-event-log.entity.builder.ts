@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { DomainEventType } from '../domain-events/domain-event-type.js'
+import { DomainEventSubjectType } from '../domain-events/domain-event-subject-type.enum.js'
 import { DomainEventLog } from './domain-event-log.entity.js'
 
 export class DomainEventLogEntityBuilder {
@@ -18,43 +19,46 @@ export class DomainEventLogEntityBuilder {
 
   withUuid (uuid: string): this {
     this.log.uuid = uuid
-
     return this
   }
 
   withCreatedAt (date: Date): this {
     this.log.createdAt = date
-
     return this
   }
 
   withVersion (version: number): this {
     this.log.version = version
-
     return this
   }
 
   withSource (source: string): this {
     this.log.source = source
-
     return this
   }
 
   withType (type: DomainEventType): this {
     this.log.type = type
-
     return this
   }
 
   withContent (content: object): this {
     this.log.content = content
+    return this
+  }
 
+  withSubjectType (type: DomainEventSubjectType | null): this {
+    this.log.subjectType = type
+    return this
+  }
+
+  withSubjectId (id: string | null): this {
+    this.log.subjectId = id
     return this
   }
 
   withUserUuid (uuid: string | null): this {
     this.log.userUuid = uuid
-
     return this
   }
 

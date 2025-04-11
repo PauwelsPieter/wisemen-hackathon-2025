@@ -16,7 +16,19 @@ export class ViewDomainEventLogIndexUseCase {
     const queryBuilder = this.logRepository.createQueryBuilder('event_log')
 
     if (query.pagination?.key != null) {
-      queryBuilder.where('(created_at, uuid) < (:createdAt, :uuid)', query.pagination.key)
+      queryBuilder.andWhere('(created_at, uuid) < (:createdAt, :uuid)', query.pagination.key)
+    }
+
+    if (query.filter?.subjectType != null) {
+      queryBuilder.andWhere('subject_type = :subjectType', { subjectType: query.filter.subjectType })
+    }
+
+    if (query.filter?.subjectId != null) {
+      queryBuilder.andWhere('subject_id = :subjectId', { subjectId: query.filter.subjectId })
+    }
+
+    if (query.filter?.userUuid != null) {
+      queryBuilder.andWhere('user_uuid = :userUuid', { userUuid: query.filter.userUuid })
     }
 
     const logs = await queryBuilder
