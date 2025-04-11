@@ -19,7 +19,7 @@ export class GetApiInfoController {
     description: 'API info retrieved',
     type: GetApiInfoResponse
   })
-  viewMe (
+  getApiInfo (
   ): GetApiInfoResponse {
     return new GetApiInfoResponse(
       this.configService.getOrThrow('NODE_ENV'),

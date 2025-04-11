@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing'
 import { expect } from 'expect'
 import { OpentelemetryMetricsModule } from '../../utils/opentelemetry/metrics/opentelemetry-metrics.module.js'
 
-describe('Metrics tests', () => {
+describe('Opentelemtetry metrics module tests', () => {
   async function testMetricsStartup (): Promise<void> {
     const module = await Test.createTestingModule({
       imports: [OpentelemetryMetricsModule]

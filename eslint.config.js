@@ -30,12 +30,12 @@ export default [
         {
           pathGroups: [
             {
-              pattern: '../**/otel-sdk.js',
+              pattern: '../**/otel-*-sdk.js',
               group: 'builtin',
               position: 'before'
             },
             {
-              pattern: './**/otel-sdk.js',
+              pattern: './**/otel-*-sdk.js',
               group: 'builtin',
               position: 'before'
             }

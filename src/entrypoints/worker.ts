@@ -1,5 +1,5 @@
 import '../modules/exceptions/sentry.js'
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { startOpentelemetryTracing } from '../utils/opentelemetry/otel-tracer-sdk.js'
 import { NestFactory } from '@nestjs/core'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
@@ -39,7 +39,7 @@ if (!Object.values(QueueName).includes(unvalidatedQueueName as QueueName)) {
 }
 const queueName = unvalidatedQueueName
 
-startOpentelemetry()
+startOpentelemetryTracing()
 
 class Worker extends WorkerContainer {
   async bootstrap (): Promise<INestApplicationContext> {

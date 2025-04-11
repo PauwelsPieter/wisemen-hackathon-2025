@@ -1,4 +1,4 @@
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { startOpentelemetryTracing } from '../utils/opentelemetry/otel-tracer-sdk.js'
 import { INestApplicationContext } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'
@@ -20,7 +20,7 @@ const args = await yargs(hideBin(process.argv))
   .help()
   .argv
 
-startOpentelemetry()
+startOpentelemetryTracing()
 
 export class Cronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {

@@ -1,5 +1,5 @@
 import '../modules/exceptions/sentry.js'
-import { startOpentelemetry } from '../utils/opentelemetry/otel-sdk.js'
+import { startOpentelemetryTracing } from '../utils/opentelemetry/otel-tracer-sdk.js'
 import { NestFactory } from '@nestjs/core'
 import { INestApplicationContext, Module } from '@nestjs/common'
 import { ExpressAdapter } from '@nestjs/platform-express'
@@ -18,7 +18,7 @@ import { AuthModule } from '../modules/auth/auth.module.js'
 })
 class WebsocketServerModule {}
 
-startOpentelemetry()
+startOpentelemetryTracing()
 
 class WebsocketServer extends ApiContainer {
   async bootstrap (adapter: ExpressAdapter): Promise<INestApplicationContext> {

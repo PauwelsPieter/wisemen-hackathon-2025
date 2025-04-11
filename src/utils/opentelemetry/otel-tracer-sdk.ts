@@ -1,8 +1,6 @@
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto'
-import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
 import { registerInstruments } from './instrumentations.js'
@@ -10,21 +8,20 @@ import { getOtelServiceName } from './get-otel-service-name.js'
 
 registerInstruments()
 
-export function startOpentelemetry (serviceName: string = getOtelServiceName()): void {
+export function startOpentelemetryTracing (serviceName: string = getOtelServiceName()): void {
   if (process.env.NODE_ENV === 'test') return
   if (process.env.NODE_ENV === 'local') return
 
-  const sdk = configure(serviceName)
+  const sdk = configureOpentelemetryTracing(serviceName)
 
   sdk?.start()
 }
 
-function configure (serviceName: string): NodeSDK | null {
+function configureOpentelemetryTracing (serviceName: string): NodeSDK | null {
   const traceUrl = process.env.SIGNOZ_TRACE_ENDPOINT
-  const metricsUrl = process.env.SIGNOZ_METRICS_ENDPOINT
   const env = process.env.NODE_ENV
 
-  if (traceUrl == null || traceUrl === '' || metricsUrl == null || metricsUrl == '') {
+  if (traceUrl == null || traceUrl === '') {
     return null
   }
 
@@ -35,18 +32,8 @@ function configure (serviceName: string): NodeSDK | null {
     headers
   })
 
-  const metricReader = new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-      url: metricsUrl,
-      headers
-    }),
-    exportIntervalMillis: 10000,
-    exportTimeoutMillis: 10000
-  })
-
   const sdk = new NodeSDK({
     traceExporter,
-    metricReader,
     spanProcessors: [
       new IgnoredSpansProcessor(traceExporter, {
         maxQueueSize: 2048,
@@ -56,8 +43,8 @@ function configure (serviceName: string): NodeSDK | null {
       })
     ],
     resource: resourceFromAttributes({
-      'service.name': `${serviceName}`,
-      'deployment.environment': `${env}`
+      'service.name': serviceName,
+      'deployment.environment': env
     })
   })
 

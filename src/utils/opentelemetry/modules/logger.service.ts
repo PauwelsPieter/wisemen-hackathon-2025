@@ -4,7 +4,10 @@ import {
 } from '@opentelemetry/sdk-logs'
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http'
 import { SeverityNumber, type Logger } from '@opentelemetry/api-logs'
-import { getOTLPExporterHeaders } from './signoz-auth.js'
+import { Injectable, OnModuleInit } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { getOTLPExporterHeaders } from '../signoz-auth.js'
+import { getOtelServiceName } from '../get-otel-service-name.js'
 
 export enum LogContext {
   INFO = 'info'
@@ -16,28 +19,35 @@ interface LogRecord {
   attributes?: Record<string, unknown>
 }
 
-class OpenTelemetryLogger {
-  private readonly loggerProvider: LoggerProvider
-  private readonly logProvider: Logger | null
+@Injectable()
+export class OpenTelemetryLoggerService implements OnModuleInit {
+  private loggerProvider: LoggerProvider
+  private logProvider: Logger | null
   private readonly hostname: string
 
-  constructor () {
-    if (process.env.SIGNOZ_LOG_ENDPOINT == null) {
-      this.logProvider = null
+  constructor (private readonly configService: ConfigService) {
+    this.hostname = getOtelServiceName()
+  }
 
+  onModuleInit () {
+    const logEndpoint = this.configService.get<string>('SIGNOZ_LOG_ENDPOINT')
+
+    if (logEndpoint == null || logEndpoint === '') {
       return
     }
 
     const headers = getOTLPExporterHeaders()
 
     const logExporter = new OTLPLogExporter({
-      url: process.env.SIGNOZ_LOG_ENDPOINT,
+      url: logEndpoint,
       headers,
       concurrencyLimit: 1
     })
 
     this.loggerProvider = new LoggerProvider()
-    this.loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter))
+    this.loggerProvider.addLogRecordProcessor(
+      new BatchLogRecordProcessor(logExporter)
+    )
 
     this.logProvider = this.loggerProvider.getLogger('default')
   }
@@ -61,6 +71,7 @@ class OpenTelemetryLogger {
 
     this.logProvider.emit({
       severityNumber: severity,
+      severityText: SeverityNumber[severity],
       timestamp: Date.now(),
       body: JSON.stringify(record.body),
       attributes: {
@@ -73,7 +84,3 @@ class OpenTelemetryLogger {
     })
   }
 }
-
-const openTelemetryLogger = new OpenTelemetryLogger()
-
-export default openTelemetryLogger
