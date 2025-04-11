@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { TypesenseQueryService } from '../../../../modules/typesense/services/typesense-query.service.js'
 import { TypesenseSearchParamsBuilder } from '../../../../modules/typesense/builder/search-params.builder.js'
 import { TypesenseCollectionName } from '../../../../modules/typesense/enums/typesense-collection-index.enum.js'
-import { ContactTypesenseCollection } from '../../typesense/contact.typesense-collection.js'
 import { ViewContactIndexResponse } from './view-contact-index.response.js'
 import { ViewContactIndexQuery } from './query/view-contact-index.query.js'
 
@@ -15,7 +14,7 @@ export class ViewContactIndexUseCase {
   public async execute (
     query: ViewContactIndexQuery
   ): Promise<ViewContactIndexResponse> {
-    const searchParamsBuilder = new TypesenseSearchParamsBuilder(new ContactTypesenseCollection())
+    const searchParamsBuilder = new TypesenseSearchParamsBuilder()
       .withQuery(query.search)
       .withLimit(query.pagination?.limit)
       .withOffset(query.pagination?.offset)

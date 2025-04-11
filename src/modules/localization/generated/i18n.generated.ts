@@ -23,6 +23,17 @@ export type I18nTranslations = {
                 "v1": string;
             };
         };
+        "contact": {
+            "created": {
+                "v1": string;
+            };
+            "updated": {
+                "v1": string;
+            };
+            "deleted": {
+                "v1": string;
+            };
+        };
         "roles": {
             "permissions": {
                 "updated": {

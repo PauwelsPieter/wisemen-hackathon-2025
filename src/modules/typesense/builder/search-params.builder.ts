@@ -19,12 +19,12 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
   private readonly filters: string[] = []
   private queries: string[] = []
   private readonly sorting: string[] = []
-  private query: string = ''
+  private query: string = '*'
   private offset: number = DEFAULT_OFFSET
   private limit: number = DEFAULT_LIMIT
   private infix: TypesenseOperationMode[] = []
 
-  constructor (private readonly collection: Collection) {}
+  constructor () {}
 
   withQuery (query: string | undefined): this {
     if (query != null) {
@@ -122,19 +122,9 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
   }
 
   build (): SearchParams {
-    let queryBy: string = ''
-
-    if (this.queries.length > 0) {
-      queryBy = this.queries.join(',')
-    } else {
-      queryBy = this.collection.searchableFields
-        .map(field => field.name)
-        .join(',')
-    }
-
     return {
       q: this.query,
-      query_by: queryBy,
+      query_by: this.queries.join(','),
       filter_by: this.filters.join(` ${TypesenseLogicOperator.AND} `),
       sort_by: this.sorting.join(','),
       offset: this.offset,
