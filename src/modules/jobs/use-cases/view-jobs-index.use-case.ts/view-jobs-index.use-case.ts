@@ -20,7 +20,7 @@ export class ViewJobsIndexUseCase {
       .select([
         'name AS "queueName"',
         'id',
-        'data->>\'className\' AS "jobName"',
+        'data->>\'className\' AS "name"',
         'state AS "status"',
         'created_on AS "createdAt"',
         'completed_on AS "completedAt"'

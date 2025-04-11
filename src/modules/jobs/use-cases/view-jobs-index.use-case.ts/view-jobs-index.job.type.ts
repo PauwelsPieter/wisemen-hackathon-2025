@@ -4,7 +4,7 @@ import { JobStatus } from '../../job-status.enum.js'
 export interface ViewJobsIndexJob {
   queueName: QueueName
   id: string
-  jobName: string
+  name: string
   status: JobStatus
   createdAt: string
   completedAt: string | null

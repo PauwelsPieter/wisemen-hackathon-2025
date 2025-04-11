@@ -47,7 +47,7 @@ describe('View job index end to end tests', () => {
       items: [expect.objectContaining({
         queueName: expect.isEnumValue(QueueName),
         id: expect.any(String),
-        jobName: SyncTypesenseJob.name,
+        name: SyncTypesenseJob.name,
         createdAt: expect.ISO8601(),
         completedAt: null
       })]
@@ -92,7 +92,7 @@ describe('View job index end to end tests', () => {
       items: [expect.objectContaining({
         queueName: expect.isEnumValue(QueueName),
         id: expect.any(String),
-        jobName: SyncTypesenseJob.name,
+        name: SyncTypesenseJob.name,
         createdAt: expect.ISO8601(),
         completedAt: null
       })]

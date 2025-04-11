@@ -9,11 +9,11 @@ class ViewJobsIndexItemResponse {
   @QueuenameApiProperty()
   queueName: string
 
-  @ApiProperty({ type: 'string' })
+  @ApiProperty({ type: 'string', format: 'uuid' })
   id: string
 
   @ApiProperty({ type: 'string' })
-  jobName: string
+  name: string
 
   @JobStatusApiProperty()
   status: JobStatus
@@ -27,7 +27,7 @@ class ViewJobsIndexItemResponse {
   constructor (job: ViewJobsIndexJob) {
     this.queueName = job.queueName
     this.id = job.id
-    this.jobName = job.jobName
+    this.name = job.name
     this.status = job.status
     this.createdAt = job.createdAt
     this.completedAt = job.completedAt
