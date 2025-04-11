@@ -1,4 +1,4 @@
-import { Equals, IsOptional, IsString, ValidateNested } from 'class-validator'
+import { Equals, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
 import { FilterQuery, PaginatedOffsetSearchQuery } from '@wisemen/pagination'
@@ -20,6 +20,9 @@ export class ViewContactIndexQuery extends PaginatedOffsetSearchQuery {
   @ValidateNested()
   filter?: ViewContactIndexFilterQuery
 
-  @Equals(undefined)
-  search?: never
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  search?: string
 }

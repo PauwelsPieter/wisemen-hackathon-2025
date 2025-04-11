@@ -9,6 +9,7 @@ import { MigrateCollectionsModule } from '../use-cases/migrate-collections/migra
 import { ImportCollectionsModule } from '../use-cases/import-collections/import-collections.module.js'
 import { ViewCollectionsModule } from '../use-cases/view-collections/view-collections.module.js'
 import { UserTypesenseCollectorModule } from '../../../app/users/typesense/user-typesense-collector.module.js'
+import { ContactTypesenseCollectorModule } from '../../../app/contact/typesense/typesense-contact.module.js'
 
 @Module({
   providers: [
@@ -23,7 +24,8 @@ import { UserTypesenseCollectorModule } from '../../../app/users/typesense/user-
     MigrateCollectionsModule,
     ImportCollectionsModule,
     ViewCollectionsModule,
-    UserTypesenseCollectorModule
+    UserTypesenseCollectorModule,
+    ContactTypesenseCollectorModule
   ],
   exports: [
     TypesenseQueryService,

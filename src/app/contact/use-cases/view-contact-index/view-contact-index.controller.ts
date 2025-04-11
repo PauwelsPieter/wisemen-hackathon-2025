@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common'
 import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
-import { ViewContactIndexQuery } from './view-contact-index.query.js'
+import { ViewContactIndexQuery } from './query/view-contact-index.query.js'
 import { ViewContactIndexResponse } from './view-contact-index.response.js'
 import { ViewContactIndexUseCase } from './view-contact-index.use-case.js'
 

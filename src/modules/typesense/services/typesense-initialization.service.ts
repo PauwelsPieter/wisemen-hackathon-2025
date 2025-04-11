@@ -7,6 +7,7 @@ import { TypesenseClient } from '../clients/typesense.client.js'
 import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
 import { exhaustiveCheck } from '../../../utils/helpers/exhaustive-check.helper.js'
 import { UserTypesenseCollection } from '../../../app/users/typesense/user.collections.js'
+import { ContactTypesenseCollection } from '../../../app/contact/typesense/contact.typesense-collection.js'
 import { TypesenseCollectionService } from './typesense-collection.service.js'
 
 @Injectable()
@@ -91,6 +92,7 @@ export class TypesenseInitializationService {
   private getCollectionSchema (collection: TypesenseCollectionName): CollectionCreateSchema {
     switch (collection) {
       case TypesenseCollectionName.USER: return new UserTypesenseCollection().getSchema()
+      case TypesenseCollectionName.CONTACT: return new ContactTypesenseCollection().getSchema()
       default: exhaustiveCheck(collection)
     }
   }

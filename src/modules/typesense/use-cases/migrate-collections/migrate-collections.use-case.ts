@@ -10,6 +10,7 @@ import { TypesenseCollectorFactory } from '../../services/collectors/typesense-c
 import { UserTypesenseCollection } from '../../../../app/users/typesense/user.collections.js'
 import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
 import { TypesenseSync } from '../../jobs/sync-typesense/typesense-sync.entity.js'
+import { ContactTypesenseCollection } from '../../../../app/contact/typesense/contact.typesense-collection.js'
 
 @Injectable()
 export class MigrateCollectionsUseCase {
@@ -127,6 +128,7 @@ export class MigrateCollectionsUseCase {
   private getCollectionSchema (collection: TypesenseCollectionName): CollectionCreateSchema {
     switch (collection) {
       case TypesenseCollectionName.USER: return new UserTypesenseCollection().getSchema()
+      case TypesenseCollectionName.CONTACT: return new ContactTypesenseCollection().getSchema()
       default: exhaustiveCheck(collection)
     }
   }

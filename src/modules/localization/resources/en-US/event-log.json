@@ -7,6 +7,17 @@
             "v1": "Role assigned to user"
         }
     },
+    "contact": {
+        "created": {
+            "v1": "Contact created"
+        },
+        "updated": {
+            "v1": "Contact updated"
+        },
+        "deleted": {
+            "v1": "Contact deleted"
+        }
+    },
     "roles": {
         "permissions": {
             "updated": {

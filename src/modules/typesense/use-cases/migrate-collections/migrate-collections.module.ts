@@ -4,12 +4,14 @@ import { TypesenseClient } from '../../clients/typesense.client.js'
 import { TypesenseCollectorFactory } from '../../services/collectors/typesense-collector.factory.js'
 import { UserTypesenseCollectorModule } from '../../../../app/users/typesense/user-typesense-collector.module.js'
 import { TypesenseSync } from '../../jobs/sync-typesense/typesense-sync.entity.js'
+import { ContactTypesenseCollectorModule } from '../../../../app/contact/typesense/typesense-contact.module.js'
 import { MigrateCollectionsUseCase } from './migrate-collections.use-case.js'
 import { MigrateCollectionsController } from './migrate-collections.controller.js'
 
 @Module({
   imports: [
     UserTypesenseCollectorModule,
+    ContactTypesenseCollectorModule,
     TypeOrmModule.forFeature([TypesenseSync])
   ],
   controllers: [MigrateCollectionsController],

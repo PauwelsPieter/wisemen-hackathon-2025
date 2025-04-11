@@ -1,13 +1,18 @@
-import { Repository } from 'typeorm'
-import { InjectRepository } from '@wisemen/nestjs-typeorm'
+import { DataSource, Repository } from 'typeorm'
+import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
 import { Injectable } from '@nestjs/common'
 import { Contact } from '../../entities/contact.entity.js'
+import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
+import { ContactEntityBuilder } from '../../entities/contact.entity.builder.js'
 import { CreateContactCommand } from './create-contact.command.js'
 import { CreateContactResponse } from './create-contact.response.js'
+import { ContactCreatedEvent } from './contact-created.event.js'
 
 @Injectable()
 export class CreateContactUseCase {
   constructor (
+    private readonly datasource: DataSource,
+    private readonly eventEmitter: DomainEventEmitter,
     @InjectRepository(Contact)
     private contactRepository: Repository<Contact>
   ) {}
@@ -15,15 +20,20 @@ export class CreateContactUseCase {
   public async execute (
     command: CreateContactCommand
   ): Promise<CreateContactResponse> {
-    const contact = this.contactRepository.create({
-      firstName: command.firstName,
-      lastName: command.lastName,
-      email: command.email,
-      phone: command.phone,
-      address: command.address?.parse() ?? null
-    })
+    const contact = new ContactEntityBuilder()
+      .withFirstName(command.firstName)
+      .withLastName(command.lastName)
+      .withEmail(command.email)
+      .withPhone(command.phone)
+      .withAddress(command.address?.parse() ?? null)
+      .build()
 
-    await this.contactRepository.insert(contact)
+    const event = new ContactCreatedEvent(contact)
+
+    await transaction(this.datasource, async () => {
+      await this.contactRepository.insert(contact)
+      await this.eventEmitter.emit([event])
+    })
 
     return new CreateContactResponse(contact)
   }

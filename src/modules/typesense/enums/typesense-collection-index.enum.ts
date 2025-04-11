@@ -1,3 +1,4 @@
 export enum TypesenseCollectionName {
-  USER = 'user'
+  USER = 'user',
+  CONTACT = 'contact'
 }
