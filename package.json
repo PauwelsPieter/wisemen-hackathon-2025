@@ -60,7 +60,7 @@
     "@wisemen/nestjs-typeorm": "^0.0.17",
     "@wisemen/one-of": "^0.0.3",
     "@wisemen/pagination": "^0.0.5",
-    "@wisemen/pgboss-nestjs-job": "^1.0.1",
+    "@wisemen/pgboss-nestjs-job": "^1.0.2",
     "@wisemen/time": "^0.0.21",
     "@wisemen/validators": "^0.0.7",
     "axios": "^1.8.4",

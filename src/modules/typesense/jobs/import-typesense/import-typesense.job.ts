@@ -3,7 +3,9 @@ import { QueueName } from '../../../pgboss/enums/queue-name.enum.js'
 
 @PgBossJob(QueueName.SYSTEM)
 export class ImportTypesenseJob extends BaseJob {
-  uniqueBy (): string {
-    return 'import-typesense'
+  constructor () {
+    super(undefined, {
+      singletonKey: 'import-typesense'
+    })
   }
 }

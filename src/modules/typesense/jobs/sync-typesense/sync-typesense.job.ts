@@ -12,10 +12,9 @@ export class SyncTypesenseJob extends BaseJob<SyncTypesenseJobData> {
   constructor (collectionName: TypesenseCollectionName) {
     const startAfter = dayjs().add(2, 'seconds').toDate()
 
-    super({ collectionName }, { startAfter })
-  }
-
-  uniqueBy (data: SyncTypesenseJobData): string {
-    return `sync-typesense-${data.collectionName}`
+    super({ collectionName }, {
+      singletonKey: `sync-typesense-${collectionName}`,
+      startAfter
+    })
   }
 }
