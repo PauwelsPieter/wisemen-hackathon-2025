@@ -11,8 +11,7 @@ export class AssignDefaultRoleToUserSubscriber {
 
   @Subscribe(UserCreatedEvent)
   async assignDefaultRole (events: UserCreatedEvent[]): Promise<void> {
-    for (const event of events) {
-      await this.useCase.assignDefaultRole(event.content.userUuid)
-    }
+    const userUuids = events.map(event => event.content.userUuid)
+    await this.useCase.assignDefaultRole(userUuids)
   }
 }

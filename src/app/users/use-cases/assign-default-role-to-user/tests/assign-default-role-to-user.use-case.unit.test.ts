@@ -26,7 +26,7 @@ describe('Assign default tole to user use case', () => {
 
     const userUuid = randomUUID()
 
-    await useCase.assignDefaultRole(userUuid)
+    await useCase.assignDefaultRole([userUuid])
 
     expect(repository.insert.called).toBe(true)
   })
@@ -47,7 +47,7 @@ describe('Assign default tole to user use case', () => {
 
     const userUuid = randomUUID()
 
-    await useCase.assignDefaultRole(userUuid)
+    await useCase.assignDefaultRole([userUuid])
 
     expect(eventEmitter).toHaveEmitted(new RoleAssignedToUserEvent(userUuid, role.uuid))
   })

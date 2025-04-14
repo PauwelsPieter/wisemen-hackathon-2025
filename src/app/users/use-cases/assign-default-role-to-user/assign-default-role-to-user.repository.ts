@@ -13,7 +13,7 @@ export class AssignDefaultRoleToUserRepository {
     return await this.roleRepository.findOneByOrFail({ isDefault: true })
   }
 
-  async insert (userRole: UserRole): Promise<void> {
-    await this.userRoleRepository.insert(userRole)
+  async insert (userRoles: UserRole[]): Promise<void> {
+    await this.userRoleRepository.insert(userRoles)
   }
 }

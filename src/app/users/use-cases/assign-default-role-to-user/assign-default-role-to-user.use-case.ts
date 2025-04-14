@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { UserRoleEntityBuilder } from '../../../roles/tests/builders/entities/user-role-entity.builder.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
+import { UserRole } from '../../../roles/entities/user-role.entity.js'
 import { AssignDefaultRoleToUserRepository } from './assign-default-role-to-user.repository.js'
 import { RoleAssignedToUserEvent } from './role-assigned-to-user.event.js'
 
@@ -14,18 +15,28 @@ export class AssignDefaultRoleToUserUseCase {
     private readonly repository: AssignDefaultRoleToUserRepository
   ) {}
 
-  async assignDefaultRole (toUserUuid: string): Promise<void> {
-    const defaultRole = await this.repository.getDefaultRole()
-    const userRole = new UserRoleEntityBuilder()
-      .withRoleUuid(defaultRole.uuid)
-      .withUserUuid(toUserUuid)
-      .build()
+  async assignDefaultRole (toUserUuids: string[]): Promise<void> {
+    if (toUserUuids.length === 0) {
+      return
+    }
 
-    const event = new RoleAssignedToUserEvent(userRole.userUuid, userRole.roleUuid)
+    const defaultRole = await this.repository.getDefaultRole()
+
+    const userRoles: UserRole[] = []
+    const events: RoleAssignedToUserEvent[] = []
+    for (const userUuid of toUserUuids) {
+      const userRole = new UserRoleEntityBuilder()
+        .withRoleUuid(defaultRole.uuid)
+        .withUserUuid(userUuid)
+        .build()
+
+      userRoles.push(userRole)
+      events.push(new RoleAssignedToUserEvent(userRole.userUuid, userRole.roleUuid))
+    }
 
     await transaction(this.dataSource, async () => {
-      await this.repository.insert(userRole)
-      await this.eventEmitter.emit([event])
+      await this.repository.insert(userRoles)
+      await this.eventEmitter.emit(events)
     })
   }
 }
