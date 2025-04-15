@@ -5,6 +5,7 @@ import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-errors/api-error-response.decorator.js'
 import { ContactNotFoundError } from '../../errors/contact.not-found.error.js'
+import { FileNotFoundError } from '../../../../modules/files/errors/file.not-found.error.js'
 import { UpdateContactUseCase } from './update-contact.use-case.js'
 import { UpdateContactCommand } from './update-contact.command.js'
 
@@ -20,7 +21,7 @@ export class UpdateContactController {
   @Permissions(Permission.CONTACT_UPDATE)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
-  @ApiNotFoundErrorResponse(ContactNotFoundError)
+  @ApiNotFoundErrorResponse(ContactNotFoundError, FileNotFoundError)
   public async updateContact (
     @UuidParam('uuid') uuid: string,
     @Body() command: UpdateContactCommand

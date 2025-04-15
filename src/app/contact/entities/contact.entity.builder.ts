@@ -16,6 +16,7 @@ export class ContactEntityBuilder {
     this.contact.phone = null
     this.contact.address = null
     this.contact.isActive = true
+    this.contact.fileUuid = null
   }
 
   withUuid (uuid: string): this {
@@ -50,6 +51,11 @@ export class ContactEntityBuilder {
 
   withIsActive (isActive: boolean): this {
     this.contact.isActive = isActive
+    return this
+  }
+
+  withFileUuid (fileUuid: string | null): this {
+    this.contact.fileUuid = fileUuid
     return this
   }
 

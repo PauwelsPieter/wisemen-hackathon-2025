@@ -2,10 +2,14 @@ import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
 import { TypesenseCollectionName } from '../../../typesense/enums/typesense-collection-index.enum.js'
 import { GlobalSearchTypesenseCollectionNameApiProperty, GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseResult } from '../../global-search-typesense-collections.js'
+import { TypesenseUser } from '../../../../app/users/typesense/typesense-user.js'
+import { TypesenseContact } from '../../../../app/contact/typesense/typesense-contact.js'
 import { SearchCollectionUserResponse } from './search-collection-user.response.js'
+import { SearchCollectionContactResponse } from './search-collection-contact.response.js'
 
 @ApiExtraModels(
-  SearchCollectionUserResponse
+  SearchCollectionUserResponse,
+  SearchCollectionContactResponse
 )
 class SearchCollectionsResponseItem {
   @GlobalSearchTypesenseCollectionNameApiProperty()
@@ -13,10 +17,11 @@ class SearchCollectionsResponseItem {
 
   @ApiProperty({
     oneOf: [
-      { $ref: getSchemaPath(SearchCollectionUserResponse) }
+      { $ref: getSchemaPath(SearchCollectionUserResponse) },
+      { $ref: getSchemaPath(SearchCollectionContactResponse) }
     ]
   })
-  entity: SearchCollectionUserResponse
+  entity: SearchCollectionUserResponse | SearchCollectionContactResponse
 
   @ApiProperty({ type: 'number' })
   text_match: number
@@ -34,7 +39,9 @@ class SearchCollectionsResponseItem {
 
     switch (searchCollectionsItem.collection) {
       case TypesenseCollectionName.USER:
-        return new SearchCollectionUserResponse(item)
+        return new SearchCollectionUserResponse(item as TypesenseUser)
+      case TypesenseCollectionName.CONTACT:
+        return new SearchCollectionContactResponse(item as TypesenseContact)
       default:
         exhaustiveCheck(searchCollectionsItem.collection)
     }

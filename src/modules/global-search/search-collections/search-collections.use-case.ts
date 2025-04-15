@@ -17,11 +17,8 @@ export class SearchCollectionsUseCase {
   ): Promise<SearchCollectionsResponse> {
     const searchParams: CustomMultiSearchRequestSchema<GlobalSearchTypesenseCollectionNames>[] = []
 
-    const collections: TypesenseCollectionName[] = []
-
     for (const collection of query.filter?.collections ?? GlobalSearchTypesenseCollections) {
       searchParams.push(this.buildSearchParams(query.search, collection))
-      collections.push(collection)
     }
 
     const searchResult = await this.typesense.multiSearch(searchParams)
@@ -41,6 +38,14 @@ export class SearchCollectionsUseCase {
           collection: collection,
           q: search,
           query_by: 'firstName,lastName,email',
+          infix: 'always'
+        }
+      }
+      case TypesenseCollectionName.CONTACT: {
+        return {
+          collection: collection,
+          q: search,
+          query_by: 'name,email',
           infix: 'always'
         }
       }

@@ -12,6 +12,7 @@ export class UpdateContactCommandBuilder {
     this.command.phone = null
     this.command.isActive = true
     this.command.address = null
+    this.command.fileUuid = null
   }
 
   withFirstName (firstName: string): this {
@@ -41,6 +42,11 @@ export class UpdateContactCommandBuilder {
 
   withAddress (address: AddressCommand | null): this {
     this.command.address = address
+    return this
+  }
+
+  withFileUuid (fileUuid: string | null): this {
+    this.command.fileUuid = fileUuid
     return this
   }
 

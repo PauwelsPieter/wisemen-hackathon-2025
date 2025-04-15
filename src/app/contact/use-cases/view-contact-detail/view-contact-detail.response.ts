@@ -30,6 +30,9 @@ export class ViewContactDetailResponse {
   @ApiProperty({ type: AddressResponse, nullable: true })
   address: AddressResponse | null
 
+  @ApiProperty({ type: String, format: 'uuid', nullable: true })
+  fileUuid: string | null
+
   constructor (contact: Contact) {
     this.uuid = contact.uuid
     this.createdAt = contact.createdAt.toISOString()
@@ -40,5 +43,6 @@ export class ViewContactDetailResponse {
     this.email = contact.email
     this.phone = contact.phone
     this.address = contact.address ? new AddressResponse(contact.address) : null
+    this.fileUuid = contact.fileUuid
   }
 }

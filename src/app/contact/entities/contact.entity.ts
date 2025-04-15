@@ -33,6 +33,9 @@ export class Contact {
   @Column({ type: 'varchar', nullable: true })
   phone: string | null
 
+  @Column({ type: 'uuid', nullable: true })
+  fileUuid: string | null
+
   @AddressColumn({ nullable: true })
   address: Address | null
 }

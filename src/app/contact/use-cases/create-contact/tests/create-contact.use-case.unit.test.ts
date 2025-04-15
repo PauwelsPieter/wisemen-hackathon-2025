@@ -1,30 +1,47 @@
 import { before, describe, it } from 'node:test'
 import { randomUUID } from 'crypto'
 import { assert, createStubInstance } from 'sinon'
-import { InsertResult, Repository } from 'typeorm'
 import { expect } from 'expect'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { CreateContactCommandBuilder } from '../create-contact.command.builder.js'
 import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
-import { Contact } from '../../../entities/contact.entity.js'
 import { CreateContactUseCase } from '../create-contact.use-case.js'
 import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
 import { ContactCreatedEvent } from '../contact-created.event.js'
+import { CreateContactRepository } from '../create-contact.repository.js'
+import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-found.error.js'
 
 describe('CreateContactUseCase Unit test', () => {
   before(() => {
     TestBench.setupUnitTest()
   })
 
+  it('throws an error when the file does not exist', async () => {
+    const contactRepo = createStubInstance(CreateContactRepository)
+    contactRepo.fileExists.resolves(false)
+
+    const useCase = new CreateContactUseCase(
+      stubDataSource(),
+      createStubInstance(DomainEventEmitter),
+      contactRepo
+    )
+
+    const fileUuid = randomUUID()
+
+    const command = new CreateContactCommandBuilder()
+      .withFileUuid(fileUuid)
+      .build()
+
+    await expect(useCase.execute(command))
+      .rejects.toThrow(new FileNotFoundError(fileUuid))
+  })
+
   it('the use cases calls the repository once', async () => {
     const eventEmitter = createStubInstance(DomainEventEmitter)
 
-    const contactRepo = createStubInstance(Repository<Contact>)
-    contactRepo.insert.callsFake((contact: Contact) => {
-      contact.uuid = randomUUID()
-      return Promise.resolve({} as InsertResult)
-    })
+    const contactRepo = createStubInstance(CreateContactRepository)
+    contactRepo.insert.resolves()
 
     const useCase = new CreateContactUseCase(
       stubDataSource(),
@@ -41,7 +58,8 @@ describe('CreateContactUseCase Unit test', () => {
   it('the use cases emits a contact created event', async () => {
     const eventEmitter = createStubInstance(DomainEventEmitter)
 
-    const contactRepo = createStubInstance(Repository<Contact>)
+    const contactRepo = createStubInstance(CreateContactRepository)
+    contactRepo.fileExists.resolves(true)
 
     const useCase = new CreateContactUseCase(
       stubDataSource(),
