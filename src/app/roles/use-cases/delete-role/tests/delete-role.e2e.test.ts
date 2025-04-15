@@ -3,19 +3,19 @@ import { randomUUID } from 'node:crypto'
 import request from 'supertest'
 import { expect } from 'expect'
 import { Any, type DataSource } from 'typeorm'
-import type { Role } from '../../entities/role.entity.js'
-import { UserRepository } from '../../../users/repositories/user.repository.js'
-import { UserSeeder } from '../../../users/tests/user.seeder.js'
-import { UserEntityBuilder } from '../../../users/tests/user-entity.builder.js'
-import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
-import type { TestUser } from '../../../users/tests/setup-user.type.js'
-import { UserRole } from '../../entities/user-role.entity.js'
-import { RoleSeeder } from '../../tests/seeders/role.seeder.js'
-import { UserRoleSeeder } from '../../tests/seeders/user-role.seeder.js'
-import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
-import { TestBench } from '../../../../../test/setup/test-bench.js'
-import { RoleEntityBuilder } from '../../tests/builders/entities/role-entity.builder.js'
-import { UserRoleEntityBuilder } from '../../tests/builders/entities/user-role-entity.builder.js'
+import type { Role } from '../../../entities/role.entity.js'
+import { UserRepository } from '../../../../users/repositories/user.repository.js'
+import { UserSeeder } from '../../../../users/tests/user.seeder.js'
+import { UserEntityBuilder } from '../../../../users/tests/user-entity.builder.js'
+import { TestAuthContext } from '../../../../../../test/utils/test-auth-context.js'
+import type { TestUser } from '../../../../users/tests/setup-user.type.js'
+import { UserRole } from '../../../entities/user-role.entity.js'
+import { RoleSeeder } from '../../../tests/seeders/role.seeder.js'
+import { UserRoleSeeder } from '../../../tests/seeders/user-role.seeder.js'
+import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../../test/setup/test-bench.js'
+import { RoleEntityBuilder } from '../../../tests/builders/entities/role-entity.builder.js'
+import { UserRoleEntityBuilder } from '../../../tests/builders/entities/user-role-entity.builder.js'
 
 describe('Delete role end to end tests', () => {
   let setup: EndToEndTestSetup
@@ -99,7 +99,7 @@ describe('Delete role end to end tests', () => {
         .delete(`/roles/${role.uuid}`)
         .set('Authorization', `Bearer ${adminUser.token}`)
 
-      expect(response).toHaveStatus(200)
+      expect(response).toHaveStatus(204)
 
       // check if users do not have the role anymore
       const usersAfter = await new UserRepository(dataSource.manager).find({

@@ -5,20 +5,17 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { NotFoundCompositeApiError } from '../../../../modules/exceptions/api-errors/not-found-composite.api-error.js'
 import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
-import { TypesenseCollectionName } from '../../../../modules/typesense/enums/typesense-collection-index.enum.js'
-import { TypesenseCollectionService } from '../../../../modules/typesense/services/typesense-collection.service.js'
 import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
 import { UpdateRolesPermissionsRepository } from './update-roles-permissions.repository.js'
 import { UpdateRolesPermissionsCommand } from './update-roles-permissions.command.js'
-import { RolesPermissionsUpdatedEvent } from './roles-permissions-updated.event.js'
+import { RolePermissionsUpdatedEvent } from './role-permissions-updated.event.js'
 
 @Injectable()
 export class UpdateRolesPermissionsUseCase {
   constructor (
     private readonly dataSource: DataSource,
     private readonly eventEmitter: DomainEventEmitter,
-    private readonly repository: UpdateRolesPermissionsRepository,
-    private readonly typesense: TypesenseCollectionService
+    private readonly repository: UpdateRolesPermissionsRepository
   ) {}
 
   async updateRolePermissions (
@@ -43,19 +40,18 @@ export class UpdateRolesPermissionsUseCase {
       throw new RoleNotEditableError(nonEditableRole)
     }
 
+    const events: RolePermissionsUpdatedEvent[] = []
     for (const role of roles) {
       const roleCommand = command.roles.find(c => c.roleUuid === role.uuid)
 
       assert(roleCommand !== undefined, 'Found role which should not exist')
       role.permissions = roleCommand.permissions
+      events.push(new RolePermissionsUpdatedEvent(role))
     }
 
     await transaction(this.dataSource, async () => {
       await this.repository.updateRoles(roles)
-      await this.eventEmitter.emitOne(new RolesPermissionsUpdatedEvent(roles))
-
-      // TODO: Remove this CBN-123
-      await this.typesense.import(TypesenseCollectionName.USER)
+      await this.eventEmitter.emit(events)
     })
   }
 }

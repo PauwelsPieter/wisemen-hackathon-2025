@@ -1,5 +1,5 @@
-import { Controller, Delete } from '@nestjs/common'
-import { ApiTags, ApiOAuth2 } from '@nestjs/swagger'
+import { Controller, Delete, HttpCode, HttpStatus } from '@nestjs/common'
+import { ApiTags, ApiOAuth2, ApiNoContentResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
@@ -15,6 +15,8 @@ export class DeleteRoleController {
 
   @Delete()
   @Permissions(Permission.ROLE_DELETE)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNoContentResponse()
   async deleteRole (
     @UuidParam('role') uuid: string
   ): Promise<void> {

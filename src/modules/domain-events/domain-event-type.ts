@@ -9,7 +9,10 @@ export enum DomainEventType {
   NOTIFICATION_TYPES_MIGRATED = 'notification.types.migrated',
   NOTIFICATION_PREFERENCE_PRESET_UPDATED = 'notification.preference.preset.updated',
 
-  ROLES_PERMISSIONS_UPDATED = 'roles.permissions.updated',
+  ROLE_CREATED = 'role.created',
+  ROLE_DELETED = 'role.deleted',
+  ROLE_RENAMED = 'role.renamed',
+  ROLE_PERMISSIONS_UPDATED = 'role.permissions.updated',
 
   USER_CREATED = 'user.created',
   USER_ROLE_ASSIGNED = 'user.role-assigned',

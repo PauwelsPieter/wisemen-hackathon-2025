@@ -1,11 +1,13 @@
 import { before, describe, it, after } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { TestAuthContext } from '../../../../../test/utils/test-auth-context.js'
-import type { TestUser } from '../../../users/tests/setup-user.type.js'
-import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
-import { TestBench } from '../../../../../test/setup/test-bench.js'
-import { CreateRoleCommandBuilder } from './create-role.command.builder.js'
+import { TestAuthContext } from '../../../../../../test/utils/test-auth-context.js'
+import type { TestUser } from '../../../../users/tests/setup-user.type.js'
+import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
+import { TestBench } from '../../../../../../test/setup/test-bench.js'
+import { CreateRoleCommandBuilder } from '../create-role.command.builder.js'
+import { RoleEntityBuilder } from '../../../entities/role.entity-builder.js'
+import { Role } from '../../../entities/role.entity.js'
 
 describe('Create role end to end tests', () => {
   let setup: EndToEndTestSetup
@@ -60,13 +62,13 @@ describe('Create role end to end tests', () => {
       expect(response).toHaveStatus(201)
     })
 
-    it('should create role not a second time', async () => {
-      const command = new CreateRoleCommandBuilder().build()
+    it('should return an error when the name of a role has already been taken', async () => {
+      const existingRole = new RoleEntityBuilder().withName('JohnDoesRole').build()
+      await setup.dataSource.manager.insert(Role, existingRole)
 
-      await request(setup.httpServer)
-        .post('/roles')
-        .set('Authorization', `Bearer ${adminUser.token}`)
-        .send(command)
+      const command = new CreateRoleCommandBuilder()
+        .withName(existingRole.name)
+        .build()
 
       const response = await request(setup.httpServer)
         .post('/roles')
@@ -77,7 +79,7 @@ describe('Create role end to end tests', () => {
       expect(response).toHaveErrorCode('role_name_already_in_use')
     })
 
-    it('should not create role with invalid name', async () => {
+    it('should not create role with an empty name', async () => {
       const command = new CreateRoleCommandBuilder()
         .withName('')
         .build()

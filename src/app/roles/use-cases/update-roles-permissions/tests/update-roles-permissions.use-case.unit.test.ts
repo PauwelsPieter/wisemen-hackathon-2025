@@ -7,13 +7,11 @@ import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-
 import { UpdateRolesPermissionsRepository } from '../update-roles-permissions.repository.js'
 import { NotFoundCompositeApiError } from '../../../../../modules/exceptions/api-errors/not-found-composite.api-error.js'
 import { RoleNotFoundError } from '../../../errors/role-not-found.error.js'
-import { RolesPermissionsUpdatedEvent } from '../roles-permissions-updated.event.js'
+import { RolePermissionsUpdatedEvent } from '../role-permissions-updated.event.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { RoleNotEditableError } from '../../../errors/role-not-editable.error.js'
-import {
-  TypesenseCollectionService
-} from '../../../../../modules/typesense/services/typesense-collection.service.js'
+
 import { RoleEntityBuilder } from '../../../tests/builders/entities/role-entity.builder.js'
 import { UpdateRolesPermissionsCommandBuilder } from './update-roles-permissions.command.builder.js'
 
@@ -28,8 +26,7 @@ describe('Update role permissions use case unit tests', () => {
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),
       createStubInstance(DomainEventEmitter),
-      repository,
-      createStubInstance(TypesenseCollectionService)
+      repository
     )
 
     const roleUuid = randomUUID()
@@ -54,8 +51,7 @@ describe('Update role permissions use case unit tests', () => {
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),
       createStubInstance(DomainEventEmitter),
-      repository,
-      createStubInstance(TypesenseCollectionService)
+      repository
     )
 
     const command = new UpdateRolesPermissionsCommandBuilder()
@@ -88,8 +84,7 @@ describe('Update role permissions use case unit tests', () => {
     const useCase = new UpdateRolesPermissionsUseCase(
       stubDataSource(),
       eventEmitter,
-      repository,
-      createStubInstance(TypesenseCollectionService)
+      repository
     )
 
     const command = new UpdateRolesPermissionsCommandBuilder()
@@ -98,6 +93,7 @@ describe('Update role permissions use case unit tests', () => {
       .build()
 
     await useCase.updateRolePermissions(command)
-    expect(eventEmitter).toHaveEmitted(new RolesPermissionsUpdatedEvent(roles))
+    expect(eventEmitter).toHaveEmitted(new RolePermissionsUpdatedEvent(roles[0]))
+    expect(eventEmitter).toHaveEmitted(new RolePermissionsUpdatedEvent(roles[1]))
   })
 })

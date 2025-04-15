@@ -9,6 +9,9 @@ export type DomainEventOptions<Content extends object = object> = {
   subjectId?: string
 }
 
+export type SubjectedEventOptions<Content extends object, CustomOptions = object> =
+   Omit<DomainEventOptions<Content>, 'subjectType' | 'subjectId'> & CustomOptions
+
 export class DomainEvent<Content extends object = object> {
   public readonly id: string
   public readonly createdAt: Date

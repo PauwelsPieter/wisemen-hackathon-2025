@@ -10,7 +10,6 @@ export class CreateRoleCommandBuilder {
 
   withName (name: string): this {
     this.command.name = name
-
     return this
   }
 

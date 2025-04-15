@@ -1,34 +1,36 @@
 import { Injectable } from '@nestjs/common'
-import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
-import { DataSource, Repository } from 'typeorm'
-import { Role } from '../../entities/role.entity.js'
+import { transaction } from '@wisemen/nestjs-typeorm'
+import { DataSource } from 'typeorm'
 import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
-import { UserRole } from '../../entities/user-role.entity.js'
-import { RoleCache } from '../../cache/role-cache.service.js'
+import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
+import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
+import { DeleteRoleRepository } from './delete-role.repository.js'
+import { RoleDeletedEvent } from './role-deleted.event.js'
 
 @Injectable()
 export class DeleteRoleUseCase {
   constructor (
     private readonly dataSource: DataSource,
-    @InjectRepository(Role)
-    private roleRepository: Repository<Role>,
-    @InjectRepository(UserRole)
-    private userRoleRepository: Repository<UserRole>,
-    private readonly roleCache: RoleCache
+    private readonly eventEmitter: DomainEventEmitter,
+    private readonly repository: DeleteRoleRepository
   ) {}
 
   async execute (uuid: string): Promise<void> {
-    const role = await this.roleRepository.findOneByOrFail({ uuid })
+    const role = await this.repository.findRole(uuid)
+
+    if (role === null) {
+      throw new RoleNotFoundError(uuid)
+    }
 
     if (role.isSystemAdmin) {
       throw new RoleNotEditableError(role)
     }
 
-    await transaction(this.dataSource, async () => {
-      await this.userRoleRepository.delete({ roleUuid: uuid })
-      await this.roleRepository.delete({ uuid })
-    })
+    const event = new RoleDeletedEvent(role)
 
-    await this.roleCache.clearRolesPermissions([uuid])
+    await transaction(this.dataSource, async () => {
+      await this.repository.delete(role)
+      await this.eventEmitter.emitOne(event)
+    })
   }
 }

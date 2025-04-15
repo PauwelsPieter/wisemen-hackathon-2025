@@ -8,34 +8,29 @@ import { DomainEventType } from '../../../../modules/domain-events/domain-event-
 import { PermissionApiProperty } from '../../../../modules/permission/permission.api-property.js'
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
 
-class UpdatedRole {
+@OneOfMeta(DomainEventLog, DomainEventType.ROLE_PERMISSIONS_UPDATED)
+export class RolePermissionsUpdatedEventContent {
   @ApiProperty({ type: 'string', format: 'uuid' })
-  readonly uuid: string
+  readonly roleUuid: string
 
   @PermissionApiProperty({ isArray: true })
   readonly newPermissions: Permission[]
 
-  constructor (uuid: string, newPermissions: Permission[]) {
-    this.newPermissions = newPermissions
-    this.uuid = uuid
+  @ApiProperty({ type: 'string' })
+  readonly roleName: string
+
+  constructor (role: Role) {
+    this.roleUuid = role.uuid
+    this.newPermissions = role.permissions
+    this.roleName = role.name
   }
 }
 
-@OneOfMeta(DomainEventLog, DomainEventType.ROLES_PERMISSIONS_UPDATED)
-export class RolePermissionsUpdatedEventContent {
-  @ApiProperty({ type: UpdatedRole, isArray: true })
-  readonly roles: UpdatedRole[]
-
-  constructor (roles: Role[]) {
-    this.roles = roles.map(role => new UpdatedRole(role.uuid, role.permissions))
-  }
-}
-
-@RegisterDomainEvent(DomainEventType.ROLES_PERMISSIONS_UPDATED, 1)
-export class RolesPermissionsUpdatedEvent extends DomainEvent<RolePermissionsUpdatedEventContent> {
-  constructor (roles: Role[]) {
+@RegisterDomainEvent(DomainEventType.ROLE_PERMISSIONS_UPDATED, 1)
+export class RolePermissionsUpdatedEvent extends DomainEvent<RolePermissionsUpdatedEventContent> {
+  constructor (role: Role) {
     super({
-      content: new RolePermissionsUpdatedEventContent(roles)
+      content: new RolePermissionsUpdatedEventContent(role)
     })
   }
 }
