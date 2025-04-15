@@ -1,4 +1,27 @@
 {
+    "notification": {
+        "created": {
+            "v1": "Notification created {type}"
+        },
+        "read": {
+            "v1": "Notification read"
+        },
+        "unread": {
+            "v1": "Notification unread"
+        },
+        "types": {
+            "migrated": {
+                "v1": "Notification types migrated"
+            }
+        },
+        "preference": {
+            "preset": {
+                "updated": {
+                    "v1": "Notification preference preset updated"
+                }
+            }
+        }
+    },
     "user": {
         "created": {
             "v1": "User created"

@@ -15,6 +15,16 @@ export enum Permission {
   JOBS_READ_INDEX = 'jobs.read.index',
   JOBS_READ_DETAIL = 'jobs.read.detail',
 
+  NOTIFICATION_READ_OWN = 'notification.read.own',
+  NOTIFICATION_READ_CONFIG = 'notification.read.config',
+  NOTIFICATION_UPDATE_READ = 'notification.update.read',
+  NOTIFICATION_UPDATE_UNREAD = 'notification.update.unread',
+  NOTIFICATION_PREFERENCES_UPDATE_CHANNEL = 'notification.preferences.update.channel',
+  NOTIFICATION_PREFERENCES_UPDATE_PRESET = 'notification.preferences.update.preset',
+  NOTIFICATION_PREFERENCES_UPDATE_TYPES = 'notification.preferences.update.types',
+  NOTIFICATION_PREFRENCES_READ_OWN = 'notification.preferences.read.own',
+  NOTIFICATION_MIGRATE_TYPE = 'notification.migrate-type',
+
   ROLE_READ = 'role.read',
   ROLE_CREATE = 'role.create',
   ROLE_UPDATE = 'role.update',
@@ -28,4 +38,5 @@ export enum Permission {
   USER_CREATE = 'user.create',
   USER_UPDATE = 'user.update',
   USER_DELETE = 'user.delete'
+
 }

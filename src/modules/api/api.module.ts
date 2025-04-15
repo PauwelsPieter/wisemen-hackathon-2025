@@ -14,6 +14,7 @@ import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
 import { DomainEventLogModule } from '../domain-event-log/domain-event-log.module.js'
 import { OneSignalModule } from '../one-signal/one-signal.module.js'
 import { GlobalSearchModule } from '../global-search/global-search.module.js'
+import { NotificationModule } from '../notification/notification.module.js'
 import { JobsApiModule } from '../jobs/jobs.api-module.js'
 
 @Module({
@@ -32,6 +33,7 @@ import { JobsApiModule } from '../jobs/jobs.api-module.js'
     OneSignalModule,
     DomainEventLogModule,
     GlobalSearchModule,
+    NotificationModule,
     JobsApiModule
   ]
 })

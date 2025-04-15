@@ -15,6 +15,29 @@ export type I18nTranslations = {
         "missing-translation": string;
     };
     "event-log": {
+        "notification": {
+            "created": {
+                "v1": string;
+            };
+            "read": {
+                "v1": string;
+            };
+            "unread": {
+                "v1": string;
+            };
+            "types": {
+                "migrated": {
+                    "v1": string;
+                };
+            };
+            "preference": {
+                "preset": {
+                    "updated": {
+                        "v1": string;
+                    };
+                };
+            };
+        };
         "user": {
             "created": {
                 "v1": string;
@@ -53,6 +76,11 @@ export type I18nTranslations = {
             "button": {
                 "text": string;
             };
+        };
+    };
+    "notification": {
+        "user": {
+            "created": string;
         };
     };
 };
