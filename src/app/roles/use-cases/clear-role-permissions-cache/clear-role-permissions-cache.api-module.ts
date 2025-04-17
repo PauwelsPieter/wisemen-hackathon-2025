@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
-import { ClearRolePermissionsCacheSubscriber } from './clear-role-permissions-cache.subscriber.js'
 import { ClearRolePermissionsCacheUseCaseModule } from './clear-role-permissions-cache.use-case.module.js'
+import { ClearRolePermissionsCacheController } from './clear-role-permissions-cache.controller.js'
 
 @Module({
   imports: [ClearRolePermissionsCacheUseCaseModule],
-  providers: [ClearRolePermissionsCacheSubscriber]
+  controllers: [ClearRolePermissionsCacheController]
 })
-export class ClearRolePermissionsCacheSubscriberModule {}
+export class ClearRolePermissionsCacheApiModule {}

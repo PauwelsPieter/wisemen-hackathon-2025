@@ -29,6 +29,7 @@ export enum Permission {
   ROLE_CREATE = 'role.create',
   ROLE_UPDATE = 'role.update',
   ROLE_DELETE = 'role.delete',
+  ROLE_CACHE_CLEAR = 'role.cache.clear',
 
   SEND_PUSH_NOTIFICATION = 'send_push_notification',
 

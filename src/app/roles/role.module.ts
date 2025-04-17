@@ -6,10 +6,12 @@ import { ViewRoleDetailModule } from './use-cases/view-role-detail/view-role-det
 import { ViewRoleIndexModule } from './use-cases/view-role-index/view-role-index.module.js'
 import { UpdateRolesPermissionsModule } from './use-cases/update-roles-permissions/update-roles-permissions.module.js'
 import { ClearRolePermissionsCacheSubscriberModule } from './use-cases/clear-role-permissions-cache/clear-role-permissions-cache-subscriber.module.js'
+import { ClearRolePermissionsCacheApiModule } from './use-cases/clear-role-permissions-cache/clear-role-permissions-cache.api-module.js'
 
 @Module({
   imports: [
     CreateRoleModule,
+    ClearRolePermissionsCacheApiModule,
     DeleteRoleModule,
     UpdateRoleModule,
     ViewRoleDetailModule,

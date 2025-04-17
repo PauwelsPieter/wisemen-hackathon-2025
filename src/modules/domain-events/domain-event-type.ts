@@ -13,6 +13,7 @@ export enum DomainEventType {
   ROLE_DELETED = 'role.deleted',
   ROLE_RENAMED = 'role.renamed',
   ROLE_PERMISSIONS_UPDATED = 'role.permissions.updated',
+  ROLE_PERMISSIONS_CACHE_CLEARED = 'role.permissions.cache.cleared',
 
   USER_CREATED = 'user.created',
   USER_ROLE_ASSIGNED = 'user.role-assigned',

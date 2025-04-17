@@ -25,71 +25,69 @@ describe('Create role end to end tests', () => {
 
   after(async () => await setup.teardown())
 
-  describe('Create role', () => {
-    it('should return 401 when not authenticated', async () => {
-      const roleDto = new CreateRoleCommandBuilder()
-        .withName('should-return-401-when-not-authenticated')
-        .build()
+  it('returns 401 when not authenticated', async () => {
+    const roleDto = new CreateRoleCommandBuilder()
+      .withName('should-return-401-when-not-authenticated')
+      .build()
 
-      const response = await request(setup.httpServer)
-        .post('/roles')
-        .send(roleDto)
+    const response = await request(setup.httpServer)
+      .post('/roles')
+      .send(roleDto)
 
-      expect(response).toHaveStatus(401)
-    })
+    expect(response).toHaveStatus(401)
+  })
 
-    it('should return 403 when not authorized', async () => {
-      const command = new CreateRoleCommandBuilder().build()
+  it('returns 403 when not authorized', async () => {
+    const command = new CreateRoleCommandBuilder().build()
 
-      const response = await request(setup.httpServer)
-        .post('/roles')
-        .set('Authorization', `Bearer ${defaultUser.token}`)
-        .send(command)
+    const response = await request(setup.httpServer)
+      .post('/roles')
+      .set('Authorization', `Bearer ${defaultUser.token}`)
+      .send(command)
 
-      expect(response).toHaveStatus(403)
-    })
+    expect(response).toHaveStatus(403)
+  })
 
-    it('should create role', async () => {
-      const command = new CreateRoleCommandBuilder()
-        .withName('should-create-role-test')
-        .build()
+  it('creates role', async () => {
+    const command = new CreateRoleCommandBuilder()
+      .withName('should-create-role-test')
+      .build()
 
-      const response = await request(setup.httpServer)
-        .post('/roles')
-        .set('Authorization', `Bearer ${adminUser.token}`)
-        .send(command)
+    const response = await request(setup.httpServer)
+      .post('/roles')
+      .set('Authorization', `Bearer ${adminUser.token}`)
+      .send(command)
 
-      expect(response).toHaveStatus(201)
-    })
+    expect(response).toHaveStatus(201)
+  })
 
-    it('should return an error when the name of a role has already been taken', async () => {
-      const existingRole = new RoleEntityBuilder().withName('JohnDoesRole').build()
-      await setup.dataSource.manager.insert(Role, existingRole)
+  it('returns an error when the name of a role has already been taken', async () => {
+    const existingRole = new RoleEntityBuilder().withName('JohnDoesRole').build()
+    await setup.dataSource.manager.insert(Role, existingRole)
 
-      const command = new CreateRoleCommandBuilder()
-        .withName(existingRole.name)
-        .build()
+    const command = new CreateRoleCommandBuilder()
+      .withName(existingRole.name)
+      .build()
 
-      const response = await request(setup.httpServer)
-        .post('/roles')
-        .set('Authorization', `Bearer ${adminUser.token}`)
-        .send(command)
+    const response = await request(setup.httpServer)
+      .post('/roles')
+      .set('Authorization', `Bearer ${adminUser.token}`)
+      .send(command)
 
-      expect(response).toHaveStatus(409)
-      expect(response).toHaveErrorCode('role_name_already_in_use')
-    })
+    expect(response).toHaveStatus(409)
+    expect(response).toHaveErrorCode('role_name_already_in_use')
+  })
 
-    it('should not create role with an empty name', async () => {
-      const command = new CreateRoleCommandBuilder()
-        .withName('')
-        .build()
+  it('does not create role with an empty name', async () => {
+    const command = new CreateRoleCommandBuilder()
+      .withName('')
+      .build()
 
-      const response = await request(setup.httpServer)
-        .post('/roles')
-        .set('Authorization', `Bearer ${adminUser.token}`)
-        .send(command)
+    const response = await request(setup.httpServer)
+      .post('/roles')
+      .set('Authorization', `Bearer ${adminUser.token}`)
+      .send(command)
 
-      expect(response).toHaveStatus(400)
-    })
+    expect(response).toHaveStatus(400)
   })
 })
