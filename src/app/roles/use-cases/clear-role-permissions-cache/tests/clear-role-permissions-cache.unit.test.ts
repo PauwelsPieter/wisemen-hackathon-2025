@@ -9,6 +9,7 @@ import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-
 import { ClearRolePermissionsCacheUseCase } from '../clear-role-permissions-cache.use-case.js'
 import { RoleCache } from '../../../cache/role-cache.service.js'
 import { RolePermissionsCacheClearedEvent } from '../role-permissions-cache-cleared.event.js'
+import { generateRoleUuid } from '../../../entities/role.uuid.js'
 
 describe('clear role permissions cache use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -24,7 +25,7 @@ describe('clear role permissions cache use case unit tests', () => {
       repository
     )
 
-    const rolesToClear = [randomUUID()]
+    const rolesToClear = [generateRoleUuid()]
     await useCase.execute(rolesToClear)
 
     expect(cache.clearRolesPermissions.firstCall.firstArg).toStrictEqual(rolesToClear)

@@ -5,6 +5,7 @@ node_modules
 .typesense/
 .postgres
 .minio
+.machinekey
 _build
 
 # Logs

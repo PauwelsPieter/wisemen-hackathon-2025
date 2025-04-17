@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { ArrayMinSize, IsArray, IsOptional, IsUUID } from 'class-validator'
+import { RoleUuid } from '../../entities/role.uuid.js'
 
 export class ClearRolePermissionsCacheCommand {
   @ApiProperty({
@@ -14,5 +15,5 @@ export class ClearRolePermissionsCacheCommand {
   @IsUUID('all', { each: true })
   @IsArray()
   @ArrayMinSize(1)
-  roleUuids?: string[] | null
+  roleUuids?: RoleUuid[] | null
 }

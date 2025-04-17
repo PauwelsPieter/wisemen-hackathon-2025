@@ -4,6 +4,7 @@ import { InjectRepository, transaction } from '@wisemen/nestjs-typeorm'
 import { RoleCache } from '../../cache/role-cache.service.js'
 import { Role } from '../../entities/role.entity.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 import { RolePermissionsCacheClearedEvent } from './role-permissions-cache-cleared.event.js'
 
 @Injectable()
@@ -15,7 +16,7 @@ export class ClearRolePermissionsCacheUseCase {
     @InjectRepository(Role) private readonly roleRepository: Repository<Role>
   ) {}
 
-  async execute (roleUuids?: string[]): Promise<void> {
+  async execute (roleUuids?: RoleUuid[]): Promise<void> {
     if (roleUuids === undefined) {
       const roles = await this.roleRepository.find({ select: { uuid: true } })
       roleUuids = roles.map(role => role.uuid)
