@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { Controller, Get, Res } from '@nestjs/common'
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger'
-import { Response } from 'express'
+import type { Response } from 'express'
 import { Public } from '../permission/permission.decorator.js'
 
 @ApiTags('Swagger')
