@@ -11,11 +11,12 @@ import {
 } from 'typeorm'
 import { NotificationPreset } from '../enums/notification-preset.enum.js'
 import { User } from '../../../app/users/entities/user.entity.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 
 @Entity()
 export class NotificationPreferencesPreset {
   @PrimaryColumn({ type: 'uuid' })
-  userUuid: string
+  userUuid: UserUuid
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date

@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { ContactNotFoundError } from '../../../errors/contact.not-found.error.js'
@@ -9,8 +8,10 @@ import { ContactUpdatedEvent } from '../contact-updated.event.js'
 import { UpdateContactCommandBuilder } from '../update-contact.command.builder.js'
 import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
 import { UpdateContactUseCase } from '../update-contact.use-case.js'
-import { UpdateContactRepository } from '../update-contact.repository.js'
 import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-found.error.js'
+import { generateContactUuid } from '../../../entities/contact.uuid.js'
+import { UpdateContactRepository } from '../update-contact.repository.js'
+import { generateFileUuid } from '../../../../../modules/files/entities/file.uuid.js'
 
 describe('UpdateContactUseCase Unit test', () => {
   before(() => {
@@ -30,7 +31,7 @@ describe('UpdateContactUseCase Unit test', () => {
 
     const command = new UpdateContactCommandBuilder().build()
 
-    const contactUuid = randomUUID()
+    const contactUuid = generateContactUuid()
 
     await expect(useCase.execute(contactUuid, command))
       .rejects.toThrow(new ContactNotFoundError(contactUuid))
@@ -47,8 +48,8 @@ describe('UpdateContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const contactUuid = randomUUID()
-    const fileUuid = randomUUID()
+    const contactUuid = generateContactUuid()
+    const fileUuid = generateFileUuid()
 
     const command = new UpdateContactCommandBuilder()
       .withFileUuid(fileUuid)
@@ -72,7 +73,7 @@ describe('UpdateContactUseCase Unit test', () => {
     )
 
     const command = new UpdateContactCommandBuilder().build()
-    const contactUuid = randomUUID()
+    const contactUuid = generateContactUuid()
 
     await useCase.execute(contactUuid, command)
 

@@ -7,6 +7,7 @@ import { Notification } from '../../entities/notification.entity.js'
 import { NotificationChannel } from '../../enums/notification-channel.enum.js'
 import { UserNotification } from '../../entities/user-notification.entity.js'
 import { UserNotificationEntityBuilder } from '../../entity-builders/user-notification.entity.builder.js'
+import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { CreateUserNotificationsRepository } from './create-user-notifications.repository.js'
 import { SubscribedUser } from './subcribed-user.js'
 import { UserNotificationCreatedEvent } from './user-notification.created.event.js'
@@ -19,7 +20,7 @@ export class CreateUserNotificationsUseCase {
     private readonly repository: CreateUserNotificationsRepository
   ) {}
 
-  async execute (notificationUuid: string): Promise<void> {
+  async execute (notificationUuid: NotificationUuid): Promise<void> {
     const notification = await this.repository.findNotificationOrFail(notificationUuid)
     const supportedChannels = getSupportedNotificationChannels(notification.type)
     for (const channel of supportedChannels) {

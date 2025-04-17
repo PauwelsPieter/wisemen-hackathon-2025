@@ -5,6 +5,7 @@ import { UserNotificationNotFoundError } from '../../errors/user-notification-no
 import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
+import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { MarkNotificationAsReadUseCase } from './mark-notification-as-read.use-case.js'
 
 @ApiTags('Notifications')
@@ -20,7 +21,7 @@ export class MarkNotificationAsReadController {
   @ApiNoContentResponse()
   @ApiNotFoundErrorResponse(UserNotificationNotFoundError)
   async markNotificationAsRead (
-    @UuidParam('notificationUuid') notificationUuid: string
+    @UuidParam('notificationUuid') notificationUuid: NotificationUuid
   ): Promise<void> {
     await this.useCase.execute(notificationUuid)
   }

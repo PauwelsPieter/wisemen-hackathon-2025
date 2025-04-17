@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { LocalizationContext } from '../../../modules/localization/localization-context.js'
+import { UserUuid } from '../../users/entities/user.uuid.js'
 import { UIPreferencesEntityBuilder } from './ui-preferences.entity.builder.js'
 import { UiPreferences } from './ui-preferences.entity.js'
 
@@ -9,7 +10,7 @@ export class DefaultUiPreferencesFactory {
     private readonly localizationContext: LocalizationContext
   ) {}
 
-  create (forUserUuid: string): UiPreferences {
+  create (forUserUuid: UserUuid): UiPreferences {
     return new UIPreferencesEntityBuilder()
       .withUserUuid(forUserUuid)
       .withLanguage(this.localizationContext.locale)

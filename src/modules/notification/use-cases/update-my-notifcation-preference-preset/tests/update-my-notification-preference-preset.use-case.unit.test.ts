@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { Repository } from 'typeorm'
@@ -11,6 +10,7 @@ import { UpdateMyNotificationPreferencePresetCommandBuilder } from '../update-my
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { AuthContext } from '../../../../auth/auth.context.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
+import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
 
 describe('UpdateNotificationPresetPreferenceUseCase - Unit Tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -19,7 +19,7 @@ describe('UpdateNotificationPresetPreferenceUseCase - Unit Tests', () => {
     const repository = createStubInstance(Repository<NotificationPreferencesPreset>)
     repository.upsert.resolves()
 
-    const userUuid = randomUUID()
+    const userUuid = generateUserUuid()
     const authContext = createStubInstance(AuthContext)
     authContext.getUserUuidOrFail.returns(userUuid)
 

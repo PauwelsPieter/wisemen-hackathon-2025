@@ -1,3 +1,4 @@
+import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
 import { AddressCommand } from '../../../../utils/address/address-command.js'
 import { UpdateContactCommand } from './update-contact.command.js'
 
@@ -45,7 +46,7 @@ export class UpdateContactCommandBuilder {
     return this
   }
 
-  withFileUuid (fileUuid: string | null): this {
+  withFileUuid (fileUuid: FileUuid | null): this {
     this.command.fileUuid = fileUuid
     return this
   }

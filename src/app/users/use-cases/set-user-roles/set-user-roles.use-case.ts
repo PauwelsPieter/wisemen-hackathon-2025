@@ -7,6 +7,7 @@ import { TypesenseCollectionService } from '../../../../modules/typesense/servic
 import { UserRole } from '../../../roles/entities/user-role.entity.js'
 import { User } from '../../entities/user.entity.js'
 import { UserCache } from '../../cache/user-cache.service.js'
+import { UserUuid } from '../../entities/user.uuid.js'
 import type { SetUserRolesCommand } from './set-user-roles.command.js'
 
 @Injectable()
@@ -21,7 +22,7 @@ export class SetUserRolesUseCase {
     private readonly typesenseService: TypesenseCollectionService
   ) {}
 
-  async changeRoles (userUuid: string, dto: SetUserRolesCommand): Promise<void> {
+  async changeRoles (userUuid: UserUuid, dto: SetUserRolesCommand): Promise<void> {
     const user = await this.userRepository.findOneOrFail({
       where: { uuid: userUuid },
       relations: { userRoles: { role: true } }

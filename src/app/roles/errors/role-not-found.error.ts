@@ -1,5 +1,6 @@
 import { NotFoundApiError } from '../../../modules/exceptions/api-errors/not-found.api-error.js'
 import { ApiErrorCode } from '../../../modules/exceptions/api-errors/api-error-code.decorator.js'
+import { RoleUuid } from '../entities/role.uuid.js'
 
 export class RoleNotFoundError extends NotFoundApiError {
   @ApiErrorCode('role_not_found')
@@ -7,7 +8,7 @@ export class RoleNotFoundError extends NotFoundApiError {
 
   meta: never
 
-  constructor (roleUuid?: string) {
+  constructor (roleUuid?: RoleUuid) {
     super(`Role ${roleUuid ?? ''} not found`)
   }
 }

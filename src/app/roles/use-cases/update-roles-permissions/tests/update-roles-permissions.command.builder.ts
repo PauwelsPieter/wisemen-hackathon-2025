@@ -1,4 +1,5 @@
 import { Permission } from '../../../../../modules/permission/permission.enum.js'
+import { RoleUuid } from '../../../entities/role.uuid.js'
 import {
   UpdateRolesPermissionsCommand,
   UpdateRolesPermissionsCommandItem
@@ -11,7 +12,7 @@ export class UpdateRolesPermissionsCommandBuilder {
     this.command.roles = []
   }
 
-  addRole (uuid: string, permissions: Permission[]): this {
+  addRole (uuid: RoleUuid, permissions: Permission[]): this {
     const item = new UpdateRolesPermissionsCommandItem()
 
     item.permissions = permissions

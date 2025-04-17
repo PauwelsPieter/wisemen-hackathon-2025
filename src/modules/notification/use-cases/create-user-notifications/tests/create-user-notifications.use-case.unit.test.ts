@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
@@ -9,6 +8,7 @@ import { NotificationType } from '../../../enums/notification-types.enum.js'
 import { CreateUserNotificationsRepository } from '../create-user-notifications.repository.js'
 import { CreateUserNotificationsUseCase } from '../create-user-notifications.use-case.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
+import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
 
 describe('CreateUserNotificationsUseCase - Unit Tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -19,7 +19,7 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     const notification = new NotificationEntityBuilder()
       .withType(NotificationType.USER_CREATED)
       .withMeta({ userName: 'John Doe' })
-      .withCreatedByUserUuid(randomUUID())
+      .withCreatedByUserUuid(generateUserUuid())
       .build()
 
     repo.findNotificationOrFail.resolves(notification)
@@ -27,8 +27,8 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     repo.getSubscribedUsers.callsFake(
       async function*() {
         yield await new Promise(res => res([
-          { uuid: randomUUID() },
-          { uuid: randomUUID() }
+          { uuid: generateUserUuid() },
+          { uuid: generateUserUuid() }
         ]))
       }
     )
@@ -50,7 +50,7 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     const notification = new NotificationEntityBuilder()
       .withType(NotificationType.USER_CREATED)
       .withMeta({ userName: 'John Doe' })
-      .withCreatedByUserUuid(randomUUID())
+      .withCreatedByUserUuid(generateUserUuid())
       .build()
 
     repo.findNotificationOrFail.resolves(notification)
@@ -58,8 +58,8 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     repo.getSubscribedUsers.callsFake(
       async function*() {
         yield await new Promise(res => res([
-          { uuid: randomUUID() },
-          { uuid: randomUUID() }
+          { uuid: generateUserUuid() },
+          { uuid: generateUserUuid() }
         ]))
       }
     )

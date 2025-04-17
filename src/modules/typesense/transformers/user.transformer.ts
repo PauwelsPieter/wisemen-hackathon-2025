@@ -1,6 +1,7 @@
 import assert from 'assert'
 import type { User } from '../../../app/users/entities/user.entity.js'
 import type { Permission } from '../../permission/permission.enum.js'
+import { RoleUuid } from '../../../app/roles/entities/role.uuid.js'
 
 export class UserSearchTransformer {
   id: string
@@ -8,7 +9,7 @@ export class UserSearchTransformer {
   firstName: string
   lastName: string
   email: string
-  roleUuids: string[]
+  roleUuids: RoleUuid[]
   permissions: Permission[]
 
   constructor (user: User) {

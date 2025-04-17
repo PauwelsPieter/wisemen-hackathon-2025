@@ -1,17 +1,17 @@
-import { randomUUID } from 'node:crypto'
 import { NotificationPreferencesPreset } from '../entities/notification-preferences-preset.entity.js'
 import { NotificationPreset } from '../enums/notification-preset.enum.js'
+import { generateUserUuid, UserUuid } from '../../../app/users/entities/user.uuid.js'
 
 export class NotificationPreferencesPresetEntityBuilder {
   private readonly preferencesPreset: NotificationPreferencesPreset
 
   constructor () {
     this.preferencesPreset = new NotificationPreferencesPreset()
-    this.preferencesPreset.userUuid = randomUUID()
+    this.preferencesPreset.userUuid = generateUserUuid()
     this.preferencesPreset.preset = NotificationPreset.DEFAULT
   }
 
-  withUserUuid (userUuid: string): this {
+  withUserUuid (userUuid: UserUuid): this {
     this.preferencesPreset.userUuid = userUuid
     return this
   }

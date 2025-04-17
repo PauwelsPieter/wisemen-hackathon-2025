@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import { File } from '../../entities/file.entity.js'
 import { S3Service } from '../../services/s3.service.js'
 import { AuthContext } from '../../../auth/auth.context.js'
+import { FileUuid } from '../../entities/file.uuid.js'
 
 @Injectable()
 export class DownloadFileUseCase {
@@ -14,7 +15,7 @@ export class DownloadFileUseCase {
     private readonly s3Service: S3Service
   ) {}
 
-  async execute (fileUuid: string): Promise<{ file: File, temporaryUrl: string }> {
+  async execute (fileUuid: FileUuid): Promise<{ file: File, temporaryUrl: string }> {
     const userUuid = this.authContext.getUserUuidOrFail()
     const file = await this.fileRepository.findOneByOrFail({
       uuid: fileUuid,

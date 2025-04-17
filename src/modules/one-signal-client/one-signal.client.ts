@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import * as OneSignal from '@onesignal/node-onesignal'
 import { captureException } from '@sentry/nestjs'
+import { UserUuid } from '../../app/users/entities/user.uuid.js'
 import { OneSignalUnavailableError } from './errors/one-signal-unavailable.error.js'
 
 @Injectable()
@@ -44,7 +45,7 @@ export class OneSignalClient {
     name: string,
     headings: OneSignal.LanguageStringMap,
     contents: OneSignal.LanguageStringMap,
-    userUuids: string[],
+    userUuids: UserUuid[],
     data?: Record<string, unknown>
   ): Promise<void> {
     const notification = new OneSignal.Notification()

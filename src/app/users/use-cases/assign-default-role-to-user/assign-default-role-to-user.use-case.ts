@@ -4,6 +4,7 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { UserRoleEntityBuilder } from '../../../roles/tests/builders/entities/user-role-entity.builder.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { UserRole } from '../../../roles/entities/user-role.entity.js'
+import { UserUuid } from '../../entities/user.uuid.js'
 import { AssignDefaultRoleToUserRepository } from './assign-default-role-to-user.repository.js'
 import { RoleAssignedToUserEvent } from './role-assigned-to-user.event.js'
 
@@ -15,7 +16,7 @@ export class AssignDefaultRoleToUserUseCase {
     private readonly repository: AssignDefaultRoleToUserRepository
   ) {}
 
-  async assignDefaultRole (toUserUuids: string[]): Promise<void> {
+  async assignDefaultRole (toUserUuids: UserUuid[]): Promise<void> {
     if (toUserUuids.length === 0) {
       return
     }

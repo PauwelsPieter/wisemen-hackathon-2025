@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { Repository } from 'typeorm'
@@ -10,6 +9,7 @@ import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-
 import { Contact } from '../../../entities/contact.entity.js'
 import { DeleteContactUseCase } from '../delete-contact.use-case.js'
 import { ContactDeletedEvent } from '../contact-deleted.event.js'
+import { generateContactUuid } from '../../../entities/contact.uuid.js'
 
 describe('DeleteContactUseCase Unit test', () => {
   before(() => {
@@ -26,7 +26,7 @@ describe('DeleteContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const contactUuid = randomUUID()
+    const contactUuid = generateContactUuid()
 
     await expect(useCase.execute(contactUuid))
       .rejects.toThrow(new ContactNotFoundError(contactUuid))
@@ -44,7 +44,7 @@ describe('DeleteContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const contactUuid = randomUUID()
+    const contactUuid = generateContactUuid()
 
     await useCase.execute(contactUuid)
 

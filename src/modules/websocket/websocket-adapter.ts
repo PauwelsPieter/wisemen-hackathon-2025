@@ -14,10 +14,11 @@ import { WebSocket } from 'ws'
 import { isNil } from '@nestjs/common/utils/shared.utils.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
 import { AuthContent, AuthContext } from '../auth/auth.context.js'
+import { UserUuid } from '../../app/users/entities/user.uuid.js'
 
 declare module 'http' {
   interface IncomingMessage {
-    userUuid: string
+    userUuid: UserUuid
   }
 }
 

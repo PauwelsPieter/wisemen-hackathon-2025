@@ -1,13 +1,13 @@
-import { randomUUID } from 'crypto'
 import { Address } from '../../../utils/address/address.js'
 import { Contact } from './contact.entity.js'
+import { ContactUuid, generateContactUuid } from './contact.uuid.js'
 
 export class ContactEntityBuilder {
   private readonly contact: Contact
 
   constructor () {
     this.contact = new Contact()
-    this.contact.uuid = randomUUID()
+    this.contact.uuid = generateContactUuid()
     this.contact.createdAt = new Date()
     this.contact.updatedAt = new Date()
     this.contact.firstName = null
@@ -19,7 +19,7 @@ export class ContactEntityBuilder {
     this.contact.fileUuid = null
   }
 
-  withUuid (uuid: string): this {
+  withUuid (uuid: ContactUuid): this {
     this.contact.uuid = uuid
     return this
   }

@@ -5,11 +5,12 @@ import { DomainEventType } from '../../../../modules/domain-events/domain-event-
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
 import { RoleDomainEvent as RoleEvent } from '../../events/role.event.js'
 import { Role } from '../../entities/role.entity.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.ROLE_DELETED)
 export class RoleDeletedEventContent {
   @ApiProperty({ type: 'string', format: 'uuid' })
-  readonly roleUuid: string
+  readonly roleUuid: RoleUuid
 
   @ApiProperty({ type: 'string' })
   readonly roleName: string

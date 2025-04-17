@@ -2,6 +2,7 @@ import { EntityManager } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { TypeOrmRepository } from '@wisemen/nestjs-typeorm'
 import { User } from '../entities/user.entity.js'
+import { UserUuid } from '../entities/user.uuid.js'
 
 @Injectable()
 export class UserRepository extends TypeOrmRepository<User> {
@@ -10,7 +11,7 @@ export class UserRepository extends TypeOrmRepository<User> {
   }
 
   async findWithUuids (
-    userUuids: string[]
+    userUuids: UserUuid[]
   ): Promise<User[]> {
     if (userUuids.length === 0) return []
     const usersQuery = this.createQueryBuilder('user')

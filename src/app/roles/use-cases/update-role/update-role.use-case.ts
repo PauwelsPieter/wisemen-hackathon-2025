@@ -4,6 +4,7 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { RoleNameAlreadyInUseError } from '../../errors/role-name-already-in-use.error.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 import { UpdateRoleCommand } from './update-role.command.js'
 import { UpdateRoleRepository } from './update-role.repository.js'
 import { RoleRenamedEvent } from './role-renamed.event.js'
@@ -16,7 +17,7 @@ export class UpdateRoleUseCase {
     private readonly repository: UpdateRoleRepository
   ) {}
 
-  async execute (uuid: string, command: UpdateRoleCommand): Promise<void> {
+  async execute (uuid: RoleUuid, command: UpdateRoleCommand): Promise<void> {
     const role = await this.repository.findRole(uuid)
 
     if (role === null) {

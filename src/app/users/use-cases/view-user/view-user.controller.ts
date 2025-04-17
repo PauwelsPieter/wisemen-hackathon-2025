@@ -3,6 +3,7 @@ import { Controller, Get } from '@nestjs/common'
 import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
+import { UserUuid } from '../../entities/user.uuid.js'
 import { ViewUserUseCase } from './view-user.use-case.js'
 import { ViewUserResponse } from './view-user.response.js'
 
@@ -21,7 +22,7 @@ export class ViewUserController {
     type: ViewUserResponse
   })
   async viewUser (
-    @UuidParam('uuid') userUuid: string
+    @UuidParam('uuid') userUuid: UserUuid
   ): Promise<ViewUserResponse> {
     const user = await this.useCase.viewUser(userUuid)
 

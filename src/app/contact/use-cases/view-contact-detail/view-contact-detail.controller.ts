@@ -3,6 +3,7 @@ import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
+import { ContactUuid } from '../../entities/contact.uuid.js'
 import { ViewContactDetailUseCase } from './view-contact-detail.use-case.js'
 import { ViewContactDetailResponse } from './view-contact-detail.response.js'
 
@@ -18,7 +19,7 @@ export class ViewContactDetailController {
   @Permissions(Permission.CONTACT_READ)
   @ApiOkResponse({ type: ViewContactDetailResponse })
   public async viewContactDetail (
-    @UuidParam('uuid') uuid: string
+    @UuidParam('uuid') uuid: ContactUuid
   ): Promise<ViewContactDetailResponse> {
     return this.viewContactDetailUseCase.execute(uuid)
   }

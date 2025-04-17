@@ -7,6 +7,7 @@ import { NotificationPreferencesPreset } from '../../entities/notification-prefe
 import { NotificationPreset } from '../../enums/notification-preset.enum.js'
 import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
 import { AuthContext } from '../../../auth/auth.context.js'
+import { UserUuid } from '../../../../app/users/entities/user.uuid.js'
 import { GetMyNotificationPreferencesResponse } from './get-my-notification-preferences.response.js'
 
 @Injectable()
@@ -27,7 +28,7 @@ export class GetMyNotificationPreferencesUseCase {
     return new GetMyNotificationPreferencesResponse(userPreferences, userPreset.preset)
   }
 
-  private async getNotificationPreferences (preset: NotificationPreset, userUuid: string):
+  private async getNotificationPreferences (preset: NotificationPreset, userUuid: UserUuid):
   Promise<NotificationPreferences[]> {
     switch (preset) {
       case NotificationPreset.ALL:

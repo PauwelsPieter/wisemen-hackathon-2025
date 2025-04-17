@@ -7,11 +7,12 @@ import { DomainEventLog } from '../../../../modules/domain-event-log/domain-even
 import { DomainEventType } from '../../../../modules/domain-events/domain-event-type.js'
 import { PermissionApiProperty } from '../../../../modules/permission/permission.api-property.js'
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.ROLE_PERMISSIONS_UPDATED)
 export class RolePermissionsUpdatedEventContent {
   @ApiProperty({ type: 'string', format: 'uuid' })
-  readonly roleUuid: string
+  readonly roleUuid: RoleUuid
 
   @PermissionApiProperty({ isArray: true })
   readonly newPermissions: Permission[]

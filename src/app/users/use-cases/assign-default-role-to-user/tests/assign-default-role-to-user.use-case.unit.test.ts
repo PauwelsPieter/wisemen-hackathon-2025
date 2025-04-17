@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
@@ -9,6 +8,7 @@ import { RoleEntityBuilder } from '../../../../roles/tests/builders/entities/rol
 import { RoleAssignedToUserEvent } from '../role-assigned-to-user.event.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
+import { generateUserUuid } from '../../../entities/user.uuid.js'
 
 describe('Assign default tole to user use case', () => {
   before(() => TestBench.setupUnitTest())
@@ -24,7 +24,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = randomUUID()
+    const userUuid = generateUserUuid()
 
     await useCase.assignDefaultRole([userUuid])
 
@@ -45,7 +45,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = randomUUID()
+    const userUuid = generateUserUuid()
 
     await useCase.assignDefaultRole([userUuid])
 

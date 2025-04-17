@@ -57,11 +57,20 @@ export type I18nTranslations = {
                 "v1": string;
             };
         };
-        "roles": {
+        "role": {
             "permissions": {
                 "updated": {
                     "v1": string;
                 };
+            };
+            "created": {
+                "v1": string;
+            };
+            "renamed": {
+                "v1": string;
+            };
+            "deleted": {
+                "v1": string;
             };
         };
     };

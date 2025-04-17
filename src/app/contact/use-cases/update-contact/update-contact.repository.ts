@@ -2,6 +2,8 @@ import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { Contact } from '../../entities/contact.entity.js'
 import { File } from '../../../../modules/files/entities/file.entity.js'
+import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
+import { ContactUuid } from '../../entities/contact.uuid.js'
 import { UpdateContactCommand } from './update-contact.command.js'
 
 export class UpdateContactRepository {
@@ -10,15 +12,15 @@ export class UpdateContactRepository {
     @InjectRepository(File) private readonly fileRepo: Repository<File>
   ) {}
 
-  async contactExists (contactUuid: string): Promise<boolean> {
+  async contactExists (contactUuid: ContactUuid): Promise<boolean> {
     return await this.contactRepo.existsBy({ uuid: contactUuid })
   }
 
-  async fileExists (fileUuid: string): Promise<boolean> {
+  async fileExists (fileUuid: FileUuid): Promise<boolean> {
     return await this.fileRepo.existsBy({ uuid: fileUuid })
   }
 
-  async updateContact (contactUuid: string, command: UpdateContactCommand): Promise<void> {
+  async updateContact (contactUuid: ContactUuid, command: UpdateContactCommand): Promise<void> {
     await this.contactRepo.update({
       uuid: contactUuid
     }, {

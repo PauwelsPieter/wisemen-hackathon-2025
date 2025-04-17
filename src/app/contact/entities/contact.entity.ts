@@ -1,11 +1,12 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { AddressColumn } from '../../../utils/address/address-column.js'
 import { Address } from '../../../utils/address/address.js'
+import { ContactUuid } from './contact.uuid.js'
 
 @Entity()
 export class Contact {
   @PrimaryGeneratedColumn('uuid')
-  uuid: string
+  uuid: ContactUuid
 
   @CreateDateColumn({ precision: 3 })
   createdAt: Date

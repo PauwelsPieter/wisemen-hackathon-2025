@@ -2,6 +2,7 @@ import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { Role } from '../../entities/role.entity.js'
 import { UserRole } from '../../entities/user-role.entity.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 
 export class DeleteRoleRepository {
   constructor (
@@ -9,7 +10,7 @@ export class DeleteRoleRepository {
         @InjectRepository(UserRole) private userRoleRepository: Repository<UserRole>
   ) {}
 
-  async findRole (withUuid: string): Promise<Role | null> {
+  async findRole (withUuid: RoleUuid): Promise<Role | null> {
     return await this.roleRepository.findOneBy({ uuid: withUuid })
   }
 

@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
@@ -12,6 +11,7 @@ import { UpdateRoleUseCase } from '../update-role.use-case.js'
 import { UpdateRoleCommandBuilder } from '../update-role-command.builder.js'
 import { RoleRenamedEvent } from '../role-renamed.event.js'
 import { RoleNameAlreadyInUseError } from '../../../errors/role-name-already-in-use.error.js'
+import { generateRoleUuid } from '../../../entities/role.uuid.js'
 
 describe('update role use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -28,7 +28,7 @@ describe('update role use case unit tests', () => {
 
     const command = new UpdateRoleCommandBuilder().build()
 
-    await expect(async () => await useCase.execute(randomUUID(), command))
+    await expect(async () => await useCase.execute(generateRoleUuid(), command))
       .rejects.toThrow(RoleNotFoundError)
   })
 

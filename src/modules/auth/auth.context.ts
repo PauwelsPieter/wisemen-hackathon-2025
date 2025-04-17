@@ -1,10 +1,11 @@
 import { AsyncLocalStorage } from 'async_hooks'
 import { Injectable } from '@nestjs/common'
 import { UnauthorizedError } from '../exceptions/generic/unauthorized.error.js'
+import { UserUuid } from '../../app/users/entities/user.uuid.js'
 
 export interface AuthContent {
   userId: string
-  uuid: string
+  uuid: UserUuid
 }
 
 @Injectable()
@@ -25,11 +26,11 @@ export class AuthContext {
     return this.authStorage.getStore()
   }
 
-  public getUserUuidOrFail (): string {
+  public getUserUuidOrFail (): UserUuid {
     return this.getAuthOrFail().uuid
   }
 
-  public getUserUuid (): string | null {
+  public getUserUuid (): UserUuid | null {
     return this.getAuth()?.uuid ?? null
   }
 

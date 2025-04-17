@@ -1,13 +1,14 @@
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Not, Repository } from 'typeorm'
 import { Role } from '../../entities/role.entity.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 
 export class UpdateRoleRepository {
   constructor (
     @InjectRepository(Role) private roleRepository: Repository<Role>
   ) {}
 
-  async findRole (withUuid: string): Promise<Role | null> {
+  async findRole (withUuid: RoleUuid): Promise<Role | null> {
     return await this.roleRepository.findOneBy({ uuid: withUuid })
   }
 

@@ -1,21 +1,22 @@
-import { randomUUID } from 'node:crypto'
 import { NotificationChannel } from '../enums/notification-channel.enum.js'
 import { NotificationType } from '../enums/notification-types.enum.js'
 import { NotificationPreferences } from '../entities/notification-preferences.entity.js'
+import { generateNotificationPreferencesUuid } from '../entities/notification-preferences.uuid.js'
+import { generateUserUuid, UserUuid } from '../../../app/users/entities/user.uuid.js'
 
 export class NotificationPreferencesEntityBuilder {
   private readonly notificationPreferences: NotificationPreferences
 
   constructor () {
     this.notificationPreferences = new NotificationPreferences()
-    this.notificationPreferences.uuid = randomUUID()
-    this.notificationPreferences.userUuid = randomUUID()
+    this.notificationPreferences.uuid = generateNotificationPreferencesUuid()
+    this.notificationPreferences.userUuid = generateUserUuid()
     this.notificationPreferences.types = []
     this.notificationPreferences.channel = NotificationChannel.APP
     this.notificationPreferences.isEnabled = true
   }
 
-  withUserUuid (userUuid: string): this {
+  withUserUuid (userUuid: UserUuid): this {
     this.notificationPreferences.userUuid = userUuid
     return this
   }

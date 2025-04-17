@@ -3,6 +3,8 @@ import { transaction } from '@wisemen/nestjs-typeorm'
 import { DataSource } from 'typeorm'
 import { ContactNotFoundError } from '../../errors/contact.not-found.error.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
+import { ContactUuid } from '../../entities/contact.uuid.js'
+import { FileNotFoundError } from '../../../../modules/files/errors/file.not-found.error.js'
 import { UpdateContactCommand } from './update-contact.command.js'
 import { ContactUpdatedEvent } from './contact-updated.event.js'
 import { UpdateContactRepository } from './update-contact.repository.js'
@@ -16,7 +18,7 @@ export class UpdateContactUseCase {
   ) {}
 
   public async execute (
-    uuid: string,
+    uuid: ContactUuid,
     command: UpdateContactCommand
   ): Promise<void> {
     if (!await this.repository.contactExists(uuid)) {
@@ -24,7 +26,7 @@ export class UpdateContactUseCase {
     }
 
     if (command.fileUuid != null && !await this.repository.fileExists(command.fileUuid)) {
-      throw new ContactNotFoundError(command.fileUuid)
+      throw new FileNotFoundError(command.fileUuid)
     }
 
     const event = new ContactUpdatedEvent(uuid)

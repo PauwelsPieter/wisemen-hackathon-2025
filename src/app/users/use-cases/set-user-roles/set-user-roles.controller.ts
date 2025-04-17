@@ -3,6 +3,7 @@ import { ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
+import { UserUuid } from '../../entities/user.uuid.js'
 import { SetUserRolesUseCase } from './set-user-roles.use-case.js'
 import { SetUserRolesCommand } from './set-user-roles.command.js'
 
@@ -17,7 +18,7 @@ export class SetUserRolesController {
   @Post()
   @Permissions(Permission.USER_UPDATE)
   async updateUser (
-    @UuidParam('user') userUuid: string,
+    @UuidParam('user') userUuid: UserUuid,
     @Body() dto: SetUserRolesCommand
   ): Promise<void> {
     await this.useCase.changeRoles(userUuid, dto)

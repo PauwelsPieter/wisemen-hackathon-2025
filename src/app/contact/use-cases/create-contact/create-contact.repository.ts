@@ -2,6 +2,7 @@ import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { Contact } from '../../entities/contact.entity.js'
 import { File } from '../../../../modules/files/entities/file.entity.js'
+import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
 
 export class CreateContactRepository {
   constructor (
@@ -9,7 +10,7 @@ export class CreateContactRepository {
     @InjectRepository(File) private readonly fileRepo: Repository<File>
   ) {}
 
-  async fileExists (fileUuid: string): Promise<boolean> {
+  async fileExists (fileUuid: FileUuid): Promise<boolean> {
     return await this.fileRepo.existsBy({ uuid: fileUuid })
   }
 

@@ -1,19 +1,22 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, Unique } from 'typeorm'
 import { User } from '../../users/entities/user.entity.js'
+import { UserUuid } from '../../users/entities/user.uuid.js'
 import { Role } from './role.entity.js'
+import { RoleUuid } from './role.uuid.js'
+import { UserRoleUuid } from './user-role.uuid.js'
 
 @Entity()
 @Unique(['userUuid', 'roleUuid'])
 export class UserRole {
   @PrimaryGeneratedColumn('uuid')
-  uuid: string
+  uuid: UserRoleUuid
 
   @Column({ type: 'uuid' })
-  userUuid: string
+  userUuid: UserUuid
 
   @Index()
   @Column({ type: 'uuid' })
-  roleUuid: string
+  roleUuid: RoleUuid
 
   @ManyToOne(() => User, user => user.userRoles)
   @JoinColumn({ name: 'user_uuid' })

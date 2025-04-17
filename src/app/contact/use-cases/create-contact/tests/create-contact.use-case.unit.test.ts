@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'crypto'
 import { assert, createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
@@ -9,8 +8,9 @@ import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-
 import { CreateContactUseCase } from '../create-contact.use-case.js'
 import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
 import { ContactCreatedEvent } from '../contact-created.event.js'
-import { CreateContactRepository } from '../create-contact.repository.js'
 import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-found.error.js'
+import { CreateContactRepository } from '../create-contact.repository.js'
+import { generateFileUuid } from '../../../../../modules/files/entities/file.uuid.js'
 
 describe('CreateContactUseCase Unit test', () => {
   before(() => {
@@ -27,7 +27,7 @@ describe('CreateContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const fileUuid = randomUUID()
+    const fileUuid = generateFileUuid()
 
     const command = new CreateContactCommandBuilder()
       .withFileUuid(fileUuid)
@@ -41,7 +41,6 @@ describe('CreateContactUseCase Unit test', () => {
     const eventEmitter = createStubInstance(DomainEventEmitter)
 
     const contactRepo = createStubInstance(CreateContactRepository)
-    contactRepo.insert.resolves()
 
     const useCase = new CreateContactUseCase(
       stubDataSource(),

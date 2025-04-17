@@ -1,5 +1,4 @@
 import { describe, it } from 'node:test'
-import { randomUUID } from 'crypto'
 import { expect } from 'expect'
 import { createStubInstance } from 'sinon'
 import { Repository } from 'typeorm'
@@ -9,6 +8,8 @@ import { UserEntityBuilder } from '../tests/user-entity.builder.js'
 import {
   UserRoleEntityBuilder
 } from '../../roles/tests/builders/entities/user-role-entity.builder.js'
+import { generateRoleUuid } from '../../roles/entities/role.uuid.js'
+import { generateUserUuid } from '../entities/user.uuid.js'
 import { UserCache } from './user-cache.service.js'
 
 describe('User cache unit test', () => {
@@ -21,7 +22,7 @@ describe('User cache unit test', () => {
 
       redisClient.putCachedValue.rejects(new Error('Redis is down'))
 
-      const promise = userCache.setUserRoles(randomUUID(), [randomUUID()])
+      const promise = userCache.setUserRoles(generateUserUuid(), [generateRoleUuid()])
 
       expect(promise).rejects.toThrow()
     })
@@ -34,7 +35,7 @@ describe('User cache unit test', () => {
 
       redisClient.putCachedValue.resolves()
 
-      const promise = userCache.setUserRoles(randomUUID(), [randomUUID()])
+      const promise = userCache.setUserRoles(generateUserUuid(), [generateRoleUuid()])
 
       expect(promise).resolves.not.toThrow()
     })

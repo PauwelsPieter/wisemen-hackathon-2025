@@ -3,11 +3,12 @@ import { UiTheme } from '../enums/theme.enum.js'
 import { User } from '../../users/entities/user.entity.js'
 import { FontSize } from '../enums/font-size.enum.js'
 import { Locale } from '../../../modules/localization/enums/locale.enum.js'
+import { UserUuid } from '../../users/entities/user.uuid.js'
 
 @Entity()
 export class UiPreferences {
   @PrimaryGeneratedColumn('uuid')
-  userUuid: string
+  userUuid: UserUuid
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date

@@ -5,6 +5,7 @@ import { DomainEventType } from '../../domain-events/domain-event-type.js'
 import { tcr } from '../../localization/helpers/translate.helper.js'
 import { DomainEventSubjectType } from '../../domain-events/domain-event-subject-type.enum.js'
 import { DomainEventSubjectTypeApiProperty } from '../../domain-events/domain-event-subject-type.api-property.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 
 @OneOfResponse(DomainEventLog)
 export class DomainEventLogResponse {
@@ -21,7 +22,7 @@ export class DomainEventLogResponse {
   source: string
 
   @ApiProperty({ type: 'string', format: 'uuid', nullable: true })
-  userUuid: string | null
+  userUuid: UserUuid | null
 
   @ApiProperty({ type: 'string' })
   message: string

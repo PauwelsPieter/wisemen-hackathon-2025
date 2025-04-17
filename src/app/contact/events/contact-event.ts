@@ -1,9 +1,10 @@
 import { DomainEvent, DomainEventOptions } from '../../../modules/domain-events/domain-event.js'
 import { DomainEventSubjectType } from '../../../modules/domain-events/domain-event-subject-type.enum.js'
+import { ContactUuid } from '../entities/contact.uuid.js'
 
 export class ContactEvent<Content extends object> extends DomainEvent<Content> {
   constructor (
-    options: Omit<DomainEventOptions<Content>, 'subjectType' | 'subjectId'> & { contactUuid: string }
+    options: Omit<DomainEventOptions<Content>, 'subjectType' | 'subjectId'> & { contactUuid: ContactUuid }
   ) {
     super({
       ...options,

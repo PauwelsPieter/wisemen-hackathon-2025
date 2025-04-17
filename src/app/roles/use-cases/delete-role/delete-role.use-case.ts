@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm'
 import { RoleNotEditableError } from '../../errors/role-not-editable.error.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 import { DeleteRoleRepository } from './delete-role.repository.js'
 import { RoleDeletedEvent } from './role-deleted.event.js'
 
@@ -15,7 +16,7 @@ export class DeleteRoleUseCase {
     private readonly repository: DeleteRoleRepository
   ) {}
 
-  async execute (uuid: string): Promise<void> {
+  async execute (uuid: RoleUuid): Promise<void> {
     const role = await this.repository.findRole(uuid)
 
     if (role === null) {

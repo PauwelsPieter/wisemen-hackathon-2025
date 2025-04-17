@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNullable } from '@wisemen/validators'
 import { AddressCommand } from '../../../../utils/address/address-command.js'
 import { IsAddress } from '../../../../utils/address/is-address.validator.js'
+import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
 
 export class UpdateContactCommand {
   @ApiProperty({ type: String, nullable: true, example: 'John' })
@@ -37,5 +38,5 @@ export class UpdateContactCommand {
   @ApiProperty({ type: 'string', nullable: true, format: 'uuid' })
   @IsNullable()
   @IsUUID()
-  fileUuid: string | null
+  fileUuid: FileUuid | null
 }

@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm'
 import { File } from './file.entity.js'
+import { FileUuid } from './file.uuid.js'
 
 @Entity()
 @Index(['entityType', 'entityUuid'])
@@ -15,7 +16,7 @@ export class FileLink {
 
   @Index()
   @Column({ type: 'uuid' })
-  fileUuid: string
+  fileUuid: FileUuid
 
   @ManyToOne(() => File, file => file.fileEntities, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'file_uuid' })

@@ -18,8 +18,7 @@ export class ViewMeController {
     description: 'User details retrieved',
     type: ViewMeResponse
   })
-  async viewMe (
-  ): Promise<ViewMeResponse> {
+  async viewMe (): Promise<ViewMeResponse> {
     const userUuid = this.authContext.getUserUuidOrFail()
     const user = await this.useCase.viewMe(userUuid)
 

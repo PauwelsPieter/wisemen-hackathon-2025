@@ -1,7 +1,8 @@
-import { randomUUID } from 'node:crypto'
 import { NotificationType } from '../enums/notification-types.enum.js'
 import { Notification } from '../entities/notification.entity.js'
 import { Serializable } from '../../../utils/types/serializable.js'
+import { generateNotificationUuid } from '../entities/notification.uuid.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 
 export class NotificationEntityBuilder {
   private readonly notification: Notification
@@ -9,11 +10,11 @@ export class NotificationEntityBuilder {
   constructor () {
     this.notification = new Notification()
     this.notification.createdAt = new Date()
-    this.notification.uuid = randomUUID()
+    this.notification.uuid = generateNotificationUuid()
     this.notification.meta = {}
   }
 
-  withCreatedByUserUuid (createdByUserUuid: string | null): this {
+  withCreatedByUserUuid (createdByUserUuid: UserUuid | null): this {
     this.notification.createdByUserUuid = createdByUserUuid
     return this
   }

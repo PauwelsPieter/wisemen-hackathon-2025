@@ -4,16 +4,18 @@ import { DomainEventType } from '../../../../modules/domain-events/domain-event-
 import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
 import { UserEvent } from '../../events/user.event.js'
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
+import { RoleUuid } from '../../../roles/entities/role.uuid.js'
+import { UserUuid } from '../../entities/user.uuid.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.USER_ROLE_ASSIGNED)
 export class RoleAssignedToUserEventContent {
   @ApiProperty({ type: 'string', format: 'uuid' })
-  readonly userUuid: string
+  readonly userUuid: UserUuid
 
   @ApiProperty({ type: 'string', format: 'uuid' })
-  readonly roleUuid: string
+  readonly roleUuid: RoleUuid
 
-  constructor (userUuid: string, roleUuid: string) {
+  constructor (userUuid: UserUuid, roleUuid: RoleUuid) {
     this.userUuid = userUuid
     this.roleUuid = roleUuid
   }
@@ -21,7 +23,7 @@ export class RoleAssignedToUserEventContent {
 
 @RegisterDomainEvent(DomainEventType.USER_ROLE_ASSIGNED, 1)
 export class RoleAssignedToUserEvent extends UserEvent<RoleAssignedToUserEventContent> {
-  constructor (userUuid: string, roleUuid: string) {
+  constructor (userUuid: UserUuid, roleUuid: RoleUuid) {
     super({
       userUuid,
       content: new RoleAssignedToUserEventContent(userUuid, roleUuid)

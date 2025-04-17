@@ -6,6 +6,7 @@ import { UserNotification } from '../../entities/user-notification.entity.js'
 import { NotificationPreferencesPreset } from '../../entities/notification-preferences-preset.entity.js'
 import { NotificationChannel } from '../../enums/notification-channel.enum.js'
 import { NotificationPreset } from '../../enums/notification-preset.enum.js'
+import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { SubscribedUser } from './subcribed-user.js'
 
 @Injectable()
@@ -19,7 +20,7 @@ export class CreateUserNotificationsRepository {
     private readonly preferenceRepo: Repository<NotificationPreferencesPreset>
   ) {}
 
-  async findNotificationOrFail (notificationUuid: string): Promise<Notification> {
+  async findNotificationOrFail (notificationUuid: NotificationUuid): Promise<Notification> {
     return await this.notificationRepo.findOneByOrFail({ uuid: notificationUuid })
   }
 

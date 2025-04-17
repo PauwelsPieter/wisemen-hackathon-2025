@@ -6,6 +6,7 @@ import { NotificationType } from '../../enums/notification-types.enum.js'
 import { NotificationEntityBuilder } from '../../entity-builders/notification.entity.builder.js'
 import { DomainEventEmitter } from '../../../domain-events/domain-event-emitter.js'
 import { Serializable } from '../../../../utils/types/serializable.js'
+import { UserUuid } from '../../../../app/users/entities/user.uuid.js'
 import { NotificationCreatedEvent } from './notification-created.event.js'
 import { NotificationCreatedResponse } from './notification-created.response.js'
 
@@ -18,7 +19,7 @@ export class CreateNotificationUseCase {
   ) {}
 
   async createNotification (
-    createdByUserUuid: string | null,
+    createdByUserUuid: UserUuid | null,
     type: NotificationType,
     meta: Serializable
   ): Promise<NotificationCreatedResponse> {

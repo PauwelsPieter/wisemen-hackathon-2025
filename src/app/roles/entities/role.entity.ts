@@ -1,10 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, type Relation, Index } from 'typeorm'
 import { Permission } from '../../../modules/permission/permission.enum.js'
+import { RoleUuid } from './role.uuid.js'
 
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn('uuid')
-  uuid: string
+  uuid: RoleUuid
 
   @CreateDateColumn({ precision: 3 })
   createdAt: Date

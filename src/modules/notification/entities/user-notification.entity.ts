@@ -1,15 +1,17 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, UpdateDateColumn } from 'typeorm'
 import { NotificationChannel } from '../enums/notification-channel.enum.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 import { Notification } from './notification.entity.js'
+import { NotificationUuid } from './notification.uuid.js'
 
 @Entity()
 @Index(['notificationUuid', 'channel'])
 export class UserNotification {
   @Column({ type: 'uuid', primary: true })
-  userUuid: string
+  userUuid: UserUuid
 
   @Column({ type: 'uuid', primary: true })
-  notificationUuid: string
+  notificationUuid: NotificationUuid
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date

@@ -9,11 +9,12 @@ import {
   OneToMany
 } from 'typeorm'
 import { UserRole } from '../../roles/entities/user-role.entity.js'
+import { UserUuid } from './user.uuid.js'
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  uuid: string
+  uuid: UserUuid
 
   @Column({ type: 'varchar', unique: true })
   userId: string

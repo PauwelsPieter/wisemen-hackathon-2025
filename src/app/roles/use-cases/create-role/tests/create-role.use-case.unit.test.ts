@@ -10,6 +10,7 @@ import { CreateRoleCommandBuilder } from '../create-role.command.builder.js'
 import { RoleNameAlreadyInUseError } from '../../../errors/role-name-already-in-use.error.js'
 import { RoleEntityBuilder } from '../../../entities/role.entity-builder.js'
 import { RoleCreatedEvent } from '../role-created.event.js'
+import { RoleUuid } from '../../../entities/role.uuid.js'
 
 describe('create role use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -46,7 +47,7 @@ describe('create role use case unit tests', () => {
 
     const expectedRole = new RoleEntityBuilder()
       .withName(command.name)
-      .withUuid(reponse.uuid)
+      .withUuid(reponse.uuid as RoleUuid)
       .build()
 
     expect(eventEmitter).toHaveEmitted(new RoleCreatedEvent(expectedRole))

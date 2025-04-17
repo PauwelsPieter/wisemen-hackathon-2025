@@ -6,6 +6,7 @@ import { UserNotificationNotFoundError } from '../../errors/user-notification-no
 import { AuthContext } from '../../../auth/auth.context.js'
 import { DomainEventEmitter } from '../../../domain-events/domain-event-emitter.js'
 import { NotificationChannel } from '../../enums/notification-channel.enum.js'
+import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { NotificationUnreadEvent } from './mark-notification-as-unread.event.js'
 
 @Injectable()
@@ -18,7 +19,7 @@ export class MarkNotificationAsUnreadUseCase {
     private readonly eventEmitter: DomainEventEmitter
   ) {}
 
-  async execute (notificationUuid: string): Promise<void> {
+  async execute (notificationUuid: NotificationUuid): Promise<void> {
     const userUuid = this.authContext.getUserUuidOrFail()
     const userNotificationExists = await this.repository.existsBy({
       notificationUuid,

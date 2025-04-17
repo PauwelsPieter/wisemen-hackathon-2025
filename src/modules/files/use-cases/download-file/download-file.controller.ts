@@ -4,6 +4,7 @@ import { UuidParam } from '@wisemen/decorators'
 import { Response } from 'express'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
+import { FileUuid } from '../../entities/file.uuid.js'
 import { DownloadFileUseCase } from './download-file.use-case.js'
 
 @ApiTags('File')
@@ -21,7 +22,7 @@ export class DownloadFileController {
     status: HttpStatus.FOUND
   })
   async downloadFile (
-    @UuidParam('file') fileUuid: string,
+    @UuidParam('file') fileUuid: FileUuid,
     @Res() res: Response
   ): Promise<void> {
     const { file, temporaryUrl } = await this.useCase.execute(fileUuid)

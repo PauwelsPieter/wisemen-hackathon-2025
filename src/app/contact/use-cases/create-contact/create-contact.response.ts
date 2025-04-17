@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Contact } from '../../entities/contact.entity.js'
 import { AddressResponse } from '../../../../utils/address/address-response.js'
+import { ContactUuid } from '../../entities/contact.uuid.js'
 
 export class CreateContactResponse {
   @ApiProperty({ type: String, format: 'uuid' })
-  uuid: string
+  uuid: ContactUuid
 
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt: string

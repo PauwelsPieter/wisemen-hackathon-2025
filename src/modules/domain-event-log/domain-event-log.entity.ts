@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity } from 'typeorm'
 import { DomainEventType } from '../domain-events/domain-event-type.js'
 import { DomainEventSubjectType } from '../domain-events/domain-event-subject-type.enum.js'
+import { UserUuid } from '../../app/users/entities/user.uuid.js'
 
 @Entity()
 export class DomainEventLog {
@@ -29,7 +30,7 @@ export class DomainEventLog {
   content: object
 
   @Column({ type: 'uuid', nullable: true })
-  userUuid: string | null
+  userUuid: UserUuid | null
 
   @Column({ type: 'varchar', nullable: true })
   traceId: string | null

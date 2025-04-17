@@ -3,6 +3,7 @@ import { ApiTags, ApiOAuth2, ApiOkResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
+import { FileUuid } from '../../entities/file.uuid.js'
 import { DeleteFileUseCase } from './delete-file.use-case.js'
 
 @ApiTags('File')
@@ -17,7 +18,7 @@ export class DeleteFileController {
   @Permissions(Permission.FILE_DELETE)
   @ApiOkResponse()
   async deleteFile (
-    @UuidParam('file') fileUuid: string
+    @UuidParam('file') fileUuid: FileUuid
   ): Promise<void> {
     await this.useCase.execute(fileUuid)
   }

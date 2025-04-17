@@ -3,6 +3,7 @@ import { ApiTags, ApiOAuth2 } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
+import { RoleUuid } from '../../entities/role.uuid.js'
 import { UpdateRoleUseCase } from './update-role.use-case.js'
 import { UpdateRoleCommand } from './update-role.command.js'
 
@@ -18,7 +19,7 @@ export class UpdateRoleController {
   @Permissions(Permission.ROLE_UPDATE)
   async updateRole (
     @Body() updateRoleCommand: UpdateRoleCommand,
-    @UuidParam('role') uuid: string
+    @UuidParam('role') uuid: RoleUuid
   ): Promise<void> {
     await this.useCase.execute(uuid, updateRoleCommand)
   }

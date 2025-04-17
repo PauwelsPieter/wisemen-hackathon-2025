@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsUndefinable } from '@wisemen/validators'
 import { Type } from 'class-transformer'
 import { IsArray, IsObject, IsString, ValidateNested } from 'class-validator'
+import { UserUuid } from '../../../../app/users/entities/user.uuid.js'
 
 export class Translations {
   @ApiProperty({ type: String, required: false })
@@ -35,5 +36,5 @@ export class SendPushNotificationCommand {
   @ApiProperty({ type: String, format: 'uuid', isArray: true })
   @IsArray()
   @IsString({ each: true })
-  userUuids: string[]
+  userUuids: UserUuid[]
 }

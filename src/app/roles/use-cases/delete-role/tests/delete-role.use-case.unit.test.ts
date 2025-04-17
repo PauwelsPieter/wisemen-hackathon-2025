@@ -1,5 +1,4 @@
 import { before, describe, it } from 'node:test'
-import { randomUUID } from 'node:crypto'
 import { createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
@@ -11,6 +10,7 @@ import { DeleteRoleRepository } from '../delete-role.repository.js'
 import { RoleNotFoundError } from '../../../errors/role-not-found.error.js'
 import { RoleDeletedEvent } from '../role-deleted.event.js'
 import { RoleNotEditableError } from '../../../errors/role-not-editable.error.js'
+import { generateRoleUuid } from '../../../entities/role.uuid.js'
 
 describe('delete role use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -25,7 +25,7 @@ describe('delete role use case unit tests', () => {
       repository
     )
 
-    await expect(async () => await useCase.execute(randomUUID()))
+    await expect(async () => await useCase.execute(generateRoleUuid()))
       .rejects.toThrow(RoleNotFoundError)
   })
 
@@ -43,7 +43,7 @@ describe('delete role use case unit tests', () => {
       repository
     )
 
-    await expect(async () => await useCase.execute(randomUUID()))
+    await expect(async () => await useCase.execute(generateRoleUuid()))
       .rejects.toThrow(RoleNotEditableError)
   })
 
@@ -61,7 +61,7 @@ describe('delete role use case unit tests', () => {
       repository
     )
 
-    await useCase.execute(randomUUID())
+    await useCase.execute(generateRoleUuid())
 
     expect(eventEmitter).toHaveEmitted(new RoleDeletedEvent(role))
   })

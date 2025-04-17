@@ -1,3 +1,5 @@
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { NotificationUuid } from '../entities/notification.uuid.js'
 import { UserNotification } from '../entities/user-notification.entity.js'
 import { NotificationChannel } from '../enums/notification-channel.enum.js'
 
@@ -11,12 +13,12 @@ export class UserNotificationEntityBuilder {
     this.userNotification.readAt = null
   }
 
-  withUserUuid (userUuid: string): this {
+  withUserUuid (userUuid: UserUuid): this {
     this.userNotification.userUuid = userUuid
     return this
   }
 
-  withNotificationUuid (notificationUuid: string): this {
+  withNotificationUuid (notificationUuid: NotificationUuid): this {
     this.userNotification.notificationUuid = notificationUuid
     return this
   }

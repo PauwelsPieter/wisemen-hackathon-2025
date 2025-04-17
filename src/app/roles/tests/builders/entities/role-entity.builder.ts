@@ -1,58 +1,58 @@
-import { randomUUID } from 'node:crypto'
 import { Role } from '../../../entities/role.entity.js'
 import { Permission } from '../../../../../modules/permission/permission.enum.js'
+import { generateRoleUuid, RoleUuid } from '../../../entities/role.uuid.js'
 
 export class RoleEntityBuilder {
-  private roleEntity: Role
+  private role: Role
 
   constructor () {
     this.reset()
   }
 
   reset (): this {
-    this.roleEntity = new Role()
+    this.role = new Role()
 
-    this.roleEntity.uuid = randomUUID()
-    this.roleEntity.name = 'test-role'
-    this.roleEntity.permissions = []
-    this.roleEntity.isSystemAdmin = false
-    this.roleEntity.isDefault = false
+    this.role.uuid = generateRoleUuid()
+    this.role.name = 'test-role'
+    this.role.permissions = []
+    this.role.isSystemAdmin = false
+    this.role.isDefault = false
 
     return this
   }
 
-  withUuid (uuid: string): this {
-    this.roleEntity.uuid = uuid
+  withUuid (uuid: RoleUuid): this {
+    this.role.uuid = uuid
 
     return this
   }
 
   withName (name: string): this {
-    this.roleEntity.name = name
+    this.role.name = name
 
     return this
   }
 
   withPermissions (permissions: Permission[]): this {
-    this.roleEntity.permissions = permissions
+    this.role.permissions = permissions
 
     return this
   }
 
   withIsDefault (isDefault: boolean): this {
-    this.roleEntity.isDefault = isDefault
+    this.role.isDefault = isDefault
 
     return this
   }
 
   withIsSystemAdmin (isSystemAdmin: boolean): this {
-    this.roleEntity.isSystemAdmin = isSystemAdmin
+    this.role.isSystemAdmin = isSystemAdmin
 
     return this
   }
 
   build (): Role {
-    const result = this.roleEntity
+    const result = this.role
 
     this.reset()
 
