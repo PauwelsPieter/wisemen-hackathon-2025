@@ -28,6 +28,12 @@ export class ViewContactIndexUseCase {
       searchParamsBuilder.addSearchOn(['name', 'email', 'phone', 'city', 'country', 'postalCode', 'streetName', 'streetNumber', 'unit'])
     }
 
+    if (query.sort != null) {
+      for (const sort of query.sort) {
+        searchParamsBuilder.addSortOn(sort.key, sort.order)
+      }
+    }
+
     const searchParams = searchParamsBuilder.build()
 
     const searchResult = await this.typesense.search(

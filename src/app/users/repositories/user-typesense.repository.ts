@@ -5,6 +5,7 @@ import { TypesenseSearchParamsBuilder } from '../../../modules/typesense/builder
 import { TypesenseCollectionName } from '../../../modules/typesense/enums/typesense-collection-index.enum.js'
 import type { ViewUsersQuery } from '../use-cases/view-users/view-users.query.js'
 import { TypesenseUser } from '../typesense/typesense-user.js'
+import { UserTypesenseCollection } from '../typesense/user.collections.js'
 
 @Injectable()
 export class UserTypesenseRepository {
@@ -30,7 +31,7 @@ export class UserTypesenseRepository {
 
   private createTypesenseSearchParams (query: ViewUsersQuery): SearchParams {
     const searchParamBuilder
-      = new TypesenseSearchParamsBuilder()
+      = new TypesenseSearchParamsBuilder<UserTypesenseCollection>()
         .withQuery(query.search)
         .withOffset(query.pagination?.offset)
         .withLimit(query.pagination?.limit)

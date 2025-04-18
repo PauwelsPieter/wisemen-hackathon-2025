@@ -1,4 +1,7 @@
-import { ViewContactIndexFilterQuery, ViewContactIndexQuery } from './view-contact-index.query.js'
+import { PaginatedOffsetQuery, SortDirection } from '@wisemen/pagination'
+import { ViewContactIndexFilterQuery } from './view-contact-index-filter.query.js'
+import { ViewContactIndexQuery } from './view-contact-index.query.js'
+import { ViewContactIndexSortQueryKey } from './view-contact-index-sort.query.js'
 
 export class ViewContactIndexQueryBuilder {
   private readonly query: ViewContactIndexQuery
@@ -17,19 +20,21 @@ export class ViewContactIndexQueryBuilder {
     return this
   }
 
+  withSortOn (key: ViewContactIndexSortQueryKey, order: SortDirection): this {
+    this.query.sort ??= []
+    this.query.sort.push({ key, order })
+    return this
+  }
+
   withLimit (limit: number): this {
-    this.query.pagination = {
-      limit,
-      offset: this.query.pagination?.offset ?? 0
-    }
+    this.query.pagination ??= new PaginatedOffsetQuery()
+    this.query.pagination.limit = limit
     return this
   }
 
   withOffset (offset: number): this {
-    this.query.pagination = {
-      limit: this.query.pagination?.limit ?? 20,
-      offset
-    }
+    this.query.pagination ??= new PaginatedOffsetQuery()
+    this.query.pagination.offset = offset
     return this
   }
 

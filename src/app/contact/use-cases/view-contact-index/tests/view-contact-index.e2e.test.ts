@@ -2,6 +2,7 @@ import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { stringify } from 'qs'
 import { expect } from 'expect'
+import { SortDirection } from '@wisemen/pagination'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { TypesenseCollectionName } from '../../../../../modules/typesense/enums/typesense-collection-index.enum.js'
@@ -10,11 +11,15 @@ import { TypesenseInitializationService } from '../../../../../modules/typesense
 import { TestUser } from '../../../../users/tests/setup-user.type.js'
 import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
 import { ViewContactIndexQueryBuilder } from '../query/view-contact-index.query.builder.js'
+import { Contact } from '../../../entities/contact.entity.js'
+import { ViewContactIndexSortQueryKey } from '../query/view-contact-index-sort.query.js'
 
 describe('View contact index e2e tests', () => {
   let testSetup: EndToEndTestSetup
   let adminUser: TestUser
-  let typesenseCollectionService: TypesenseCollectionService
+  let findableContact: Contact
+  let unfindableByNameContact: Contact
+  let unfindableByIsActiveContact: Contact
 
   before(async () => {
     testSetup = await TestBench.setupEndToEndTest()
@@ -23,22 +28,17 @@ describe('View contact index e2e tests', () => {
     const typesenseInitializationService = testSetup.testModule.get(TypesenseInitializationService)
     await typesenseInitializationService.migrate(true, [TypesenseCollectionName.CONTACT])
 
-    typesenseCollectionService = testSetup.testModule.get(
+    const typesenseCollectionService = testSetup.testModule.get(
       TypesenseCollectionService, { strict: false })
-  })
 
-  after(async () => {
-    await testSetup.teardown()
-  })
-
-  it('Retrieves contacts successfully', async () => {
-    const findableContact = new ContactEntityBuilder()
+    findableContact = new ContactEntityBuilder()
       .withFirstName('Jonas')
       .build()
-    const unfindableByNameContact = new ContactEntityBuilder()
-      .withFirstName('John')
+    unfindableByNameContact = new ContactEntityBuilder()
+      .withFirstName('AAA')
       .build()
-    const unfindableByIsActiveContact = new ContactEntityBuilder()
+    unfindableByIsActiveContact = new ContactEntityBuilder()
+      .withFirstName('BBB')
       .withIsActive(false)
       .build()
 
@@ -50,7 +50,13 @@ describe('View contact index e2e tests', () => {
         unfindableByIsActiveContact
       ]
     )
+  })
 
+  after(async () => {
+    await testSetup.teardown()
+  })
+
+  it('Retrieves contacts successfully when searched', async () => {
     const query = new ViewContactIndexQueryBuilder()
       .withSearch('Jonas')
       .withFilter({
@@ -74,5 +80,22 @@ describe('View contact index e2e tests', () => {
         offset: 0
       })
     }))
+  })
+
+  it('Retrieves contacts successfully when sorted', async () => {
+    const query = new ViewContactIndexQueryBuilder()
+      .withSortOn(ViewContactIndexSortQueryKey.NAME, SortDirection.ASC)
+      .build()
+
+    const response = await request(testSetup.app.getHttpServer())
+      .get(`/contacts`)
+      .set('Authorization', `Bearer ${adminUser.token}`)
+      .query(stringify(query))
+
+    expect(response).toHaveStatus(200)
+    expect(response.body.items).toHaveLength(3)
+    expect(response.body.items[0].uuid).toEqual(unfindableByNameContact.uuid)
+    expect(response.body.items[1].uuid).toEqual(unfindableByIsActiveContact.uuid)
+    expect(response.body.items[2].uuid).toEqual(findableContact.uuid)
   })
 })

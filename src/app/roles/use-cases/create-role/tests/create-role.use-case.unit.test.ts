@@ -43,11 +43,11 @@ describe('create role use case unit tests', () => {
     )
 
     const command = new CreateRoleCommandBuilder().build()
-    const reponse = await useCase.execute(command)
+    const response = await useCase.execute(command)
 
     const expectedRole = new RoleEntityBuilder()
       .withName(command.name)
-      .withUuid(reponse.uuid as RoleUuid)
+      .withUuid(response.uuid as RoleUuid)
       .build()
 
     expect(eventEmitter).toHaveEmitted(new RoleCreatedEvent(expectedRole))
