@@ -31,6 +31,8 @@ export class CreateContactUseCase {
       .withPhone(command.phone)
       .withAddress(command.address?.parse() ?? null)
       .withFileUuid(command.fileUuid)
+      .withBalance(command.balance?.parse() ?? null)
+      .withDiscount(command.discount?.parse() ?? null)
       .build()
 
     const event = new ContactCreatedEvent(contact)

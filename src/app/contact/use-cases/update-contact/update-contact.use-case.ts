@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { DataSource } from 'typeorm'
 import { ContactNotFoundError } from '../../errors/contact.not-found.error.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { ContactUuid } from '../../entities/contact.uuid.js'
 import { FileNotFoundError } from '../../../../modules/files/errors/file.not-found.error.js'
+import { Contact } from '../../entities/contact.entity.js'
 import { UpdateContactCommand } from './update-contact.command.js'
 import { ContactUpdatedEvent } from './contact-updated.event.js'
 import { UpdateContactRepository } from './update-contact.repository.js'
@@ -21,7 +22,8 @@ export class UpdateContactUseCase {
     uuid: ContactUuid,
     command: UpdateContactCommand
   ): Promise<void> {
-    if (!await this.repository.contactExists(uuid)) {
+    const contact = await this.repository.findContact(uuid)
+    if (contact === null) {
       throw new ContactNotFoundError(uuid)
     }
 
@@ -29,11 +31,28 @@ export class UpdateContactUseCase {
       throw new FileNotFoundError(command.fileUuid)
     }
 
+    this.updateContact(contact, command)
     const event = new ContactUpdatedEvent(uuid)
 
-    await transaction(this.dataSource, async () => {
-      await this.repository.updateContact(uuid, command)
-      await this.eventEmitter.emit([event])
-    })
+    try {
+      await transaction(this.dataSource, async () => {
+        await this.repository.updateContact(contact)
+        await this.eventEmitter.emit([event])
+      })
+    } catch (error) {
+      Logger.log(error)
+    }
+  }
+
+  private updateContact (contact: Contact, command: UpdateContactCommand): void {
+    contact.address = command.address?.parse() ?? null
+    contact.balance = command.balance?.parse() ?? null
+    contact.discount = command.balance?.parse() ?? null
+    contact.firstName = command.firstName
+    contact.lastName = command.lastName
+    contact.email = command.email
+    contact.phone = command.phone
+    contact.isActive = command.isActive
+    contact.fileUuid = command.fileUuid
   }
 }

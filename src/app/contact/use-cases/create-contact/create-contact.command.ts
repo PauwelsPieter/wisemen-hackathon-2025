@@ -1,6 +1,7 @@
 import { IsEmail, IsPhoneNumber, IsString, IsUUID } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNullable } from '@wisemen/validators'
+import { MonetaryDto, IsMonetary, Currency } from '@wisemen/monetary'
 import { AddressCommand } from '../../../../utils/address/address-command.js'
 import { IsAddress } from '../../../../utils/address/is-address.validator.js'
 import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
@@ -35,4 +36,18 @@ export class CreateContactCommand {
   @IsNullable()
   @IsUUID()
   fileUuid: FileUuid | null
+
+  @ApiProperty({ type: MonetaryDto, nullable: true })
+  @IsNullable()
+  @IsMonetary({
+    allowedCurrencies: new Set([Currency.EUR]),
+    maxPrecision: 4,
+    minAmount: 0
+  })
+  discount: MonetaryDto | null
+
+  @ApiProperty({ type: MonetaryDto, nullable: true })
+  @IsNullable()
+  @IsMonetary({ maxPrecision: 4 })
+  balance: MonetaryDto | null
 }

@@ -1,3 +1,4 @@
+import { MonetaryDto } from '@wisemen/monetary'
 import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
 import { AddressCommand } from '../../../../utils/address/address-command.js'
 import { UpdateContactCommand } from './update-contact.command.js'
@@ -14,6 +15,8 @@ export class UpdateContactCommandBuilder {
     this.command.isActive = true
     this.command.address = null
     this.command.fileUuid = null
+    this.command.discount = null
+    this.command.balance = null
   }
 
   withFirstName (firstName: string): this {
@@ -48,6 +51,16 @@ export class UpdateContactCommandBuilder {
 
   withFileUuid (fileUuid: FileUuid | null): this {
     this.command.fileUuid = fileUuid
+    return this
+  }
+
+  withDiscount (amount: MonetaryDto | null): this {
+    this.command.discount = amount
+    return this
+  }
+
+  withBalance (amount: MonetaryDto | null): this {
+    this.command.balance = amount
     return this
   }
 

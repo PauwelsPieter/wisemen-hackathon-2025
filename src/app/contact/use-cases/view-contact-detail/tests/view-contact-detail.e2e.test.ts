@@ -10,16 +10,10 @@ import { Contact } from '../../../entities/contact.entity.js'
 describe('view contact detail e2e tests', () => {
   let testSetup: EndToEndTestSetup
   let adminUser: TestUser
-  let contact: Contact
 
   before(async () => {
     testSetup = await TestBench.setupEndToEndTest()
     adminUser = await testSetup.authContext.getAdminUser()
-
-    contact = new ContactEntityBuilder()
-      .build()
-
-    await testSetup.dataSource.manager.insert(Contact, contact)
   })
 
   after(async () => {
@@ -27,6 +21,10 @@ describe('view contact detail e2e tests', () => {
   })
 
   it('retrieves a contact successfully', async () => {
+    const contact = new ContactEntityBuilder().build()
+
+    await testSetup.dataSource.manager.insert(Contact, contact)
+
     const response = await request(testSetup.app.getHttpServer())
       .get(`/contacts/${contact.uuid}`)
       .set('Authorization', `Bearer ${adminUser.token}`)

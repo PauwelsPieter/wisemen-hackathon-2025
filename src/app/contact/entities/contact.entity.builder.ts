@@ -1,3 +1,4 @@
+import { Monetary } from '@wisemen/monetary'
 import { Address } from '../../../utils/address/address.js'
 import { Contact } from './contact.entity.js'
 import { ContactUuid, generateContactUuid } from './contact.uuid.js'
@@ -17,6 +18,8 @@ export class ContactEntityBuilder {
     this.contact.address = null
     this.contact.isActive = true
     this.contact.fileUuid = null
+    this.contact.discount = null
+    this.contact.balance = null
   }
 
   withUuid (uuid: ContactUuid): this {
@@ -56,6 +59,16 @@ export class ContactEntityBuilder {
 
   withFileUuid (fileUuid: string | null): this {
     this.contact.fileUuid = fileUuid
+    return this
+  }
+
+  withBalance (amount: Monetary | null): this {
+    this.contact.balance = amount
+    return this
+  }
+
+  withDiscount (amount: Monetary | null): this {
+    this.contact.discount = amount
     return this
   }
 

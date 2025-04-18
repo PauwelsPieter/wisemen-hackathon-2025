@@ -12,6 +12,7 @@ import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-
 import { generateContactUuid } from '../../../entities/contact.uuid.js'
 import { UpdateContactRepository } from '../update-contact.repository.js'
 import { generateFileUuid } from '../../../../../modules/files/entities/file.uuid.js'
+import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
 
 describe('UpdateContactUseCase Unit test', () => {
   before(() => {
@@ -21,7 +22,7 @@ describe('UpdateContactUseCase Unit test', () => {
   it('throws an error when the contact does not exist', async () => {
     const contactRepo = createStubInstance(UpdateContactRepository)
 
-    contactRepo.contactExists.resolves(false)
+    contactRepo.findContact.resolves(null)
 
     const useCase = new UpdateContactUseCase(
       stubDataSource(),
@@ -39,7 +40,7 @@ describe('UpdateContactUseCase Unit test', () => {
 
   it('throws an error when the file does not exist', async () => {
     const contactRepo = createStubInstance(UpdateContactRepository)
-    contactRepo.contactExists.resolves(true)
+    contactRepo.findContact.resolves(new ContactEntityBuilder().build())
     contactRepo.fileExists.resolves(false)
 
     const useCase = new UpdateContactUseCase(
@@ -61,7 +62,7 @@ describe('UpdateContactUseCase Unit test', () => {
 
   it('emits a contact updated event', async () => {
     const contactRepo = createStubInstance(UpdateContactRepository)
-    contactRepo.contactExists.resolves(true)
+    contactRepo.findContact.resolves(new ContactEntityBuilder().build())
     contactRepo.fileExists.resolves(true)
 
     const eventEmitter = createStubInstance(DomainEventEmitter)

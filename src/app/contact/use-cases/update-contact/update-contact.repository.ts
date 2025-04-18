@@ -4,7 +4,6 @@ import { Contact } from '../../entities/contact.entity.js'
 import { File } from '../../../../modules/files/entities/file.entity.js'
 import { FileUuid } from '../../../../modules/files/entities/file.uuid.js'
 import { ContactUuid } from '../../entities/contact.uuid.js'
-import { UpdateContactCommand } from './update-contact.command.js'
 
 export class UpdateContactRepository {
   constructor (
@@ -12,25 +11,15 @@ export class UpdateContactRepository {
     @InjectRepository(File) private readonly fileRepo: Repository<File>
   ) {}
 
-  async contactExists (contactUuid: ContactUuid): Promise<boolean> {
-    return await this.contactRepo.existsBy({ uuid: contactUuid })
+  async findContact (contactUuid: ContactUuid): Promise<Contact | null> {
+    return await this.contactRepo.findOneBy({ uuid: contactUuid })
   }
 
   async fileExists (fileUuid: FileUuid): Promise<boolean> {
     return await this.fileRepo.existsBy({ uuid: fileUuid })
   }
 
-  async updateContact (contactUuid: ContactUuid, command: UpdateContactCommand): Promise<void> {
-    await this.contactRepo.update({
-      uuid: contactUuid
-    }, {
-      firstName: command.firstName,
-      lastName: command.lastName,
-      email: command.email,
-      phone: command.phone,
-      isActive: command.isActive,
-      address: command.address?.parse(),
-      fileUuid: command.fileUuid
-    })
+  async updateContact (contact: Contact): Promise<void> {
+    await this.contactRepo.save(contact)
   }
 }

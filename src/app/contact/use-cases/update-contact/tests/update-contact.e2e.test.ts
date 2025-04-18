@@ -27,7 +27,7 @@ describe('update contact e2e tests', () => {
     await testSetup.teardown()
   })
 
-  it('updates a new contact successfully', async () => {
+  it('updates a contact successfully', async () => {
     const command = new UpdateContactCommandBuilder()
       .withFirstName('updated name')
       .build()

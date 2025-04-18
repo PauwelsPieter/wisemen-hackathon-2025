@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Currency, Monetary, MonetaryAmountColumn, MonetaryColumn } from '@wisemen/monetary'
 import { AddressColumn } from '../../../utils/address/address-column.js'
 import { Address } from '../../../utils/address/address.js'
 import { ContactUuid } from './contact.uuid.js'
@@ -39,4 +40,10 @@ export class Contact {
 
   @AddressColumn({ nullable: true })
   address: Address | null
+
+  @MonetaryAmountColumn({ currency: Currency.EUR, monetaryPrecision: 4, nullable: true })
+  discount: Monetary | null
+
+  @MonetaryColumn({ defaultPrecision: 4, nullable: true })
+  balance: Monetary | null
 }
