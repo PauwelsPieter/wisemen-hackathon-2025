@@ -15,7 +15,8 @@ function buildOAuthScopes (): Record<string, string> {
   return {
     openid: 'openid',
     email: 'email',
-    profile: 'profile'
+    profile: 'profile',
+    offline_access: 'offline_access'
   }
 }
 
@@ -33,7 +34,10 @@ export function buildExtraOptions (
       initOAuth: {
         clientId: clientId,
         scopes: Object.keys(scopes),
-        usePkceWithAuthorizationCodeGrant: true
+        usePkceWithAuthorizationCodeGrant: true,
+        additionalQueryStringParams: {
+          prompt: 'select_account'
+        }
       }
     }
   }
