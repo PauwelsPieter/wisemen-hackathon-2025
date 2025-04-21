@@ -35,7 +35,7 @@ export class UserAuthService {
 
     await this.redisClient.putCachedValue(cacheKey, JSON.stringify(response))
 
-    return user
+    return response
   }
 
   private async fetchOrCreateUser (token: TokenContent): Promise<User> {
