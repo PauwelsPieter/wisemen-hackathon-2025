@@ -1,5 +1,6 @@
 export enum DomainEventSubjectType {
-  USER = 'user',
+  CONTACT = 'contact',
+  FILE = 'file',
   ROLE = 'role',
-  CONTACT = 'contact'
+  USER = 'user'
 }

@@ -5,7 +5,7 @@ import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
 import { DownloadFileUseCase } from '../download-file.use-case.js'
-import { S3Service } from '../../../services/s3.service.js'
+import { S3 } from '../../../../s3/s3.js'
 import { AuthContext } from '../../../../auth/auth.context.js'
 import { generateUserUuid, UserUuid } from '../../../../../app/users/entities/user.uuid.js'
 import { generateFileUuid } from '../../../entities/file.uuid.js'
@@ -16,7 +16,7 @@ describe('Download file use case unit tests', () => {
   let userUuid: UserUuid
 
   let fileRepository: SinonStubbedInstance<Repository<File>>
-  let s3Service: SinonStubbedInstance<S3Service>
+  let s3Service: SinonStubbedInstance<S3>
 
   before(() => {
     TestBench.setupUnitTest()
@@ -29,7 +29,7 @@ describe('Download file use case unit tests', () => {
       Repository<File>
     )
 
-    s3Service = createStubInstance(S3Service)
+    s3Service = createStubInstance(S3)
 
     useCase = new DownloadFileUseCase(
       authStorage,

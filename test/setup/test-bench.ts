@@ -8,7 +8,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import { expect } from 'expect'
 import { TestAuthContext } from '../utils/test-auth-context.js'
 import { AuthMiddleware } from '../../src/modules/auth/middleware/auth.middleware.js'
-import { S3Service } from '../../src/modules/files/services/s3.service.js'
+import { S3 } from '../../src/modules/s3/s3.js'
 import { uuid } from '../expect/expect-uuid.js'
 import { toHaveErrorCode } from '../expect/expect-error-code.js'
 import { toHaveStatus } from '../expect/expect-status.js'
@@ -128,12 +128,12 @@ export class TestBench {
   }
 
   private static mockS3 (): void {
-    mock.method(S3Service.prototype, 'createTemporaryDownloadUrl', () => 'http://localhost:3000')
-    mock.method(S3Service.prototype, 'createTemporaryUploadUrl', () => 'http://localhost:3000')
-    mock.method(S3Service.prototype, 'upload', () => {})
-    mock.method(S3Service.prototype, 'uploadStream', () => {})
-    mock.method(S3Service.prototype, 'delete', () => {})
-    mock.method(S3Service.prototype, 'list', () => [])
+    mock.method(S3.prototype, 'createTemporaryDownloadUrl', () => 'http://localhost:3000')
+    mock.method(S3.prototype, 'createTemporaryUploadUrl', () => 'http://localhost:3000')
+    mock.method(S3.prototype, 'upload', () => {})
+    mock.method(S3.prototype, 'uploadStream', () => {})
+    mock.method(S3.prototype, 'delete', () => {})
+    mock.method(S3.prototype, 'list', () => [])
   }
 
   private static extendExpect (): void {

@@ -3,6 +3,10 @@ export enum DomainEventType {
   CONTACT_UPDATED = 'contact.updated',
   CONTACT_DELETED = 'contact.deleted',
 
+  FILE_CREATED = 'file.created',
+  FILE_DELETED = 'file.deleted',
+  FILE_UPLOADED = 'file.uploaded',
+
   NOTIFICATION_CREATED = 'notification.created',
   NOTIFICATION_READ = 'notification.read',
   NOTIFICATION_UNREAD = 'notification.unread',

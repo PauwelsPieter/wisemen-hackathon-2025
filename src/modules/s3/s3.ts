@@ -12,12 +12,12 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Upload } from '@aws-sdk/lib-storage'
 import { captureException } from '@sentry/nestjs'
-import type { MimeType } from '../enums/mime-type.enum.js'
-import type { File } from '../entities/file.entity.js'
-import { S3UnavailableError } from '../errors/s3-unavailable.error.js'
+import type { MimeType } from '../files/enums/mime-type.enum.js'
+import type { File } from '../files/entities/file.entity.js'
+import { S3UnavailableError } from '../files/errors/s3-unavailable.error.js'
 
 @Injectable()
-export class S3Service {
+export class S3 {
   private readonly _client?: S3Client
 
   constructor (

@@ -1,42 +1,55 @@
 import { before, describe, it } from 'node:test'
-import { assert, createStubInstance, SinonStubbedInstance } from 'sinon'
+import { assert, createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { ConfirmFileUploadUseCase } from '../confirm-file-upload.use-case.js'
 import { File } from '../../../entities/file.entity.js'
 import { AuthContext } from '../../../../auth/auth.context.js'
-import { generateUserUuid, UserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
+import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
+import { FileEntityBuilder } from '../../../tests/builders/entities/file-entity.builder.js'
+import { FileUploadedEvent } from '../file-uploaded.event.js'
 import { generateFileUuid } from '../../../entities/file.uuid.js'
+import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
 
 describe('Confirm file upload use case unit tests', () => {
-  let useCase: ConfirmFileUploadUseCase
+  before(() => TestBench.setupUnitTest())
 
-  let userUuid: UserUuid
+  it('throws an error when the file does not exist', async () => {
+    const userUuid = generateUserUuid()
+    const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
+    const fileRepository = createStubInstance(Repository<File>)
+    fileRepository.findOneByOrFail.throws(new EntityNotFoundError(File, {}))
 
-  let fileRepository: SinonStubbedInstance<Repository<File>>
-
-  before(() => {
-    TestBench.setupUnitTest()
-
-    userUuid = generateUserUuid()
-
-    const authStorage = createStubInstance(AuthContext, { getUserUuid: userUuid })
-
-    fileRepository = createStubInstance<Repository<File>>(
-      Repository<File>
-    )
-
-    useCase = new ConfirmFileUploadUseCase(
-      authStorage,
+    const useCase = new ConfirmFileUploadUseCase(
+      stubDataSource(),
+      createStubInstance(DomainEventEmitter),
+      authContext,
       fileRepository
     )
-  })
-
-  it('should return 404 when file not uploaded by customer', async () => {
-    fileRepository.findOneByOrFail.throws(new EntityNotFoundError(File, {}))
 
     await expect(useCase.execute(generateFileUuid())).rejects.toThrow()
     assert.notCalled(fileRepository.update)
+  })
+
+  it('emits an event when the file has been marked as uploaded', async () => {
+    const userUuid = generateUserUuid()
+    const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
+    const fileRepository = createStubInstance(Repository<File>)
+    const file = new FileEntityBuilder().build()
+    fileRepository.findOneByOrFail.resolves(file)
+
+    const eventEmitter = createStubInstance(DomainEventEmitter)
+    const useCase = new ConfirmFileUploadUseCase(
+      stubDataSource(),
+      eventEmitter,
+      authContext,
+      fileRepository
+    )
+
+    await useCase.execute(generateFileUuid())
+
+    expect(eventEmitter).toHaveEmitted(new FileUploadedEvent(file))
   })
 })
