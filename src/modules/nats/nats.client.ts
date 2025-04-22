@@ -1,7 +1,9 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
-import { type NatsConnection, connect, type KV, credsAuthenticator, type Authenticator, type Payload, type Subscription, type SubscriptionOptions } from 'nats'
 import { ConfigService } from '@nestjs/config'
 import { captureException } from '@sentry/nestjs'
+import { KV, Kvm } from '@nats-io/kv'
+import { NatsConnection, Authenticator, credsAuthenticator, SubscriptionOptions, Payload, connect, Subscription } from '@nats-io/transport-node'
+import { jetstream } from '@nats-io/jetstream'
 import { NatsUnavailableError } from './nats-unavailable.error.js'
 
 interface SubscribeOptions {
@@ -43,7 +45,9 @@ export class NatsClient implements OnModuleInit, OnModuleDestroy {
         timeout: 3000
       })
 
-      this._cache = await this.client.jetstream().views.kv('cache')
+      const js = jetstream(this.client)
+
+      this._cache = await new Kvm(js).create('cache')
     } catch (error) {
       captureException(error)
     }

@@ -10,6 +10,32 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: test_db
 
+  zitadel:
+    # The user should have the permission to write to ./machinekey
+    user: "${UID:-1000}"
+    restart: 'always'
+    image: 'ghcr.io/zitadel/zitadel:latest'
+    command: 'start-from-init --masterkey "MasterkeyNeedsToHave32Characters" --tlsMode disabled'
+    environment:
+      ZITADEL_DATABASE_POSTGRES_HOST: postgres
+      ZITADEL_DATABASE_POSTGRES_PORT: 5432
+      ZITADEL_DATABASE_POSTGRES_DATABASE: test_db
+      ZITADEL_DATABASE_POSTGRES_USER_USERNAME: zitadel
+      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: zitadel
+      ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE: disable
+      ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: postgres
+      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: password
+      ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: disable
+      ZITADEL_EXTERNALSECURE: false
+      ZITADEL_FIRSTINSTANCE_MACHINEKEYPATH: /machinekey/zitadel-admin-sa.json
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINE_USERNAME: zitadel-admin-sa
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINE_NAME: Admin
+      ZITADEL_FIRSTINSTANCE_ORG_MACHINE_MACHINEKEY_TYPE: 1
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./.machinekey:/machinekey
+
   typesense:
     image: typesense/typesense:28.0
     ports:
@@ -34,7 +60,9 @@ services:
       - "4222:4222"
     volumes:
       - ./.nats:/data/nats
+      - ./nats.conf:/data/nats.conf
     command:
+      - "--config=/data/nats.conf"
       - "--debug"
       - "--http_port=8222"
       - "--js"
