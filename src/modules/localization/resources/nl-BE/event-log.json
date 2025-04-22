@@ -1,0 +1,60 @@
+{
+    "notification": {
+        "created": {
+            "v1": "Notificatie aangemaakt {type}"
+        },
+        "read": {
+            "v1": "Notificatie gelezen"
+        },
+        "unread": {
+            "v1": "Notificatie ongelezen"
+        },
+        "types": {
+            "migrated": {
+                "v1": "Notificatie types gemigreerd"
+            }
+        },
+        "preference": {
+            "preset": {
+                "updated": {
+                    "v1": "Notificatie preset voorkeur aangepast"
+                }
+            }
+        }
+    },
+    "user": {
+        "created": {
+            "v1": "Gebruiker aangemaakt"
+        },
+        "role-assigned": {
+            "v1": "Rol toegekend aan gebruiker"
+        }
+    },
+    "contact": {
+        "created": {
+            "v1": "Contact aangemaakt"
+        },
+        "updated": {
+            "v1": "Contact aangepast"
+        },
+        "deleted": {
+            "v1": "Contact verwijderd"
+        }
+    },
+    "role": {
+        "permissions": {
+            "updated": {
+                "v1": "De permissies van de rol {roleName} werden aangepast"
+            }
+        },
+        "created": {
+            "v1": "Nieuwe rol {roleName} aangemaakt"
+        },
+        "renamed": {
+            "v1": "Rol {previousName} hernoemd naar {newName}"
+        },
+        "deleted": {
+            "v1": "Rol {roleName} verwijderd"
+        }
+    }
+}
