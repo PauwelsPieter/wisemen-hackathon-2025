@@ -35,6 +35,10 @@ export function getDefaultForType (type: NotificationType): NotificationTypeChan
       defaultChannels: [NotificationChannel.APP],
       supportedChannels: [NotificationChannel.APP]
     }
+    case NotificationType.TEST_NOTIFICATION: return {
+      defaultChannels: [NotificationChannel.APP],
+      supportedChannels: [NotificationChannel.APP]
+    }
     default: exhaustiveCheck(type)
   }
 }

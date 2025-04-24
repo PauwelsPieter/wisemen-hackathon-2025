@@ -9,12 +9,14 @@ import { MarkNotificationAsReadModule } from './use-cases/mark-notification-as-r
 import { MarkNotificationAsUnreadModule } from './use-cases/mark-notification-as-unread/mark-notification-as-unread.module.js'
 import { UpdateMyNotificationPreferencePresetModule } from './use-cases/update-my-notifcation-preference-preset/update-my-notification-preference-preset.module.js'
 import { MigrateNotificationTypesModule } from './use-cases/migrate-notification-types/migrate-notification-types.module.js'
+import { SendTestNotificationModule } from './use-cases/send-test-notification/send-test-notification.module.js'
 
 @Module({
   imports: [
     GetMyNotificationPreferencesModule,
     GetNotificationTypesConfigModule,
     UpdateMyChannelNotificationPreferenceModule,
+    SendTestNotificationModule,
     GetMyNotificationsModule,
     UpdateMyNotificationTypePreferenceModule,
     MarkNotificationAsReadModule,

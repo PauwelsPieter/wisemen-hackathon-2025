@@ -91,6 +91,7 @@ export type I18nTranslations = {
         "user": {
             "created": string;
         };
+        "test-notification": string;
     };
 };
 /* prettier-ignore */

@@ -19,6 +19,8 @@ export enum DomainEventType {
   ROLE_PERMISSIONS_UPDATED = 'role.permissions.updated',
   ROLE_PERMISSIONS_CACHE_CLEARED = 'role.permissions.cache.cleared',
 
+  TEST_NOTIFICATION_SENT = 'test-notification.sent',
+
   USER_CREATED = 'user.created',
   USER_ROLE_ASSIGNED = 'user.role-assigned',
   USER_NOTIFICATION_CREATED = 'user.notification.created'
