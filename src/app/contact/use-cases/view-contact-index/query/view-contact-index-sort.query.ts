@@ -7,7 +7,7 @@ export enum ViewContactIndexSortQueryKey {
 }
 
 export class ViewContactIndexSortQuery extends SortQuery {
-  @ApiProperty({ enum: ViewContactIndexSortQueryKey })
+  @ApiProperty({ enum: ViewContactIndexSortQueryKey, enumName: 'ViewContactIndexSortQueryKey' })
   @IsEnum(ViewContactIndexSortQueryKey)
   key: ViewContactIndexSortQueryKey
 
