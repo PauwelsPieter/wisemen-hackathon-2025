@@ -4,7 +4,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./.postgres:/var/lib/postgresql/data
+      - ./.postgres:/home/postgres/pgdata/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -45,7 +45,7 @@ services:
     environment:
       TYPESENSE_DATA_DIR: /data
       TYPESENSE_API_KEY: api_key
-  
+
   typesense_dashboard:
     image: ghcr.io/bfritscher/typesense-dashboard:latest
     restart: on-failure
