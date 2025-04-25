@@ -16,7 +16,7 @@ export class Role {
   @Column({ type: 'varchar', unique: true })
   name: string
 
-  @Column({ type: 'varchar', enum: Permission, default: [], array: true })
+  @Column({ type: 'varchar', default: [], array: true })
   permissions: Permission[]
 
   @Column({ type: 'boolean', default: false })
