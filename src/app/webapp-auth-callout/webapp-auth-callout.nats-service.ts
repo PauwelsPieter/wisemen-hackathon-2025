@@ -26,11 +26,11 @@ export class WebappAuthCalloutNatsService {
     name: 'auth-callout',
     subject: '$SYS.REQ.USER.AUTH'
   })
-  async handleCallout (msg: ServiceMsg): Promise<string> {
+  async handleCallout (msg: ServiceMsg): Promise<Uint8Array> {
     const audience = this.config.natsAudience.orThrow()
     Logger.debug('received message', `${audience} Auth Callout`)
 
-    const parsedRequest = this.requestParser.parse(msg)
+    const parsedRequest = this.requestParser.parse(msg, this.config.xKey.orUndefined())
     const { authToken, clientName } = parsedRequest
     Logger.debug(`authentication request from ${clientName}`, `${audience} Auth Callout`)
 

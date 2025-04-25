@@ -3,4 +3,5 @@ export interface ParsedAuthorizationRequest {
   userNkey: string
   serverNkey: string
   authToken: string
+  xKey?: string
 }

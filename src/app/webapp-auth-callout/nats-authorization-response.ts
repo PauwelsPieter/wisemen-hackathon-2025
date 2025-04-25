@@ -13,6 +13,7 @@ export class NatsAuthorizationResponseBuilder {
   private publishPermissions: Partial<Permission>
   private subPermissions: Partial<Permission>
   private expiresAt: number | undefined
+  private xKeyPair: KeyPair | undefined
 
   constructor () {
     this.dataLimit = 1000000
@@ -66,7 +67,12 @@ export class NatsAuthorizationResponseBuilder {
     return this
   }
 
-  async build (): Promise<string> {
+  withXKeyPair (xKeyPair: KeyPair): this {
+    this.xKeyPair = xKeyPair
+    return this
+  }
+
+  async build (): Promise<Uint8Array> {
     if (this.authorizationRequest === undefined) {
       throw new Error('no request set')
     }
@@ -102,7 +108,7 @@ export class NatsAuthorizationResponseBuilder {
       }
     )
 
-    return await encodeAuthorizationResponse(
+    const authorizationResponse = await encodeAuthorizationResponse(
       user,
       fromPublic(this.authorizationRequest.serverNkey),
       this.issuerKeys,
@@ -112,5 +118,16 @@ export class NatsAuthorizationResponseBuilder {
         exp: this.expiresAt
       }
     )
+    const encodedResponse = new TextEncoder().encode(authorizationResponse)
+
+    if (this.xKeyPair !== undefined) {
+      if (this.authorizationRequest.xKey === undefined) {
+        throw new Error('Expected authorization request to be encrypted')
+      }
+
+      return this.xKeyPair.seal(encodedResponse, this.authorizationRequest.xKey)
+    }
+
+    return encodedResponse
   }
 }

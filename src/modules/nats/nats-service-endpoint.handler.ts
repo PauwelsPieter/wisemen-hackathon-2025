@@ -18,7 +18,11 @@ export class NatsServiceEndpointHandler {
   private async handleMessageOnEndpoint (message: ServiceMsg): Promise<void> {
     try {
       const response = await this.handler(message)
-      message.respond(new TextEncoder().encode(JSON.stringify(response)))
+      if (response instanceof Uint8Array) {
+        message.respond(response)
+      } else {
+        message.respond(new TextEncoder().encode(JSON.stringify(response)))
+      }
     } catch (e) {
       message.respondError(500, (e as Error).message, JSON.stringify(e))
     }

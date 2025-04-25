@@ -11,6 +11,7 @@ export class WebappAuthCalloutConfig {
   private readonly _audience: string | undefined
   private readonly _tokenIssuer: string | undefined
   private readonly _tokenAudience: string | undefined
+  private readonly _xKey: KeyPair | undefined
 
   constructor (private readonly configService: ConfigService) {
     const jwksEndpoint = this.configService.get<string>('AUTH_JWKS_ENDPOINT')
@@ -21,6 +22,11 @@ export class WebappAuthCalloutConfig {
     const nkey = this.configService.get<string>('WEBAPP_AUTH_CALLOUT_NKEY')
     if (nkey !== undefined) {
       this._issuer = fromSeed(new TextEncoder().encode(nkey))
+    }
+
+    const xKey = this.configService.get<string>('WEBAPP_NATS_XKEY')
+    if (xKey !== undefined) {
+      this._xKey = fromSeed(new TextEncoder().encode(xKey))
     }
 
     this._audience = this.configService.get<string>('WEBAPP_NATS_AUDIENCE')
@@ -46,5 +52,9 @@ export class WebappAuthCalloutConfig {
 
   get tokenAudience (): Optional<string> {
     return new Optional(this._tokenAudience)
+  }
+
+  get xKey (): Optional<KeyPair> {
+    return new Optional(this._xKey)
   }
 }
