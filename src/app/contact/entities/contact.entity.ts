@@ -1,8 +1,10 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm'
 import { Currency, Monetary, MonetaryAmountColumn, MonetaryColumn } from '@wisemen/monetary'
-import { WiseDate, WiseDateColumn } from '@wisemen/wise-date'
+import { WiseDateColumn, WiseDate } from '@wisemen/wise-date'
 import { AddressColumn } from '../../../utils/address/address-column.js'
 import { Address } from '../../../utils/address/address.js'
+import { File } from '../../../modules/files/entities/file.entity.js'
+import { FileUuid } from '../../../modules/files/entities/file.uuid.js'
 import { ContactUuid } from './contact.uuid.js'
 
 @Entity()
@@ -37,7 +39,10 @@ export class Contact {
   phone: string | null
 
   @Column({ type: 'uuid', nullable: true })
-  fileUuid: string | null
+  fileUuid: FileUuid | null
+
+  @ManyToOne(() => File)
+  file?: Relation<File | null>
 
   @AddressColumn({ nullable: true })
   address: Address | null
@@ -50,4 +55,10 @@ export class Contact {
 
   @WiseDateColumn({ nullable: true })
   birthDate: WiseDate | null
+
+  @Column({ type: 'uuid', nullable: true })
+  avatarUuid: FileUuid | null
+
+  @ManyToOne(() => File)
+  avatar?: Relation<File | null>
 }

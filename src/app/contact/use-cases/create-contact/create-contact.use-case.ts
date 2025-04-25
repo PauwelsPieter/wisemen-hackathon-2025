@@ -25,6 +25,10 @@ export class CreateContactUseCase {
       throw new FileNotFoundError(command.fileUuid)
     }
 
+    if (command.avatarUuid != null && !await this.repository.fileExists(command.avatarUuid)) {
+      throw new FileNotFoundError(command.avatarUuid)
+    }
+
     const contact = new ContactEntityBuilder()
       .withFirstName(command.firstName)
       .withLastName(command.lastName)
@@ -34,6 +38,7 @@ export class CreateContactUseCase {
       .withFileUuid(command.fileUuid)
       .withBalance(command.balance?.parse() ?? null)
       .withDiscount(command.discount?.parse() ?? null)
+      .withAvatarUuid(command.avatarUuid)
       .withBirthDate(wiseDate(command.birthDate))
       .build()
 

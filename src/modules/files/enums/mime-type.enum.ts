@@ -1,3 +1,5 @@
+import { ApiPropertyOptions, ApiProperty } from '@nestjs/swagger'
+
 export enum MimeType {
   PDF = 'application/pdf',
   DOC = 'application/msword',
@@ -13,4 +15,12 @@ export enum MimeType {
   HEIC = 'image/heic',
   WEBP = 'image/webp',
   GIF = 'image/gif'
+}
+
+export function MimeTypeApiProperty (options?: ApiPropertyOptions): PropertyDecorator {
+  return ApiProperty({
+    ...options,
+    enum: MimeType,
+    enumName: 'MimeType'
+  })
 }

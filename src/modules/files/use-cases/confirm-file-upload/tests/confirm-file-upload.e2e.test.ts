@@ -6,8 +6,8 @@ import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestAuthContext } from '../../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../../../app/users/tests/setup-user.type.js'
-import { FileSeeder } from '../../../tests/seeders/file.seeder.js'
-import { FileEntityBuilder } from '../../../tests/builders/entities/file-entity.builder.js'
+import { FileEntityBuilder } from '../../../entities/file-entity.builder.js'
+import { File } from '../../../entities/file.entity.js'
 
 describe('Confirm file upload end to end tests', () => {
   let setup: EndToEndTestSetup
@@ -25,12 +25,9 @@ describe('Confirm file upload end to end tests', () => {
 
   after(async () => await setup.teardown())
 
-  it('should mark file as uploaded', async () => {
-    const file = await new FileSeeder(dataSource.manager).seedOne(
-      new FileEntityBuilder()
-        .withUserUuid(adminUser.user.uuid)
-        .build()
-    )
+  it('marks a file as uploaded', async () => {
+    const file = new FileEntityBuilder().build()
+    await dataSource.manager.insert(File, file)
 
     const response = await request(setup.httpServer)
       .post(`/files/${file.uuid}/confirm-upload`)

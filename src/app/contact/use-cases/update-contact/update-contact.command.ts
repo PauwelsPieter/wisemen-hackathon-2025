@@ -41,6 +41,11 @@ export class UpdateContactCommand {
   @IsUUID()
   fileUuid: FileUuid | null
 
+  @ApiProperty({ type: 'string', nullable: true, format: 'uuid' })
+  @IsNullable()
+  @IsUUID()
+  avatarUuid: FileUuid | null
+
   @ApiProperty({ type: MonetaryDto, nullable: true })
   @IsNullable()
   @IsMonetary({

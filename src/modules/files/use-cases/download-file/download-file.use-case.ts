@@ -2,31 +2,21 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { File } from '../../entities/file.entity.js'
-import { S3 } from '../../../s3/s3.js'
-import { AuthContext } from '../../../auth/auth.context.js'
 import { FileUuid } from '../../entities/file.uuid.js'
+import { PresignedFileResponse } from '../../responses/presigned-file.response.js'
+import { FilePresigner } from '../../services/presign-file/file-presigner.js'
 
 @Injectable()
 export class DownloadFileUseCase {
   constructor (
-    private readonly authContext: AuthContext,
     @InjectRepository(File)
     private fileRepository: Repository<File>,
-    private readonly s3Service: S3
+    private readonly filePresigner: FilePresigner
   ) {}
 
-  async execute (fileUuid: FileUuid): Promise<{ file: File, temporaryUrl: string }> {
-    const userUuid = this.authContext.getUserUuidOrFail()
-    const file = await this.fileRepository.findOneByOrFail({
-      uuid: fileUuid,
-      userUuid: userUuid
-    })
-    const temporaryUrl = await this.s3Service.createTemporaryDownloadUrl(
-      file.name,
-      file.uuid,
-      file.mimeType
-    )
-
-    return { file, temporaryUrl }
+  async execute (fileUuid: FileUuid): Promise<PresignedFileResponse> {
+    const file = await this.fileRepository.findOneByOrFail({ uuid: fileUuid })
+    const presignedFile = await this.filePresigner.presign(file)
+    return new PresignedFileResponse(presignedFile)
   }
 }

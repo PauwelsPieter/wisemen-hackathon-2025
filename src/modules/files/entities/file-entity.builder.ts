@@ -1,0 +1,47 @@
+import { randomUUID } from 'node:crypto'
+import { MimeType } from '../enums/mime-type.enum.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { File } from './file.entity.js'
+import { FileUuid, generateFileUuid } from './file.uuid.js'
+
+export class FileEntityBuilder {
+  private file: File
+
+  constructor () {
+    this.file = new File()
+
+    this.file.uuid = generateFileUuid()
+    this.file.name = randomUUID()
+    this.file.key = randomUUID()
+    this.file.mimeType = null
+    this.file.isUploadConfirmed = false
+    this.file.variants = []
+    this.file.createdAt = new Date()
+    this.file.updatedAt = new Date()
+    this.file.uploaderUuid = null
+  }
+
+  withUuid (uuid: FileUuid): this {
+    this.file.uuid = uuid
+    return this
+  }
+
+  withName (name: string): this {
+    this.file.name = name
+    return this
+  }
+
+  withMimeType (mimeType: MimeType | null): this {
+    this.file.mimeType = mimeType
+    return this
+  }
+
+  withUploaderUuid (uuid: UserUuid | null): this {
+    this.file.uploaderUuid = uuid
+    return this
+  }
+
+  build (): File {
+    return this.file
+  }
+}

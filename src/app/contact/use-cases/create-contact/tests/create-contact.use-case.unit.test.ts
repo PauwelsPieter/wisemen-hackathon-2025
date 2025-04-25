@@ -37,6 +37,26 @@ describe('CreateContactUseCase Unit test', () => {
       .rejects.toThrow(new FileNotFoundError(fileUuid))
   })
 
+  it('throws an error when the avatar does not exist', async () => {
+    const contactRepo = createStubInstance(CreateContactRepository)
+    const avatarUuid = generateFileUuid()
+
+    contactRepo.fileExists.resolves(false)
+
+    const useCase = new CreateContactUseCase(
+      stubDataSource(),
+      createStubInstance(DomainEventEmitter),
+      contactRepo
+    )
+
+    const command = new CreateContactCommandBuilder()
+      .withAvatarUuid(avatarUuid)
+      .build()
+
+    await expect(useCase.execute(command))
+      .rejects.toThrow(new FileNotFoundError(avatarUuid))
+  })
+
   it('the use cases calls the repository once', async () => {
     const eventEmitter = createStubInstance(DomainEventEmitter)
 

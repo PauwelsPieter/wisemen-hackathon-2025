@@ -18,11 +18,7 @@ export class ConfirmFileUploadUseCase {
   ) {}
 
   async execute (fileUuid: FileUuid): Promise<void> {
-    const userUuid = this.authContext.getUserUuidOrFail()
-    const file = await this.fileRepository.findOneByOrFail({
-      uuid: fileUuid,
-      userUuid: userUuid
-    })
+    const file = await this.fileRepository.findOneByOrFail({ uuid: fileUuid })
 
     await transaction(this.dataSource, async () => {
       await this.fileRepository.update(

@@ -32,6 +32,10 @@ export class UpdateContactUseCase {
       throw new FileNotFoundError(command.fileUuid)
     }
 
+    if (command.avatarUuid != null && !await this.repository.fileExists(command.avatarUuid)) {
+      throw new FileNotFoundError(command.avatarUuid)
+    }
+
     this.updateContact(contact, command)
     const event = new ContactUpdatedEvent(uuid)
 
@@ -55,6 +59,7 @@ export class UpdateContactUseCase {
     contact.phone = command.phone
     contact.isActive = command.isActive
     contact.fileUuid = command.fileUuid
+    contact.avatarUuid = command.avatarUuid
     contact.birthDate = wiseDate(command.birthDate)
   }
 }

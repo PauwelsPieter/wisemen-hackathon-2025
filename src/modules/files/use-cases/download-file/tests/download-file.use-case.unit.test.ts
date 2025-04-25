@@ -1,47 +1,27 @@
 import { before, describe, it } from 'node:test'
-import { assert, createStubInstance, SinonStubbedInstance } from 'sinon'
+import { assert, createStubInstance } from 'sinon'
 import { expect } from 'expect'
 import { EntityNotFoundError, Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
 import { DownloadFileUseCase } from '../download-file.use-case.js'
-import { S3 } from '../../../../s3/s3.js'
-import { AuthContext } from '../../../../auth/auth.context.js'
-import { generateUserUuid, UserUuid } from '../../../../../app/users/entities/user.uuid.js'
 import { generateFileUuid } from '../../../entities/file.uuid.js'
+import { FilePresigner } from '../../../services/presign-file/file-presigner.js'
 
 describe('Download file use case unit tests', () => {
-  let useCase: DownloadFileUseCase
+  before(() => TestBench.setupUnitTest())
 
-  let userUuid: UserUuid
+  it('should return 404 when the file does not exist', async () => {
+    const fileRepository = createStubInstance(Repository<File>)
+    fileRepository.findOneByOrFail.rejects(new EntityNotFoundError(File, {}))
 
-  let fileRepository: SinonStubbedInstance<Repository<File>>
-  let s3Service: SinonStubbedInstance<S3>
-
-  before(() => {
-    TestBench.setupUnitTest()
-
-    userUuid = generateUserUuid()
-
-    const authStorage = createStubInstance(AuthContext, { getUserUuid: userUuid })
-
-    fileRepository = createStubInstance<Repository<File>>(
-      Repository<File>
-    )
-
-    s3Service = createStubInstance(S3)
-
-    useCase = new DownloadFileUseCase(
-      authStorage,
+    const filePresigner = createStubInstance(FilePresigner)
+    const useCase = new DownloadFileUseCase(
       fileRepository,
-      s3Service
+      filePresigner
     )
-  })
-
-  it('should return 404 when file not uploaded by customer', async () => {
-    fileRepository.findOneByOrFail.throws(new EntityNotFoundError(File, {}))
 
     await expect(useCase.execute(generateFileUuid())).rejects.toThrow()
-    assert.notCalled(s3Service.createTemporaryDownloadUrl)
+    assert.notCalled(filePresigner.presign)
   })
 })

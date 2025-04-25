@@ -14,7 +14,7 @@ import { Upload } from '@aws-sdk/lib-storage'
 import { captureException } from '@sentry/nestjs'
 import type { MimeType } from '../files/enums/mime-type.enum.js'
 import type { File } from '../files/entities/file.entity.js'
-import { S3UnavailableError } from '../files/errors/s3-unavailable.error.js'
+import { S3UnavailableError } from './s3-unavailable.error.js'
 
 @Injectable()
 export class S3 {
@@ -66,17 +66,14 @@ export class S3 {
     return await getSignedUrl(this.client, command, { expiresIn })
   }
 
-  public async createTemporaryUploadUrl (
-    file: File,
-    expiresInSeconds?: number
-  ): Promise<string> {
+  public async createTemporaryUploadUrl (file: File, expiresInSeconds?: number): Promise<string> {
     if (file.mimeType == null) {
       throw new Error('File MIME type is required')
     }
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
-      Key: this.prependEnvKey(file.uuid),
+      Key: this.prependEnvKey(file.key),
       ContentType: file.mimeType,
       ACL: 'private'
     })

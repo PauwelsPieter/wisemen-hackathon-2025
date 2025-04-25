@@ -25,11 +25,11 @@ export class DownloadFileController {
     @UuidParam('file') fileUuid: FileUuid,
     @Res() res: Response
   ): Promise<void> {
-    const { file, temporaryUrl } = await this.useCase.execute(fileUuid)
+    const presignedFile = await this.useCase.execute(fileUuid)
 
-    res.setHeader('Location', temporaryUrl)
-    res.setHeader('Content-Disposition', `attachment; filename=${file.name}`)
-    res.setHeader('Content-Type', file.mimeType ?? 'application/octet-stream')
-    res.redirect(temporaryUrl)
+    res.setHeader('Location', presignedFile.url)
+    res.setHeader('Content-Disposition', `attachment; filename=${presignedFile.name}`)
+    res.setHeader('Content-Type', presignedFile.mimeType ?? 'application/octet-stream')
+    res.redirect(presignedFile.url)
   }
 }

@@ -1,5 +1,5 @@
-import { ApiErrorCode } from '../../exceptions/api-errors/api-error-code.decorator.js'
-import { ServiceUnavailableApiError } from '../../exceptions/api-errors/service-unavailable.api-error.js'
+import { ApiErrorCode } from '../exceptions/api-errors/api-error-code.decorator.js'
+import { ServiceUnavailableApiError } from '../exceptions/api-errors/service-unavailable.api-error.js'
 
 export class S3UnavailableError extends ServiceUnavailableApiError {
   @ApiErrorCode('s3_unavailable')

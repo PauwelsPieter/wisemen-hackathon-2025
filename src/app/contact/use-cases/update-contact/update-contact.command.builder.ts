@@ -17,6 +17,7 @@ export class UpdateContactCommandBuilder {
     this.command.fileUuid = null
     this.command.discount = null
     this.command.balance = null
+    this.command.avatarUuid = null
     this.command.birthDate = null
   }
 
@@ -52,6 +53,11 @@ export class UpdateContactCommandBuilder {
 
   withFileUuid (fileUuid: FileUuid | null): this {
     this.command.fileUuid = fileUuid
+    return this
+  }
+
+  withAvatarUuid (avatarUuid: FileUuid | null): this {
+    this.command.avatarUuid = avatarUuid
     return this
   }
 

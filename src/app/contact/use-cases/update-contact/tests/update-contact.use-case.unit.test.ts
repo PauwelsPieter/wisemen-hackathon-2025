@@ -57,7 +57,29 @@ describe('UpdateContactUseCase Unit test', () => {
       .build()
 
     await expect(useCase.execute(contactUuid, command))
-      .rejects.toThrow(new FileNotFoundError(contactUuid))
+      .rejects.toThrow(new FileNotFoundError(fileUuid))
+  })
+
+  it('throws an error when the avatar does not exist', async () => {
+    const contactRepo = createStubInstance(UpdateContactRepository)
+    contactRepo.findContact.resolves(new ContactEntityBuilder().build())
+    contactRepo.fileExists.resolves(false)
+
+    const useCase = new UpdateContactUseCase(
+      stubDataSource(),
+      createStubInstance(DomainEventEmitter),
+      contactRepo
+    )
+
+    const contactUuid = generateContactUuid()
+    const avatarUuid = generateFileUuid()
+
+    const command = new UpdateContactCommandBuilder()
+      .withAvatarUuid(avatarUuid)
+      .build()
+
+    await expect(useCase.execute(contactUuid, command))
+      .rejects.toThrow(new FileNotFoundError(avatarUuid))
   })
 
   it('emits a contact updated event', async () => {

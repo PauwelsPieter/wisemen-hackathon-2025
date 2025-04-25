@@ -1,7 +1,11 @@
+import assert from 'assert'
 import { ApiProperty } from '@nestjs/swagger'
 import { MonetaryDto } from '@wisemen/monetary'
 import { Contact } from '../../entities/contact.entity.js'
 import { AddressResponse } from '../../../../utils/address/address-response.js'
+import { FileResponse } from '../../../../modules/files/responses/file.response.js'
+import { PresignedFileResponse } from '../../../../modules/files/responses/presigned-file.response.js'
+import { PresignedFile } from '../../../../modules/files/entities/presigned-file.js'
 
 export class ViewContactDetailResponse {
   @ApiProperty({ type: String, format: 'uuid' })
@@ -31,8 +35,11 @@ export class ViewContactDetailResponse {
   @ApiProperty({ type: AddressResponse, nullable: true })
   address: AddressResponse | null
 
-  @ApiProperty({ type: String, format: 'uuid', nullable: true })
-  fileUuid: string | null
+  @ApiProperty({ type: FileResponse, nullable: true })
+  file: FileResponse | null
+
+  @ApiProperty({ type: PresignedFileResponse, nullable: true })
+  avatar: PresignedFileResponse | null
 
   @ApiProperty({ type: MonetaryDto, nullable: true })
   discount: MonetaryDto | null
@@ -43,7 +50,9 @@ export class ViewContactDetailResponse {
   @ApiProperty({ type: 'string', nullable: true, format: 'date' })
   birthDate: string | null
 
-  constructor (contact: Contact) {
+  constructor (contact: Contact, avatar: PresignedFile | null) {
+    assert(contact.file !== undefined)
+
     this.uuid = contact.uuid
     this.createdAt = contact.createdAt.toISOString()
     this.updatedAt = contact.updatedAt.toISOString()
@@ -53,9 +62,10 @@ export class ViewContactDetailResponse {
     this.email = contact.email
     this.phone = contact.phone
     this.address = contact.address ? new AddressResponse(contact.address) : null
-    this.fileUuid = contact.fileUuid
+    this.file = (contact.file !== null) ? new FileResponse(contact.file) : null
     this.discount = MonetaryDto.from(contact.discount)
     this.balance = MonetaryDto.from(contact.balance)
+    this.avatar = avatar ? new PresignedFileResponse(avatar) : null
     this.birthDate = contact.birthDate?.toString() ?? null
   }
 }

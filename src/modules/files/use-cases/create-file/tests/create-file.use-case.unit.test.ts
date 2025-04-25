@@ -7,11 +7,11 @@ import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { CreateFileUseCase } from '../create-file.use-case.js'
 import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
-import { AuthContext } from '../../../../auth/auth.context.js'
 import { S3 } from '../../../../s3/s3.js'
-import { FileEntityBuilder } from '../../../tests/builders/entities/file-entity.builder.js'
+import { FileEntityBuilder } from '../../../entities/file-entity.builder.js'
 import { FileCreatedEvent } from '../file-created.event.js'
 import { FileUuid } from '../../../entities/file.uuid.js'
+import { AuthContext } from '../../../../auth/auth.context.js'
 import { CreateFileCommandBuilder } from './create-file.command.builder.js'
 
 describe('CreateFile use case unit tests', () => {
@@ -19,9 +19,6 @@ describe('CreateFile use case unit tests', () => {
 
   it('emits an event when a file is created', async () => {
     const command = new CreateFileCommandBuilder().build()
-
-    const authContext = createStubInstance(AuthContext)
-    authContext.getUserUuid.resolves(randomUUID())
 
     const eventEmitter = createStubInstance(DomainEventEmitter)
 
@@ -33,13 +30,15 @@ describe('CreateFile use case unit tests', () => {
     })
 
     const s3 = createStubInstance(S3)
+    const authContext = createStubInstance(AuthContext)
+    authContext.getUserUuid.returns(null)
 
     const useCase = new CreateFileUseCase(
       stubDataSource(),
       eventEmitter,
-      authContext,
       repository,
-      s3
+      s3,
+      authContext
     )
 
     const response = await useCase.execute(command)
