@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { DataSource } from 'typeorm'
+import { wiseDate } from '@wisemen/wise-date'
 import { ContactNotFoundError } from '../../errors/contact.not-found.error.js'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { ContactUuid } from '../../entities/contact.uuid.js'
@@ -54,5 +55,6 @@ export class UpdateContactUseCase {
     contact.phone = command.phone
     contact.isActive = command.isActive
     contact.fileUuid = command.fileUuid
+    contact.birthDate = wiseDate(command.birthDate)
   }
 }

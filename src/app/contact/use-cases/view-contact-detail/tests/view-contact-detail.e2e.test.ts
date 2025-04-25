@@ -21,7 +21,8 @@ describe('view contact detail e2e tests', () => {
   })
 
   it('retrieves a contact successfully', async () => {
-    const contact = new ContactEntityBuilder().build()
+    const contact = new ContactEntityBuilder()
+      .build()
 
     await testSetup.dataSource.manager.insert(Contact, contact)
 

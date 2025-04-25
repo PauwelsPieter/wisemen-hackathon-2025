@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm'
 import { transaction } from '@wisemen/nestjs-typeorm'
 import { Injectable } from '@nestjs/common'
+import { wiseDate } from '@wisemen/wise-date'
 import { DomainEventEmitter } from '../../../../modules/domain-events/domain-event-emitter.js'
 import { ContactEntityBuilder } from '../../entities/contact.entity.builder.js'
 import { FileNotFoundError } from '../../../../modules/files/errors/file.not-found.error.js'
@@ -33,6 +34,7 @@ export class CreateContactUseCase {
       .withFileUuid(command.fileUuid)
       .withBalance(command.balance?.parse() ?? null)
       .withDiscount(command.discount?.parse() ?? null)
+      .withBirthDate(wiseDate(command.birthDate))
       .build()
 
     const event = new ContactCreatedEvent(contact)

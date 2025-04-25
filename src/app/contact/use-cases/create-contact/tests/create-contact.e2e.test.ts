@@ -1,7 +1,6 @@
 import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
-import { Currency, MonetaryDtoBuilder } from '@wisemen/monetary'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { TestUser } from '../../../../users/tests/setup-user.type.js'
@@ -21,15 +20,7 @@ describe('Create contact e2e tests', () => {
   })
 
   it('Creates a new contact successfully', async () => {
-    const command = new CreateContactCommandBuilder()
-      .withDiscount(
-        new MonetaryDtoBuilder()
-          .withAmount(10_0000)
-          .withPrecision(4)
-          .withCurrency(Currency.EUR)
-          .build()
-      )
-      .build()
+    const command = new CreateContactCommandBuilder().build()
 
     const response = await request(testSetup.app.getHttpServer())
       .post(`/contacts`)

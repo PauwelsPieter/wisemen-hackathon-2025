@@ -1,4 +1,5 @@
 import { Monetary } from '@wisemen/monetary'
+import { WiseDate } from '@wisemen/wise-date'
 import { Address } from '../../../utils/address/address.js'
 import { Contact } from './contact.entity.js'
 import { ContactUuid, generateContactUuid } from './contact.uuid.js'
@@ -20,6 +21,7 @@ export class ContactEntityBuilder {
     this.contact.fileUuid = null
     this.contact.discount = null
     this.contact.balance = null
+    this.contact.birthDate = null
   }
 
   withUuid (uuid: ContactUuid): this {
@@ -69,6 +71,11 @@ export class ContactEntityBuilder {
 
   withDiscount (amount: Monetary | null): this {
     this.contact.discount = amount
+    return this
+  }
+
+  withBirthDate (birthDate: WiseDate | null): this {
+    this.contact.birthDate = birthDate
     return this
   }
 

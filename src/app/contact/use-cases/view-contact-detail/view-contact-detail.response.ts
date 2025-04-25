@@ -40,6 +40,9 @@ export class ViewContactDetailResponse {
   @ApiProperty({ type: MonetaryDto, nullable: true })
   balance: MonetaryDto | null
 
+  @ApiProperty({ type: 'string', nullable: true, format: 'date' })
+  birthDate: string | null
+
   constructor (contact: Contact) {
     this.uuid = contact.uuid
     this.createdAt = contact.createdAt.toISOString()
@@ -53,5 +56,6 @@ export class ViewContactDetailResponse {
     this.fileUuid = contact.fileUuid
     this.discount = MonetaryDto.from(contact.discount)
     this.balance = MonetaryDto.from(contact.balance)
+    this.birthDate = contact.birthDate?.toString() ?? null
   }
 }

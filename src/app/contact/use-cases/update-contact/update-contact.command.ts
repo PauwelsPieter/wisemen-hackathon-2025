@@ -1,6 +1,6 @@
 import { IsBoolean, IsEmail, IsPhoneNumber, IsString, IsUUID } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNullable } from '@wisemen/validators'
+import { IsDateWithoutTimeString, IsNullable } from '@wisemen/validators'
 import { MonetaryDto, IsMonetary, Currency } from '@wisemen/monetary'
 import { AddressCommand } from '../../../../utils/address/address-command.js'
 import { IsAddress } from '../../../../utils/address/is-address.validator.js'
@@ -54,4 +54,9 @@ export class UpdateContactCommand {
   @IsNullable()
   @IsMonetary({ maxPrecision: 4 })
   balance: MonetaryDto | null
+
+  @ApiProperty({ type: 'string', format: 'date' })
+  @IsDateWithoutTimeString()
+  @IsNullable()
+  birthDate: string | null
 }

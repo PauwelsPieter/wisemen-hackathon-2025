@@ -16,6 +16,7 @@ export class CreateContactCommandBuilder {
     this.command.fileUuid = null
     this.command.discount = null
     this.command.balance = null
+    this.command.birthDate = null
   }
 
   withFirstName (firstName: string): this {
@@ -55,6 +56,11 @@ export class CreateContactCommandBuilder {
 
   withBalance (amount: MonetaryDto | null): this {
     this.command.balance = amount
+    return this
+  }
+
+  withBirthDate (date: string | null): this {
+    this.command.birthDate = date
     return this
   }
 

@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { Currency, Monetary, MonetaryAmountColumn, MonetaryColumn } from '@wisemen/monetary'
+import { WiseDate, WiseDateColumn } from '@wisemen/wise-date'
 import { AddressColumn } from '../../../utils/address/address-column.js'
 import { Address } from '../../../utils/address/address.js'
 import { ContactUuid } from './contact.uuid.js'
@@ -46,4 +47,7 @@ export class Contact {
 
   @MonetaryColumn({ defaultPrecision: 4, nullable: true })
   balance: Monetary | null
+
+  @WiseDateColumn({ nullable: true })
+  birthDate: WiseDate | null
 }
