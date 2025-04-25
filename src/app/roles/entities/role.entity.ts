@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, type Relation, Index } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, Index } from 'typeorm'
 import { Permission } from '../../../modules/permission/permission.enum.js'
 import { RoleUuid } from './role.uuid.js'
 
@@ -17,7 +17,7 @@ export class Role {
   name: string
 
   @Column({ type: 'varchar', enum: Permission, default: [], array: true })
-  permissions: Array<Relation<Permission>>
+  permissions: Permission[]
 
   @Column({ type: 'boolean', default: false })
   @Index({ unique: true, where: 'is_default' })
