@@ -37,4 +37,13 @@ export class NatsConnectionManager {
       }
     }
   }
+
+  async drainConnections (): Promise<void> {
+    const connections = this.connections.entries()
+    for (const [name, connection] of connections) {
+      Logger.debug(`Draining connection ${name}:...`, 'NATS')
+      await connection.drain()
+      Logger.debug(`Draining connection ${name}: drained`, 'NATS')
+    }
+  }
 }

@@ -6,6 +6,7 @@ const NATS_SERVICE_ENDPOINT_KEY = Symbol('wisemen.nats-service-endpoint')
 type MethodName = string
 export interface NatsEndpointOptions extends EndpointOptions {
   name: string
+  service?: ClassConstructor<unknown>
 }
 export type NatsEndpointsConfig = Map<MethodName, NatsEndpointOptions>
 
@@ -22,12 +23,19 @@ export function NatsServiceEndpoint (options: NatsEndpointOptions): MethodDecora
   }
 }
 
+export function holdsNatsServiceEndpoints (target: ClassConstructor<unknown>): boolean {
+  return Reflect.getMetadata(NATS_SERVICE_ENDPOINT_KEY, target.prototype as object) !== undefined
+}
+
 export function getNatsServiceEndpoints (target: ClassConstructor<unknown>): NatsEndpointsConfig {
-  const options = Reflect.getMetadata(NATS_SERVICE_ENDPOINT_KEY, target) as unknown
+  const options = Reflect.getMetadata(
+    NATS_SERVICE_ENDPOINT_KEY,
+    target.prototype as object
+  ) as undefined | NatsEndpointsConfig
 
   if (options === undefined) {
     throw new Error(`${target.name} does not have nats endpoints\nDid you forget to add the @NatsServiceEndpoint({...}) decorator?`)
   }
 
-  return options as NatsEndpointsConfig
+  return options
 }

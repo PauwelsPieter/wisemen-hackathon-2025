@@ -1,11 +1,9 @@
-import { DynamicModule, Inject, Module, OnApplicationBootstrap, Type } from '@nestjs/common'
-import { ModulesContainer } from '@nestjs/core'
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper.js'
+import { DynamicModule, Module, OnApplicationBootstrap, OnApplicationShutdown, Type } from '@nestjs/common'
 import { ClassConstructor } from 'class-transformer'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { AppModule } from '../../app.module.js'
 import { NatsApplication } from './nats-application.js'
-import { isNatsService } from './nats-service.decorator.js'
+import { NatsApplicationFactory } from './nats-application-factory.js'
 
 export interface NatsApplicationModuleOptions {
   modules: Type<unknown>[]
@@ -13,7 +11,7 @@ export interface NatsApplicationModuleOptions {
 }
 
 @Module({})
-export class NatsApplicationModule implements OnApplicationBootstrap {
+export class NatsApplicationModule implements OnApplicationBootstrap, OnApplicationShutdown {
   static forRoot ({ modules, defaultClient }: NatsApplicationModuleOptions): DynamicModule {
     return {
       module: NatsApplicationModule,
@@ -21,43 +19,22 @@ export class NatsApplicationModule implements OnApplicationBootstrap {
       providers: [{
         provide: 'DEFAULT_NATS_CLIENT',
         useValue: defaultClient
-      }]
+      }, NatsApplicationFactory]
     }
   }
 
-  private readonly application: NatsApplication
+  private application: NatsApplication
+
   constructor (
-    private readonly modulesContainer: ModulesContainer,
-    private readonly configService: ConfigService,
-    @Inject('DEFAULT_NATS_CLIENT') defaultClient: ClassConstructor<unknown> | undefined
-  ) {
-    this.application = new NatsApplication(configService, defaultClient)
-  }
+    private readonly appFactory: NatsApplicationFactory
+  ) {}
 
   async onApplicationBootstrap (): Promise<void> {
-    for (const moduleWrapper of this.modulesContainer.values()) {
-      for (const providerWrapper of moduleWrapper.providers.values()) {
-        await this.registerProvider(providerWrapper)
-      }
-    }
+    this.application = await this.appFactory.createApp()
+    this.application.listen()
   }
 
-  private async registerProvider (providerWrapper: InstanceWrapper<unknown>): Promise<void> {
-    const providerClass = providerWrapper.metatype
-
-    if (providerClass == null) {
-      return
-    }
-
-    if (!Object.hasOwn(providerClass, 'prototype')) {
-      return
-    }
-
-    if (isNatsService(providerClass as Type<unknown>)) {
-      await this.application.addService(
-        providerClass as ClassConstructor<unknown>,
-        providerWrapper.instance as object
-      )
-    }
+  async onApplicationShutdown (): Promise<void> {
+    await this.application.close()
   }
 }
