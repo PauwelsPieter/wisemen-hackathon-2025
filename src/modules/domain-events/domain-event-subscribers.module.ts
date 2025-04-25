@@ -6,6 +6,7 @@ import { UserTypesenseSubscriberModule } from '../../app/users/typesense/user-ty
 import { CreateUserNotificationsSubscriberModule } from '../notification/use-cases/create-user-notifications/create-user-notifications.subscriber-module.js'
 import { SendAppNotificationSubscriberModule } from '../notification/use-cases/send-app-notification/send-app-notification.subscriber.module.js'
 import { ContactTypesenseSubscriberModule } from '../../app/contact/typesense/contact.typesense-subscriber.module.js'
+import { AssignDefaultNotificationPreferencesToUserSubscriberModule } from '../notification/use-cases/assign-default-notification-preferences-to-user/assign-default-notification-preferences-to-user.subscriber.module.js'
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { ContactTypesenseSubscriberModule } from '../../app/contact/typesense/co
     UserTypesenseSubscriberModule,
     CreateUserNotificationsSubscriberModule,
     SendAppNotificationSubscriberModule,
-    ContactTypesenseSubscriberModule
+    ContactTypesenseSubscriberModule,
+    AssignDefaultNotificationPreferencesToUserSubscriberModule
   ]
 })
 export class DomainEventSubscribersModule {}

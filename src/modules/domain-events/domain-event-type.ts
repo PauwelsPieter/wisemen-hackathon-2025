@@ -23,5 +23,6 @@ export enum DomainEventType {
 
   USER_CREATED = 'user.created',
   USER_ROLE_ASSIGNED = 'user.role-assigned',
-  USER_NOTIFICATION_CREATED = 'user.notification.created'
+  USER_NOTIFICATION_CREATED = 'user.notification.created',
+  USER_DEFAULT_NOTIFICATION_PREFERENCES_ASSIGNED = 'user.default-notification-preferences.assigned'
 }
