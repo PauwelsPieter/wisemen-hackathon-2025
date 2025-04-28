@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { NotificationType } from '../enums/notification-types.enum.js'
+import { NotificationType, NotificationTypeColumn } from '../enums/notification-types.enum.js'
 import { Serializable } from '../../../utils/types/serializable.js'
 import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 import { NotificationUuid } from './notification.uuid.js'
@@ -15,7 +15,7 @@ export class Notification {
   @Column({ type: 'uuid', nullable: true })
   createdByUserUuid: UserUuid | null
 
-  @Column({ type: 'enum', enum: NotificationType })
+  @NotificationTypeColumn()
   type: NotificationType
 
   @Column({ type: 'jsonb' })

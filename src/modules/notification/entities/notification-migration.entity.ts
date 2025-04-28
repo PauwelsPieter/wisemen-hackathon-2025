@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { NotificationType } from '../enums/notification-types.enum.js'
+import { Column, Entity } from 'typeorm'
+import { NotificationType, NotificationTypeColumn } from '../enums/notification-types.enum.js'
 
 @Entity()
 export class NotificationMigration {
-  @PrimaryColumn({ type: 'enum', enum: NotificationType })
+  @NotificationTypeColumn({ primary: true })
   type: NotificationType
 
   @Column({ type: 'timestamptz' })

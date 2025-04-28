@@ -11,7 +11,7 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 import { NotificationChannel } from '../enums/notification-channel.enum.js'
-import { NotificationType } from '../enums/notification-types.enum.js'
+import { NotificationType, NotificationTypeColumn } from '../enums/notification-types.enum.js'
 import { User } from '../../../app/users/entities/user.entity.js'
 import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 import { NotificationPrefrerencesUuid } from './notification-preferences.uuid.js'
@@ -36,7 +36,7 @@ export class NotificationPreferences {
   @JoinColumn({ name: 'user_uuid' })
   user?: Relation<User>
 
-  @Column({ type: 'enum', enum: NotificationType, array: true })
+  @NotificationTypeColumn({ array: true })
   types: NotificationType[]
 
   @Column({ type: 'enum', enum: NotificationChannel })

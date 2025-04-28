@@ -64,7 +64,7 @@ export class CreateUserNotificationsRepository {
                     .select('np.user_uuid')
                     .from('notification_preferences', 'np')
                     .where('np.is_enabled = TRUE')
-                    .andWhere('np.types @> :types::notification_preferences_types_enum[]')
+                    .andWhere('np.types @> :types')
                     .andWhere('np.channel = :notificationPreferenceChannel')
                     .getQuery()
 
