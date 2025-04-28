@@ -5,7 +5,7 @@ import { DomainEvent } from '../../../domain-events/domain-event.js'
 import { DomainEventType } from '../../../domain-events/domain-event-type.js'
 import { RegisterDomainEvent } from '../../../domain-events/register-domain-event.decorator.js'
 
-@OneOfMeta(DomainEventLog, DomainEventType.NOTIFICATION_READ)
+@OneOfMeta(DomainEventLog, DomainEventType.NOTIFICATION_UNREAD)
 export class NotificationUnreadEventContent {
   @ApiProperty({ format: 'uuid' })
   readonly notificationUuid: string
