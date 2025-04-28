@@ -3,7 +3,7 @@ import { BaseJob, BaseJobData, PgBossJob } from '@wisemen/pgboss-nestjs-job'
 import { QueueName } from '../../../pgboss/enums/queue-name.enum.js'
 
 export interface NatsOutboxEvent extends BaseJobData {
-  topic: string
+  subject: string
   serializedMessage: string
 }
 

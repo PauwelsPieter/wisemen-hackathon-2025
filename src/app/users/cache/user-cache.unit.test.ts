@@ -10,7 +10,7 @@ import {
 } from '../../roles/tests/builders/entities/user-role-entity.builder.js'
 import { generateRoleUuid } from '../../roles/entities/role.uuid.js'
 import { generateUserUuid } from '../entities/user.uuid.js'
-import { UserCache } from './user-cache.service.js'
+import { UserCache } from './user-cache.js'
 
 describe('User cache unit test', () => {
   describe('Set user roles', () => {

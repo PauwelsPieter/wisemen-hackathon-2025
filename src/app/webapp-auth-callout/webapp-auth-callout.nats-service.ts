@@ -2,13 +2,18 @@ import { Logger } from '@nestjs/common'
 import { ServiceMsg } from '@nats-io/services'
 import { jwtVerify } from 'jose'
 import dayjs from 'dayjs'
+import { Repository } from 'typeorm'
+import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { NatsService } from '../../modules/nats/nats-service.decorator.js'
 import { TokenContent } from '../../modules/auth/middleware/auth.middleware.js'
 import { NatsServiceEndpoint } from '../../modules/nats/nats-service-endpoint.decorator.js'
+import { User } from '../users/entities/user.entity.js'
+import { UserUuid } from '../users/entities/user.uuid.js'
 import { WebappNatsClient } from './webapp.nats-client.js'
 import { WebappAuthCalloutConfig as WebappAuthCalloutConfig } from './webapp-auth-callout.config.js'
 import { NatsAuthorizationRequestParser } from './nats-authorization-request-parser.js'
 import { NatsAuthorizationResponseBuilder } from './nats-authorization-response.js'
+import { WebappNatsPermissions } from './webapp-nats-permissions.js'
 
 @NatsService({
   name: 'auth',
@@ -19,7 +24,10 @@ import { NatsAuthorizationResponseBuilder } from './nats-authorization-response.
 export class WebappAuthCalloutNatsService {
   constructor (
     private readonly config: WebappAuthCalloutConfig,
-    private readonly requestParser: NatsAuthorizationRequestParser
+    private readonly requestParser: NatsAuthorizationRequestParser,
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
+    private readonly permissions: WebappNatsPermissions
   ) {}
 
   @NatsServiceEndpoint({
@@ -39,16 +47,28 @@ export class WebappAuthCalloutNatsService {
       audience: this.config.tokenAudience.orThrow()
     })
 
-    Logger.debug('authenticated request for user ' + payload.sub, `${audience} Auth Callout`)
+    const userUuid = await this.getUserUuidOrFail(payload)
+    Logger.debug('authenticated request for user ' + userUuid, `${audience} Auth Callout`)
+
+    const permissions = this.permissions.getPermissionsFor(userUuid)
 
     return await new NatsAuthorizationResponseBuilder()
       .withAudience(this.config.natsAudience.orThrow())
       .withIssuerKeys(this.config.calloutIssuerKeys.orThrow())
       .withRequest(parsedRequest)
       .withUserName(payload.sub)
-      .withPublishPermissions({ allow: ['test.' + payload.sub] })
-      .withSubPermissions({ allow: ['test.' + payload.sub] })
+      .withPublishPermissions(permissions.pub)
+      .withSubPermissions(permissions.sub)
       .withExpiresAt(dayjs().add(5, 'minutes').toDate())
       .build()
+  }
+
+  private async getUserUuidOrFail (payload: TokenContent): Promise<UserUuid> {
+    const user = await this.userRepo.findOneOrFail({
+      select: { uuid: true },
+      where: { userId: payload.sub }
+    })
+
+    return user.uuid
   }
 }

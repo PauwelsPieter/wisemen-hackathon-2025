@@ -13,6 +13,6 @@ export class PublishNatsEventJobHandler extends JobHandler<PublishNatsEventJob> 
   }
 
   public run (event: NatsOutboxEvent): void {
-    this.natsClient.publish(event.topic, event.serializedMessage)
+    this.natsClient.publish(event.subject, event.serializedMessage)
   }
 }

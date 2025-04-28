@@ -6,7 +6,7 @@ import { TypesenseCollectionName } from '../../../../modules/typesense/enums/typ
 import { TypesenseCollectionService } from '../../../../modules/typesense/services/typesense-collection.service.js'
 import { UserRole } from '../../../roles/entities/user-role.entity.js'
 import { User } from '../../entities/user.entity.js'
-import { UserCache } from '../../cache/user-cache.service.js'
+import { UserCache } from '../../cache/user-cache.js'
 import { UserUuid } from '../../entities/user.uuid.js'
 import type { SetUserRolesCommand } from './set-user-roles.command.js'
 

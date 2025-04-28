@@ -17,7 +17,8 @@ import { AssignDefaultNotificationPreferencesToUserSubscriberModule } from '../n
     CreateUserNotificationsSubscriberModule,
     SendAppNotificationSubscriberModule,
     ContactTypesenseSubscriberModule,
-    AssignDefaultNotificationPreferencesToUserSubscriberModule
+    AssignDefaultNotificationPreferencesToUserSubscriberModule,
+    SendAppNotificationSubscriberModule
   ]
 })
 export class DomainEventSubscribersModule {}

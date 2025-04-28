@@ -3,7 +3,7 @@ type ExtractParams<T> =
     ? { [K in Param]: string } & ExtractParams<Rest>
     : object
 
-export function natsTopic<Topic extends string> (
+export function natsSubject<Topic extends string> (
   topic: Topic,
   parameters: ExtractParams<Topic>
 ): string {

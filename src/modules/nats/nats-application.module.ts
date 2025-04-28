@@ -15,7 +15,7 @@ export class NatsApplicationModule implements OnApplicationBootstrap, OnApplicat
   static forRoot ({ modules, defaultClient }: NatsApplicationModuleOptions): DynamicModule {
     return {
       module: NatsApplicationModule,
-      imports: [AppModule, ConfigModule, ...modules],
+      imports: [AppModule.forRoot(), ConfigModule, ...modules],
       providers: [{
         provide: 'DEFAULT_NATS_CLIENT',
         useValue: defaultClient
