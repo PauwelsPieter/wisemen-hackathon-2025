@@ -22,7 +22,7 @@ export enum Permission {
   NOTIFICATION_PREFERENCES_UPDATE_CHANNEL = 'notification.preferences.update.channel',
   NOTIFICATION_PREFERENCES_UPDATE_PRESET = 'notification.preferences.update.preset',
   NOTIFICATION_PREFERENCES_UPDATE_TYPES = 'notification.preferences.update.types',
-  NOTIFICATION_PREFRENCES_READ_OWN = 'notification.preferences.read.own',
+  NOTIFICATION_PREFERENCES_READ_OWN = 'notification.preferences.read.own',
   NOTIFICATION_MIGRATE_TYPE = 'notification.migrate-type',
   NOTIFICATION_SEND_TEST = 'notification.send-test',
 

@@ -1,7 +1,7 @@
 import { Server } from 'http'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { TestingModule } from '@nestjs/testing'
-import { DataSource } from 'typeorm'
+import { DataSource, EntityManager } from 'typeorm'
 import { TestAuthContext } from '../utils/test-auth-context.js'
 
 export class EndToEndTestSetup {
@@ -37,5 +37,9 @@ export class EndToEndTestSetup {
 
   public get httpServer (): Server {
     return this.app.getHttpServer()
+  }
+
+  public get entityManager (): EntityManager {
+    return this.dataSource.manager
   }
 }

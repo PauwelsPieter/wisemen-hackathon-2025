@@ -13,7 +13,7 @@ export class GetMyNotificationPreferencesController {
   ) {}
 
   @Get()
-  @Permissions(Permission.NOTIFICATION_PREFRENCES_READ_OWN)
+  @Permissions(Permission.NOTIFICATION_PREFERENCES_READ_OWN)
   @ApiOkResponse({ type: GetMyNotificationPreferencesResponse })
   async getNotificationPreferences (
   ): Promise<GetMyNotificationPreferencesResponse> {

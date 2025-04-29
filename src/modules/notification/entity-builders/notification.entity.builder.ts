@@ -12,6 +12,7 @@ export class NotificationEntityBuilder {
     this.notification.createdAt = new Date()
     this.notification.uuid = generateNotificationUuid()
     this.notification.meta = {}
+    this.notification.type = NotificationType.TEST_NOTIFICATION
   }
 
   withCreatedByUserUuid (createdByUserUuid: UserUuid | null): this {
