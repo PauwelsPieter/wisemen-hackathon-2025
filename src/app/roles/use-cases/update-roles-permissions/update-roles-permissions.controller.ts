@@ -1,11 +1,14 @@
 import { Body, Controller, HttpCode, HttpStatus, Patch } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
 import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-errors/api-error-response.decorator.js'
+import { Permission } from '../../../../modules/permission/permission.enum.js'
+import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { UpdateRolesPermissionsUseCase } from './update-roles-permissions.use-case.js'
 import { UpdateRolesPermissionsCommand } from './update-roles-permissions.command.js'
 
 @ApiTags('Role')
+@ApiOAuth2([])
 @Controller('/roles')
 export class UpdateRolesPermissionsController {
   constructor (
@@ -14,6 +17,7 @@ export class UpdateRolesPermissionsController {
 
   @Patch()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Permissions(Permission.ROLE_UPDATE)
   @ApiNoContentResponse()
   @ApiNotFoundErrorResponse(RoleNotFoundError)
   async updateRolePermissions (
