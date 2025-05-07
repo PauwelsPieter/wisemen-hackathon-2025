@@ -1,5 +1,5 @@
 import { nkeyAuthenticator } from '@nats-io/transport-node'
-import { NatsClient } from '../../modules/nats/nats-client.decorator.js'
+import { NatsClient } from '../../modules/nats/nats-application/clients/nats-client.decorator.js'
 
 @NatsClient(configService => ({
   name: 'webapp-authenticator-client',

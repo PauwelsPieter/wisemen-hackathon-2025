@@ -1,25 +1,36 @@
 import { DynamicModule, Module, OnApplicationBootstrap, OnApplicationShutdown, Type } from '@nestjs/common'
 import { ClassConstructor } from 'class-transformer'
 import { ConfigModule } from '@nestjs/config'
-import { AppModule } from '../../app.module.js'
+import { AppModule } from '../../../app.module.js'
 import { NatsApplication } from './nats-application.js'
 import { NatsApplicationFactory } from './nats-application-factory.js'
 
 export interface NatsApplicationModuleOptions {
   modules: Type<unknown>[]
+  /** Creates the streams at startup */
+  streams?: Array<ClassConstructor<unknown>>
   defaultClient?: ClassConstructor<unknown>
 }
 
 @Module({})
 export class NatsApplicationModule implements OnApplicationBootstrap, OnApplicationShutdown {
-  static forRoot ({ modules, defaultClient }: NatsApplicationModuleOptions): DynamicModule {
+  static forRoot (
+    { modules, defaultClient, streams }: NatsApplicationModuleOptions
+  ): DynamicModule {
     return {
       module: NatsApplicationModule,
       imports: [AppModule.forRoot(), ConfigModule, ...modules],
-      providers: [{
-        provide: 'DEFAULT_NATS_CLIENT',
-        useValue: defaultClient
-      }, NatsApplicationFactory]
+      providers: [
+        {
+          provide: 'DEFAULT_NATS_CLIENT',
+          useValue: defaultClient
+        },
+        {
+          provide: 'NATS_STREAMS',
+          useValue: streams
+        },
+        NatsApplicationFactory
+      ]
     }
   }
 

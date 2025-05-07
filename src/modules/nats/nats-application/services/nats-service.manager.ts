@@ -1,7 +1,7 @@
 import { ClassConstructor } from 'class-transformer'
 import { Logger } from '@nestjs/common'
 import { Service, Svcm } from '@nats-io/services'
-import { NatsConnectionManager } from './nats-connection.manager.js'
+import { NatsConnectionManager } from '../clients/nats-connection.manager.js'
 import { getNatsServiceConfig } from './nats-service.decorator.js'
 
 export class NatsServiceManager {

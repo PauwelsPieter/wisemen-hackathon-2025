@@ -1,6 +1,6 @@
 import { ClassConstructor } from 'class-transformer'
 import { Logger } from '@nestjs/common'
-import { NatsConnectionManager } from './nats-connection.manager.js'
+import { NatsConnectionManager } from '../clients/nats-connection.manager.js'
 import { NatsSubscription } from './nats-subscription.js'
 import { getNatsSubscriberOptions } from './nats-subscriber.decorator.js'
 

@@ -44,7 +44,7 @@ export class NatsSubscription {
     if (this.fallbackHandler === undefined) {
       throw new Error(`No handler found for message`
         + `on NATS subscriber ${this.subscription.getSubject()}.`
-        + '\nDid you forget to add a fallback @OnNatsEvent() handler?')
+        + '\nDid you forget to add a fallback @OnNatsMessage() handler?')
     }
 
     return this.fallbackHandler
