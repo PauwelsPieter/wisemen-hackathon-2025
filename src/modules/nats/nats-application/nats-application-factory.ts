@@ -6,7 +6,7 @@ import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper.js'
 import { isNatsMessageHandler } from './subscribers/on-nats-message.decorator.js'
 import { NatsApplication } from './nats-application.js'
 import { holdsNatsServiceEndpoints } from './services/nats-service-endpoint.decorator.js'
-import { isJetstreamMessageHandler as isJetstreamMessageHandler } from './consumers/on-jetstream-message.decorator.js'
+import { isJetstreamMessageHandler } from './consumers/on-jetstream-message.decorator.js'
 
 @Injectable()
 export class NatsApplicationFactory {
@@ -53,7 +53,7 @@ export class NatsApplicationFactory {
     }
 
     if (isNatsMessageHandler(providerClass)) {
-      await app.addSubscriptionHandler(providerClass, providerInstance)
+      await app.addSubscriberHandler(providerClass, providerInstance)
     }
 
     if (isJetstreamMessageHandler(providerClass)) {

@@ -1,17 +1,16 @@
 import { Consumer, ConsumerInfo, JsMsg } from '@nats-io/jetstream'
 import { Logger } from '@nestjs/common'
 import { captureException } from '@sentry/nestjs'
-
-export type JetstreamMessageHandlerFunction = (msg: JsMsg) => Promise<void>
+import { NatsMessageHandlerFunction } from '../message-handler/nats-message-handler.js'
 
 export class NatsConsumption {
-  private fallbackHandler: JetstreamMessageHandlerFunction | undefined
+  private fallbackHandler: NatsMessageHandlerFunction | undefined
   constructor (
     private readonly consumerInfo: ConsumerInfo,
     private readonly consumer: Consumer
   ) {}
 
-  addFallBackHandler (handler: JetstreamMessageHandlerFunction): void {
+  addFallBackHandler (handler: NatsMessageHandlerFunction): void {
     if (this.fallbackHandler !== undefined) {
       throw new Error(`Fallback handler already set for consumer ${this.consumerInfo.name}`
         + `\nDid you add two @OnNatsMessage() handlers to one @NatsConsumer({...})?`)
@@ -34,7 +33,7 @@ export class NatsConsumption {
   private async handleMessage (message: JsMsg): Promise<void> {
     try {
       const handler = this.getHandler(message)
-      await handler(message)
+      await handler.handle(message)
       message.ack()
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : 'unknown cause'
@@ -44,7 +43,7 @@ export class NatsConsumption {
     }
   }
 
-  private getHandler (_forMessage: JsMsg): JetstreamMessageHandlerFunction {
+  private getHandler (_forMessage: JsMsg): NatsMessageHandlerFunction {
     if (this.fallbackHandler === undefined) {
       throw new Error(`No handler found for message`
         + `on NATS consumer ${this.consumerInfo.name}.`

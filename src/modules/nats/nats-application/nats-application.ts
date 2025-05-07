@@ -10,11 +10,10 @@ import { getNatsServiceEndpoints } from './services/nats-service-endpoint.decora
 import { NatsServiceManager } from './services/nats-service.manager.js'
 import { NatsServiceEndpointHandler, ServiceMessageHandlerFunction } from './services/nats-service-endpoint.handler.js'
 import { NatsSubscriberManager } from './subscribers/nats-subscriber.manager.js'
-import { NatsMessageHandlerFunction } from './subscribers/nats-subscription.js'
 import { NatsConsumerManager } from './consumers/nats-consumer.manager.js'
 import { getJetstreamMessageHandlerConfig } from './consumers/on-jetstream-message.decorator.js'
-import { JetstreamMessageHandlerFunction } from './consumers/nats-consumption.js'
 import { getNatsStreamConfig } from './streams/nats-stream.decorator.js'
+import { NatsMessageHandlerFunction } from './message-handler/nats-message-handler.js'
 
 export class NatsApplication {
   private readonly connectionManager: NatsConnectionManager
@@ -69,13 +68,13 @@ export class NatsApplication {
     }
   }
 
-  async addSubscriptionHandler (
+  async addSubscriberHandler (
     handlerClass: ClassConstructor<unknown>,
     instance: object
   ): Promise<void> {
     const handlerConfig = getNatsMessageHandlerConfig(handlerClass)
     for (const { methodName, ...options } of handlerConfig) {
-      const handler = instance[methodName].bind(instance) as NatsMessageHandlerFunction
+      const handler = new NatsMessageHandlerFunction({ handlerClass, instance, methodName })
       const subscriberClass = options.subscriber ?? handlerClass
       const subcriber = await this.subscriberManager.createSubscriber(subscriberClass)
       subcriber.addFallBackHandler(handler)
@@ -88,7 +87,7 @@ export class NatsApplication {
   ): Promise<void> {
     const handlerConfig = getJetstreamMessageHandlerConfig(handlerClass)
     for (const { methodName, ...options } of handlerConfig) {
-      const handler = instance[methodName].bind(instance) as JetstreamMessageHandlerFunction
+      const handler = new NatsMessageHandlerFunction({ handlerClass, instance, methodName })
       const consumerClass = options.consumer ?? handlerClass
       const consumer = await this.consumerManager.createConsumer(consumerClass)
       consumer.addFallBackHandler(handler)
