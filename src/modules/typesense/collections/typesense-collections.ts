@@ -25,10 +25,10 @@ export class TypesenseCollections implements OnApplicationBootstrap {
     const collection = this.collections.get(collectionName)
 
     if (collection === undefined) {
-      throw new Error(`No collector set for ${collectionName}`
-        + `\n - Did you forget to add a @RegisterTypesenseCollector(TypesenseCollectionName.${collection})?`
-        + `\n - Did you forget to add the collector as a provider in the collector's typesense module?`
-        + ` \n - Did you forget to import the collector's module in the typesense module?`)
+      throw new Error(`No collection set for ${collectionName}`
+        + `\n - Did you forget to add a @RegisterTypesenseCollection(TypesenseCollectionName.${collection})?`
+        + `\n - Did you forget to add the collection as a provider in the collection's typesense module?`
+        + ` \n - Did you forget to import the collection's module in the typesense module?`)
     }
 
     return collection

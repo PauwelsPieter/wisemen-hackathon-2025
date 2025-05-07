@@ -7,9 +7,7 @@ import { WsAdapter } from '@nestjs/platform-ws'
 import { WebSocketServer } from 'ws'
 import { MessageMappingProperties } from '@nestjs/websockets'
 import { filter, first, fromEvent, mergeMap, Observable, share, takeUntil } from 'rxjs'
-import {
-  CLOSE_EVENT
-} from '@nestjs/websockets/constants.js'
+import { CLOSE_EVENT } from '@nestjs/websockets/constants.js'
 import { WebSocket } from 'ws'
 import { isNil } from '@nestjs/common/utils/shared.utils.js'
 import { AuthMiddleware } from '../auth/middleware/auth.middleware.js'
