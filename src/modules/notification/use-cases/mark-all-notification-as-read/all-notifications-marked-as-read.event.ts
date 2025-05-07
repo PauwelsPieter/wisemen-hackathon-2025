@@ -6,7 +6,7 @@ import { DomainEvent } from '../../../domain-events/domain-event.js'
 import { RegisterDomainEvent } from '../../../domain-events/register-domain-event.decorator.js'
 import { UserUuid } from '../../../../app/users/entities/user.uuid.js'
 
-@OneOfMeta(DomainEventLog, DomainEventType.NOTIFICATION_READ)
+@OneOfMeta(DomainEventLog, DomainEventType.NOTIFICATION_READ_ALL)
 export class AllNotificationsMarkedAsReadEventContent {
   @ApiProperty({ format: 'uuid' })
   readonly userUuid: UserUuid
@@ -16,7 +16,7 @@ export class AllNotificationsMarkedAsReadEventContent {
   }
 }
 
-@RegisterDomainEvent(DomainEventType.NOTIFICATION_READ, 1)
+@RegisterDomainEvent(DomainEventType.NOTIFICATION_READ_ALL, 1)
 export class AllNotificationMarkedAsReadEvent extends DomainEvent {
   constructor (userUuid: UserUuid) {
     super({

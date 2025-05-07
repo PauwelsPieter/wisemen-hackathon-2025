@@ -9,6 +9,7 @@ export enum DomainEventType {
 
   NOTIFICATION_CREATED = 'notification.created',
   NOTIFICATION_READ = 'notification.read',
+  NOTIFICATION_READ_ALL = 'notification.read.all',
   NOTIFICATION_UNREAD = 'notification.unread',
   NOTIFICATION_TYPES_MIGRATED = 'notification.types.migrated',
   NOTIFICATION_PREFERENCE_PRESET_UPDATED = 'notification.preference.preset.updated',
