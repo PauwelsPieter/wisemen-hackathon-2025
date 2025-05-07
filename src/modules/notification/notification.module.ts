@@ -11,6 +11,7 @@ import { UpdateMyNotificationPreferencePresetModule } from './use-cases/update-m
 import { MigrateNotificationTypesModule } from './use-cases/migrate-notification-types/migrate-notification-types.module.js'
 import { SendTestNotificationModule } from './use-cases/send-test-notification/send-test-notification.module.js'
 import { ViewUserNotificationDetailModule } from './use-cases/view-user-notification-detail/view-user-notification-detail.module.js'
+import { ViewUnreadNotificationsCountModule } from './use-cases/view-unread-notifications-count/view-unread-notifications-count.module.js'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ViewUserNotificationDetailModule } from './use-cases/view-user-notifica
     UpdateMyChannelNotificationPreferenceModule,
     SendTestNotificationModule,
     GetMyNotificationsModule,
+    ViewUnreadNotificationsCountModule,
     ViewUserNotificationDetailModule,
     UpdateMyNotificationTypePreferenceModule,
     MarkNotificationAsReadModule,
