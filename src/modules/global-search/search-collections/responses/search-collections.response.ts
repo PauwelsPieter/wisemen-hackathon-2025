@@ -1,6 +1,6 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
-import { TypesenseCollectionName } from '../../../typesense/enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../../../typesense/collections/typesense-collection-name.enum.js'
 import { GlobalSearchTypesenseCollectionNameApiProperty, GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseResult } from '../../global-search-typesense-collections.js'
 import { TypesenseUser } from '../../../../app/users/typesense/typesense-user.js'
 import { TypesenseContact } from '../../../../app/contact/typesense/typesense-contact.js'

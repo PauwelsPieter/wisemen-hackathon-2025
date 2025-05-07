@@ -1,6 +1,8 @@
-import { TypesenseCollectionName } from '../../../modules/typesense/enums/typesense-collection-index.enum.js'
-import { TypesenseCollection } from '../../../modules/typesense/collections/abstract-typesense.collection.js'
+import { TypesenseCollectionName } from '../../../modules/typesense/collections/typesense-collection-name.enum.js'
+import { RegisterTypesenseCollection } from '../../../modules/typesense/collections/typesense-collection.decorator.js'
+import { TypesenseCollection } from '../../../modules/typesense/collections/typesense.collection.js'
 
+@RegisterTypesenseCollection(TypesenseCollectionName.USER)
 export class UserTypesenseCollection extends TypesenseCollection {
   readonly name = TypesenseCollectionName.USER
 

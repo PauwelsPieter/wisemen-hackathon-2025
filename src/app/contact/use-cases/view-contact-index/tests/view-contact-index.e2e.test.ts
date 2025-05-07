@@ -5,14 +5,14 @@ import { expect } from 'expect'
 import { SortDirection } from '@wisemen/pagination'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
-import { TypesenseCollectionName } from '../../../../../modules/typesense/enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../../../../../modules/typesense/collections/typesense-collection-name.enum.js'
 import { TypesenseCollectionService } from '../../../../../modules/typesense/services/typesense-collection.service.js'
-import { TypesenseInitializationService } from '../../../../../modules/typesense/services/typesense-initialization.service.js'
 import { TestUser } from '../../../../users/tests/setup-user.type.js'
 import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
 import { ViewContactIndexQueryBuilder } from '../query/view-contact-index.query.builder.js'
 import { Contact } from '../../../entities/contact.entity.js'
 import { ViewContactIndexSortQueryKey } from '../query/view-contact-index-sort.query.js'
+import { MigrateCollectionsUseCase } from '../../../../../modules/typesense/use-cases/migrate-collections/migrate-collections.use-case.js'
 
 describe('View contact index e2e tests', () => {
   let testSetup: EndToEndTestSetup
@@ -25,8 +25,8 @@ describe('View contact index e2e tests', () => {
     testSetup = await TestBench.setupEndToEndTest()
     adminUser = await testSetup.authContext.getAdminUser()
 
-    const typesenseInitializationService = testSetup.testModule.get(TypesenseInitializationService)
-    await typesenseInitializationService.migrate(true, [TypesenseCollectionName.CONTACT])
+    const typesenseMigrator = testSetup.testModule.get(MigrateCollectionsUseCase, { strict: false })
+    await typesenseMigrator.execute(true, [TypesenseCollectionName.CONTACT])
 
     const typesenseCollectionService = testSetup.testModule.get(
       TypesenseCollectionService, { strict: false })

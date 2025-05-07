@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common'
 import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import { PaginatedOffsetResponse, PaginatedOffsetResponseMeta } from '@wisemen/pagination'
 import { captureException } from '@sentry/nestjs'
-import { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
-import { TypesenseClient } from '../clients/typesense.client.js'
-import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../builder/search-params.builder.js'
+import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
+import { TypesenseClient } from '../client/typesense.client.js'
+import { DEFAULT_LIMIT, DEFAULT_OFFSET } from '../param-builders/search-params.builder.js'
 import { TypesenseCollectionSchema, CustomMultiSearchRequestSchemas, MultiSearchResult, MultiSearchResponse } from '../enums/multi-search.result.js'
 
 @Injectable()

@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common'
-import type { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
-import { TypesenseCollectorFactory } from './collectors/typesense-collector.factory.js'
+import type { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
+import { TypesenseCollectors } from '../collectors/typesense-collectors.js'
 import { TypesenseDocumentService } from './typesense-document.service.js'
 
 @Injectable()
 export class TypesenseCollectionService {
   constructor (
     private readonly typesenseDocumentService: TypesenseDocumentService,
-    private readonly collectorFactory: TypesenseCollectorFactory
+    private readonly collectorFactory: TypesenseCollectors
   ) {}
 
   async importManually<T> (
     collection: TypesenseCollectionName,
     objects: T[]
   ): Promise<void> {
-    const collector = this.collectorFactory.create(collection)
+    const collector = this.collectorFactory.get(collection)
 
     await this.typesenseDocumentService.addDocuments(
       collection,
@@ -23,7 +23,7 @@ export class TypesenseCollectionService {
   }
 
   async import (collection: TypesenseCollectionName, uuids?: string[]): Promise<void> {
-    const collector = this.collectorFactory.create(collection)
+    const collector = this.collectorFactory.get(collection)
 
     const entities = await collector.fetch(uuids)
 
@@ -34,7 +34,7 @@ export class TypesenseCollectionService {
   }
 
   async importChanged (collection: TypesenseCollectionName, since: Date): Promise<void> {
-    const collector = this.collectorFactory.create(collection)
+    const collector = this.collectorFactory.get(collection)
     const entities = await collector.fetchChanged(since)
 
     await this.typesenseDocumentService.addDocuments(
@@ -44,7 +44,7 @@ export class TypesenseCollectionService {
   }
 
   async deleteRemoved (collection: TypesenseCollectionName, since: Date): Promise<void> {
-    const collector = this.collectorFactory.create(collection)
+    const collector = this.collectorFactory.get(collection)
     const uuids = await collector.fetchRemoved(since)
 
     await this.typesenseDocumentService.deleteDocuments(collection, uuids)

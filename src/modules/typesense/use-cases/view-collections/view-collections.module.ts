@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common'
-import { TypesenseClient } from '../../clients/typesense.client.js'
+import { TypesenseClientModule } from '../../client/typesense-client.module.js'
 import { ViewCollectionsController } from './view-collections.controller.js'
 import { ViewCollectionsUseCase } from './view-collections.use-case.js'
 
 @Module({
+  imports: [TypesenseClientModule],
   controllers: [ViewCollectionsController],
-  providers: [
-    ViewCollectionsUseCase,
-    TypesenseClient
-  ]
+  providers: [ViewCollectionsUseCase]
 })
 export class ViewCollectionsModule {}

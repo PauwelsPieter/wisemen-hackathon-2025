@@ -2,7 +2,7 @@ import { MultiSearchRequestSchema } from 'typesense/lib/Typesense/MultiSearch.js
 import { PaginatedOffsetResponse } from '@wisemen/pagination'
 import { TypesenseUser } from '../../../app/users/typesense/typesense-user.js'
 import { TypesenseContact } from '../../../app/contact/typesense/typesense-contact.js'
-import { TypesenseCollectionName } from './typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
 
 export interface TypesenseCollectionSchema {
   [TypesenseCollectionName.USER]: TypesenseUser

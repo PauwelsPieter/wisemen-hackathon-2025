@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import type { CollectionSchema } from 'typesense/lib/Typesense/Collection.js'
-import { TypesenseClient } from '../../clients/typesense.client.js'
+import { TypesenseClient } from '../../client/typesense.client.js'
 
 @Injectable()
 export class ViewCollectionsUseCase {

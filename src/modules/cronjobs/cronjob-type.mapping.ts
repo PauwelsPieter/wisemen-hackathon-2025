@@ -1,10 +1,10 @@
-import { CronjobType } from './enums/cronjob-type.enum.js'
+import { CronjobType } from './cronjob-type.enum.js'
 
 export const CronjobTypeMapping = {
-  [CronjobType.IMPORT_TYPESENSE]: async () => {
+  [CronjobType.EXAMPLE]: async () => {
     return {
-      module: (await import('../typesense/cronjobs/import-typesense/import-typesense.module.js')).ImportTypesenseModule,
-      useCase: (await import('../typesense/cronjobs/import-typesense/import-typesense.use-case.js')).ImportTypesenseUseCase
+      module: (await import('./example/example.cron-job.module.js')).ExampleCronjobModule,
+      useCase: (await import('./example/example.cron-job.use-case.js')).ExampleCronjobUseCase
     }
   }
 }

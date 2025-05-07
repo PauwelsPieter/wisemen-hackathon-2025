@@ -1,39 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Module, OnApplicationBootstrap, Type } from '@nestjs/common'
-import { ModulesContainer } from '@nestjs/core'
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper.js'
+import { ProvidersExplorerModule } from '../../utils/providers/providers-explorer.module.js'
+import { ProvidersExplorer } from '../../utils/providers/providers-explorer.js'
 import { EventsMap, SUBSCRIBE_KEY } from './subscribe.decorator.js'
 import { DomainEventEmitter, EventSubscriberMethod } from './domain-event-emitter.js'
 import { SUBSCRIBE_ALL_KEY, SubscribeAllMethodNames } from './subscribe-all.decorator.js'
 
 @Module({
+  imports: [ProvidersExplorerModule],
   providers: [DomainEventEmitter],
   exports: [DomainEventEmitter]
 })
 export class DomainEventEmitterModule implements OnApplicationBootstrap {
-  constructor (private readonly modulesContainer: ModulesContainer) {}
+  constructor (private readonly providerExplorer: ProvidersExplorer) {}
 
   onApplicationBootstrap () {
-    for (const moduleWrapper of this.modulesContainer.values()) {
-      for (const providerWrapper of moduleWrapper.providers.values()) {
-        this.registerSubscribers(providerWrapper)
-      }
+    for (const { providerClass, providerInstance } of this.providerExplorer.providers) {
+      this.addEventSubscribers(providerClass, providerInstance)
+      this.addGlobalSubscribers(providerClass, providerInstance)
     }
-  }
-
-  private registerSubscribers (providerWrapper: InstanceWrapper<unknown>) {
-    const providerClass = providerWrapper.metatype
-
-    if (providerClass == null) {
-      return
-    }
-
-    if (!Object.hasOwn(providerClass, 'prototype')) {
-      return
-    }
-
-    this.addEventSubscribers(providerClass as Type<unknown>, providerWrapper.instance)
-    this.addGlobalSubscribers(providerClass as Type<unknown>, providerWrapper.instance)
   }
 
   private addEventSubscribers (providerClass: Type<unknown>, instance: any) {

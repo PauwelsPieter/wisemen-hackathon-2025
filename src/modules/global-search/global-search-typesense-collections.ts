@@ -1,5 +1,5 @@
 import { ApiPropertyOptions, ApiProperty } from '@nestjs/swagger'
-import { TypesenseCollectionName } from '../typesense/enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../typesense/collections/typesense-collection-name.enum.js'
 import { MappedMultiSearchResponseItem } from '../typesense/enums/multi-search.result.js'
 
 export type GlobalSearchTypesenseCollectionNames = typeof GlobalSearchTypesenseCollections[number]

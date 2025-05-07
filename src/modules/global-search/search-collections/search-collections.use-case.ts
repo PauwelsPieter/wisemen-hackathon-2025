@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { TypesenseQueryService } from '../../typesense/services/typesense-query.service.js'
-import { TypesenseCollectionName } from '../../typesense/enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../../typesense/collections/typesense-collection-name.enum.js'
 import { CustomMultiSearchRequestSchema, MappedMultiSearchResponseItem, MultiSearchResponse } from '../../typesense/enums/multi-search.result.js'
 import { GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseCollections } from '../global-search-typesense-collections.js'
 import { SearchCollectionsQuery } from './query/search-collections.query.js'

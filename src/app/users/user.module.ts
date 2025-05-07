@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 
 import { RedisModule } from '../../modules/redis/redis.module.js'
-import { TypesenseModule } from '../../modules/typesense/modules/typesense.module.js'
+import { TypesenseModule } from '../../modules/typesense/typesense.module.js'
 import { UserAuthService } from './services/user-auth.service.js'
 import { SetUserRolesModule } from './use-cases/set-user-roles/set-user-roles.module.js'
 import { ViewMeModule } from './use-cases/view-me/view-me.module.js'

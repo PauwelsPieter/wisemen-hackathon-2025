@@ -6,8 +6,8 @@ import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { AppModule } from '../app.module.js'
 import { CronjobModule } from '../modules/cronjobs/cronjob.module.js'
-import { CronjobType } from '../modules/cronjobs/enums/cronjob-type.enum.js'
-import { AbstractUseCase } from '../modules/cronjobs/types/abstract-use-case.js'
+import { CronjobType } from '../modules/cronjobs/cronjob-type.enum.js'
+import { CronjobUseCase } from '../modules/cronjobs/cronjob.use-case.js'
 
 const args = await yargs(hideBin(process.argv))
   .usage('$0 <type>', 'Run the specified cronjob')
@@ -27,14 +27,14 @@ export class Cronjob extends JobContainer {
     return await NestFactory.createApplicationContext(
       AppModule.forRoot([
         CronjobModule.forRootAsync({
-          type: args.type
+          type: args.type as unknown as CronjobType
         })
       ])
     )
   }
 
   async execute (app: INestApplicationContext): Promise<void> {
-    const cronjobUseCase = app.get<AbstractUseCase>('CronjobUseCase')
+    const cronjobUseCase = app.get<CronjobUseCase>('CronjobUseCase')
 
     await cronjobUseCase.execute()
   }

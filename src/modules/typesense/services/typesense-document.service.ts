@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import type { TypesenseCollectionName } from '../enums/typesense-collection-index.enum.js'
-import { TypesenseClient } from '../clients/typesense.client.js'
+import type { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
+import { TypesenseClient } from '../client/typesense.client.js'
 
 @Injectable()
 export class TypesenseDocumentService {

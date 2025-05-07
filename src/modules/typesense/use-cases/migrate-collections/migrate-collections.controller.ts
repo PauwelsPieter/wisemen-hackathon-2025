@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common'
 import { ApiOAuth2, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
-import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
+import { TypesenseCollectionName } from '../../collections/typesense-collection-name.enum.js'
 import { MigrateCollectionsUseCase } from './migrate-collections.use-case.js'
 import { MigrateTypesenseQuery } from './migrate-collections.query.js'
 

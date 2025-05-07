@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
 import { DomainEventLog } from '../../domain-event-log.entity.js'
-import { DEFAULT_LIMIT } from '../../../typesense/builder/search-params.builder.js'
+import { DEFAULT_LIMIT } from '../../../typesense/param-builders/search-params.builder.js'
 import { ViewDomainEventLogIndexQuery } from './view-domain-event-log-index.query.js'
 import { ViewDomainEventLogIndexResponse } from './view-domain-event-log-index.response.js'
 

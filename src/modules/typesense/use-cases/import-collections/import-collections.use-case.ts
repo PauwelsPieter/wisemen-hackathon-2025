@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { captureException } from '@sentry/nestjs'
-import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
-import { TypesenseCollectorFactory } from '../../services/collectors/typesense-collector.factory.js'
-import { TypesenseClient } from '../../clients/typesense.client.js'
+import { TypesenseCollectionName } from '../../collections/typesense-collection-name.enum.js'
+import { TypesenseCollectors } from '../../collectors/typesense-collectors.js'
+import { TypesenseClient } from '../../client/typesense.client.js'
 
 @Injectable()
 export class ImportCollectionsUseCase {
   constructor (
     private readonly typesenseClient: TypesenseClient,
-    private readonly collectorFactory: TypesenseCollectorFactory
+    private readonly collectors: TypesenseCollectors
   ) {}
 
   public async execute (indexes: TypesenseCollectionName[]): Promise<void> {
@@ -17,29 +17,30 @@ export class ImportCollectionsUseCase {
     }
   }
 
-  private async importCollection (collection: TypesenseCollectionName) {
-    const collector = this.collectorFactory.create(collection)
+  private async importCollection (collection: TypesenseCollectionName): Promise<void> {
+    const collector = this.collectors.get(collection)
 
     const entities = await collector.fetch()
 
-    await this.addDocuments(
-      collection,
-      collector.transform(entities)
-    )
+    await this.addDocuments(collection, collector.transform(entities))
   }
 
-  private async addDocuments <T extends object> (index: TypesenseCollectionName,
-    documents: T[]) {
+  private async addDocuments <T extends object> (
+    index: TypesenseCollectionName,
+    documents: T[]
+  ): Promise<void> {
     for (let i = 0; i < documents.length; i += 100) {
       const documentsChunk = documents.slice(i, i + 100)
 
       try {
-        const collectionName = (await this.typesenseClient.client.aliases(index).retrieve())
-          .collection_name
+        const alias = await this.typesenseClient.client.aliases(index).retrieve()
+        const collectionName = alias.collection_name
+        const collection = this.typesenseClient.client.collections(collectionName)
 
-        await this.typesenseClient.client.collections(collectionName).documents().import(documentsChunk, { action: 'upsert' })
+        await collection.documents().import(documentsChunk, { action: 'upsert' })
       } catch (e) {
         captureException(e)
+        throw e
       }
     }
   }

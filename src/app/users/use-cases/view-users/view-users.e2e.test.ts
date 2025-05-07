@@ -7,10 +7,10 @@ import {
 } from '../../../../modules/typesense/services/typesense-collection.service.js'
 import {
   TypesenseCollectionName
-} from '../../../../modules/typesense/enums/typesense-collection-index.enum.js'
+} from '../../../../modules/typesense/collections/typesense-collection-name.enum.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
-import { TypesenseInitializationService } from '../../../../modules/typesense/services/typesense-initialization.service.js'
+import { MigrateCollectionsUseCase } from '../../../../modules/typesense/use-cases/migrate-collections/migrate-collections.use-case.js'
 
 describe('View users e2e test', () => {
   let setup: EndToEndTestSetup
@@ -25,10 +25,8 @@ describe('View users e2e test', () => {
 
     const typesenseCollectionService = setup.testModule.get(TypesenseCollectionService)
 
-    const typesenseMigrator = setup.testModule.get(
-      TypesenseInitializationService, { strict: false })
-
-    await typesenseMigrator.migrate(true, [TypesenseCollectionName.USER])
+    const typesenseMigrator = setup.testModule.get(MigrateCollectionsUseCase, { strict: false })
+    await typesenseMigrator.execute(true, [TypesenseCollectionName.USER])
 
     // wait for fix in v29 of typesense to use truncate instead of remigrate
     // await typesenseCollectionService.truncate([TypesenseCollectionName.USER])

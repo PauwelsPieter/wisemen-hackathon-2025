@@ -2,6 +2,7 @@ import { DynamicModule, Module, OnApplicationBootstrap, OnApplicationShutdown, T
 import { ClassConstructor } from 'class-transformer'
 import { ConfigModule } from '@nestjs/config'
 import { AppModule } from '../../../app.module.js'
+import { ProvidersExplorerModule } from '../../../utils/providers/providers-explorer.module.js'
 import { NatsApplication } from './nats-application.js'
 import { NatsApplicationFactory } from './nats-application-factory.js'
 
@@ -19,7 +20,12 @@ export class NatsApplicationModule implements OnApplicationBootstrap, OnApplicat
   ): DynamicModule {
     return {
       module: NatsApplicationModule,
-      imports: [AppModule.forRoot(), ConfigModule, ...modules],
+      imports: [
+        AppModule.forRoot(),
+        ConfigModule,
+        ProvidersExplorerModule,
+        ...modules
+      ],
       providers: [
         {
           provide: 'DEFAULT_NATS_CLIENT',

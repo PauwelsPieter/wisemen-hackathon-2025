@@ -4,27 +4,26 @@ import type { CollectionCreateSchema } from 'typesense/lib/Typesense/Collections
 import { captureException } from '@sentry/nestjs'
 import { InjectRepository } from '@wisemen/nestjs-typeorm'
 import { Repository } from 'typeorm'
-import { TypesenseCollectionName } from '../../enums/typesense-collection-index.enum.js'
-import { TypesenseClient } from '../../clients/typesense.client.js'
-import { TypesenseCollectorFactory } from '../../services/collectors/typesense-collector.factory.js'
-import { UserTypesenseCollection } from '../../../../app/users/typesense/user.collections.js'
-import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
-import { TypesenseSync } from '../../jobs/sync-typesense/typesense-sync.entity.js'
-import { ContactTypesenseCollection } from '../../../../app/contact/typesense/contact.typesense-collection.js'
+import { TypesenseCollectionName } from '../../collections/typesense-collection-name.enum.js'
+import { TypesenseClient } from '../../client/typesense.client.js'
+import { TypesenseCollectors } from '../../collectors/typesense-collectors.js'
+import { TypesenseSync } from '../sync-collection/typesense-sync.entity.js'
+import { TypesenseCollections } from '../../collections/typesense-collections.js'
 
 @Injectable()
 export class MigrateCollectionsUseCase {
   constructor (
     private readonly typesenseClient: TypesenseClient,
-    private readonly collectorFactory: TypesenseCollectorFactory,
+    private readonly collectors: TypesenseCollectors,
+    private readonly collections: TypesenseCollections,
     @InjectRepository(TypesenseSync) private readonly syncRepository: Repository<TypesenseSync>
   ) {}
 
   async execute (fresh: boolean, indexes: TypesenseCollectionName[]): Promise<void> {
-    for (const collection of indexes) {
-      const schema = this.getCollectionSchema(collection)
+    for (const collectionName of indexes) {
+      const schema = this.collections.get(collectionName).getSchema()
 
-      await this.migrateCollection(collection, schema, fresh)
+      await this.migrateCollection(collectionName, schema, fresh)
     }
   }
 
@@ -50,7 +49,7 @@ export class MigrateCollectionsUseCase {
     collection: TypesenseCollectionName,
     uuids?: string[]
   ): Promise<void> {
-    const collector = this.collectorFactory.create(collection)
+    const collector = this.collectors.get(collection)
 
     const entities = await collector.fetch(uuids)
 
@@ -60,7 +59,7 @@ export class MigrateCollectionsUseCase {
     )
   }
 
-  async addDocuments <T extends object> (
+  private async addDocuments <T extends object> (
     index: TypesenseCollectionName,
     documents: T[],
     collectionName?: string
@@ -69,14 +68,15 @@ export class MigrateCollectionsUseCase {
       const documentsChunk = documents.slice(i, i + 100)
 
       try {
-        if (collectionName == null) {
-          collectionName = (await this.typesenseClient.client.aliases(index).retrieve())
-            .collection_name
-        }
+        const alias = this.typesenseClient.client.aliases(index)
+        collectionName ??= (await alias.retrieve()).collection_name
 
-        await this.typesenseClient.client.collections(collectionName).documents().import(documentsChunk, { action: 'upsert' })
+        const collection = this.typesenseClient.client.collections(collectionName)
+
+        await collection.documents().import(documentsChunk, { action: 'upsert' })
       } catch (e) {
         captureException(e)
+        throw e
       }
     }
   }
@@ -123,14 +123,6 @@ export class MigrateCollectionsUseCase {
     await this.typesenseClient.client.aliases().upsert(aliasName, {
       collection_name: collectionName
     })
-  }
-
-  private getCollectionSchema (collection: TypesenseCollectionName): CollectionCreateSchema {
-    switch (collection) {
-      case TypesenseCollectionName.USER: return new UserTypesenseCollection().getSchema()
-      case TypesenseCollectionName.CONTACT: return new ContactTypesenseCollection().getSchema()
-      default: exhaustiveCheck(collection)
-    }
   }
 
   private async registerSynced (collection: TypesenseCollectionName, on: Date): Promise<void> {

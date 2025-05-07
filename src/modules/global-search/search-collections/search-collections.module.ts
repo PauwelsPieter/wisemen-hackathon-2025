@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { TypesenseModule } from '../../typesense/modules/typesense.module.js'
+import { TypesenseModule } from '../../typesense/typesense.module.js'
 import { SearchCollectionsController } from './search-collections.controller.js'
 import { SearchCollectionsUseCase } from './search-collections.use-case.js'
 

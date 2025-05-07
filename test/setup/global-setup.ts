@@ -1,11 +1,13 @@
 import { DataSource } from 'typeorm'
 import type { TestingModule } from '@nestjs/testing'
-import { TypesenseCollectionName } from '../../src/modules/typesense/enums/typesense-collection-index.enum.js'
-import { TypesenseInitializationService } from '../../src/modules/typesense/services/typesense-initialization.service.js'
+import { TypesenseCollectionName } from '../../src/modules/typesense/collections/typesense-collection-name.enum.js'
+import { MigrateCollectionsUseCase } from '../../src/modules/typesense/use-cases/migrate-collections/migrate-collections.use-case.js'
+import { TypesenseModule } from '../../src/modules/typesense/typesense.module.js'
 import { compileTestModule } from './compile-test-module.js'
 
 async function globalTestSetup (): Promise<void> {
-  const testingModule = await compileTestModule([], true)
+  const testingModule = await compileTestModule([TypesenseModule], true)
+  await testingModule.init()
 
   await Promise.all([
     migrateTypesense(testingModule),
@@ -18,9 +20,8 @@ async function globalTestSetup (): Promise<void> {
 }
 
 async function migrateTypesense (moduleRef: TestingModule): Promise<void> {
-  const typesenseInitService = moduleRef.get(TypesenseInitializationService)
-
-  await typesenseInitService.migrate(true, Object.values(TypesenseCollectionName))
+  const typesenseInitService = moduleRef.get(MigrateCollectionsUseCase)
+  await typesenseInitService.execute(true, Object.values(TypesenseCollectionName))
 }
 
 async function migrateDatabase (testingModule: TestingModule): Promise<void> {

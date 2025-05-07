@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { ModulesContainer } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { ClassConstructor } from 'class-transformer'
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper.js'
+import { ProvidersExplorer, NestjsProvider } from '../../../utils/providers/providers-explorer.js'
 import { isNatsMessageHandler } from './subscribers/on-nats-message.decorator.js'
 import { NatsApplication } from './nats-application.js'
 import { holdsNatsServiceEndpoints } from './services/nats-service-endpoint.decorator.js'
@@ -11,7 +10,7 @@ import { isJetstreamMessageHandler } from './consumers/on-jetstream-message.deco
 @Injectable()
 export class NatsApplicationFactory {
   constructor (
-    private readonly modulesContainer: ModulesContainer,
+    private readonly providerExplorer: ProvidersExplorer,
     private readonly configService: ConfigService,
     @Inject('DEFAULT_NATS_CLIENT') private readonly defaultClient?: ClassConstructor<unknown>,
     @Inject('NATS_STREAMS') private readonly streams?: ClassConstructor<unknown>[]
@@ -24,10 +23,8 @@ export class NatsApplicationFactory {
       await app.createStream(stream)
     }
 
-    for (const moduleWrapper of this.modulesContainer.values()) {
-      for (const providerWrapper of moduleWrapper.providers.values()) {
-        await this.registerProvider(app, providerWrapper)
-      }
+    for (const provider of this.providerExplorer.providers) {
+      await this.registerProvider(app, provider)
     }
 
     return app
@@ -35,29 +32,27 @@ export class NatsApplicationFactory {
 
   private async registerProvider (
     app: NatsApplication,
-    providerWrapper: InstanceWrapper<unknown>
+    providerWrapper: NestjsProvider
   ): Promise<void> {
-    const providerClass = providerWrapper.metatype as ClassConstructor<unknown> | null
-    const providerInstance = providerWrapper.instance as object
-
-    if (providerClass == null) {
-      return
+    if (holdsNatsServiceEndpoints(providerWrapper.providerClass)) {
+      await app.addServiceEndpoints(
+        providerWrapper.providerClass,
+        providerWrapper.providerInstance
+      )
     }
 
-    if (!Object.hasOwn(providerClass, 'prototype')) {
-      return
+    if (isNatsMessageHandler(providerWrapper.providerClass)) {
+      await app.addSubscriberHandler(
+        providerWrapper.providerClass,
+        providerWrapper.providerInstance
+      )
     }
 
-    if (holdsNatsServiceEndpoints(providerClass)) {
-      await app.addServiceEndpoints(providerClass, providerInstance)
-    }
-
-    if (isNatsMessageHandler(providerClass)) {
-      await app.addSubscriberHandler(providerClass, providerInstance)
-    }
-
-    if (isJetstreamMessageHandler(providerClass)) {
-      await app.addConsumerHandler(providerClass, providerInstance)
+    if (isJetstreamMessageHandler(providerWrapper.providerClass)) {
+      await app.addConsumerHandler(
+        providerWrapper.providerClass,
+        providerWrapper.providerInstance
+      )
     }
   }
 }

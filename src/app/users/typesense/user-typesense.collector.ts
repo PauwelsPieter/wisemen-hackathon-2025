@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common'
 import { AnyOrIgnore, InjectRepository } from '@wisemen/nestjs-typeorm'
 import { MoreThanOrEqual, Repository } from 'typeorm'
-import { TypesenseCollector } from '../../../modules/typesense/services/collectors/typesense-collector.factory.js'
 import { User } from '../entities/user.entity.js'
 import { UserUuid } from '../entities/user.uuid.js'
+import { RegisterTypesenseCollector } from '../../../modules/typesense/collectors/typesense-collector.decorator.js'
+import { TypesenseCollectionName } from '../../../modules/typesense/collections/typesense-collection-name.enum.js'
+import { TypesenseCollector } from '../../../modules/typesense/collectors/typesense-collector.js'
 import { TypesenseUser } from './typesense-user.js'
 
-@Injectable()
+@RegisterTypesenseCollector(TypesenseCollectionName.USER)
 export class UserTypesenseCollector implements TypesenseCollector {
   constructor (
     @InjectRepository(User) private readonly userRepository: Repository<User>

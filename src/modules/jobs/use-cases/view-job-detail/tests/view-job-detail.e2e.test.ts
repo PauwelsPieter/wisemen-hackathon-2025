@@ -7,8 +7,8 @@ import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { TestAuthContext } from '../../../../../../test/utils/test-auth-context.js'
 import { TestUser } from '../../../../../app/users/tests/setup-user.type.js'
-import { SyncTypesenseJob } from '../../../../typesense/jobs/sync-typesense/sync-typesense.job.js'
-import { TypesenseCollectionName } from '../../../../typesense/enums/typesense-collection-index.enum.js'
+import { SyncTypesenseJob } from '../../../../typesense/use-cases/sync-collection/sync-typesense-collection.job.js'
+import { TypesenseCollectionName } from '../../../../typesense/collections/typesense-collection-name.enum.js'
 import { ViewJobDetailQueryBuilder } from '../view-job-detail.query-builder.js'
 
 describe('View job detail end to end tests', () => {

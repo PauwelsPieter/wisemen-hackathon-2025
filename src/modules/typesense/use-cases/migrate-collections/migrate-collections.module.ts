@@ -1,24 +1,21 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { TypesenseClient } from '../../clients/typesense.client.js'
-import { TypesenseCollectorFactory } from '../../services/collectors/typesense-collector.factory.js'
-import { UserTypesenseCollectorModule } from '../../../../app/users/typesense/user-typesense-collector.module.js'
-import { TypesenseSync } from '../../jobs/sync-typesense/typesense-sync.entity.js'
-import { ContactTypesenseCollectorModule } from '../../../../app/contact/typesense/typesense-contact.module.js'
+import { TypesenseSync } from '../sync-collection/typesense-sync.entity.js'
+import { TypesenseClientModule } from '../../client/typesense-client.module.js'
+import { TypesenseCollectorsModule } from '../../collectors/typesense-collectors.module.js'
+import { TypesenseCollectionsModule } from '../../collections/typesense-collections.module.js'
 import { MigrateCollectionsUseCase } from './migrate-collections.use-case.js'
 import { MigrateCollectionsController } from './migrate-collections.controller.js'
 
 @Module({
   imports: [
-    UserTypesenseCollectorModule,
-    ContactTypesenseCollectorModule,
+    TypesenseCollectorsModule,
+    TypesenseCollectionsModule,
+    TypesenseClientModule,
     TypeOrmModule.forFeature([TypesenseSync])
   ],
   controllers: [MigrateCollectionsController],
-  providers: [
-    MigrateCollectionsUseCase,
-    TypesenseClient,
-    TypesenseCollectorFactory
-  ]
+  providers: [MigrateCollectionsUseCase],
+  exports: [MigrateCollectionsUseCase]
 })
 export class MigrateCollectionsModule {}
