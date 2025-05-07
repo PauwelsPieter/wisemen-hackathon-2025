@@ -6,6 +6,7 @@ import { NotificationUuid } from './notification.uuid.js'
 
 @Entity()
 @Index(['notificationUuid', 'channel'])
+@Index(['userUuid', 'channel', 'readAt'], { where: `channel = 'app' AND read_at IS NULL` })
 export class UserNotification {
   @Column({ type: 'uuid', primary: true })
   userUuid: UserUuid

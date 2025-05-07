@@ -4,16 +4,18 @@ import { DomainEventLog } from '../../../domain-event-log/domain-event-log.entit
 import { DomainEvent } from '../../../domain-events/domain-event.js'
 import { DomainEventType } from '../../../domain-events/domain-event-type.js'
 import { RegisterDomainEvent } from '../../../domain-events/register-domain-event.decorator.js'
+import { UserUuid } from '../../../../app/users/entities/user.uuid.js'
+import { NotificationUuid } from '../../entities/notification.uuid.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.NOTIFICATION_UNREAD)
 export class NotificationUnreadEventContent {
   @ApiProperty({ format: 'uuid' })
-  readonly notificationUuid: string
+  readonly notificationUuid: NotificationUuid
 
   @ApiProperty({ format: 'uuid' })
-  readonly userUuid: string
+  readonly userUuid: UserUuid
 
-  constructor (notificationUuid: string, userUuid: string) {
+  constructor (notificationUuid: NotificationUuid, userUuid: UserUuid) {
     this.notificationUuid = notificationUuid
     this.userUuid = userUuid
   }
@@ -21,7 +23,7 @@ export class NotificationUnreadEventContent {
 
 @RegisterDomainEvent(DomainEventType.NOTIFICATION_UNREAD, 1)
 export class NotificationUnreadEvent extends DomainEvent {
-  constructor (notificationUuid: string, userUuid: string) {
+  constructor (notificationUuid: NotificationUuid, userUuid: UserUuid) {
     super({
       content: new NotificationUnreadEventContent(notificationUuid, userUuid)
     })

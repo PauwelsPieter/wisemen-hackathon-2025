@@ -12,6 +12,7 @@ import { MigrateNotificationTypesModule } from './use-cases/migrate-notification
 import { SendTestNotificationModule } from './use-cases/send-test-notification/send-test-notification.module.js'
 import { ViewUserNotificationDetailModule } from './use-cases/view-user-notification-detail/view-user-notification-detail.module.js'
 import { ViewUnreadNotificationsCountModule } from './use-cases/view-unread-notifications-count/view-unread-notifications-count.module.js'
+import { MarkAllNotificationAsReadModule } from './use-cases/mark-all-notification-as-read/mark-all-notification-as-read.module.js'
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ViewUnreadNotificationsCountModule } from './use-cases/view-unread-noti
     GetMyNotificationsModule,
     ViewUnreadNotificationsCountModule,
     ViewUserNotificationDetailModule,
+    MarkAllNotificationAsReadModule,
     UpdateMyNotificationTypePreferenceModule,
     MarkNotificationAsReadModule,
     MarkNotificationAsUnreadModule,
