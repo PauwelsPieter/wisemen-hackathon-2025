@@ -1,49 +1,52 @@
 import { INestApplication, Logger, Module } from '@nestjs/common'
 import { SwaggerModule as NestSwaggerModule } from '@nestjs/swagger'
 import { captureException } from '@sentry/nestjs'
+import axios from 'axios'
 import { WebsocketModule } from '../websocket/websocket.module.js'
 import { InternalServerApiError } from '../exceptions/api-errors/internal-server.api-error.js'
 import { buildWebSocketDocumentation } from './helpers/build-websocket-documentation.js'
 import { SwaggerController } from './swagger.controller.js'
 import { buildApiDocumentation } from './helpers/build-api-documentation.js'
-import { buildExtraOptions } from './helpers/build-swagger-custom-options.js'
+import { buildSwaggerCustomOptions } from './helpers/build-custom-options.js'
+import { createSwaggerOperationId } from './helpers/create-swagger-operation-id.js'
+import { buildErrorDocumentation } from './helpers/build-error-documentation.js'
+import { OpenIdConnectOptions } from './types/open-id-connect-options.js'
 
 @Module({
-  controllers: [
-    SwaggerController
-  ]
+  controllers: [SwaggerController]
 })
 export class SwaggerModule {
-  static addDocumentation (app: INestApplication) {
-    this.addApiDocumentation(app, 'api/docs')
+  static async addDocumentation (app: INestApplication): Promise<void> {
+    await this.addApiDocumentation(app, 'api/docs')
+
     this.addWebSocketDocumentation(app, 'api/docs/websockets')
   }
 
-  private static addApiDocumentation (toApp: INestApplication<unknown>, onRoute: string): void {
+  private static async addApiDocumentation (
+    toApp: INestApplication<unknown>,
+    onRoute: string
+  ): Promise<void> {
     try {
-      this.tryAddApiDocumentation(toApp, onRoute)
+      await this.tryAddApiDocumentation(toApp, onRoute)
     } catch (e) {
       this.addFailurePage(onRoute, toApp, e)
     }
   }
 
-  private static tryAddApiDocumentation (toApp: INestApplication<unknown>, onRoute: string) {
-    const clientId = process.env.ZITADEL_CLIENT_ID
+  private static async tryAddApiDocumentation (
+    toApp: INestApplication<unknown>,
+    onRoute: string
+  ): Promise<void> {
+    const openIdConnectOptions = await this.loadOpenIdConnectOptions()
+    const defaultScopes = openIdConnectOptions?.scopes_supported ?? []
 
-    const documentation = buildApiDocumentation()
+    const customOptions = buildSwaggerCustomOptions(defaultScopes)
+    const documentation = buildApiDocumentation(openIdConnectOptions)
+
     const document = NestSwaggerModule.createDocument(toApp, documentation, {
-      operationIdFactory: (controllerKey, _methodKey, version) => {
-        let opId = controllerKey.replace('Controller', '')
-
-        if (version !== undefined) {
-          opId = opId + `${version.toUpperCase()}`
-        }
-
-        return opId
-      },
+      operationIdFactory: createSwaggerOperationId,
       extraModels: [InternalServerApiError]
     })
-    const customOptions = buildExtraOptions(clientId)
 
     NestSwaggerModule.setup(onRoute, toApp, document, customOptions)
   }
@@ -70,20 +73,31 @@ export class SwaggerModule {
   private static addFailurePage (onRoute: string, toApp: INestApplication<unknown>, e) {
     captureException(e)
     Logger.error(e)
-    NestSwaggerModule.setup(onRoute, toApp, {
-      info: {
-        title: 'Something went wrong',
-        version: '',
-        description: `An error occurred while generating the documentation:\n
-        ${(e as { message?: string }).message ?? 'Unknown error'} `
-      },
-      openapi: '3.1.0',
-      paths: {}
-    }, {
-      swaggerOptions: {
-        tagsSorter: 'alpha',
-        operationsSorter: 'alpha'
-      }
+
+    const document = buildErrorDocumentation(e)
+
+    NestSwaggerModule.setup(onRoute, toApp, document)
+  }
+
+  private static async loadOpenIdConnectOptions (): Promise<OpenIdConnectOptions | undefined> {
+    const openIdConnectUrl = process.env.OPEN_API_OPENID_CONFIGURATION_URL
+
+    if (openIdConnectUrl == null) {
+      return undefined
+    }
+
+    const client = axios.create({
+      timeout: 5_000
     })
+
+    try {
+      const response = await client.get<OpenIdConnectOptions>(openIdConnectUrl)
+      return response.data
+    } catch (error) {
+      captureException(error)
+      Logger.error('Failed to load OpenID Connect options', error)
+
+      return undefined
+    }
   }
 }

@@ -19,6 +19,7 @@ import { toHaveValidationErrors } from '../expect/expect-validation-errors.js'
 import { toHaveEmitted } from '../expect/expect-to-have-emitted.js'
 
 import { ISO8601 } from '../expect/expect-iso-8601.js'
+import { LOCAL_SERVER_URL } from '../../src/modules/swagger/swagger.constant.js'
 import { RepositoryTestSetup } from './repository-test-setup.js'
 import { EndToEndTestSetup } from './end-to-end-test-setup.js'
 
@@ -128,8 +129,8 @@ export class TestBench {
   }
 
   private static mockS3 (): void {
-    mock.method(S3.prototype, 'createTemporaryDownloadUrl', () => 'http://localhost:3000')
-    mock.method(S3.prototype, 'createTemporaryUploadUrl', () => 'http://localhost:3000')
+    mock.method(S3.prototype, 'createTemporaryDownloadUrl', () => LOCAL_SERVER_URL)
+    mock.method(S3.prototype, 'createTemporaryUploadUrl', () => LOCAL_SERVER_URL)
     mock.method(S3.prototype, 'upload', () => {})
     mock.method(S3.prototype, 'uploadStream', () => {})
     mock.method(S3.prototype, 'delete', () => {})

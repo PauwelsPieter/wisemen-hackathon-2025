@@ -1,11 +1,12 @@
 import { DocumentBuilder, getSchemaPath } from '@nestjs/swagger'
 import { HttpStatus } from '@nestjs/common'
 import { OpenApiDocument } from '../types/open-api-document.js'
-import { EnvType } from '../../config/env.enum.js'
 import { InternalServerApiError } from '../../exceptions/api-errors/internal-server.api-error.js'
-import { buildBaseUrl } from './build-base-url.js'
+import { OpenIdConnectOptions } from '../types/open-id-connect-options.js'
+import { EnvType } from '../../config/env.enum.js'
+import { LOCAL_SERVER_URL } from '../swagger.constant.js'
 
-export function buildApiDocumentation (): OpenApiDocument {
+export function buildApiDocumentation (options?: OpenIdConnectOptions): OpenApiDocument {
   const builder = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('The API documentation description')
@@ -27,25 +28,59 @@ export function buildApiDocumentation (): OpenApiDocument {
       }
     })
 
-  const environments = Object.values(EnvType)
-  const currentEnv = process.env.NODE_ENV
-
-  const currentEnvironmentIndex = environments.findIndex(environment => environment === currentEnv)
-
-  environments.unshift(...environments.splice(currentEnvironmentIndex, 1))
-
-  for (const environment of environments) {
-    builder.addServer(buildBaseUrl(environment))
-  }
-
-  const openIdConnectUrl = process.env.SWAGGER_OPENID_CONNECT_URL
-
-  if (openIdConnectUrl !== undefined) {
-    builder.addOAuth2({
-      type: 'openIdConnect',
-      openIdConnectUrl: openIdConnectUrl
-    })
-  }
+  addServers(builder)
+  addAuthentication(builder, options)
 
   return builder.build()
+}
+
+function addServers (builder: DocumentBuilder) {
+  const servers = process.env.OPEN_API_SERVERS?.split(',') ?? []
+
+  const envType = process.env.NODE_ENV as EnvType
+
+  if (envType === EnvType.LOCAL) {
+    servers.unshift(LOCAL_SERVER_URL)
+  } else {
+    servers.push(LOCAL_SERVER_URL)
+  }
+
+  for (const server of servers) {
+    builder.addServer(server)
+  }
+}
+
+function addAuthentication (builder: DocumentBuilder, options?: OpenIdConnectOptions) {
+  if (options == null) {
+    return
+  }
+
+  const supportedScopes = options.scopes_supported ?? []
+  const scopesObject: Record<string, string> = Object.fromEntries(
+    supportedScopes.map(scope => [scope, scope])
+  )
+
+  const additionalScopeObjects = process.env.OPEN_API_SCOPES?.split(',') ?? []
+
+  for (const scopeObject of additionalScopeObjects) {
+    const [scope, description] = scopeObject.split(' ')
+
+    if (scope == null) {
+      continue
+    }
+
+    scopesObject[scope] = description ?? scope
+  }
+
+  builder.addOAuth2({
+    type: 'oauth2',
+    flows: {
+      authorizationCode: {
+        authorizationUrl: options.authorization_endpoint,
+        tokenUrl: options.token_endpoint,
+        refreshUrl: options.token_endpoint,
+        scopes: scopesObject
+      }
+    }
+  })
 }

@@ -24,7 +24,7 @@ class Api extends ApiContainer {
       exposedHeaders: ['Content-Disposition']
     })
 
-    SwaggerModule.addDocumentation(app)
+    await SwaggerModule.addDocumentation(app)
 
     return app
   }
