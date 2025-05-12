@@ -1,7 +1,9 @@
 type ExtractParams<T> =
-  T extends `${infer _Start}.{${infer Param}}${infer Rest}`
+  T extends `{${infer Param}}.${infer Rest}`
     ? { [K in Param]: string } & ExtractParams<Rest>
-    : object
+    : T extends `${infer _Start}.{${infer Param}}${infer Rest}`
+      ? { [K in Param]: string } & ExtractParams<Rest>
+      : object
 
 export function natsSubject<Topic extends string> (
   topic: Topic,
