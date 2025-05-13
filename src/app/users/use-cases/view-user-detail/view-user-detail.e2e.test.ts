@@ -6,7 +6,7 @@ import type { TestUser } from '../../tests/setup-user.type.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 
-describe('View user e2e test', () => {
+describe('View user detail e2e test', () => {
   let setup: EndToEndTestSetup
   let adminUser: TestUser
   let authorizedUser: TestUser

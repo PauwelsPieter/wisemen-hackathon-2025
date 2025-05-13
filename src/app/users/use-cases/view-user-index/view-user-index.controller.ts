@@ -2,27 +2,27 @@ import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { Controller, Get, Query } from '@nestjs/common'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
-import { ViewUsersQuery } from './view-users.query.js'
-import { ViewUsersUseCase } from './view-users.use-case.js'
-import { ViewUsersResponse } from './view-users.response.js'
+import { ViewUserIndexQuery } from './view-user-index.query.js'
+import { ViewUserIndexUseCase } from './view-user-index.use-case.js'
+import { ViewUserIndexResponse } from './view-user-index.response.js'
 
 @ApiTags('User')
 @ApiOAuth2([])
 @Controller('users')
-export class ViewUsersController {
+export class ViewUserIndexController {
   constructor (
-    private readonly useCase: ViewUsersUseCase
+    private readonly useCase: ViewUserIndexUseCase
   ) {}
 
   @Get()
   @Permissions(Permission.USER_READ)
   @ApiOkResponse({
     description: 'Users retrieved',
-    type: ViewUsersResponse
+    type: ViewUserIndexResponse
   })
-  async viewUser (
-    @Query() query: ViewUsersQuery
-  ): Promise<ViewUsersResponse> {
+  async viewUsers (
+    @Query() query: ViewUserIndexQuery
+  ): Promise<ViewUserIndexResponse> {
     return await this.useCase.viewUsers(query)
   }
 }

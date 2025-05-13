@@ -5,8 +5,8 @@ import { TypesenseModule } from '../../modules/typesense/typesense.module.js'
 import { UserAuthService } from './services/user-auth.service.js'
 import { SetUserRolesModule } from './use-cases/set-user-roles/set-user-roles.module.js'
 import { ViewMeModule } from './use-cases/view-me/view-me.module.js'
-import { ViewUserModule } from './use-cases/view-user/view-user.module.js'
-import { ViewUsersModule } from './use-cases/view-users/view-users.module.js'
+import { ViewUserDetailModule } from './use-cases/view-user-detail/view-user-detail.module.js'
+import { ViewUserIndexModule } from './use-cases/view-user-index/view-user-index.module.js'
 import { GetOrCreateUserModule } from './use-cases/get-or-create-user/get-or-create-user.module.js'
 import {
   AssignDefaultRoleToUserSubscriberModule
@@ -18,8 +18,8 @@ import {
     TypesenseModule,
     SetUserRolesModule,
     ViewMeModule,
-    ViewUserModule,
-    ViewUsersModule,
+    ViewUserDetailModule,
+    ViewUserIndexModule,
     GetOrCreateUserModule,
     AssignDefaultRoleToUserSubscriberModule
   ],

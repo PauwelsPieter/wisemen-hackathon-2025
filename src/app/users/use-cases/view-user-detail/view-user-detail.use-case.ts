@@ -5,7 +5,7 @@ import { User } from '../../entities/user.entity.js'
 import { UserUuid } from '../../entities/user.uuid.js'
 
 @Injectable()
-export class ViewUserUseCase {
+export class ViewUserDetailUseCase {
   constructor (
     @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}

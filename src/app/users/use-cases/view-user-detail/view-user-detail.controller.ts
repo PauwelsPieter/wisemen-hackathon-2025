@@ -4,28 +4,28 @@ import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { UserUuid } from '../../entities/user.uuid.js'
-import { ViewUserUseCase } from './view-user.use-case.js'
-import { ViewUserResponse } from './view-user.response.js'
+import { ViewUserDetailUseCase } from './view-user-detail.use-case.js'
+import { ViewUserDetailResponse } from './view-user-detail.response.js'
 
 @ApiTags('User')
 @ApiOAuth2([])
 @Controller('users/:uuid')
-export class ViewUserController {
+export class ViewUserDetailController {
   constructor (
-    private readonly useCase: ViewUserUseCase
+    private readonly useCase: ViewUserDetailUseCase
   ) {}
 
   @Get()
   @Permissions(Permission.USER_READ)
   @ApiOkResponse({
     description: 'User details retrieved',
-    type: ViewUserResponse
+    type: ViewUserDetailResponse
   })
   async viewUser (
     @UuidParam('uuid') userUuid: UserUuid
-  ): Promise<ViewUserResponse> {
+  ): Promise<ViewUserDetailResponse> {
     const user = await this.useCase.viewUser(userUuid)
 
-    return new ViewUserResponse(user)
+    return new ViewUserDetailResponse(user)
   }
 }

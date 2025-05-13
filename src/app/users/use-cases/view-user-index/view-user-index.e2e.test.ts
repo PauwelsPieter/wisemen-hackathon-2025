@@ -2,17 +2,13 @@ import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import type { TestUser } from '../../tests/setup-user.type.js'
-import {
-  TypesenseCollectionService
-} from '../../../../modules/typesense/services/typesense-collection.service.js'
-import {
-  TypesenseCollectionName
-} from '../../../../modules/typesense/collections/typesense-collection-name.enum.js'
+import { TypesenseCollectionService } from '../../../../modules/typesense/services/typesense-collection.service.js'
+import { TypesenseCollectionName } from '../../../../modules/typesense/collections/typesense-collection-name.enum.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
 import { MigrateCollectionsUseCase } from '../../../../modules/typesense/use-cases/migrate-collections/migrate-collections.use-case.js'
 
-describe('View users e2e test', () => {
+describe('View user index e2e test', () => {
   let setup: EndToEndTestSetup
   let adminUser: TestUser
   let defaultUser: TestUser
@@ -59,5 +55,27 @@ describe('View users e2e test', () => {
 
     expect(response).toHaveStatus(200)
     expect(response.body.items).toHaveLength(2)
+  })
+
+  it('includes user roles', async () => {
+    const response = await request(setup.httpServer)
+      .get('/users')
+      .set('Authorization', `Bearer ${adminUser.token}`)
+      .query({
+        pagination: {
+          limit: 10,
+          offset: 0
+        }
+      })
+
+    expect(response).toHaveStatus(200)
+    expect(response.body.items).toStrictEqual(expect.arrayContaining([
+      expect.objectContaining({
+        roles: expect.arrayContaining([{
+          uuid: defaultUser.user.userRoles![0].role!.uuid,
+          name: defaultUser.user.userRoles![0].role!.name
+        }])
+      })
+    ]))
   })
 })

@@ -1,7 +1,8 @@
 import type { User } from '../entities/user.entity.js'
+import { UserUuid } from '../entities/user.uuid.js'
 
 export class TypesenseUser {
-  id: string
+  id: UserUuid
   firstName: string
   lastName: string
   email: string

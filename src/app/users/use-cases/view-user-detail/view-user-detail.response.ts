@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import type { User } from '../../entities/user.entity.js'
 import { ViewRoleDetailResponse } from '../../../roles/use-cases/view-role-detail/view-role-detail.response.js'
 
-export class ViewUserResponse {
+export class ViewUserDetailResponse {
   @ApiProperty({ type: String, format: 'uuid' })
   uuid: string
 
