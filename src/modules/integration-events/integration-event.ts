@@ -10,7 +10,7 @@ import { IntegrationEventType } from './integration-event.type.js'
 export class IntegrationEvent<Content extends Serializable = Serializable> {
   id: string
   time: string
-  contentType: string
+  datacontenttype: string
   source: string
   type: IntegrationEventType
   specVersion: string
@@ -26,7 +26,7 @@ export class IntegrationEvent<Content extends Serializable = Serializable> {
     this.time = new Date().toISOString()
     this.type = options.type
     this.specVersion = String(options.version)
-    this.contentType = 'application/json'
+    this.datacontenttype = 'application/json'
     this.data = options.data
   }
 }
