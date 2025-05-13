@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { JsMsg } from '@nats-io/jetstream'
 import { NatsConsumer } from '../../consumers/nats-consumer.decorator.js'
-import { OnJetstreamMessage } from '../../consumers/on-jetstream-message.decorator.js'
+import { OnNatsMessage } from '../../message-handler/on-nats-message.decorator.js'
 import { ExampleNatsClient } from './example-nats-client.js'
 
 @NatsConsumer({
@@ -13,7 +13,7 @@ import { ExampleNatsClient } from './example-nats-client.js'
   replay_policy: 'instant'
 })
 export class ExampleNatsConsumer {
-  @OnJetstreamMessage()
+  @OnNatsMessage()
   on (message: JsMsg): void {
     Logger.log(`Received message ${new TextDecoder().decode(message.data)}`)
   }

@@ -3,16 +3,20 @@ import { applyDecorators } from '@nestjs/common'
 
 const NATS_ON_MESSAGE_KEY = Symbol('wisemen.nats-on-message')
 
-export interface OnNatsMessageOptions {
-  subscriber?: ClassConstructor<unknown>
-}
+type SubscriberOptions = { subscriber?: ClassConstructor<unknown> }
+type ConsumerOptions = { consumer?: ClassConstructor<unknown> }
 
-export interface OnNatsMessageConfig {
+export type OnNatsMessageConfig = {
   subscriber?: ClassConstructor<unknown>
+  methodName: string
+} | {
+  consumer?: ClassConstructor<unknown>
   methodName: string
 }
 
-export function OnNatsMessage (options?: OnNatsMessageOptions): MethodDecorator {
+export function OnNatsMessage (options?: SubscriberOptions): MethodDecorator
+export function OnNatsMessage (options?: ConsumerOptions): MethodDecorator
+export function OnNatsMessage (options?: SubscriberOptions | ConsumerOptions): MethodDecorator {
   return applyDecorators(
     (target: ClassConstructor<unknown>, methodName: string): void => {
       const config = Reflect.getMetadata(
@@ -28,7 +32,11 @@ export function OnNatsMessage (options?: OnNatsMessageOptions): MethodDecorator 
 }
 
 export function isNatsMessageHandler (target: ClassConstructor<unknown>): boolean {
-  return Reflect.getMetadata(NATS_ON_MESSAGE_KEY, target.prototype as object) !== undefined
+  const config = Reflect.getMetadata(
+    NATS_ON_MESSAGE_KEY,
+    target.prototype as object
+  ) as OnNatsMessageConfig | undefined
+  return config !== undefined
 }
 
 export function getNatsMessageHandlerConfig (

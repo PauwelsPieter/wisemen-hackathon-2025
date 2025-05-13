@@ -4,16 +4,17 @@ import { ClassConstructor } from 'class-transformer'
 import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { jetstreamManager } from '@nats-io/jetstream'
-import { getNatsMessageHandlerConfig } from './subscribers/on-nats-message.decorator.js'
+import { getNatsMessageHandlerConfig } from './message-handler/on-nats-message.decorator.js'
 import { NatsConnectionManager } from './clients/nats-connection.manager.js'
 import { getNatsServiceEndpoints } from './services/nats-service-endpoint.decorator.js'
 import { NatsServiceManager } from './services/nats-service.manager.js'
 import { NatsServiceEndpointHandler, ServiceMessageHandlerFunction } from './services/nats-service-endpoint.handler.js'
 import { NatsSubscriberManager } from './subscribers/nats-subscriber.manager.js'
 import { NatsConsumerManager } from './consumers/nats-consumer.manager.js'
-import { getJetstreamMessageHandlerConfig } from './consumers/on-jetstream-message.decorator.js'
 import { getNatsStreamConfig } from './streams/nats-stream.decorator.js'
 import { NatsMessageHandlerFunction } from './message-handler/nats-message-handler.js'
+import { isNatsSubscriber } from './subscribers/nats-subscriber.decorator.js'
+import { isNatsConsumer } from './consumers/nats-consumer.decorator.js'
 
 export class NatsApplication {
   private readonly connectionManager: NatsConnectionManager
@@ -68,29 +69,29 @@ export class NatsApplication {
     }
   }
 
-  async addSubscriberHandler (
+  async addMessageHandler (
     handlerClass: ClassConstructor<unknown>,
     instance: object
   ): Promise<void> {
     const handlerConfig = getNatsMessageHandlerConfig(handlerClass)
     for (const { methodName, ...options } of handlerConfig) {
       const handler = new NatsMessageHandlerFunction({ handlerClass, instance, methodName })
-      const subscriberClass = options.subscriber ?? handlerClass
-      const subcriber = await this.subscriberManager.createSubscriber(subscriberClass)
-      subcriber.addFallBackHandler(handler)
-    }
-  }
 
-  async addConsumerHandler (
-    handlerClass: ClassConstructor<unknown>,
-    instance: object
-  ): Promise<void> {
-    const handlerConfig = getJetstreamMessageHandlerConfig(handlerClass)
-    for (const { methodName, ...options } of handlerConfig) {
-      const handler = new NatsMessageHandlerFunction({ handlerClass, instance, methodName })
-      const consumerClass = options.consumer ?? handlerClass
-      const consumer = await this.consumerManager.createConsumer(consumerClass)
-      consumer.addFallBackHandler(handler)
+      if ('subscriber' in options || isNatsSubscriber(handlerClass)) {
+        const subscriberClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
+        const subcriber = await this.subscriberManager.createSubscriber(subscriberClass)
+        subcriber.addFallBackHandler(handler)
+      } else if ('consumer' in handlerConfig || isNatsConsumer(handlerClass)) {
+        const consumerClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
+        const consumer = await this.consumerManager.createConsumer(consumerClass)
+        consumer.addFallBackHandler(handler)
+      } else {
+        throw new Error('No subscriber or consumer configured for message handler.'
+          + '\nDid you forget to add a `subscriber` or `consumer` in the options of the handler?'
+          + '\nDid you forget to add `@NatsSubscriber(...)` or `@NatsConsumer(...)` to the class on'
+          + ' which the handler is defined?'
+        )
+      }
     }
   }
 

@@ -2,10 +2,9 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClassConstructor } from 'class-transformer'
 import { ProvidersExplorer, NestjsProvider } from '../../../utils/providers/providers-explorer.js'
-import { isNatsMessageHandler } from './subscribers/on-nats-message.decorator.js'
+import { isNatsMessageHandler } from './message-handler/on-nats-message.decorator.js'
 import { NatsApplication } from './nats-application.js'
 import { holdsNatsServiceEndpoints } from './services/nats-service-endpoint.decorator.js'
-import { isJetstreamMessageHandler } from './consumers/on-jetstream-message.decorator.js'
 
 @Injectable()
 export class NatsApplicationFactory {
@@ -42,14 +41,7 @@ export class NatsApplicationFactory {
     }
 
     if (isNatsMessageHandler(providerWrapper.providerClass)) {
-      await app.addSubscriberHandler(
-        providerWrapper.providerClass,
-        providerWrapper.providerInstance
-      )
-    }
-
-    if (isJetstreamMessageHandler(providerWrapper.providerClass)) {
-      await app.addConsumerHandler(
+      await app.addMessageHandler(
         providerWrapper.providerClass,
         providerWrapper.providerInstance
       )
