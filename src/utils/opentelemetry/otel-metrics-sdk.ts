@@ -29,7 +29,7 @@ export function configureOpentelemetryMetrics (serviceName: string): NodeSDK | n
       url: metricsUrl,
       headers
     }),
-    exportIntervalMillis: 10000,
+    exportIntervalMillis: 30000,
     exportTimeoutMillis: 10000
   })
 
