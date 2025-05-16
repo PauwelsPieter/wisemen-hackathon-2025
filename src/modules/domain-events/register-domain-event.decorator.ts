@@ -1,4 +1,4 @@
-import { assert } from 'console'
+import assert from 'assert'
 import { ClassConstructor } from 'class-transformer'
 import { DomainEventType } from './domain-event-type.js'
 import { DomainEvent } from './domain-event.js'
