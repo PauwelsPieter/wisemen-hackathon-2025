@@ -28,7 +28,11 @@ export class NatsApplication {
   ) {
     this.connectionManager = new NatsConnectionManager(configService)
     this.serviceManager = new NatsServiceManager(this.connectionManager, this.defaultClient)
-    this.subscriberManager = new NatsSubscriberManager(this.connectionManager, this.defaultClient)
+    this.subscriberManager = new NatsSubscriberManager(
+      this.connectionManager,
+      configService,
+      this.defaultClient
+    )
     this.consumerManager = new NatsConsumerManager(this.connectionManager, this.defaultClient)
   }
 

@@ -1,6 +1,7 @@
 import { ClassConstructor } from 'class-transformer'
 import { applyDecorators, Injectable } from '@nestjs/common'
 import { SubscriptionOptions } from '@nats-io/transport-node'
+import { ConfigService } from '@nestjs/config'
 
 const NATS_SUBSCRIBER_KEY = Symbol('wisemen.nats-subscriber')
 export interface NatsSubscriptionOptions extends Omit<SubscriptionOptions, 'callback'> {
@@ -9,7 +10,11 @@ export interface NatsSubscriptionOptions extends Omit<SubscriptionOptions, 'call
   subject: string
 }
 
-export function NatsSubscriber (options: NatsSubscriptionOptions): ClassDecorator {
+export type NatsSubscriberConfigFunction = (configService: ConfigService) => NatsSubscriptionOptions
+
+export function NatsSubscriber (
+  options: NatsSubscriberConfigFunction
+): ClassDecorator {
   return applyDecorators(
     Injectable(),
     (target: ClassConstructor<unknown>): void => {
@@ -23,14 +28,18 @@ export function isNatsSubscriber (target: ClassConstructor<unknown>): boolean {
 }
 
 export function getNatsSubscriberOptions (
-  target: ClassConstructor<unknown>
+  target: ClassConstructor<unknown>,
+  configService: ConfigService
 ): NatsSubscriptionOptions {
-  const options = Reflect.getMetadata(NATS_SUBSCRIBER_KEY, target) as unknown
+  const options = Reflect.getMetadata(
+    NATS_SUBSCRIBER_KEY,
+    target
+  ) as NatsSubscriberConfigFunction
 
   if (options === undefined) {
     throw new Error(`${target.name} is not a valid nats subscriber\n`
       + `Did you forget to add the @NatsSubscriber({...}) decorator?`)
   }
 
-  return options as NatsSubscriptionOptions
+  return (options)(configService)
 }

@@ -1,5 +1,6 @@
 import { ClassConstructor } from 'class-transformer'
 import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { NatsConnectionManager } from '../clients/nats-connection.manager.js'
 import { NatsSubscription } from './nats-subscription.js'
 import { getNatsSubscriberOptions } from './nats-subscriber.decorator.js'
@@ -9,6 +10,7 @@ export class NatsSubscriberManager {
 
   constructor (
     private readonly connectionManager: NatsConnectionManager,
+    private readonly configService: ConfigService,
     private readonly defaultClient?: ClassConstructor<unknown>
   ) {}
 
@@ -18,7 +20,7 @@ export class NatsSubscriberManager {
       return existingSubscriber
     }
 
-    const subscriberOptions = getNatsSubscriberOptions(subscriberClass)
+    const subscriberOptions = getNatsSubscriberOptions(subscriberClass, this.configService)
     const client = subscriberOptions.client ?? this.defaultClient
 
     if (client === undefined) {

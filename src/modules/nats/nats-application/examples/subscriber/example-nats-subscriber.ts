@@ -7,6 +7,9 @@ import { NatsMessageData } from '../../parameters/nats-message-data.decorator.js
 import { NatsMsgDataValidationPipe } from '../../parameters/pipes/nats-message-data-validation.pipe.js'
 import { NatsMessageSubject } from '../../parameters/nats-message-subject.decorator.js'
 import { NatsMsgDataJsonPipe } from '../../parameters/pipes/nats-message-data-json.pipe.js'
+import { natsSubject } from '../../nats-subject.js'
+
+const EXAMPLE_SUBJECT = '{env}.example.>'
 
 class ExampleIncomingEvent {
   @IsString()
@@ -14,10 +17,12 @@ class ExampleIncomingEvent {
   name: string
 }
 
-@NatsSubscriber({
-  subject: 'test.>',
-  client: WebappNatsClient
-})
+@NatsSubscriber(configService => ({
+  client: WebappNatsClient,
+  subject: natsSubject(EXAMPLE_SUBJECT, {
+    env: configService.getOrThrow<string>('NODE_ENV')
+  })
+}))
 export class ExampleNatsSubscriber {
   @OnNatsMessage()
   on (
