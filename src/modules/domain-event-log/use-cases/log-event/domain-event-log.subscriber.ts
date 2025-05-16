@@ -6,6 +6,7 @@ import { DomainEventLog } from '../../domain-event-log.entity.js'
 import { AuthContext } from '../../../auth/auth.context.js'
 import { DomainEvent } from '../../../domain-events/domain-event.js'
 import { SubscribeToAll } from '../../../domain-events/subscribe-all.decorator.js'
+import { DomainEventLogEntityBuilder } from '../../domain-event-log.entity.builder.js'
 
 @Injectable()
 export class DomainEventLogSubscriber {
@@ -20,16 +21,19 @@ export class DomainEventLogSubscriber {
     const logs: DomainEventLog[] = []
 
     for (const event of events) {
-      logs.push(this.eventLog.create({
-        uuid: event.id,
-        createdAt: event.createdAt,
-        source: event.source,
-        type: event.type,
-        version: event.version,
-        content: event.content,
-        userUuid: this.authContext.getUserUuid(),
-        traceId: span?.spanContext().traceId ?? null
-      }))
+      const log = new DomainEventLogEntityBuilder()
+        .withUuid(event.id)
+        .withCreatedAt(event.createdAt)
+        .withSource(event.source)
+        .withType(event.type)
+        .withVersion(event.version)
+        .withContent(event.content)
+        .withSubjectType(event.subjectType)
+        .withSubjectId(event.subjectId)
+        .withUserUuid(this.authContext.getUserUuid())
+        .withTraceId(span?.spanContext().traceId ?? null)
+        .build()
+      logs.push(log)
     }
 
     await this.eventLog.insert(logs)

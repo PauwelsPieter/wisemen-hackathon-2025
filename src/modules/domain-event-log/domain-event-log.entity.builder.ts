@@ -48,18 +48,23 @@ export class DomainEventLogEntityBuilder {
     return this
   }
 
-  withSubjectType (type: DomainEventSubjectType | null): this {
-    this.log.subjectType = type
+  withSubjectType (type?: DomainEventSubjectType | null): this {
+    this.log.subjectType = type ?? null
     return this
   }
 
-  withSubjectId (id: string | null): this {
-    this.log.subjectId = id
+  withSubjectId (id?: string | null): this {
+    this.log.subjectId = id ?? null
     return this
   }
 
   withUserUuid (uuid: UserUuid | null): this {
     this.log.userUuid = uuid
+    return this
+  }
+
+  withTraceId (traceId: string | null): this {
+    this.log.traceId = traceId
     return this
   }
 
