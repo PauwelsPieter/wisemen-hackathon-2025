@@ -22,6 +22,6 @@ export function NotificationTypeColumn (
     ...options,
     type: 'enum',
     enum: NotificationType,
-    enumName: 'notification-type'
+    enumName: 'notification_type'
   })
 }
