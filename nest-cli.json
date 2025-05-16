@@ -57,10 +57,10 @@
       "entryFile": "entrypoints/playground",
       "sourceRoot": "src"
     },
-    "opentelemetry-metrics": {
+    "otel-metrics-reporter": {
       "type": "application",
       "root": "src",
-      "entryFile": "entrypoints/opentelemetry-metrics",
+      "entryFile": "entrypoints/otel-metrics-reporter",
       "sourceRoot": "src"
     }
   }
