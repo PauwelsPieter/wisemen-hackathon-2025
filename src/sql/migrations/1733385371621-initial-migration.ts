@@ -4,6 +4,7 @@ export class InitialMigration1733385371621 implements MigrationInterface {
   name = 'InitialMigration1733385371621'
 
   public async up (queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS postgis`)
     await queryRunner.query(`
             CREATE TABLE "file_link"
             (
