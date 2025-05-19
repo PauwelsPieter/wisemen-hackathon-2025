@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { PermissionModule } from '../permission/permission.module.js'
-import { PermissionsGuard } from '../permission/permission.guard.js'
+import { PermissionsGuard } from '../permission/guards/permission.guard.js'
 import { UserModule } from '../../app/users/user.module.js'
 import { AuthGuard } from './guards/auth.guard.js'
 import { AuthContext } from './auth.context.js'

@@ -1,22 +1,12 @@
 import { Module } from '@nestjs/common'
-import { RoleCacheModule } from '../../app/roles/cache/role-cache.module.js'
-import { UserCacheModule } from '../../app/users/cache/user-cache.module.js'
-import { PermissionController } from './controllers/permission.controller.js'
-import { PermissionService } from './permission.service.js'
+import { ViewPermissionIndexModule } from './use-cases/view-permission-index/view-permission-index.module.js'
+import { PermissionsGuardModule } from './guards/permission.guard.module.js'
 
 @Module({
   imports: [
-    RoleCacheModule,
-    UserCacheModule
+    ViewPermissionIndexModule,
+    PermissionsGuardModule
   ],
-  controllers: [
-    PermissionController
-  ],
-  providers: [
-    PermissionService
-  ],
-  exports: [
-    PermissionService
-  ]
+  exports: [PermissionsGuardModule]
 })
 export class PermissionModule {}

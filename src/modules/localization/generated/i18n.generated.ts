@@ -93,6 +93,174 @@ export type I18nTranslations = {
         };
         "test-notification": string;
     };
+    "permissions": {
+        "all_permissions": {
+            "group-name": string;
+            "name": string;
+            "description": string;
+        };
+        "contact": {
+            "group-name": string;
+            "create": {
+                "name": string;
+                "description": string;
+            };
+            "read": {
+                "name": string;
+                "description": string;
+            };
+            "update": {
+                "name": string;
+                "description": string;
+            };
+            "delete": {
+                "name": string;
+                "description": string;
+            };
+        };
+        "event-log": {
+            "group-name": string;
+            "read": {
+                "name": string;
+                "description": string;
+            };
+        };
+        "file": {
+            "group-name": string;
+            "read": {
+                "name": string;
+                "description": string;
+            };
+            "create": {
+                "name": string;
+                "description": string;
+            };
+            "delete": {
+                "name": string;
+                "description": string;
+            };
+        };
+        "jobs": {
+            "group-name": string;
+            "read": {
+                "index": {
+                    "name": string;
+                    "description": string;
+                };
+                "detail": {
+                    "name": string;
+                    "description": string;
+                };
+            };
+        };
+        "notification": {
+            "group-name": string;
+            "read": {
+                "own": {
+                    "name": string;
+                    "description": string;
+                };
+                "config": {
+                    "name": string;
+                    "description": string;
+                };
+            };
+            "update": {
+                "read": {
+                    "name": string;
+                    "description": string;
+                };
+                "unread": {
+                    "name": string;
+                    "description": string;
+                };
+            };
+            "preferences": {
+                "update": {
+                    "channel": {
+                        "name": string;
+                        "description": string;
+                    };
+                    "preset": {
+                        "name": string;
+                        "description": string;
+                    };
+                    "types": {
+                        "name": string;
+                        "description": string;
+                    };
+                };
+                "read": {
+                    "own": {
+                        "name": string;
+                        "description": string;
+                    };
+                };
+            };
+            "migrate-type": {
+                "name": string;
+                "description": string;
+            };
+            "send-test": {
+                "name": string;
+                "description": string;
+            };
+        };
+        "role": {
+            "group-name": string;
+            "read": {
+                "name": string;
+                "description": string;
+            };
+            "create": {
+                "name": string;
+                "description": string;
+            };
+            "update": {
+                "name": string;
+                "description": string;
+            };
+            "delete": {
+                "name": string;
+                "description": string;
+            };
+            "cache": {
+                "clear": {
+                    "name": string;
+                    "description": string;
+                };
+            };
+        };
+        "send_push_notification": {
+            "group-name": string;
+            "name": string;
+            "description": string;
+        };
+        "typesense": {
+            "group-name": string;
+            "name": string;
+            "description": string;
+        };
+        "user": {
+            "group-name": string;
+            "read": {
+                "name": string;
+                "description": string;
+            };
+            "create": {
+                "name": string;
+                "description": string;
+            };
+            "update": {
+                "name": string;
+                "description": string;
+            };
+            "delete": {
+                "name": string;
+                "description": string;
+            };
+        };
+    };
 };
 /* prettier-ignore */
 export type I18nPath = Path<I18nTranslations>;

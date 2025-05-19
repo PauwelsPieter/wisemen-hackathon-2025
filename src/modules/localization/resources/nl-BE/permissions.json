@@ -1,0 +1,168 @@
+{
+    "all_permissions": {
+        "group-name": "Beheer",
+        "name": "Alle rechten",
+        "description": "Deze permissie is een speciale permissie die alle andere permissies overschrijft"
+    },
+    "contact": {
+        "group-name": "Contactpersonen",
+        "create": {
+            "name": "Aanmaken",
+            "description": "Contactpersonen aanmaken"
+        },
+        "read": {
+            "name": "Bekijken",
+            "description": "Overzicht en detailinformatie van contactpersonen bekijken"
+        },
+        "update": {
+            "name": "Bewerken",
+            "description": "Contactpersonen bewerken"
+        },
+        "delete": {
+            "name": "Verwijderen",
+            "description": "Contactpersonen verwijderen"
+        }
+    },
+    "event-log": {
+        "group-name": "Logboek",
+        "read": {
+            "name": "Bekijken",
+            "description": "Logboekgegevens bekijken"
+        }
+    },
+    "file": {
+        "group-name": "Bestanden",
+        "read": {
+            "name": "Bekijken",
+            "description": "Geüploade bestanden bekijken"
+        },
+        "create": {
+            "name": "Uploaden",
+            "description": "Nieuwe bestanden uploaden"
+        },
+        "delete": {
+            "name": "Verwijderen",
+            "description": "Geüploade bestanden verwijderen"
+        }
+    },
+    "jobs": {
+        "group-name": "Taken",
+        "read": {
+            "index": {
+                "name": "Lijst bekijken",
+                "description": "Takenlijst bekijken"
+            },
+            "detail": {
+                "name": "Details bekijken",
+                "description": "Gedetailleerde informatie over taken bekijken"
+            }
+        }
+    },
+    "notification": {
+        "group-name": "Meldingen",
+        "read": {
+            "own": {
+                "name": "Eigen meldingen",
+                "description": "Eigen meldingen bekijken"
+            },
+            "config": {
+                "name": "Configuratie bekijken",
+                "description": "Instellingen voor meldingen bekijken"
+            }
+        },
+        "update": {
+            "read": {
+                "name": "Markeer als gelezen",
+                "description": "Meldingen markeren als gelezen"
+            },
+            "unread": {
+                "name": "Markeer als ongelezen",
+                "description": "Meldingen markeren als ongelezen"
+            }
+        },
+        "preferences": {
+            "update": {
+                "channel": {
+                    "name": "Kanalen aanpassen",
+                    "description": "Voorkeurskanalen voor meldingen wijzigen"
+                },
+                "preset": {
+                    "name": "Presets aanpassen",
+                    "description": "Voorkeursinstellingen voor meldingen wijzigen"
+                },
+                "types": {
+                    "name": "Types aanpassen",
+                    "description": "Toegestane meldingstypes wijzigen"
+                }
+            },
+            "read": {
+                "own": {
+                    "name": "Voorkeuren bekijken",
+                    "description": "Eigen meldingsvoorkeuren bekijken"
+                }
+            }
+        },
+        "migrate-type": {
+            "name": "Type migreren",
+            "description": "Meldingstypes migreren"
+        },
+        "send-test": {
+            "name": "Testmelding verzenden",
+            "description": "Een testmelding versturen"
+        }
+    },
+    "role": {
+        "group-name": "Rollen",
+        "read": {
+            "name": "Bekijken",
+            "description": "Rollen en rechten bekijken"
+        },
+        "create": {
+            "name": "Aanmaken",
+            "description": "Nieuwe rollen aanmaken"
+        },
+        "update": {
+            "name": "Bewerken",
+            "description": "Bestaande rollen bewerken"
+        },
+        "delete": {
+            "name": "Verwijderen",
+            "description": "Rollen verwijderen"
+        },
+        "cache": {
+            "clear": {
+                "name": "Cache legen",
+                "description": "Permissiecache van rollen legen"
+            }
+        }
+    },
+    "send_push_notification": {
+        "group-name": "Pushmeldingen",
+        "name": "Push verzenden",
+        "description": "Pushmeldingen versturen naar gebruikers"
+    },
+    "typesense": {
+        "group-name": "Zoekfunctie",
+        "name": "Typesense openen",
+        "description": "Typesense-index beheren en raadplegen"
+    },
+    "user": {
+        "group-name": "Gebruikers",
+        "read": {
+            "name": "Bekijken",
+            "description": "Gebruikersaccounts bekijken"
+        },
+        "create": {
+            "name": "Aanmaken",
+            "description": "Gebruikersaccounts aanmaken"
+        },
+        "update": {
+            "name": "Bewerken",
+            "description": "Gebruikersaccounts bewerken"
+        },
+        "delete": {
+            "name": "Verwijderen",
+            "description": "Gebruikersaccounts verwijderen"
+        }
+    }
+}

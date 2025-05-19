@@ -1,15 +1,15 @@
 import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthContext } from '../auth/auth.context.js'
-import type { Permission } from './permission.enum.js'
-import { PERMISSIONS_KEY } from './permission.decorator.js'
-import { PermissionService } from './permission.service.js'
+import { AuthContext } from '../../auth/auth.context.js'
+import type { Permission } from '../permission.enum.js'
+import { PERMISSIONS_KEY } from '../permission.decorator.js'
+import { PermissionGuardService } from './permission.guard.service.js'
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor (
     private readonly reflector: Reflector,
-    private readonly permissionService: PermissionService,
+    private readonly permissionService: PermissionGuardService,
     private readonly authContext: AuthContext
   ) {}
 

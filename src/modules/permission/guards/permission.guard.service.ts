@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { UserCache } from '../../app/users/cache/user-cache.js'
-import { RoleCache } from '../../app/roles/cache/role-cache.service.js'
-import { UserUuid } from '../../app/users/entities/user.uuid.js'
-import { Permission } from './permission.enum.js'
+import { UserCache } from '../../../app/users/cache/user-cache.js'
+import { RoleCache } from '../../../app/roles/cache/role-cache.service.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { Permission } from '../permission.enum.js'
 
 @Injectable()
-export class PermissionService {
+export class PermissionGuardService {
   constructor (
     private readonly userCache: UserCache,
     private readonly roleCache: RoleCache
