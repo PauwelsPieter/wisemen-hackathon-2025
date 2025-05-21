@@ -25,6 +25,7 @@ export class GetMyNotificationsUseCase {
     const queryBuilder = this.repo.createQueryBuilder('user_notification')
       .where('user_notification.userUuid = :userUuid', { userUuid })
       .leftJoinAndSelect('user_notification.notification', 'notification')
+      .leftJoinAndSelect('notification.createdByUser', 'createdByUser')
       .orderBy('user_notification.createdAt', 'DESC')
       .addOrderBy('user_notification.notificationUuid', 'DESC')
       .take(query.pagination?.limit ?? DEFAULT_LIMIT)

@@ -27,6 +27,7 @@ export class GetMyNotificationsResponse implements PaginatedKeysetResponse {
   constructor (userNotifications: UserNotification[]) {
     const items = userNotifications.map((item) => {
       assert(item.notification, 'Notification should be populated')
+      assert(item.notification.createdByUser !== undefined, 'CreatedByUser should be populated')
       return new NotificationResponse(item)
     })
 

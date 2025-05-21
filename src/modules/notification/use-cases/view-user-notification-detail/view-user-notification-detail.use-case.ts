@@ -20,7 +20,7 @@ export class ViewUserNotificationDetailUseCase {
 
     const notification = await this.repository.findOneOrFail({
       where: { userUuid, notificationUuid, channel: NotificationChannel.APP },
-      relations: { notification: true }
+      relations: { notification: { createdByUser: true } }
     })
 
     return new NotificationResponse(notification)

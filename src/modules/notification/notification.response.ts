@@ -4,9 +4,23 @@ import { OneOfMetaApiProperty, OneOfResponse, OneOfTypeApiProperty } from '@wise
 import { Locale } from '../localization/enums/locale.enum.js'
 import { tc } from '../localization/helpers/translate.helper.js'
 import { Serializable } from '../../utils/types/serializable.js'
+import { User } from '../../app/users/entities/user.entity.js'
 import { NotificationType } from './enums/notification-types.enum.js'
 import { Notification } from './entities/notification.entity.js'
 import { UserNotification } from './entities/user-notification.entity.js'
+
+class CreatedByUserResponse {
+  @ApiProperty({ format: 'uuid' })
+  uuid: string
+
+  @ApiProperty()
+  name: string
+
+  constructor (user: User) {
+    this.uuid = user.uuid
+    this.name = user.fullName
+  }
+}
 
 @OneOfResponse(Notification)
 export class NotificationResponse {
@@ -19,6 +33,9 @@ export class NotificationResponse {
   @ApiProperty({ format: 'uuid' })
   notificationUuid: string
 
+  @ApiProperty({ type: CreatedByUserResponse, nullable: true })
+  createdByUser: CreatedByUserResponse | null
+
   @ApiProperty()
   message: string
 
@@ -30,8 +47,12 @@ export class NotificationResponse {
 
   constructor (userNotification: UserNotification, language?: Locale) {
     assert(userNotification.notification !== undefined, new Error('notification not loaded'))
+    assert(userNotification.notification.createdByUser !== undefined, new Error('createdByUser not loaded'))
 
     this.createdAt = userNotification.notification.createdAt.toISOString()
+    this.createdByUser = userNotification.notification.createdByUser
+      ? new CreatedByUserResponse(userNotification.notification.createdByUser)
+      : null
     this.message = this.getMessage(userNotification.notification, language)
     this.readAt = userNotification.readAt?.toISOString() ?? null
     this.type = userNotification.notification.type

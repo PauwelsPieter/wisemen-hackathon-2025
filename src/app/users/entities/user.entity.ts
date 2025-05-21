@@ -40,4 +40,8 @@ export class User {
 
   @OneToMany(() => UserRole, role => role.user)
   userRoles?: Array<Relation<UserRole>>
+
+  get fullName (): string {
+    return this.firstName + ' ' + this.lastName
+  }
 }
