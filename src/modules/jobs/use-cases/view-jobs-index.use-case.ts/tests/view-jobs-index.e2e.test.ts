@@ -29,7 +29,7 @@ describe('View job index end to end tests', () => {
 
   after(async () => await setup.teardown())
   afterEach(async () => {
-    await setup.dataSource.manager.delete('pgboss.job', {})
+    await setup.dataSource.manager.query('DELETE FROM pgboss.job')
   })
 
   it('responds with jobs', async () => {
