@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { CronjobUseCase } from '../cronjob.use-case.js'
 
 @Injectable()
-export class ExampleCronjobUseCase implements CronjobUseCase {
+export class ExampleCronjobUseCase {
   execute (): Promise<void> {
     return Promise.resolve()
   }

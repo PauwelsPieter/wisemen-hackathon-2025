@@ -5,9 +5,8 @@ import { JobContainer } from '@wisemen/app-container'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { AppModule } from '../app.module.js'
-import { CronjobModule } from '../modules/cronjobs/cronjob.module.js'
 import { CronjobType } from '../modules/cronjobs/cronjob-type.enum.js'
-import { CronjobUseCase } from '../modules/cronjobs/cronjob.use-case.js'
+import { CronjobFactory } from './cronjob.factory.js'
 
 const args = await yargs(hideBin(process.argv))
   .usage('$0 <type>', 'Run the specified cronjob')
@@ -25,18 +24,10 @@ startOpentelemetryTracing()
 export class Cronjob extends JobContainer {
   async bootstrap (): Promise<INestApplicationContext> {
     return await NestFactory.createApplicationContext(
-      AppModule.forRoot([
-        CronjobModule.forRootAsync({
-          type: args.type as unknown as CronjobType
-        })
-      ])
+      AppModule.forRoot([CronjobFactory.create(args.type)])
     )
   }
 
-  async execute (app: INestApplicationContext): Promise<void> {
-    const cronjobUseCase = app.get<CronjobUseCase>('CronjobUseCase')
-
-    await cronjobUseCase.execute()
-  }
+  async execute (): Promise<void> { }
 }
 const _cronjob = new Cronjob()
