@@ -99,15 +99,15 @@ describe('Update my notification type preferences e2e test', () => {
 
     expect(response).toHaveStatus(204)
 
-    const updatedSmsNotificationPreferences
+    const updatedEmailNotificationPreferences
     = await dataSource.manager.findOneOrFail(NotificationPreferences, {
       where: {
         userUuid: adminUser.user.uuid,
-        channel: NotificationChannel.SMS
+        channel: NotificationChannel.EMAIL
       }
     })
 
-    expect(updatedSmsNotificationPreferences.types).toStrictEqual(
+    expect(updatedEmailNotificationPreferences.types).toStrictEqual(
       expect.arrayContaining([]))
   })
 })
