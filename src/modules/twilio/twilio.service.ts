@@ -4,7 +4,7 @@ import { captureException } from '@sentry/nestjs'
 import twilio, { Twilio } from 'twilio'
 import { CallListInstanceCreateOptions } from 'twilio/lib/rest/api/v2010/account/call.js'
 import { MessageListInstanceCreateOptions } from 'twilio/lib/rest/api/v2010/account/message.js'
-import { TwilioUnavailableError } from './twilio-unailable.error.js'
+import { TwilioUnavailableError } from './twilio-unavailable.error.js'
 
 @Injectable()
 export class TwilioService {
