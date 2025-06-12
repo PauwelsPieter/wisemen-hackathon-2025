@@ -13,7 +13,7 @@ export class IntegrationEvent<Content extends Serializable = Serializable> {
   datacontenttype: string
   source: string
   type: IntegrationEventType
-  specVersion: string
+  specversion: string
   data: Content
 
   constructor (options: {
@@ -25,7 +25,7 @@ export class IntegrationEvent<Content extends Serializable = Serializable> {
     this.source = os.hostname()
     this.time = new Date().toISOString()
     this.type = options.type
-    this.specVersion = String(options.version)
+    this.specversion = String(options.version)
     this.datacontenttype = 'application/json'
     this.data = options.data
   }

@@ -1,14 +1,39 @@
 import { Consumer, ConsumerInfo, JsMsg } from '@nats-io/jetstream'
 import { Logger } from '@nestjs/common'
 import { captureException } from '@sentry/nestjs'
+import { plainToInstance } from 'class-transformer'
+import { validate } from 'class-validator'
+import { CloudEventHandlerOptions } from '../message-handler/on-nats-message.decorator.js'
 import { NatsMessageHandlerFunction } from '../message-handler/nats-message-handler.js'
+import { CloudEvent } from '../../../integration-events/cloud-event.js'
+
+type CloudEventKey = string
 
 export class NatsConsumption {
   private fallbackHandler: NatsMessageHandlerFunction | undefined
+  private cloudEventHandlers: Map<CloudEventKey, NatsMessageHandlerFunction> = new Map()
   constructor (
     private readonly consumerInfo: ConsumerInfo,
     private readonly consumer: Consumer
   ) {}
+
+  addCloudEventHandler (
+    eventOptions: CloudEventHandlerOptions,
+    handler: NatsMessageHandlerFunction
+  ): void {
+    const key = this.mapEventOptionsToKey(eventOptions)
+    if (this.cloudEventHandlers.get(key) !== undefined) {
+      throw new Error(`A cloud event handler already exists for `
+        + `${eventOptions.type} (${eventOptions.specversion}) on `
+        + `consumer ${this.consumerInfo.name}`)
+    }
+
+    Logger.log('Registered cloud event handler on '
+      + `consumer ${this.consumerInfo.name} for `
+      + `${eventOptions.type} (${eventOptions.specversion})`, 'NATS')
+
+    this.cloudEventHandlers.set(key, handler)
+  }
 
   addFallBackHandler (handler: NatsMessageHandlerFunction): void {
     if (this.fallbackHandler !== undefined) {
@@ -32,7 +57,7 @@ export class NatsConsumption {
 
   private async handleMessage (message: JsMsg): Promise<void> {
     try {
-      const handler = this.getHandler(message)
+      const handler = await this.getHandler(message)
       await handler.handle(message)
       message.ack()
     } catch (e) {
@@ -43,7 +68,19 @@ export class NatsConsumption {
     }
   }
 
-  private getHandler (_forMessage: JsMsg): NatsMessageHandlerFunction {
+  private async getHandler (message: JsMsg): Promise<NatsMessageHandlerFunction> {
+    if (this.cloudEventHandlers.size > 0) {
+      try {
+        const cloudEventKey = await this.tryParseCloudEventKey(message)
+        const handler = this.cloudEventHandlers.get(cloudEventKey)
+        if (handler !== undefined) {
+          return handler
+        }
+      } catch {
+        // ignore non cloud events and fall through to fallback handler
+      }
+    }
+
     if (this.fallbackHandler === undefined) {
       throw new Error(`No handler found for message`
         + `on NATS consumer ${this.consumerInfo.name}.`
@@ -51,5 +88,21 @@ export class NatsConsumption {
     }
 
     return this.fallbackHandler
+  }
+
+  private async tryParseCloudEventKey (message: JsMsg): Promise<CloudEventKey> {
+    const json = JSON.parse(new TextDecoder().decode(message.data)) as unknown
+    const event = plainToInstance(CloudEvent, json)
+    const errors = await validate(event, { whitelist: true, forbidNonWhitelisted: true })
+
+    if (errors.length > 0) {
+      throw new Error('Invalid cloud event')
+    }
+
+    return event.type + ':' + event.specversion
+  }
+
+  private mapEventOptionsToKey (event: CloudEventHandlerOptions): CloudEventKey {
+    return event.type + ':' + event.specversion
   }
 }

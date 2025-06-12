@@ -3,20 +3,38 @@ import { applyDecorators } from '@nestjs/common'
 
 const NATS_ON_MESSAGE_KEY = Symbol('wisemen.nats-on-message')
 
-type SubscriberOptions = { subscriber?: ClassConstructor<unknown> }
-type ConsumerOptions = { consumer?: ClassConstructor<unknown> }
+export interface CloudEventHandlerOptions {
+  type: string
+  specversion: string
+}
+
+interface MessageOptions {
+  event?: CloudEventHandlerOptions
+}
+
+export interface OnMessageSubscriberOptions extends MessageOptions {
+  subscriber?: ClassConstructor<unknown>
+}
+
+export interface OnMessageConsumerOptions extends MessageOptions {
+  consumer?: ClassConstructor<unknown>
+}
 
 export type OnNatsMessageConfig = {
   subscriber?: ClassConstructor<unknown>
+  event?: CloudEventHandlerOptions
   methodName: string
 } | {
   consumer?: ClassConstructor<unknown>
+  event?: CloudEventHandlerOptions
   methodName: string
 }
 
-export function OnNatsMessage (options?: SubscriberOptions): MethodDecorator
-export function OnNatsMessage (options?: ConsumerOptions): MethodDecorator
-export function OnNatsMessage (options?: SubscriberOptions | ConsumerOptions): MethodDecorator {
+export function OnNatsMessage (options?: OnMessageSubscriberOptions): MethodDecorator
+export function OnNatsMessage (options?: OnMessageConsumerOptions): MethodDecorator
+export function OnNatsMessage (
+  options?: OnMessageSubscriberOptions | OnMessageConsumerOptions
+): MethodDecorator {
   return applyDecorators(
     (target: ClassConstructor<unknown>, methodName: string): void => {
       const config = Reflect.getMetadata(

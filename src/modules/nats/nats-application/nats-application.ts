@@ -4,7 +4,7 @@ import { ClassConstructor } from 'class-transformer'
 import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { jetstreamManager } from '@nats-io/jetstream'
-import { getNatsMessageHandlerConfig } from './message-handler/on-nats-message.decorator.js'
+import { CloudEventHandlerOptions, getNatsMessageHandlerConfig } from './message-handler/on-nats-message.decorator.js'
 import { NatsConnectionManager } from './clients/nats-connection.manager.js'
 import { getNatsServiceEndpoints } from './services/nats-service-endpoint.decorator.js'
 import { NatsServiceManager } from './services/nats-service.manager.js'
@@ -82,13 +82,9 @@ export class NatsApplication {
       const handler = new NatsMessageHandlerFunction({ handlerClass, instance, methodName })
 
       if ('subscriber' in options || isNatsSubscriber(handlerClass)) {
-        const subscriberClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
-        const subcriber = await this.subscriberManager.createSubscriber(subscriberClass)
-        subcriber.addFallBackHandler(handler)
+        await this.addSubscriptionHandler(options, handlerClass, handler)
       } else if ('consumer' in handlerConfig || isNatsConsumer(handlerClass)) {
-        const consumerClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
-        const consumer = await this.consumerManager.createConsumer(consumerClass)
-        consumer.addFallBackHandler(handler)
+        await this.addConsumptionHandler(options, handlerClass, handler)
       } else {
         throw new Error('No subscriber or consumer configured for message handler.'
           + '\nDid you forget to add a `subscriber` or `consumer` in the options of the handler?'
@@ -96,6 +92,34 @@ export class NatsApplication {
           + ' which the handler is defined?'
         )
       }
+    }
+  }
+
+  private async addConsumptionHandler (
+    options: { consumer?: ClassConstructor<unknown>, event?: CloudEventHandlerOptions },
+    handlerClass: ClassConstructor<unknown>,
+    handler: NatsMessageHandlerFunction
+  ): Promise<void> {
+    const consumerClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
+    const consumer = await this.consumerManager.createConsumer(consumerClass)
+    if (options.event !== undefined) {
+      consumer.addCloudEventHandler(options.event, handler)
+    } else {
+      consumer.addFallBackHandler(handler)
+    }
+  }
+
+  private async addSubscriptionHandler (
+    options: { subscriber?: ClassConstructor<unknown>, event?: CloudEventHandlerOptions },
+    handlerClass: ClassConstructor<unknown>,
+    handler: NatsMessageHandlerFunction
+  ): Promise<void> {
+    const subscriberClass = options['subscriber'] as ClassConstructor<unknown> ?? handlerClass
+    const subcriber = await this.subscriberManager.createSubscriber(subscriberClass)
+    if (options.event !== undefined) {
+      subcriber.addCloudEventHandler(options.event, handler)
+    } else {
+      subcriber.addFallBackHandler(handler)
     }
   }
 

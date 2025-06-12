@@ -26,7 +26,7 @@ export class CloudEvent {
 
   @IsString()
   @IsNotEmpty()
-  specVersion: string
+  specversion: string
 
   @IsDefined()
   data: unknown
