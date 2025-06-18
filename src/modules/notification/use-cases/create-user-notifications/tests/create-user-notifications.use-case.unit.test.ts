@@ -25,7 +25,7 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     repo.findNotificationOrFail.resolves(notification)
 
     repo.getSubscribedUsers.callsFake(
-      async function*() {
+      async function* () {
         yield await new Promise(res => res([
           { uuid: generateUserUuid() },
           { uuid: generateUserUuid() }
@@ -56,7 +56,7 @@ describe('CreateUserNotificationsUseCase - Unit Tests', () => {
     repo.findNotificationOrFail.resolves(notification)
 
     repo.getSubscribedUsers.callsFake(
-      async function*() {
+      async function* () {
         yield await new Promise(res => res([
           { uuid: generateUserUuid() },
           { uuid: generateUserUuid() }
