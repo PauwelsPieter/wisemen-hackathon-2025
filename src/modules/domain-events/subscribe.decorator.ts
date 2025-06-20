@@ -1,6 +1,6 @@
 import { ClassConstructor } from 'class-transformer'
 import { applyDecorators } from '@nestjs/common'
-import { Trace } from '../../utils/opentelemetry/trace.decorator.js'
+import { Trace } from '@wisemen/opentelemetry'
 import { DomainEvent } from './domain-event.js'
 import { getDomainEventType } from './register-domain-event.decorator.js'
 

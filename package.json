@@ -73,6 +73,7 @@
     "@wisemen/time": "^0.0.24",
     "@wisemen/validators": "^0.0.14",
     "@wisemen/wise-date": "^0.0.7",
+    "@wisemen/opentelemetry": "^0.0.1",
     "@zitadel/client": "^1.2.0",
     "@zitadel/proto": "1.2.0",
     "axios": "^1.9.0",

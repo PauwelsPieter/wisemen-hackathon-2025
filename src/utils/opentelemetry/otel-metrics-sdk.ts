@@ -2,8 +2,8 @@ import { NodeSDK } from '@opentelemetry/sdk-node'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto'
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics'
+import { getOtelServiceName } from '@wisemen/opentelemetry'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
-import { getOtelServiceName } from './get-otel-service-name.js'
 
 export function startOpentelemetryMetrics (serviceName: string = getOtelServiceName()): void {
   if (process.env.NODE_ENV === 'test') return

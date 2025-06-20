@@ -1,10 +1,10 @@
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
+import { getOtelServiceName } from '@wisemen/opentelemetry'
 import { getOTLPExporterHeaders } from './signoz-auth.js'
 import { IgnoredSpansProcessor } from './ignore-spans.processor.js'
 import { registerInstruments } from './instrumentations.js'
-import { getOtelServiceName } from './get-otel-service-name.js'
 
 registerInstruments()
 

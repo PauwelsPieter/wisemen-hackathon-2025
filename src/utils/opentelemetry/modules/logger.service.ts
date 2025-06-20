@@ -6,8 +6,8 @@ import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http'
 import { SeverityNumber, type Logger } from '@opentelemetry/api-logs'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { getOtelServiceName } from '@wisemen/opentelemetry'
 import { getOTLPExporterHeaders } from '../signoz-auth.js'
-import { getOtelServiceName } from '../get-otel-service-name.js'
 
 export enum LogContext {
   INFO = 'info'

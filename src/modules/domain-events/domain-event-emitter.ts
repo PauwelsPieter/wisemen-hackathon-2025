@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Span } from '@opentelemetry/api'
-import { getOtelTracer } from '../../utils/opentelemetry/get-otel-tracer.js'
+import { getOtelTracer } from '@wisemen/opentelemetry'
 import { DomainEvent } from './domain-event.js'
 import { DomainEventType } from './domain-event-type.js'
 
