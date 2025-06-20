@@ -4,6 +4,7 @@ import { INestApplicationContext, Module } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { JobContainer } from '@wisemen/app-container'
 import { SentryModule } from '@sentry/nestjs/setup'
+import { Trace } from '@wisemen/opentelemetry'
 import { ExceptionModule } from '../modules/exceptions/exception.module.js'
 import { DefaultConfigModule } from '../modules/config/default-config.module.js'
 import { DefaultTypeOrmModule } from '../modules/typeorm/default-typeorm.module.js'
@@ -25,6 +26,7 @@ export class Playground extends JobContainer {
     return await NestFactory.createApplicationContext(PlayGroundModule)
   }
 
+  @Trace()
   async execute (_app: INestApplicationContext): Promise<void> {
 
   }
