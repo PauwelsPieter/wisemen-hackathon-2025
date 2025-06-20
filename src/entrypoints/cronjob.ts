@@ -28,6 +28,6 @@ export class Cronjob extends JobContainer {
     )
   }
 
-  async execute (): Promise<void> { }
+  async execute (): Promise<void> {}
 }
 const _cronjob = new Cronjob()
