@@ -6,47 +6,40 @@ export class AddressBuilder {
 
   constructor () {
     this.address = new Address()
-    this.address.coordinates = new Coordinates(0, 0)
-    this.address.country = null
-    this.address.city = null
-    this.address.postalCode = null
-    this.address.streetName = null
-    this.address.streetNumber = null
-    this.address.unit = null
   }
 
   withCountry (country?: string | null): this {
-    this.address.country = country ?? null
+    this.address.country = country ?? undefined
     return this
   }
 
   withCity (city?: string | null): this {
-    this.address.city = city ?? null
+    this.address.city = city ?? undefined
     return this
   }
 
   withPostalCode (zipCode?: string | null): this {
-    this.address.postalCode = zipCode ?? null
+    this.address.postalCode = zipCode ?? undefined
     return this
   }
 
   withStreetName (streetName?: string | null): this {
-    this.address.streetName = streetName ?? null
+    this.address.streetName = streetName ?? undefined
     return this
   }
 
   withStreetNumber (streetNumber?: string | null): this {
-    this.address.streetNumber = streetNumber ?? null
+    this.address.streetNumber = streetNumber ?? undefined
     return this
   }
 
   withUnit (unit?: string | null): this {
-    this.address.unit = unit ?? null
+    this.address.unit = unit ?? undefined
     return this
   }
 
   withCoordinates (coordinates?: Coordinates | null): this {
-    this.address.coordinates = coordinates ?? null
+    this.address.coordinates = coordinates ?? undefined
     return this
   }
 

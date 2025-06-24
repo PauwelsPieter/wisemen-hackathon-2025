@@ -36,9 +36,10 @@ export class SearchCollectionContactResponse {
       .withStreetName(contact.streetName)
       .withStreetNumber(contact.streetNumber)
       .withUnit(contact.unit)
-      .withCoordinates(contact.coordinates
+      .withCoordinates(contact.coordinates !== undefined
         ? new Coordinates(contact.coordinates[0], contact.coordinates[1])
-        : null)
+        : undefined
+      )
       .build()
     )
   }

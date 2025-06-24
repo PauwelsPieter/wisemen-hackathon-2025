@@ -11,6 +11,18 @@ export class AddressCommand {
   @IsNullable()
   @IsString()
   @IsNotEmpty()
+  placeName?: string
+
+  @ApiProperty({ type: 'string', nullable: true })
+  @IsNullable()
+  @IsString()
+  @IsNotEmpty()
+  placeId?: string
+
+  @ApiProperty({ type: 'string', nullable: true })
+  @IsNullable()
+  @IsString()
+  @IsNotEmpty()
   country: string | null
 
   @ApiProperty({ type: 'string', nullable: true })
@@ -43,11 +55,12 @@ export class AddressCommand {
   @IsNotEmpty()
   unit: string | null
 
-  @ApiProperty({ type: CoordinatesCommand })
+  @ApiProperty({ type: CoordinatesCommand, nullable: true })
+  @IsNullable()
   @IsObject()
   @Type(() => CoordinatesCommand)
   @ValidateNested()
-  coordinates: CoordinatesCommand
+  coordinates: CoordinatesCommand | null
 
   parse (): Address {
     return new AddressBuilder()
@@ -57,7 +70,7 @@ export class AddressCommand {
       .withStreetName(this.streetName)
       .withStreetNumber(this.streetNumber)
       .withUnit(this.unit)
-      .withCoordinates(this.coordinates.toCoordinates())
+      .withCoordinates(this.coordinates ? this.coordinates.toCoordinates() : null)
       .build()
   }
 }

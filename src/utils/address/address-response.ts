@@ -25,13 +25,13 @@ export class AddressResponse {
   coordinates: CoordinatesResponse | null
 
   constructor (address: Address) {
-    this.country = address.country
-    this.city = address.city
-    this.postalCode = address.postalCode
-    this.streetName = address.streetName
-    this.streetNumber = address.streetNumber
-    this.unit = address.unit
-    this.coordinates = address.coordinates !== null
+    this.country = address.country ?? null
+    this.city = address.city ?? null
+    this.postalCode = address.postalCode ?? null
+    this.streetName = address.streetName ?? null
+    this.streetNumber = address.streetNumber ?? null
+    this.unit = address.unit ?? null
+    this.coordinates = address.coordinates != null
       ? new CoordinatesResponse(address.coordinates)
       : null
   }

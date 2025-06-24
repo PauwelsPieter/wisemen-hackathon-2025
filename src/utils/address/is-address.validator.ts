@@ -59,12 +59,12 @@ class IsAddressValidator implements ValidatorConstraintInterface {
   }
 
   private isAddressValid (address: AddressCommand, constraints: ValidatorConstraints): boolean {
-    return (!constraints.countryRequired || address.country !== null)
-      && (!constraints.cityRequired || address.city !== null)
-      && (!constraints.postalCodeRequired || address.postalCode !== null)
-      && (!constraints.streetNameRequired || address.streetName !== null)
-      && (!constraints.streetNumberRequired || address.streetNumber !== null)
-      && (!constraints.unitRequired || address.unit !== null)
+    return (!constraints.countryRequired || address.country != null)
+      && (!constraints.cityRequired || address.city != null)
+      && (!constraints.postalCodeRequired || address.postalCode != null)
+      && (!constraints.streetNameRequired || address.streetName != null)
+      && (!constraints.streetNumberRequired || address.streetNumber != null)
+      && (!constraints.unitRequired || address.unit != null)
   }
 
   defaultMessage (args: ValidationArguments): string {

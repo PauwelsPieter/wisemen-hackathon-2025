@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer'
-import { Column, ColumnOptions } from 'typeorm'
+import { ColumnOptions, Column } from 'typeorm'
 import { Address } from './address.js'
 
 export function AddressColumn (options?: Omit<ColumnOptions, 'type' | 'transformer'>) {

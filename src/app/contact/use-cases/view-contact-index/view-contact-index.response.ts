@@ -38,7 +38,9 @@ export class ContactResponse {
       .withStreetNumber(contact.streetNumber)
       .withUnit(contact.unit)
       .withCoordinates(
-        contact.coordinates ? new Coordinates(contact.coordinates[0], contact.coordinates[1]) : null
+        contact.coordinates
+          ? new Coordinates(contact.coordinates[0], contact.coordinates[1])
+          : undefined
       )
       .build()
     )

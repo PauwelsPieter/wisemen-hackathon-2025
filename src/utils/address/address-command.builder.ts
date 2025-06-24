@@ -1,4 +1,4 @@
-import { CoordinatesCommandBuilder, CoordinatesCommand } from '@wisemen/coordinates'
+import { CoordinatesCommand } from '@wisemen/coordinates'
 import { AddressCommand } from './address-command.js'
 
 export class AddressCommandBuilder {
@@ -6,41 +6,34 @@ export class AddressCommandBuilder {
 
   constructor () {
     this.command = new AddressCommand()
-    this.command.country = null
-    this.command.city = null
-    this.command.postalCode = null
-    this.command.streetName = null
-    this.command.streetNumber = null
-    this.command.unit = null
-    this.command.coordinates = new CoordinatesCommandBuilder().build()
   }
 
-  withCountry (country: string | null): this {
+  withCountry (country: string): this {
     this.command.country = country
     return this
   }
 
-  withCity (city: string | null): this {
+  withCity (city: string): this {
     this.command.city = city
     return this
   }
 
-  withZipCode (zipCode: string | null): this {
-    this.command.postalCode = zipCode
+  withPostalCode (postalCode: string): this {
+    this.command.postalCode = postalCode
     return this
   }
 
-  withStreetName (streetName: string | null): this {
+  withStreetName (streetName: string): this {
     this.command.streetName = streetName
     return this
   }
 
-  withStreetNumber (streetNumber: string | null): this {
+  withStreetNumber (streetNumber: string): this {
     this.command.streetNumber = streetNumber
     return this
   }
 
-  withUnit (unit: string | null): this {
+  withUnit (unit: string): this {
     this.command.unit = unit
     return this
   }
