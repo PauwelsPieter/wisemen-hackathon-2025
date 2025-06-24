@@ -21,6 +21,13 @@ export class SearchCollectionsQueryBuilder {
     return this
   }
 
+  withContactActive (active: boolean): this {
+    this.query.filter ??= {}
+    this.query.filter.contact ??= {}
+    this.query.filter.contact.isActive = String(active)
+    return this
+  }
+
   build (): SearchCollectionsQuery {
     return this.query
   }

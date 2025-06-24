@@ -1,8 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { Equals, ValidateNested, IsNotEmpty, IsString, IsEnum, IsArray, IsOptional, IsObject } from 'class-validator'
+import { Equals, ValidateNested, IsNotEmpty, IsString, IsEnum, IsArray, IsOptional, IsObject, IsBooleanString } from 'class-validator'
 import { FilterQuery } from '@wisemen/pagination'
+import { IsUndefinable } from '@wisemen/validators'
 import { GlobalSearchTypesenseCollectionNameApiProperty, GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseCollections } from '../../global-search-typesense-collections.js'
+
+export class SearchCollectionsFilterContactQuery extends FilterQuery {
+  @ApiProperty({ type: 'boolean', required: false })
+  @IsUndefinable()
+  @IsBooleanString()
+  isActive?: string
+}
 
 export class SearchCollectionsFilterQuery extends FilterQuery {
   @GlobalSearchTypesenseCollectionNameApiProperty({ required: false, isArray: true })
@@ -10,6 +18,13 @@ export class SearchCollectionsFilterQuery extends FilterQuery {
   @IsEnum(GlobalSearchTypesenseCollections, { each: true })
   @IsArray()
   collections?: GlobalSearchTypesenseCollectionNames[]
+
+  @ApiProperty({ type: SearchCollectionsFilterContactQuery, required: false })
+  @IsObject()
+  @IsOptional()
+  @Type(() => SearchCollectionsFilterContactQuery)
+  @ValidateNested()
+  contact?: SearchCollectionsFilterContactQuery
 }
 
 export class SearchCollectionsQuery {

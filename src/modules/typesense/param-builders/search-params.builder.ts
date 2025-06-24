@@ -87,11 +87,12 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
 
   addFilterOn (
     filterField: FilterField<Collection>,
-    values: string[] | undefined,
-    options?: TypesenseFilterOptions): this {
+    values: string | string[] | undefined,
+    options?: TypesenseFilterOptions
+  ): this {
     if (values !== undefined) {
-      const joinedValue = values.join(',')
-      const value = values.length > 1 ? `[${joinedValue}]` : joinedValue
+      const joinedValue = Array.isArray(values) ? values.join(',') : values
+      const value = (Array.isArray(values) && values.length > 1) ? `[${joinedValue}]` : joinedValue
 
       this.filters.push(`${filterField}:${this.getOperator(options)}${value}`)
     }
