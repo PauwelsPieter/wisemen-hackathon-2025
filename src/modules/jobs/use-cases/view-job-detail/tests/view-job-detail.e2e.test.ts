@@ -27,7 +27,7 @@ describe('View job detail end to end tests', () => {
 
   after(async () => await setup.teardown())
   afterEach(async () => {
-    await setup.dataSource.manager.query('DELETE FROM pgboss.job')
+    await setup.dataSource.manager.deleteAll('pgboss.job')
   })
 
   it('responds with the details of a job', async () => {
