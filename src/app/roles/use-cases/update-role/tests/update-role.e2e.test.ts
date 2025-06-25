@@ -72,7 +72,7 @@ describe('Update role end to end tests', () => {
         .set('Authorization', `Bearer ${adminUser.token}`)
         .send(command)
 
-      expect(response).toHaveStatus(201)
+      expect(response).toHaveStatus(204)
       expect(response.body.name).not.toBe(role.name)
     })
 

@@ -5,6 +5,7 @@ import { File } from '../../entities/file.entity.js'
 import { AuthContext } from '../../../auth/auth.context.js'
 import { DomainEventEmitter } from '../../../domain-events/domain-event-emitter.js'
 import { FileUuid } from '../../entities/file.uuid.js'
+import { FileNotFoundError } from '../../errors/file.not-found.error.js'
 import { FileUploadedEvent } from './file-uploaded.event.js'
 
 @Injectable()
@@ -18,7 +19,11 @@ export class ConfirmFileUploadUseCase {
   ) {}
 
   async execute (fileUuid: FileUuid): Promise<void> {
-    const file = await this.fileRepository.findOneByOrFail({ uuid: fileUuid })
+    const file = await this.fileRepository.findOneBy({ uuid: fileUuid })
+
+    if (file === null) {
+      throw new FileNotFoundError(fileUuid)
+    }
 
     await transaction(this.dataSource, async () => {
       await this.fileRepository.update(

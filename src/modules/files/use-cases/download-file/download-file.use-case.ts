@@ -5,6 +5,7 @@ import { File } from '../../entities/file.entity.js'
 import { FileUuid } from '../../entities/file.uuid.js'
 import { PresignedFileResponse } from '../../responses/presigned-file.response.js'
 import { FilePresigner } from '../../services/presign-file/file-presigner.js'
+import { FileNotFoundError } from '../../errors/file.not-found.error.js'
 
 @Injectable()
 export class DownloadFileUseCase {
@@ -15,7 +16,12 @@ export class DownloadFileUseCase {
   ) {}
 
   async execute (fileUuid: FileUuid): Promise<PresignedFileResponse> {
-    const file = await this.fileRepository.findOneByOrFail({ uuid: fileUuid })
+    const file = await this.fileRepository.findOneBy({ uuid: fileUuid })
+
+    if (file === null) {
+      throw new FileNotFoundError(fileUuid)
+    }
+
     const presignedFile = await this.filePresigner.presign(file)
     return new PresignedFileResponse(presignedFile)
   }

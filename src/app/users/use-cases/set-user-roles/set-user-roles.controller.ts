@@ -4,6 +4,8 @@ import { UuidParam } from '@wisemen/decorators'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { UserUuid } from '../../entities/user.uuid.js'
+import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-errors/api-error-response.decorator.js'
+import { UserNotFoundError } from '../../errors/user-not-found.error.js'
 import { SetUserRolesUseCase } from './set-user-roles.use-case.js'
 import { SetUserRolesCommand } from './set-user-roles.command.js'
 
@@ -17,6 +19,7 @@ export class SetUserRolesController {
 
   @Post()
   @Permissions(Permission.USER_UPDATE)
+  @ApiNotFoundErrorResponse(UserNotFoundError)
   async updateUser (
     @UuidParam('user') userUuid: UserUuid,
     @Body() dto: SetUserRolesCommand

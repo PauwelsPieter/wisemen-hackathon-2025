@@ -1,7 +1,7 @@
 import { before, describe, it } from 'node:test'
 import { assert, createStubInstance } from 'sinon'
 import { expect } from 'expect'
-import { EntityNotFoundError, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { ConfirmFileUploadUseCase } from '../confirm-file-upload.use-case.js'
 import { File } from '../../../entities/file.entity.js'
@@ -20,7 +20,7 @@ describe('Confirm file upload use case unit tests', () => {
     const userUuid = generateUserUuid()
     const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
     const fileRepository = createStubInstance(Repository<File>)
-    fileRepository.findOneByOrFail.throws(new EntityNotFoundError(File, {}))
+    fileRepository.findOneBy.resolves(null)
 
     const useCase = new ConfirmFileUploadUseCase(
       stubDataSource(),
@@ -38,7 +38,7 @@ describe('Confirm file upload use case unit tests', () => {
     const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
     const fileRepository = createStubInstance(Repository<File>)
     const file = new FileEntityBuilder().build()
-    fileRepository.findOneByOrFail.resolves(file)
+    fileRepository.findOneBy.resolves(file)
 
     const eventEmitter = createStubInstance(DomainEventEmitter)
     const useCase = new ConfirmFileUploadUseCase(

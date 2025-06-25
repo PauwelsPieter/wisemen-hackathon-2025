@@ -4,9 +4,11 @@ import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { toBoolean } from '../../../../utils/transformers/to-boolean.js'
+import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
 import { ViewJobDetailResponse } from './view-job-detail.response.js'
 import { ViewJobDetailQuery } from './view-job-detail.query.js'
 import { ViewJobDetailUseCase } from './view-job-detail.use-case.js'
+import { JobNotFoundError } from './job-not-found.api-error.js'
 
 @Controller('/jobs/:jobId')
 @ApiTags('Jobs')
@@ -19,6 +21,7 @@ export class ViewJobDetailController {
   @Get()
   @Permissions(Permission.JOBS_READ_DETAIL)
   @ApiOkResponse({ type: ViewJobDetailResponse })
+  @ApiNotFoundErrorResponse(JobNotFoundError)
   async getJob (
     @UuidParam('jobId') jobId: string,
     @Query() query: ViewJobDetailQuery

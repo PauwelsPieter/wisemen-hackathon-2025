@@ -5,6 +5,8 @@ import { Response } from 'express'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { FileUuid } from '../../entities/file.uuid.js'
+import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
+import { FileNotFoundError } from '../../errors/file.not-found.error.js'
 import { DownloadFileUseCase } from './download-file.use-case.js'
 
 @ApiTags('File')
@@ -18,9 +20,8 @@ export class DownloadFileController {
   @Post()
   @HttpCode(302)
   @Permissions(Permission.FILE_READ)
-  @ApiResponse({
-    status: HttpStatus.FOUND
-  })
+  @ApiResponse({ status: HttpStatus.FOUND })
+  @ApiNotFoundErrorResponse(FileNotFoundError)
   async downloadFile (
     @UuidParam('file') fileUuid: FileUuid,
     @Res() res: Response

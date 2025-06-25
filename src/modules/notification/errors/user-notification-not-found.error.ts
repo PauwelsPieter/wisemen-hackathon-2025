@@ -1,5 +1,6 @@
 import { ApiErrorCode } from '../../exceptions/api-errors/api-error-code.decorator.js'
 import { NotFoundApiError } from '../../exceptions/api-errors/not-found.api-error.js'
+import { NotificationUuid } from '../entities/notification.uuid.js'
 
 export class UserNotificationNotFoundError extends NotFoundApiError {
   @ApiErrorCode('user_notification_not_found')
@@ -7,7 +8,7 @@ export class UserNotificationNotFoundError extends NotFoundApiError {
 
   meta: never
 
-  constructor (notificationUuid: string) {
+  constructor (notificationUuid: NotificationUuid) {
     super(`User notification with notification ${notificationUuid} not found`)
   }
 }

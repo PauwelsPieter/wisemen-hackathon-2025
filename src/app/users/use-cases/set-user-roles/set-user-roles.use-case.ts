@@ -8,6 +8,7 @@ import { UserRole } from '../../../roles/entities/user-role.entity.js'
 import { User } from '../../entities/user.entity.js'
 import { UserCache } from '../../cache/user-cache.js'
 import { UserUuid } from '../../entities/user.uuid.js'
+import { UserNotFoundError } from '../../errors/user-not-found.error.js'
 import type { SetUserRolesCommand } from './set-user-roles.command.js'
 
 @Injectable()
@@ -23,10 +24,14 @@ export class SetUserRolesUseCase {
   ) {}
 
   async changeRoles (userUuid: UserUuid, dto: SetUserRolesCommand): Promise<void> {
-    const user = await this.userRepository.findOneOrFail({
+    const user = await this.userRepository.findOne({
       where: { uuid: userUuid },
       relations: { userRoles: { role: true } }
     })
+
+    if (user === null) {
+      throw new UserNotFoundError(userUuid)
+    }
 
     assert(user.userRoles != null)
 

@@ -33,6 +33,6 @@ describe('Confirm file upload end to end tests', () => {
       .post(`/files/${file.uuid}/confirm-upload`)
       .set('Authorization', `Bearer ${adminUser.token}`)
 
-    expect(response).toHaveStatus(200)
+    expect(response).toHaveStatus(204)
   })
 })

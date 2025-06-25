@@ -4,6 +4,8 @@ import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { RoleUuid } from '../../entities/role.uuid.js'
+import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-errors/api-error-response.decorator.js'
+import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
 import { DeleteRoleUseCase } from './delete-role.use-case.js'
 
 @ApiTags('Role')
@@ -18,6 +20,7 @@ export class DeleteRoleController {
   @Permissions(Permission.ROLE_DELETE)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
+  @ApiNotFoundErrorResponse(RoleNotFoundError)
   async deleteRole (
     @UuidParam('role') uuid: RoleUuid
   ): Promise<void> {

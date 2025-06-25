@@ -4,6 +4,8 @@ import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { RoleUuid } from '../../entities/role.uuid.js'
+import { ApiNotFoundErrorResponse } from '../../../../modules/exceptions/api-errors/api-error-response.decorator.js'
+import { RoleNotFoundError } from '../../errors/role-not-found.error.js'
 import { ViewRoleDetailUseCase } from './view-role-detail.use-case.js'
 import { ViewRoleDetailResponse } from './view-role-detail.response.js'
 
@@ -20,6 +22,7 @@ export class ViewRoleDetailController {
     description: 'The role has been successfully received.',
     type: ViewRoleDetailResponse
   })
+  @ApiNotFoundErrorResponse(RoleNotFoundError)
   @Permissions(Permission.ROLE_READ)
   async getRole (
     @UuidParam('role') uuid: RoleUuid

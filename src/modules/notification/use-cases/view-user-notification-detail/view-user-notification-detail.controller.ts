@@ -7,6 +7,8 @@ import { Permission } from '../../../permission/permission.enum.js'
 import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { NotificationResponse } from '../../notification.response.js'
 import { Notification } from '../../entities/notification.entity.js'
+import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
+import { UserNotificationNotFoundError } from '../../errors/user-notification-not-found.error.js'
 import { ViewUserNotificationDetailUseCase } from './view-user-notification-detail.use-case.js'
 
 @ApiTags('Notification')
@@ -19,6 +21,7 @@ export class ViewUserNotificationDetailController {
   @Get()
   @Permissions(Permission.NOTIFICATION_READ_OWN)
   @OneOfApiResponse(Notification, { status: HttpStatus.OK })
+  @ApiNotFoundErrorResponse(UserNotificationNotFoundError)
   async getNotificationDetail (
     @UuidParam('notificationUuid') notificationUuid: NotificationUuid
   ): Promise<NotificationResponse> {
