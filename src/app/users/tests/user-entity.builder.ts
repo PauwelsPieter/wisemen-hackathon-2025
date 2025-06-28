@@ -1,13 +1,14 @@
 import { randomUUID } from 'node:crypto'
 import { User } from '../entities/user.entity.js'
-import { generateUserUuid, UserUuid } from '../entities/user.uuid.js'
+import { UserUuid } from '../entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 
 export class UserEntityBuilder {
   private user: User
 
   constructor () {
     this.user = new User()
-    this.user.uuid = generateUserUuid()
+    this.user.uuid = generateUuid()
     this.user.userId = randomUUID()
     this.user.createdAt = new Date()
     this.user.updatedAt = new Date()

@@ -10,7 +10,8 @@ import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { ViewDomainEventLogIndexQueryBuilder } from '../view-domain-event-log-index.query.builder.js'
 import { DomainEventSubjectType } from '../../../../domain-events/domain-event-subject-type.enum.js'
-import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
+import { UserUuid } from '../../../../../app/users/entities/user.uuid.js'
 
 describe('Get domain event logs end to end tests', () => {
   let setup: EndToEndTestSetup
@@ -104,7 +105,7 @@ describe('Get domain event logs end to end tests', () => {
 
   it('filters the results on user uuid', async () => {
     const userLog = new DomainEventLogEntityBuilder()
-      .withUserUuid(generateUserUuid())
+      .withUserUuid(generateUuid<UserUuid>())
       .build()
 
     const otherLog = new DomainEventLogEntityBuilder()

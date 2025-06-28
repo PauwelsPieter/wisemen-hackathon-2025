@@ -1,16 +1,16 @@
 import { NotificationChannel } from '../enums/notification-channel.enum.js'
 import { NotificationType } from '../enums/notification-types.enum.js'
 import { NotificationPreferences } from '../entities/notification-preferences.entity.js'
-import { generateNotificationPreferencesUuid } from '../entities/notification-preferences.uuid.js'
-import { generateUserUuid, UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 
 export class NotificationPreferencesEntityBuilder {
   private readonly notificationPreferences: NotificationPreferences
 
   constructor () {
     this.notificationPreferences = new NotificationPreferences()
-    this.notificationPreferences.uuid = generateNotificationPreferencesUuid()
-    this.notificationPreferences.userUuid = generateUserUuid()
+    this.notificationPreferences.uuid = generateUuid()
+    this.notificationPreferences.userUuid = generateUuid()
     this.notificationPreferences.types = []
     this.notificationPreferences.channel = NotificationChannel.APP
     this.notificationPreferences.isEnabled = true

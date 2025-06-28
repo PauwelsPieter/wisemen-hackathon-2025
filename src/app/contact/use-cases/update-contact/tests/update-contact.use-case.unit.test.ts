@@ -9,10 +9,11 @@ import { UpdateContactCommandBuilder } from '../update-contact.command.builder.j
 import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
 import { UpdateContactUseCase } from '../update-contact.use-case.js'
 import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-found.error.js'
-import { generateContactUuid } from '../../../entities/contact.uuid.js'
+import { ContactUuid } from '../../../entities/contact.uuid.js'
 import { UpdateContactRepository } from '../update-contact.repository.js'
-import { generateFileUuid } from '../../../../../modules/files/entities/file.uuid.js'
 import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
+import { FileUuid } from '../../../../../modules/files/entities/file.uuid.js'
 
 describe('UpdateContactUseCase Unit test', () => {
   before(() => {
@@ -32,7 +33,7 @@ describe('UpdateContactUseCase Unit test', () => {
 
     const command = new UpdateContactCommandBuilder().build()
 
-    const contactUuid = generateContactUuid()
+    const contactUuid = generateUuid<ContactUuid>()
 
     await expect(useCase.execute(contactUuid, command))
       .rejects.toThrow(new ContactNotFoundError(contactUuid))
@@ -49,8 +50,8 @@ describe('UpdateContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const contactUuid = generateContactUuid()
-    const fileUuid = generateFileUuid()
+    const contactUuid = generateUuid<ContactUuid>()
+    const fileUuid = generateUuid<FileUuid>()
 
     const command = new UpdateContactCommandBuilder()
       .withFileUuid(fileUuid)
@@ -71,8 +72,8 @@ describe('UpdateContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const contactUuid = generateContactUuid()
-    const avatarUuid = generateFileUuid()
+    const contactUuid = generateUuid<ContactUuid>()
+    const avatarUuid = generateUuid<FileUuid>()
 
     const command = new UpdateContactCommandBuilder()
       .withAvatarUuid(avatarUuid)
@@ -96,7 +97,7 @@ describe('UpdateContactUseCase Unit test', () => {
     )
 
     const command = new UpdateContactCommandBuilder().build()
-    const contactUuid = generateContactUuid()
+    const contactUuid = generateUuid<ContactUuid>()
 
     await useCase.execute(contactUuid, command)
 

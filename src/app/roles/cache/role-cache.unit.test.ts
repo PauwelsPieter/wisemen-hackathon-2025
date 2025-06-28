@@ -6,7 +6,8 @@ import { RedisClient } from '../../../modules/redis/redis.client.js'
 import { Role } from '../entities/role.entity.js'
 import { RoleEntityBuilder } from '../tests/builders/entities/role-entity.builder.js'
 import { Permission } from '../../../modules/permission/permission.enum.js'
-import { generateRoleUuid } from '../entities/role.uuid.js'
+import { RoleUuid } from '../entities/role.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { RoleCache } from './role-cache.service.js'
 
 describe('Role cache unit test', () => {
@@ -19,7 +20,7 @@ describe('Role cache unit test', () => {
 
       redisClient.deleteCachedValues.rejects(new Error('Redis is down'))
 
-      const promise = roleCache.clearRolesPermissions([generateRoleUuid()])
+      const promise = roleCache.clearRolesPermissions([generateUuid<RoleUuid>()])
 
       expect(promise).rejects.toThrow()
     })
@@ -32,7 +33,7 @@ describe('Role cache unit test', () => {
 
       redisClient.deleteCachedValues.resolves()
 
-      const promise = roleCache.clearRolesPermissions([generateRoleUuid()])
+      const promise = roleCache.clearRolesPermissions([generateUuid<RoleUuid>()])
 
       expect(promise).resolves.not.toThrow()
     })

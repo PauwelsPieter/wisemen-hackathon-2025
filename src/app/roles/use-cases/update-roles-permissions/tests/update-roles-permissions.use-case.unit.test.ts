@@ -12,7 +12,8 @@ import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { RoleNotEditableError } from '../../../errors/role-not-editable.error.js'
 
 import { RoleEntityBuilder } from '../../../tests/builders/entities/role-entity.builder.js'
-import { generateRoleUuid } from '../../../entities/role.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
+import { RoleUuid } from '../../../entities/role.uuid.js'
 import { UpdateRolesPermissionsCommandBuilder } from './update-roles-permissions.command.builder.js'
 
 describe('Update role permissions use case unit tests', () => {
@@ -29,7 +30,7 @@ describe('Update role permissions use case unit tests', () => {
       repository
     )
 
-    const roleUuid = generateRoleUuid()
+    const roleUuid = generateUuid<RoleUuid>()
     const command = new UpdateRolesPermissionsCommandBuilder()
       .addRole(roleUuid, [])
       .build()
@@ -64,8 +65,8 @@ describe('Update role permissions use case unit tests', () => {
   })
 
   it('emits an event for each role', async () => {
-    const role1Uuid = generateRoleUuid()
-    const role2Uuid = generateRoleUuid()
+    const role1Uuid = generateUuid<RoleUuid>()
+    const role2Uuid = generateUuid<RoleUuid>()
 
     const repository = createStubInstance(UpdateRolesPermissionsRepository)
     const roles = [

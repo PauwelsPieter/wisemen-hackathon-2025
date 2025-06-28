@@ -10,7 +10,8 @@ import { UpdateMyNotificationPreferencePresetCommandBuilder } from '../update-my
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { AuthContext } from '../../../../auth/auth.context.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
-import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { UserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('UpdateNotificationPresetPreferenceUseCase - Unit Tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -19,7 +20,7 @@ describe('UpdateNotificationPresetPreferenceUseCase - Unit Tests', () => {
     const repository = createStubInstance(Repository<NotificationPreferencesPreset>)
     repository.upsert.resolves()
 
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
     const authContext = createStubInstance(AuthContext)
     authContext.getUserUuidOrFail.returns(userUuid)
 

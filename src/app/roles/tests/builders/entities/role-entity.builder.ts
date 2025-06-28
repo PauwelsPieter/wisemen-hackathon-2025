@@ -1,6 +1,7 @@
 import { Role } from '../../../entities/role.entity.js'
 import { Permission } from '../../../../../modules/permission/permission.enum.js'
-import { generateRoleUuid, RoleUuid } from '../../../entities/role.uuid.js'
+import { RoleUuid } from '../../../entities/role.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 export class RoleEntityBuilder {
   private role: Role
@@ -12,7 +13,7 @@ export class RoleEntityBuilder {
   reset (): this {
     this.role = new Role()
 
-    this.role.uuid = generateRoleUuid()
+    this.role.uuid = generateUuid()
     this.role.name = 'test-role'
     this.role.permissions = []
     this.role.isSystemAdmin = false

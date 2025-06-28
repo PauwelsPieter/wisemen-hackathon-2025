@@ -1,7 +1,8 @@
 import { UiTheme } from '../enums/theme.enum.js'
 import { FontSize } from '../enums/font-size.enum.js'
 import { Locale } from '../../../modules/localization/enums/locale.enum.js'
-import { generateUserUuid, UserUuid } from '../../users/entities/user.uuid.js'
+import { UserUuid } from '../../users/entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { UiPreferences } from './ui-preferences.entity.js'
 
 export class UIPreferencesEntityBuilder {
@@ -10,7 +11,7 @@ export class UIPreferencesEntityBuilder {
   constructor () {
     this.preference = new UiPreferences()
 
-    this.preference.userUuid = generateUserUuid()
+    this.preference.userUuid = generateUuid()
     this.preference.createdAt = new Date()
     this.preference.updatedAt = new Date()
     this.preference.fontSize = FontSize.DEFAULT

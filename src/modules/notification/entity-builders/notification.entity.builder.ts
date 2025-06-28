@@ -1,8 +1,8 @@
 import { NotificationType } from '../enums/notification-types.enum.js'
 import { Notification } from '../entities/notification.entity.js'
 import { Serializable } from '../../../utils/types/serializable.js'
-import { generateNotificationUuid } from '../entities/notification.uuid.js'
 import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 
 export class NotificationEntityBuilder {
   private readonly notification: Notification
@@ -10,7 +10,7 @@ export class NotificationEntityBuilder {
   constructor () {
     this.notification = new Notification()
     this.notification.createdAt = new Date()
-    this.notification.uuid = generateNotificationUuid()
+    this.notification.uuid = generateUuid()
     this.notification.meta = {}
     this.notification.type = NotificationType.TEST_NOTIFICATION
   }

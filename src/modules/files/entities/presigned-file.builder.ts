@@ -1,16 +1,17 @@
 import { randomUUID } from 'node:crypto'
 import { MimeType } from '../enums/mime-type.enum.js'
-import { FileUuid, generateFileUuid } from './file.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { PresignedFile } from './presigned-file.js'
 import { File } from './file.entity.js'
 import { PresignedFileVariant } from './presigned-file-variant.type.js'
+import { FileUuid } from './file.uuid.js'
 
 export class PresignedFileBuilder {
   private file: PresignedFile
 
   constructor () {
     this.file = new PresignedFile()
-    this.file.uuid = generateFileUuid()
+    this.file.uuid = generateUuid()
     this.file.name = randomUUID()
     this.file.mimeType = null
     this.file.url = ''

@@ -10,7 +10,8 @@ import { ContactEntityBuilder } from '../../../entities/contact.entity.builder.j
 import { ContactCreatedEvent } from '../contact-created.event.js'
 import { FileNotFoundError } from '../../../../../modules/files/errors/file.not-found.error.js'
 import { CreateContactRepository } from '../create-contact.repository.js'
-import { generateFileUuid } from '../../../../../modules/files/entities/file.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
+import { FileUuid } from '../../../../../modules/files/entities/file.uuid.js'
 
 describe('CreateContactUseCase Unit test', () => {
   before(() => {
@@ -27,7 +28,7 @@ describe('CreateContactUseCase Unit test', () => {
       contactRepo
     )
 
-    const fileUuid = generateFileUuid()
+    const fileUuid = generateUuid<FileUuid>()
 
     const command = new CreateContactCommandBuilder()
       .withFileUuid(fileUuid)
@@ -39,7 +40,7 @@ describe('CreateContactUseCase Unit test', () => {
 
   it('throws an error when the avatar does not exist', async () => {
     const contactRepo = createStubInstance(CreateContactRepository)
-    const avatarUuid = generateFileUuid()
+    const avatarUuid = generateUuid<FileUuid>()
 
     contactRepo.fileExists.resolves(false)
 

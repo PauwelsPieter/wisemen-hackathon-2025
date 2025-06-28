@@ -8,7 +8,8 @@ import { RoleEntityBuilder } from '../../../../roles/tests/builders/entities/rol
 import { RoleAssignedToUserEvent } from '../role-assigned-to-user.event.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { DomainEventEmitter } from '../../../../../modules/domain-events/domain-event-emitter.js'
-import { generateUserUuid } from '../../../entities/user.uuid.js'
+import { UserUuid } from '../../../entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('Assign default tole to user use case', () => {
   before(() => TestBench.setupUnitTest())
@@ -24,7 +25,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
 
     await useCase.assignDefaultRole([userUuid])
 
@@ -45,7 +46,7 @@ describe('Assign default tole to user use case', () => {
       repository
     )
 
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
 
     await useCase.assignDefaultRole([userUuid])
 

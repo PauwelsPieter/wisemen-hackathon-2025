@@ -2,15 +2,16 @@ import { Monetary } from '@wisemen/monetary'
 import { WiseDate } from '@wisemen/wise-date'
 import { Address } from '../../../utils/address/address.js'
 import { FileUuid } from '../../../modules/files/entities/file.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { Contact } from './contact.entity.js'
-import { ContactUuid, generateContactUuid } from './contact.uuid.js'
+import { ContactUuid } from './contact.uuid.js'
 
 export class ContactEntityBuilder {
   private readonly contact: Contact
 
   constructor () {
     this.contact = new Contact()
-    this.contact.uuid = generateContactUuid()
+    this.contact.uuid = generateUuid()
     this.contact.createdAt = new Date()
     this.contact.updatedAt = new Date()
     this.contact.firstName = null

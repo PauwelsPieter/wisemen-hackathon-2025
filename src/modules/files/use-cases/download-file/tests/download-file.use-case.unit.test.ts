@@ -5,8 +5,8 @@ import { Repository } from 'typeorm'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { File } from '../../../entities/file.entity.js'
 import { DownloadFileUseCase } from '../download-file.use-case.js'
-import { generateFileUuid } from '../../../entities/file.uuid.js'
 import { FilePresigner } from '../../../services/presign-file/file-presigner.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('Download file use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -21,7 +21,7 @@ describe('Download file use case unit tests', () => {
       filePresigner
     )
 
-    await expect(useCase.execute(generateFileUuid())).rejects.toThrow()
+    await expect(useCase.execute(generateUuid())).rejects.toThrow()
     assert.notCalled(filePresigner.presign)
   })
 })

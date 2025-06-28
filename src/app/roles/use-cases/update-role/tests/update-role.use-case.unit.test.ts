@@ -11,7 +11,7 @@ import { UpdateRoleUseCase } from '../update-role.use-case.js'
 import { UpdateRoleCommandBuilder } from '../update-role-command.builder.js'
 import { RoleRenamedEvent } from '../role-renamed.event.js'
 import { RoleNameAlreadyInUseError } from '../../../errors/role-name-already-in-use.error.js'
-import { generateRoleUuid } from '../../../entities/role.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('update role use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -28,7 +28,7 @@ describe('update role use case unit tests', () => {
 
     const command = new UpdateRoleCommandBuilder().build()
 
-    await expect(async () => await useCase.execute(generateRoleUuid(), command))
+    await expect(async () => await useCase.execute(generateUuid(), command))
       .rejects.toThrow(RoleNotFoundError)
   })
 

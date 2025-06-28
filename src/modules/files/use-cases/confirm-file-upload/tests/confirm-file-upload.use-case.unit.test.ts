@@ -10,14 +10,14 @@ import { stubDataSource } from '../../../../../../test/utils/stub-datasource.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
 import { FileEntityBuilder } from '../../../entities/file-entity.builder.js'
 import { FileUploadedEvent } from '../file-uploaded.event.js'
-import { generateFileUuid } from '../../../entities/file.uuid.js'
-import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { UserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('Confirm file upload use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
 
   it('throws an error when the file does not exist', async () => {
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
     const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
     const fileRepository = createStubInstance(Repository<File>)
     fileRepository.findOneBy.resolves(null)
@@ -29,12 +29,12 @@ describe('Confirm file upload use case unit tests', () => {
       fileRepository
     )
 
-    await expect(useCase.execute(generateFileUuid())).rejects.toThrow()
+    await expect(useCase.execute(generateUuid())).rejects.toThrow()
     assert.notCalled(fileRepository.update)
   })
 
   it('emits an event when the file has been marked as uploaded', async () => {
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
     const authContext = createStubInstance(AuthContext, { getUserUuid: userUuid })
     const fileRepository = createStubInstance(Repository<File>)
     const file = new FileEntityBuilder().build()
@@ -48,7 +48,7 @@ describe('Confirm file upload use case unit tests', () => {
       fileRepository
     )
 
-    await useCase.execute(generateFileUuid())
+    await useCase.execute(generateUuid())
 
     expect(eventEmitter).toHaveEmitted(new FileUploadedEvent(file))
   })

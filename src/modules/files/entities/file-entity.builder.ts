@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto'
 import { MimeType } from '../enums/mime-type.enum.js'
 import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { File } from './file.entity.js'
-import { FileUuid, generateFileUuid } from './file.uuid.js'
+import { FileUuid } from './file.uuid.js'
 
 export class FileEntityBuilder {
   private file: File
@@ -10,7 +11,7 @@ export class FileEntityBuilder {
   constructor () {
     this.file = new File()
 
-    this.file.uuid = generateFileUuid()
+    this.file.uuid = generateUuid()
     this.file.name = randomUUID()
     this.file.key = randomUUID()
     this.file.mimeType = null

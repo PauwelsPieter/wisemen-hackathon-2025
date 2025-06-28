@@ -9,14 +9,14 @@ import { NotificationPreferencesEntityBuilder } from '../../../entity-builders/n
 import { UpdateMyNotificationTypePreferenceCommandBuilder } from '../update-my-notification-type-preference.command.builder.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { AuthContext } from '../../../../auth/auth.context.js'
-import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('UpdateMyNotificationTypePreference - Unit Tests', () => {
   before(() => TestBench.setupUnitTest())
 
   it('Enables a new notification type', async () => {
     const authContext = createStubInstance(AuthContext)
-    authContext.getUserUuidOrFail.returns(generateUserUuid())
+    authContext.getUserUuidOrFail.returns(generateUuid())
 
     const repo = createStubInstance(Repository<NotificationPreferences>)
     repo.findOneByOrFail.resolves(new NotificationPreferencesEntityBuilder()
@@ -42,7 +42,7 @@ describe('UpdateMyNotificationTypePreference - Unit Tests', () => {
 
   it('Removes a disabled notification type', async () => {
     const authContext = createStubInstance(AuthContext)
-    authContext.getUserUuidOrFail.returns(generateUserUuid())
+    authContext.getUserUuidOrFail.returns(generateUuid())
 
     const repo = createStubInstance(Repository<NotificationPreferences>)
     repo.findOneByOrFail.resolves(new NotificationPreferencesEntityBuilder()
@@ -68,7 +68,7 @@ describe('UpdateMyNotificationTypePreference - Unit Tests', () => {
 
   it('Does nothing when disabling a disabled type', async () => {
     const authContext = createStubInstance(AuthContext)
-    authContext.getUserUuidOrFail.returns(generateUserUuid())
+    authContext.getUserUuidOrFail.returns(generateUuid())
 
     const repo = createStubInstance(Repository<NotificationPreferences>)
     repo.findOneByOrFail.resolves(new NotificationPreferencesEntityBuilder()
@@ -94,7 +94,7 @@ describe('UpdateMyNotificationTypePreference - Unit Tests', () => {
 
   it('Does nothing when enabling an enabled type', async () => {
     const authContext = createStubInstance(AuthContext)
-    authContext.getUserUuidOrFail.returns(generateUserUuid())
+    authContext.getUserUuidOrFail.returns(generateUuid())
 
     const repo = createStubInstance(Repository<NotificationPreferences>)
     repo.findOneByOrFail.resolves(new NotificationPreferencesEntityBuilder()

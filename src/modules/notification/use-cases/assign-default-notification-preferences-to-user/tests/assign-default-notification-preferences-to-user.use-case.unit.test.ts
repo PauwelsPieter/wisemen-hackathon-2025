@@ -9,7 +9,8 @@ import { DefaultNotificationPreferencesAssignedToUserEvent } from '../default-no
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
 import { UserNotFoundError } from '../../../../../app/users/errors/user-not-found.error.js'
 import { DomainEventEmitter } from '../../../../domain-events/domain-event-emitter.js'
-import { generateUserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { UserUuid } from '../../../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../../../utils/types/uuid.js'
 
 describe('Assign default preferences to user use case unit test', () => {
   before(() => TestBench.setupUnitTest())
@@ -24,7 +25,7 @@ describe('Assign default preferences to user use case unit test', () => {
       repository
     )
 
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
 
     await expect(useCase.assignDefaultPreferences(userUuid))
       .rejects.toThrow(new UserNotFoundError(userUuid))
@@ -41,7 +42,7 @@ describe('Assign default preferences to user use case unit test', () => {
       repository
     )
 
-    const userUuid = generateUserUuid()
+    const userUuid = generateUuid<UserUuid>()
     await useCase.assignDefaultPreferences(userUuid)
 
     const expectedEvent = new DefaultNotificationPreferencesAssignedToUserEvent(userUuid)

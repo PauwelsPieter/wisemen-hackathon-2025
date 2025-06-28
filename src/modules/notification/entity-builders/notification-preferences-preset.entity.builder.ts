@@ -1,13 +1,14 @@
 import { NotificationPreferencesPreset } from '../entities/notification-preferences-preset.entity.js'
 import { NotificationPreset } from '../enums/notification-preset.enum.js'
-import { generateUserUuid, UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { UserUuid } from '../../../app/users/entities/user.uuid.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 
 export class NotificationPreferencesPresetEntityBuilder {
   private readonly preferencesPreset: NotificationPreferencesPreset
 
   constructor () {
     this.preferencesPreset = new NotificationPreferencesPreset()
-    this.preferencesPreset.userUuid = generateUserUuid()
+    this.preferencesPreset.userUuid = generateUuid()
     this.preferencesPreset.preset = NotificationPreset.DEFAULT
   }
 

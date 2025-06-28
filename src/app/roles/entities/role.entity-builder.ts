@@ -1,14 +1,15 @@
 import { randomUUID } from 'node:crypto'
 import { Permission } from '../../../modules/permission/permission.enum.js'
+import { generateUuid } from '../../../utils/types/uuid.js'
 import { Role } from './role.entity.js'
-import { generateRoleUuid, RoleUuid } from './role.uuid.js'
+import { RoleUuid } from './role.uuid.js'
 
 export class RoleEntityBuilder {
   private role: Role
 
   constructor () {
     this.role = new Role()
-    this.role.uuid = generateRoleUuid()
+    this.role.uuid = generateUuid()
     this.role.name = randomUUID()
     this.role.createdAt = new Date()
     this.role.updatedAt = new Date()
