@@ -38,7 +38,7 @@ export class TypesenseDocumentService {
       .collections(index)
       .documents()
       .delete({
-        filter_by: `uuid: [${uuids.join(',')}]`,
+        filter_by: `id: [${uuids.join(',')}]`,
         batch_size: 100,
         ignore_not_found: true
       })
