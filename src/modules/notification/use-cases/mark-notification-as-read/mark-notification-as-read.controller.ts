@@ -1,5 +1,5 @@
 import { Controller, HttpCode, HttpStatus, Patch } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { UserNotificationNotFoundError } from '../../errors/user-notification-not-found.error.js'
 import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
@@ -9,6 +9,7 @@ import { NotificationUuid } from '../../entities/notification.uuid.js'
 import { MarkNotificationAsReadUseCase } from './mark-notification-as-read.use-case.js'
 
 @ApiTags('Notifications')
+@ApiOAuth2([])
 @Controller('/me/notifications/:notificationUuid/mark-as-read')
 export class MarkNotificationAsReadController {
   constructor (

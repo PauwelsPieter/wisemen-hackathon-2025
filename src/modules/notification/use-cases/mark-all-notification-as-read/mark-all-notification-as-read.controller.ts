@@ -1,11 +1,12 @@
 import { Controller, HttpCode, HttpStatus, Patch } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { AuthContext } from '../../../auth/auth.context.js'
 import { MarkAllNotificationAsReadUseCase } from './mark-all-notification-as-read.use-case.js'
 
 @ApiTags('Notifications')
+@ApiOAuth2([])
 @Controller('/me/notifications/mark-as-read')
 export class MarkAllNotificationAsReadController {
   constructor (

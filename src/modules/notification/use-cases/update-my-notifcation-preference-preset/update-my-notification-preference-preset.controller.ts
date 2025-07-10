@@ -1,11 +1,12 @@
 import { Body, Controller, HttpCode, HttpStatus, Patch } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { UpdateNotificationPresetPreferenceUseCase } from './update-my-notification-preference-preset.use-case.js'
 import { UpdateMyNotificationPreferencePresetCommand } from './update-my-notification-preference-preset.command.js'
 
 @ApiTags('Notification Preferences')
+@ApiOAuth2([])
 @Controller('me/notification-preferences/preset')
 export class UpdateMyNotificationPreferencePresetController {
   constructor (

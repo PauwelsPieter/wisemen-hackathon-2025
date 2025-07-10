@@ -1,5 +1,5 @@
 import { Controller, Get, HttpStatus } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { OneOfApiResponse } from '@wisemen/one-of'
 import { Permissions } from '../../../permission/permission.decorator.js'
@@ -12,6 +12,7 @@ import { UserNotificationNotFoundError } from '../../errors/user-notification-no
 import { ViewUserNotificationDetailUseCase } from './view-user-notification-detail.use-case.js'
 
 @ApiTags('Notification')
+@ApiOAuth2([])
 @Controller('me/notifications/:notificationUuid')
 export class ViewUserNotificationDetailController {
   constructor (

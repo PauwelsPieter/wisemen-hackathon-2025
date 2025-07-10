@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { ApiBadRequestErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
 import { MigrationAlreadyPerformedError } from '../../errors/migration-already-performed.error.js'
 import { Permissions } from '../../../permission/permission.decorator.js'
@@ -8,6 +8,7 @@ import { MigrateNotificationTypesUseCase } from './migrate-notification-types.us
 import { MigrateNotificationTypesCommand } from './migrate-notification-types.command.js'
 
 @ApiTags('Notifications')
+@ApiOAuth2([])
 @Controller('notifications/migrate')
 export class MigrateNotificationTypesController {
   constructor (

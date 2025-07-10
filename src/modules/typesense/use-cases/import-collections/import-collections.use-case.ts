@@ -11,7 +11,7 @@ export class ImportCollectionsUseCase {
     private readonly collectors: TypesenseCollectors
   ) {}
 
-  public async execute (indexes: TypesenseCollectionName[]): Promise<void> {
+  async execute (indexes: TypesenseCollectionName[]): Promise<void> {
     for (const collection of indexes) {
       await this.importCollection(collection)
     }

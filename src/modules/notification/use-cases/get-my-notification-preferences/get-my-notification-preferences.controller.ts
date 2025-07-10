@@ -1,11 +1,12 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
+import { ApiOAuth2, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { GetMyNotificationPreferencesResponse } from './get-my-notification-preferences.response.js'
 import { GetMyNotificationPreferencesUseCase } from './get-my-notification-preferences.use-case.js'
 
 @ApiTags('Notification Preferences')
+@ApiOAuth2([])
 @Controller('me/notification-preferences')
 export class GetMyNotificationPreferencesController {
   constructor (

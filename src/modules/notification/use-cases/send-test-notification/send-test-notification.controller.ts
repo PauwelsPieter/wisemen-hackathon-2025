@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
-import { ApiNoContentResponse, ApiTags } from '@nestjs/swagger'
+import { ApiNoContentResponse, ApiOAuth2, ApiTags } from '@nestjs/swagger'
 import { Permissions } from '../../../permission/permission.decorator.js'
 import { Permission } from '../../../permission/permission.enum.js'
 import { AuthContext } from '../../../auth/auth.context.js'
@@ -7,6 +7,7 @@ import { SendTestNotificationUseCase } from './send-test-notification.use-case.j
 import { SendTestNotificationCommand } from './send-test-notification.command.js'
 
 @ApiTags('Notifications')
+@ApiOAuth2([])
 @Controller('notifications/test-notification')
 export class SendTestNotificationController {
   constructor (

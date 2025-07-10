@@ -1,11 +1,12 @@
-import {
-  IsEnum,
-  IsOptional
-} from 'class-validator'
-import { TypesenseCollectionName } from '../../collections/typesense-collection-name.enum.js'
+import { ArrayUnique, IsArray, IsEnum } from 'class-validator'
+import { IsUndefinable } from '@wisemen/validators'
+import { TypesenseCollectionName, TypesenseCollectionNameApiProperty } from '../../collections/typesense-collection-name.enum.js'
 
 export class ImportTypesenseQuery {
-  @IsOptional()
+  @TypesenseCollectionNameApiProperty({ required: false, isArray: true })
+  @IsUndefinable()
+  @IsArray()
+  @ArrayUnique()
   @IsEnum(TypesenseCollectionName, { each: true })
   collections: TypesenseCollectionName[] = Object.values(TypesenseCollectionName)
 }
