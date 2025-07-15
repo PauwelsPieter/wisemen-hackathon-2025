@@ -14,5 +14,6 @@ jobs:
     with:
       test-postgres-image: timescale/timescaledb-ha:pg16
       test-typesense-enabled: true
+      test-typesense-image: 'typesense/typesense:29.0'
       test-redis-enabled: true
       test-nats-enabled: true

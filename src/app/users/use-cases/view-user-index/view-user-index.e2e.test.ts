@@ -6,7 +6,6 @@ import { TypesenseCollectionService } from '../../../../modules/typesense/servic
 import { TypesenseCollectionName } from '../../../../modules/typesense/collections/typesense-collection-name.enum.js'
 import { TestBench } from '../../../../../test/setup/test-bench.js'
 import { EndToEndTestSetup } from '../../../../../test/setup/end-to-end-test-setup.js'
-import { MigrateCollectionsUseCase } from '../../../../modules/typesense/use-cases/migrate-collections/migrate-collections.use-case.js'
 
 describe('View user index e2e test', () => {
   let setup: EndToEndTestSetup
@@ -21,11 +20,7 @@ describe('View user index e2e test', () => {
 
     const typesenseCollectionService = setup.testModule.get(TypesenseCollectionService)
 
-    const typesenseMigrator = setup.testModule.get(MigrateCollectionsUseCase, { strict: false })
-    await typesenseMigrator.execute(true, [TypesenseCollectionName.USER])
-
-    // wait for fix in v29 of typesense to use truncate instead of remigrate
-    // await typesenseCollectionService.truncate([TypesenseCollectionName.USER])
+    await typesenseCollectionService.truncate([TypesenseCollectionName.USER])
 
     await typesenseCollectionService.importManually(
       TypesenseCollectionName.USER,
