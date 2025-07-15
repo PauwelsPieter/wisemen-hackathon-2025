@@ -11,13 +11,13 @@ export class AddressCommand {
   @IsNullable()
   @IsString()
   @IsNotEmpty()
-  placeName?: string
+  placeName: string | null
 
   @ApiProperty({ type: 'string', nullable: true })
   @IsNullable()
   @IsString()
   @IsNotEmpty()
-  placeId?: string
+  placeId: string | null
 
   @ApiProperty({ type: 'string', nullable: true })
   @IsNullable()

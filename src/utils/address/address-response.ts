@@ -4,6 +4,12 @@ import { Address } from './address.js'
 
 export class AddressResponse {
   @ApiProperty({ type: 'string', nullable: true })
+  placeName: string | null
+
+  @ApiProperty({ type: 'string', nullable: true })
+  placeId: string | null
+
+  @ApiProperty({ type: 'string', nullable: true })
   country: string | null
 
   @ApiProperty({ type: 'string', nullable: true })
@@ -25,6 +31,8 @@ export class AddressResponse {
   coordinates: CoordinatesResponse | null
 
   constructor (address: Address) {
+    this.placeName = address.placeName ?? null
+    this.placeId = address.placeId ?? null
     this.country = address.country ?? null
     this.city = address.city ?? null
     this.postalCode = address.postalCode ?? null
