@@ -8,6 +8,16 @@ export class AddressBuilder {
     this.address = new Address()
   }
 
+  withPlaceName (name?: string | null): this {
+    this.address.placeName = name ?? undefined
+    return this
+  }
+
+  withPlaceId (id?: string | null): this {
+    this.address.placeId = id ?? undefined
+    return this
+  }
+
   withCountry (country?: string | null): this {
     this.address.country = country ?? undefined
     return this

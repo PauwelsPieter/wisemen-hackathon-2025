@@ -64,6 +64,8 @@ export class AddressCommand {
 
   parse (): Address {
     return new AddressBuilder()
+      .withPlaceId(this.placeId)
+      .withPlaceName(this.placeName)
       .withCountry(this.country)
       .withCity(this.city)
       .withPostalCode(this.postalCode)
