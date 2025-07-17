@@ -7,5 +7,6 @@ export class PresignedFile {
   name: string
   mimeType: MimeType | null
   url: string
+  blurHash: string | null
   variants: PresignedFileVariant[]
 }

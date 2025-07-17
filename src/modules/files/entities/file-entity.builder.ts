@@ -16,6 +16,7 @@ export class FileEntityBuilder {
     this.file.key = randomUUID()
     this.file.mimeType = null
     this.file.isUploadConfirmed = false
+    this.file.blurHash = null
     this.file.variants = []
     this.file.createdAt = new Date()
     this.file.updatedAt = new Date()

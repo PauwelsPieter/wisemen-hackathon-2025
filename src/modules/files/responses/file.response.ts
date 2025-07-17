@@ -12,9 +12,13 @@ export class FileResponse {
   @MimeTypeApiProperty({ nullable: true })
   mimeType: MimeType | null
 
+  @ApiProperty({ type: 'string', nullable: true })
+  blurHash: string | null
+
   constructor (file: File) {
     this.uuid = file.uuid
     this.name = file.name
     this.mimeType = file.mimeType
+    this.blurHash = file.blurHash
   }
 }

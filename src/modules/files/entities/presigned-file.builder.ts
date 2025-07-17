@@ -15,6 +15,7 @@ export class PresignedFileBuilder {
     this.file.name = randomUUID()
     this.file.mimeType = null
     this.file.url = ''
+    this.file.blurHash = null
     this.file.variants = []
   }
 
@@ -38,6 +39,11 @@ export class PresignedFileBuilder {
     return this
   }
 
+  withBlurHash (blurHash: string | null): this {
+    this.file.blurHash = blurHash
+    return this
+  }
+
   withVariants (variants: PresignedFileVariant[]): this {
     this.file.variants = variants
     return this
@@ -52,6 +58,7 @@ export class PresignedFileBuilder {
     return this.withUuid(file.uuid)
       .withName(file.name)
       .withMimeType(file.mimeType)
+      .withBlurHash(file.blurHash)
   }
 
   build (): PresignedFile {

@@ -29,6 +29,9 @@ export class PresignedFileResponse {
   @ApiProperty({ type: 'string' })
   url: string
 
+  @ApiProperty({ type: 'string', nullable: true })
+  blurHash: string | null
+
   @ApiProperty({ type: PresignedFileVariantResponse, isArray: true })
   variants: PresignedFileVariantResponse[]
 
@@ -37,6 +40,7 @@ export class PresignedFileResponse {
     this.name = file.name
     this.mimeType = file.mimeType
     this.url = file.url
+    this.blurHash = file.blurHash
     this.variants = file.variants.map(variant => new PresignedFileVariantResponse(variant))
   }
 }

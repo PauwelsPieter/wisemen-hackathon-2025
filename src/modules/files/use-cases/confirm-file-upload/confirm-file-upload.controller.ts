@@ -1,4 +1,4 @@
-import { Controller, Post, HttpCode, HttpStatus } from '@nestjs/common'
+import { Controller, Post, HttpCode, HttpStatus, Body } from '@nestjs/common'
 import { ApiTags, ApiOAuth2, ApiNoContentResponse } from '@nestjs/swagger'
 import { UuidParam } from '@wisemen/decorators'
 import { Permissions } from '../../../../modules/permission/permission.decorator.js'
@@ -7,6 +7,7 @@ import { FileUuid } from '../../entities/file.uuid.js'
 import { ApiNotFoundErrorResponse } from '../../../exceptions/api-errors/api-error-response.decorator.js'
 import { FileNotFoundError } from '../../errors/file.not-found.error.js'
 import { ConfirmFileUploadUseCase } from './confirm-file-upload.use-case.js'
+import { ConfirmFileUploadCommand } from './confirm-file-upload.command.js'
 
 @ApiTags('File')
 @Controller('files/:file/confirm-upload')
@@ -22,8 +23,9 @@ export class ConfirmFileUploadController {
   @ApiNoContentResponse()
   @ApiNotFoundErrorResponse(FileNotFoundError)
   async confirmFileUpload (
-    @UuidParam('file') fileUuid: FileUuid
+    @UuidParam('file') fileUuid: FileUuid,
+    @Body() command: ConfirmFileUploadCommand
   ): Promise<void> {
-    await this.useCase.execute(fileUuid)
+    await this.useCase.execute(fileUuid, command)
   }
 }

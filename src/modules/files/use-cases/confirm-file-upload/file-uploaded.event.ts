@@ -15,9 +15,13 @@ export class FileUploadedEventContent {
   @ApiProperty({ type: 'string' })
   readonly fileName: string
 
+  @ApiProperty({ type: 'string', nullable: true })
+  readonly blurHash: string | null
+
   constructor (file: File) {
     this.fileUuid = file.uuid
     this.fileName = file.name
+    this.blurHash = file.blurHash
   }
 }
 

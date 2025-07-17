@@ -12,6 +12,7 @@ import { FileEntityBuilder } from '../../../entities/file-entity.builder.js'
 import { FileUploadedEvent } from '../file-uploaded.event.js'
 import { UserUuid } from '../../../../../app/users/entities/user.uuid.js'
 import { generateUuid } from '../../../../../utils/types/uuid.js'
+import { ConfirmFileUploadCommandBuilder } from '../confirm-file-upload.command.builder.js'
 
 describe('Confirm file upload use case unit tests', () => {
   before(() => TestBench.setupUnitTest())
@@ -29,7 +30,9 @@ describe('Confirm file upload use case unit tests', () => {
       fileRepository
     )
 
-    await expect(useCase.execute(generateUuid())).rejects.toThrow()
+    const command = new ConfirmFileUploadCommandBuilder().build()
+
+    await expect(useCase.execute(generateUuid(), command)).rejects.toThrow()
     assert.notCalled(fileRepository.update)
   })
 
@@ -48,7 +51,9 @@ describe('Confirm file upload use case unit tests', () => {
       fileRepository
     )
 
-    await useCase.execute(generateUuid())
+    const command = new ConfirmFileUploadCommandBuilder().build()
+
+    await useCase.execute(generateUuid(), command)
 
     expect(eventEmitter).toHaveEmitted(new FileUploadedEvent(file))
   })

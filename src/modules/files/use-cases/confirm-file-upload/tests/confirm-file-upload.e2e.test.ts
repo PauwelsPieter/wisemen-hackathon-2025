@@ -8,6 +8,7 @@ import { TestAuthContext } from '../../../../../../test/utils/test-auth-context.
 import { TestUser } from '../../../../../app/users/tests/setup-user.type.js'
 import { FileEntityBuilder } from '../../../entities/file-entity.builder.js'
 import { File } from '../../../entities/file.entity.js'
+import { ConfirmFileUploadCommandBuilder } from '../confirm-file-upload.command.builder.js'
 
 describe('Confirm file upload end to end tests', () => {
   let setup: EndToEndTestSetup
@@ -29,9 +30,14 @@ describe('Confirm file upload end to end tests', () => {
     const file = new FileEntityBuilder().build()
     await dataSource.manager.insert(File, file)
 
+    const command = new ConfirmFileUploadCommandBuilder()
+      .withBlurHash('LEHLk~WB2yk8pyo0adR*.7kCMdnj')
+      .build()
+
     const response = await request(setup.httpServer)
       .post(`/files/${file.uuid}/confirm-upload`)
       .set('Authorization', `Bearer ${adminUser.token}`)
+      .send(command)
 
     expect(response).toHaveStatus(204)
   })

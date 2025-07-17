@@ -38,6 +38,9 @@ export class File {
   @Column({ type: 'jsonb', default: [] })
   variants: FileVariant[]
 
+  @Column({ type: 'varchar', nullable: true })
+  blurHash: string | null
+
   @Column({ type: 'uuid', nullable: true })
   uploaderUuid: UserUuid | null
 
