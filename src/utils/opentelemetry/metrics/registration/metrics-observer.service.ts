@@ -84,9 +84,9 @@ export class MetricsObserverService {
       const result: { name: string, waiting_seconds: number }[]
         = await this.dataSource
           .query(`
-            SELECT name, EXTRACT(EPOCH FROM (now() - MIN(created_on)))::integer as waiting_seconds
+            SELECT name, EXTRACT(EPOCH FROM (now() - MIN(start_after)))::integer as waiting_seconds
             FROM pgboss.job
-            WHERE state = 'created'
+            WHERE state = 'created' AND start_after <= now()
             group by name
           `)
 
