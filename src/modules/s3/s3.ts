@@ -12,7 +12,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Upload } from '@aws-sdk/lib-storage'
 import { captureException } from '@sentry/nestjs'
-import type { MimeType } from '../files/enums/mime-type.enum.js'
+import { MimeType } from '../files/enums/mime-type.enum.js'
 import type { File } from '../files/entities/file.entity.js'
 import { S3UnavailableError } from './s3-unavailable.error.js'
 
@@ -51,13 +51,13 @@ export class S3 {
   public async createTemporaryDownloadUrl (
     name: string,
     key: string,
-    mimeType?: MimeType | null,
+    mimeType: MimeType,
     expiresInSeconds?: number
   ): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key),
-      ResponseContentType: mimeType ?? 'application/octet-stream',
+      ResponseContentType: mimeType,
       ResponseContentDisposition: `attachment; filename=${name}`
     })
 
@@ -67,10 +67,6 @@ export class S3 {
   }
 
   public async createTemporaryUploadUrl (file: File, expiresInSeconds?: number): Promise<string> {
-    if (file.mimeType == null) {
-      throw new Error('File MIME type is required')
-    }
-
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(file.key),

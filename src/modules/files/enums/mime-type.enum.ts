@@ -14,7 +14,8 @@ export enum MimeType {
   BMP = 'image/bmp',
   HEIC = 'image/heic',
   WEBP = 'image/webp',
-  GIF = 'image/gif'
+  GIF = 'image/gif',
+  OCTET_STREAM = 'application/octet-stream'
 }
 
 export function MimeTypeApiProperty (options?: ApiPropertyOptions): PropertyDecorator {

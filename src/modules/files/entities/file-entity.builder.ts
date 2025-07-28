@@ -14,7 +14,7 @@ export class FileEntityBuilder {
     this.file.uuid = generateUuid()
     this.file.name = randomUUID()
     this.file.key = randomUUID()
-    this.file.mimeType = null
+    this.file.mimeType = MimeType.OCTET_STREAM
     this.file.isUploadConfirmed = false
     this.file.blurHash = null
     this.file.variants = []
@@ -33,7 +33,7 @@ export class FileEntityBuilder {
     return this
   }
 
-  withMimeType (mimeType: MimeType | null): this {
+  withMimeType (mimeType: MimeType): this {
     this.file.mimeType = mimeType
     return this
   }

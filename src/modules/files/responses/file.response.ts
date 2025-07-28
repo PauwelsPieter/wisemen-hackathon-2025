@@ -9,8 +9,8 @@ export class FileResponse {
   @ApiProperty({ type: 'string' })
   name: string
 
-  @MimeTypeApiProperty({ nullable: true })
-  mimeType: MimeType | null
+  @MimeTypeApiProperty()
+  mimeType: MimeType
 
   @ApiProperty({ type: 'string', nullable: true })
   blurHash: string | null

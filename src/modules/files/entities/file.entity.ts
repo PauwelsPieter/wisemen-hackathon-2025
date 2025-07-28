@@ -23,8 +23,8 @@ export class File {
   @Column({ type: 'varchar' })
   name: string
 
-  @Column({ type: 'varchar', nullable: true })
-  mimeType: MimeType | null
+  @Column({ type: 'varchar' })
+  mimeType: MimeType
 
   @Column({ type: 'boolean', default: false })
   isUploadConfirmed: boolean
