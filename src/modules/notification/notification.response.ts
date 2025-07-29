@@ -2,9 +2,9 @@ import assert from 'assert'
 import { ApiProperty } from '@nestjs/swagger'
 import { OneOfMetaApiProperty, OneOfResponse, OneOfTypeApiProperty } from '@wisemen/one-of'
 import { Locale } from '../localization/enums/locale.enum.js'
-import { tc } from '../localization/helpers/translate.helper.js'
 import { Serializable } from '../../utils/types/serializable.js'
 import { User } from '../../app/users/entities/user.entity.js'
+import { tc } from '../localization/helpers/translate.helper.js'
 import { NotificationType } from './enums/notification-types.enum.js'
 import { Notification } from './entities/notification.entity.js'
 import { UserNotification } from './entities/user-notification.entity.js'
@@ -61,6 +61,6 @@ export class NotificationResponse {
   }
 
   private getMessage (notification: Notification, lang?: Locale): string {
-    return tc(`notification.${notification.type}`, { lang })
+    return tc(`notifications.${notification.type}.content`, { lang })
   }
 }

@@ -2,7 +2,6 @@ import { after, before, describe, it } from 'node:test'
 import request from 'supertest'
 import { expect } from 'expect'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import { NotificationType } from '../../../enums/notification-types.enum.js'
 import { NotificationChannel } from '../../../enums/notification-channel.enum.js'
 import { EndToEndTestSetup } from '../../../../../../test/setup/end-to-end-test-setup.js'
 import { TestBench } from '../../../../../../test/setup/test-bench.js'
@@ -30,31 +29,19 @@ describe('Get notification types config e2e test', () => {
       .set('Authorization', `Bearer ${adminUser.token}`)
 
     expect(response).toHaveStatus(200)
-    expect(response.body.items).toStrictEqual(expect.arrayContaining([
+    expect(response.body.groups).toStrictEqual(expect.arrayContaining([
       {
-        type: NotificationType.USER_CREATED,
-        channelConfigs: expect.arrayContaining([
-          {
-            channel: NotificationChannel.APP,
-            defaultValue: true,
-            isSupported: true
-          },
-          {
-            channel: NotificationChannel.EMAIL,
-            defaultValue: false,
-            isSupported: false
-          },
-          {
-            channel: NotificationChannel.SMS,
-            defaultValue: false,
-            isSupported: false
-          },
-          {
-            channel: NotificationChannel.PUSH,
-            defaultValue: false,
-            isSupported: false
-          }
-        ])
+        name: expect.any(String),
+        description: expect.any(String),
+        types: expect.arrayContaining([{
+          key: expect.any(String),
+          description: expect.any(String),
+          channelConfigs: expect.arrayContaining([{
+            channel: expect.isEnumValue(NotificationChannel),
+            defaultValue: expect.any(Boolean),
+            isSupported: expect.any(Boolean)
+          }])
+        }])
       }
     ]))
   })

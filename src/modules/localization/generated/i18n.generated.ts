@@ -91,7 +91,27 @@ export type I18nTranslations = {
         "user": {
             "created": string;
         };
-        "test-notification": string;
+        "system": {
+            "test-notification": string;
+        };
+    };
+    "notifications": {
+        "user": {
+            "group-name": string;
+            "group-description": string;
+            "created": {
+                "content": string;
+                "description": string;
+            };
+        };
+        "system": {
+            "group-name": string;
+            "group-description": string;
+            "test-notification": {
+                "content": string;
+                "description": string;
+            };
+        };
     };
     "permissions": {
         "all_permissions": {

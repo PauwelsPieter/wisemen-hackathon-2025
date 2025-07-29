@@ -3,7 +3,7 @@ import { Column, ColumnOptions } from 'typeorm'
 
 export enum NotificationType {
   USER_CREATED = 'user.created',
-  TEST_NOTIFICATION = 'test-notification'
+  TEST_NOTIFICATION = 'system.test-notification'
 }
 
 export function NotificationTypeApiProperty (options?: ApiPropertyOptions): PropertyDecorator {

@@ -3,7 +3,7 @@ import { NotificationPreferences } from './entities/notification-preferences.ent
 import { NotificationPreferencesEntityBuilder } from './entity-builders/notification-preferences.entity.builder.js'
 import { NotificationChannel } from './enums/notification-channel.enum.js'
 import { NotificationType } from './enums/notification-types.enum.js'
-import { NotificationTypeConfig, NotificationTypeChannelConfig } from './use-cases/get-notification-types-config/get-notification-types-config.response.js'
+import { NotificationTypeChannelConfig } from './use-cases/get-notification-types-config/get-notification-types-config.response.js'
 
 type NotificationTypeChannelsConfig = {
   defaultChannels: NotificationChannel[]
@@ -23,7 +23,7 @@ function createNotificationChannelDefaultsForType (
     const defaultValue = typeDefaults.defaultChannels.includes(channel)
     const isSupported = typeDefaults.supportedChannels.includes(channel)
 
-    channels.push(new NotificationTypeChannelConfig(channel, defaultValue, isSupported))
+    channels.push(new NotificationTypeChannelConfig({ channel, defaultValue, isSupported }))
   }
 
   return channels
@@ -49,7 +49,7 @@ export function getDefaultTypesOfChannel (
   const result: NotificationType[] = []
 
   for (const defaultType of NOTIFICATION_TYPES_CONFIG) {
-    for (const channelConfig of defaultType.channelConfigs) {
+    for (const channelConfig of defaultType.channels) {
       if (channelConfig.channel === notificationChannel && channelConfig.defaultValue) {
         result.push(defaultType.type)
         break
@@ -66,7 +66,7 @@ export function getSupportedNotificationTypesOfChannel (
   const result: NotificationType[] = []
 
   for (const defaultType of NOTIFICATION_TYPES_CONFIG) {
-    for (const channelConfig of defaultType.channelConfigs) {
+    for (const channelConfig of defaultType.channels) {
       if (channelConfig.channel === notificationChannel && channelConfig.isSupported) {
         result.push(defaultType.type)
         break
@@ -128,13 +128,18 @@ function initDefaultNotificationPreferences (): NotificationPreferences[] {
   return defaultPreferences
 }
 
+export interface NotificationTypeConfig {
+  type: NotificationType
+  channels: NotificationTypeChannelConfig[]
+}
+
 function initConfig (): NotificationTypeConfig[] {
   const defaults: NotificationTypeConfig[] = []
 
   const types = Object.values(NotificationType)
 
   for (const type of types) {
-    defaults.push({ type, channelConfigs: createNotificationChannelDefaultsForType(type) })
+    defaults.push({ type, channels: createNotificationChannelDefaultsForType(type) })
   }
 
   return defaults

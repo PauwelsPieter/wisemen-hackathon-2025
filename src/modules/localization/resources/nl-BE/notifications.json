@@ -1,0 +1,16 @@
+{
+    "user": {
+        "group-name": "Gebruikers",
+        "group-description": "Meldingen met betrekking tot gebruikersactiviteit, voorkeuren, waarschuwingen en vereiste acties",
+        "created": {
+            "description": "Ontvang een melding bij nieuwe gebruikers"
+        }
+    },
+    "system": {
+        "group-name": "Systeem",
+        "group-description": "Interne berichten voor debugging, testen en systeemmonitoring. Niet bedoeld voor eindgebruikers",
+        "test-notification": {
+            "description": "Ontvang testmeldingen"
+        }
+    }
+}
