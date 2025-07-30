@@ -7,7 +7,8 @@ import { envValidationSchema } from './env.validation.js'
     ConfigModule.forRoot({
       ignoreEnvFile: true,
       validationSchema: envValidationSchema,
-      isGlobal: true
+      isGlobal: true,
+      cache: true
     })
   ]
 })
