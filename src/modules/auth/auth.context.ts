@@ -16,7 +16,7 @@ export class AuthContext {
     const token = this.authStorage.getStore()
 
     if (token == null) {
-      throw new UnauthorizedError()
+      throw new UnauthorizedError('Unauthorized: No authentication context found')
     }
 
     return token

@@ -53,7 +53,7 @@ export class GetOrCreateUserUseCase {
     if (user != null) {
       return user
     } else {
-      throw new UnauthorizedError()
+      throw new UnauthorizedError('Unauthorized: User not found after creation')
     }
   }
 

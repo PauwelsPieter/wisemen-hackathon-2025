@@ -33,7 +33,7 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     if (!req.headers.authorization.startsWith('Bearer ')) {
-      throw new UnauthorizedError()
+      throw new UnauthorizedError('Unauthorized: Invalid authorization header format')
     }
 
     const token = req.headers.authorization.split(' ')[1]
@@ -42,8 +42,11 @@ export class AuthMiddleware implements NestMiddleware {
       const content = await this.verify(token)
 
       this.authContext.run(content, next)
-    } catch (_error) {
-      next()
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new UnauthorizedError('Unauthorized: Invalid or expired token', error)
+      }
+      throw error
     }
   }
 
