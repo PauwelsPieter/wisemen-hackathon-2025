@@ -48,7 +48,7 @@ export class S3 {
     }
   }
 
-  public async createTemporaryDownloadUrl (
+  async createTemporaryDownloadUrl (
     name: string,
     key: string,
     mimeType: MimeType,
@@ -66,7 +66,11 @@ export class S3 {
     return await getSignedUrl(this.client, command, { expiresIn })
   }
 
-  public async createTemporaryUploadUrl (file: File, expiresInSeconds?: number): Promise<string> {
+  async createTemporaryUploadUrl (file: File, expiresInSeconds?: number): Promise<string> {
+    if (file.mimeType == null) {
+      throw new Error('File MIME type is required')
+    }
+
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(file.key),
@@ -75,14 +79,24 @@ export class S3 {
     })
 
     const expiresIn = expiresInSeconds ?? 180
-
     return await getSignedUrl(this.client, command, { expiresIn })
   }
 
-  public async upload (
-    key: string,
-    content: Buffer
-  ): Promise<void> {
+  async download (key: string): Promise<string> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: this.prependEnvKey(key)
+    })
+
+    const result = await this.client.send(command)
+    if (result.Body === undefined) {
+      throw new Error(`Could not download ${key}`)
+    }
+
+    return await result.Body.transformToString()
+  }
+
+  async upload (key: string, content: Buffer): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key),
@@ -95,10 +109,7 @@ export class S3 {
     })
   }
 
-  public async uploadStream (
-    key: string,
-    stream: Readable
-  ): Promise<void> {
+  async uploadStream (key: string, stream: Readable): Promise<void> {
     const parallelUploads = new Upload({
       client: this.client,
       params: {
@@ -114,22 +125,17 @@ export class S3 {
     await parallelUploads.done()
   }
 
-  public async list (
-    key: string
-  ): Promise<ListObjectsV2Output['Contents']> {
+  async list (key: string): Promise<ListObjectsV2Output['Contents']> {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: this.prependEnvKey(key)
     })
 
     const result = await this.client.send(command)
-
     return result.Contents
   }
 
-  public async delete (
-    key: string
-  ): Promise<void> {
+  async delete (key: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key)
@@ -143,16 +149,12 @@ export class S3 {
       return this.configService.getOrThrow('S3_BUCKET')
     } catch (error) {
       captureException(error)
-
       throw new S3UnavailableError('The S3 bucket is not configured')
     }
   }
 
-  private prependEnvKey (
-    key: string
-  ): string {
+  private prependEnvKey (key: string): string {
     const env: string = this.configService.get('NODE_ENV', 'local')
-
     return `${env}/${key}`
   }
 }
