@@ -5,6 +5,7 @@ import { DefaultTypeOrmModule } from './modules/typeorm/default-typeorm.module.j
 import { DefaultConfigModule } from './modules/config/default-config.module.js'
 import { GlobalPipesModule } from './modules/global-pipes/global-pipes.module.js'
 import { DomainEventSubscribersModule } from './modules/domain-events/domain-event-subscribers.module.js'
+import { DomainEventEmitterModule } from './modules/domain-events/domain-event-emitter.module.js'
 
 @Module({})
 export class AppModule {
@@ -22,6 +23,7 @@ export class AppModule {
         GlobalPipesModule,
 
         DomainEventSubscribersModule,
+        DomainEventEmitterModule,
 
         // Utils
         ...modules

@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Module, OnApplicationBootstrap, Type } from '@nestjs/common'
+import { Global, Module, OnApplicationBootstrap, Type } from '@nestjs/common'
 import { ProvidersExplorerModule } from '../../utils/providers/providers-explorer.module.js'
 import { ProvidersExplorer } from '../../utils/providers/providers-explorer.js'
 import { EventsMap, SUBSCRIBE_KEY } from './subscribe.decorator.js'
 import { DomainEventEmitter, EventSubscriberMethod } from './domain-event-emitter.js'
 import { SUBSCRIBE_ALL_KEY, SubscribeAllMethodNames } from './subscribe-all.decorator.js'
 
+@Global()
 @Module({
   imports: [ProvidersExplorerModule],
   providers: [DomainEventEmitter],

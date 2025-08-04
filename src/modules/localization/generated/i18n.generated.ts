@@ -87,14 +87,6 @@ export type I18nTranslations = {
             };
         };
     };
-    "notification": {
-        "user": {
-            "created": string;
-        };
-        "system": {
-            "test-notification": string;
-        };
-    };
     "notifications": {
         "user": {
             "group-name": string;

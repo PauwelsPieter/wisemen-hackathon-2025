@@ -7,12 +7,10 @@ import { ApiContainer } from '@wisemen/app-container'
 import { AppModule } from '../app.module.js'
 import { WebsocketModule } from '../modules/websocket/websocket.module.js'
 import { AuthenticatedWsAdapter } from '../modules/websocket/websocket-adapter.js'
-import { AuthModule } from '../modules/auth/auth.module.js'
 
 @Module({
   imports: [
     AppModule.forRoot(),
-    AuthModule,
     WebsocketModule
   ]
 })

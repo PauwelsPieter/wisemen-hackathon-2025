@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { DomainEventEmitterModule } from '../../../domain-events/domain-event-emitter.module.js'
 import { Notification } from '../../entities/notification.entity.js'
 import { UserNotification } from '../../entities/user-notification.entity.js'
 import { NotificationPreferencesPreset } from '../../entities/notification-preferences-preset.entity.js'
@@ -10,7 +9,6 @@ import { CreateUserNotificationsRepository } from './create-user-notifications.r
 
 @Module({
   imports: [
-    DomainEventEmitterModule,
     TypeOrmModule.forFeature([
       Notification,
       UserNotification,

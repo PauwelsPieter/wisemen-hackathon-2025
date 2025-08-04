@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@wisemen/nestjs-typeorm'
-import { DomainEventEmitterModule } from '../../../../modules/domain-events/domain-event-emitter.module.js'
 import { Role } from '../../entities/role.entity.js'
 import { UpdateRolesPermissionsController } from './update-roles-permissions.controller.js'
 import { UpdateRolesPermissionsUseCase } from './update-roles-permissions.use-case.js'
@@ -8,8 +7,7 @@ import { UpdateRolesPermissionsRepository } from './update-roles-permissions.rep
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role]),
-    DomainEventEmitterModule
+    TypeOrmModule.forFeature([Role])
   ],
   controllers: [UpdateRolesPermissionsController],
   providers: [
