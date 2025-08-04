@@ -3,22 +3,27 @@ import type { SearchParams } from 'typesense/lib/Typesense/Documents.js'
 import { SortDirection } from '@wisemen/pagination'
 import type {
   FilterField,
+  ReferenceField,
   SearchField,
   SortField,
   TypesenseCollection
 } from '../collections/typesense.collection.js'
+import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
 import { TypesenseFilterOptions } from './enums/typesense-filter-options.enum.js'
 import { TypesenseOperationMode } from './enums/typesense-operation-mode.enum.js'
 import { TypesenseLogicOperator } from './enums/typesense-logic-operator.enum.js'
 import { TypesenseFilterParamsBuilder } from './filter-params.builder.js'
+import { TypesenseJoinType } from './enums/typesense-join-type.enum.js'
+import { TypesenseJoinOptions, TypesenseJoinParamsBuilder } from './join-params.builder.js'
 
 export const DEFAULT_LIMIT = 10
 export const DEFAULT_OFFSET = 0
 
 export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection> {
-  private readonly filters: string[] = []
+  private filters: string[] = []
   private queries: string[] = []
-  private readonly sorting: string[] = []
+  private sorting: string[] = []
+  private includeFields: string[] = []
   private query: string = '*'
   private offset: number = DEFAULT_OFFSET
   private limit: number = DEFAULT_LIMIT
@@ -122,10 +127,33 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     return this
   }
 
+  innerJoin (
+    field: ReferenceField<Collection>,
+    options?: TypesenseJoinOptions
+  ): this {
+    return this.addJoin(TypesenseJoinType.INNER, field, undefined, options)
+  }
+
+  leftJoin (
+    field: ReferenceField<Collection>,
+    options?: TypesenseJoinOptions
+  ): this {
+    return this.addJoin(TypesenseJoinType.LEFT, field, undefined, options)
+  }
+
+  inverseJoin (
+    collectionName: TypesenseCollectionName,
+    filterBy: string,
+    options?: TypesenseJoinOptions
+  ): this {
+    return this.addJoin(TypesenseJoinType.INVERSE, collectionName, filterBy, options)
+  }
+
   build (): SearchParams {
     return {
       q: this.query,
       query_by: this.queries.join(','),
+      include_fields: this.includeFields.join(','),
       filter_by: this.filters.join(` ${TypesenseLogicOperator.AND} `),
       sort_by: this.sorting.join(','),
       offset: this.offset,
@@ -136,5 +164,23 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
 
   private getOperator (options?: TypesenseFilterOptions): string {
     return options ?? TypesenseFilterOptions.EQUALS
+  }
+
+  private addJoin (
+    type: TypesenseJoinType,
+    field: ReferenceField<Collection> | TypesenseCollectionName,
+    filterBy?: string,
+    options?: TypesenseJoinOptions
+  ): this {
+    const builder = new TypesenseJoinParamsBuilder<Collection>()
+    const joinParams = builder.build(type, field, filterBy, options)
+
+    this.includeFields.push(joinParams.fields)
+
+    if (joinParams.filter != undefined) {
+      this.filters.push(joinParams.filter)
+    }
+
+    return this
   }
 }
