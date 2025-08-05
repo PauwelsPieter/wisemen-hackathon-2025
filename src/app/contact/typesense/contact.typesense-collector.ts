@@ -29,8 +29,10 @@ export class ContactTypesenseCollector implements TypesenseCollector {
   }
 
   async fetchRemoved (since: Date): Promise<string[]> {
-    return await this.contactRepository.findBy({
-      deletedAt: MoreThanOrEqual(since)
+    return await this.contactRepository.find({
+      select: { uuid: true },
+      where: { deletedAt: MoreThanOrEqual(since) },
+      withDeleted: true
     }).then(contacts => contacts.map(contact => contact.uuid))
   }
 }
