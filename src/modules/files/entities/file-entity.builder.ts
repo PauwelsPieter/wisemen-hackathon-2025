@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { MimeType } from '../enums/mime-type.enum.js'
 import { UserUuid } from '../../../app/users/entities/user.uuid.js'
 import { generateUuid } from '../../../utils/types/uuid.js'
+import { generateSanitizedS3Key } from '../../s3/sanitized-s3-key.js'
 import { File } from './file.entity.js'
 import { FileUuid } from './file.uuid.js'
 
@@ -13,7 +14,7 @@ export class FileEntityBuilder {
 
     this.file.uuid = generateUuid()
     this.file.name = randomUUID()
-    this.file.key = randomUUID()
+    this.file.key = generateSanitizedS3Key()
     this.file.mimeType = MimeType.OCTET_STREAM
     this.file.isUploadConfirmed = false
     this.file.blurHash = null
