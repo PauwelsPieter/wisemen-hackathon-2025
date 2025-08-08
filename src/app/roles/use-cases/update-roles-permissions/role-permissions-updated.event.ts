@@ -1,6 +1,5 @@
 import { OneOfMeta } from '@wisemen/one-of'
 import { ApiProperty } from '@nestjs/swagger'
-import { DomainEvent } from '../../../../modules/domain-events/domain-event.js'
 import { Role } from '../../entities/role.entity.js'
 import { Permission } from '../../../../modules/permission/permission.enum.js'
 import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
@@ -8,6 +7,7 @@ import { DomainEventType } from '../../../../modules/domain-events/domain-event-
 import { PermissionApiProperty } from '../../../../modules/permission/permission.api-property.js'
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
 import { RoleUuid } from '../../entities/role.uuid.js'
+import { RoleEvent } from '../../events/role.event.js'
 
 @OneOfMeta(DomainEventLog, DomainEventType.ROLE_PERMISSIONS_UPDATED)
 export class RolePermissionsUpdatedEventContent {
@@ -28,9 +28,10 @@ export class RolePermissionsUpdatedEventContent {
 }
 
 @RegisterDomainEvent(DomainEventType.ROLE_PERMISSIONS_UPDATED, 1)
-export class RolePermissionsUpdatedEvent extends DomainEvent<RolePermissionsUpdatedEventContent> {
+export class RolePermissionsUpdatedEvent extends RoleEvent<RolePermissionsUpdatedEventContent> {
   constructor (role: Role) {
     super({
+      roleUuid: role.uuid,
       content: new RolePermissionsUpdatedEventContent(role)
     })
   }

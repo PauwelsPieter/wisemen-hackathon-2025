@@ -3,7 +3,7 @@ import { OneOfMeta } from '@wisemen/one-of'
 import { DomainEventLog } from '../../../../modules/domain-event-log/domain-event-log.entity.js'
 import { DomainEventType } from '../../../../modules/domain-events/domain-event-type.js'
 import { RegisterDomainEvent } from '../../../../modules/domain-events/register-domain-event.decorator.js'
-import { RoleDomainEvent as RoleEvent } from '../../events/role.event.js'
+import { RoleEvent } from '../../events/role.event.js'
 import { Role } from '../../entities/role.entity.js'
 import { RoleUuid } from '../../entities/role.uuid.js'
 
