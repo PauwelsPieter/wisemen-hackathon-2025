@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap, Type } from '@nestjs/common'
+import { Injectable, Type } from '@nestjs/common'
 import { ModulesContainer } from '@nestjs/core'
 
 export interface NestjsProvider {
@@ -7,12 +7,13 @@ export interface NestjsProvider {
 }
 
 @Injectable()
-export class ProvidersExplorer implements OnApplicationBootstrap {
+export class ProvidersExplorer {
   private _providers: NestjsProvider[] = []
+  private isInitialized = false
 
   constructor (private readonly modules: ModulesContainer) {}
 
-  onApplicationBootstrap (): void {
+  init (): void {
     for (const moduleWrapper of this.modules.values()) {
       for (const providerWrapper of moduleWrapper.providers.values()) {
         const providerClass = providerWrapper.metatype
@@ -34,6 +35,10 @@ export class ProvidersExplorer implements OnApplicationBootstrap {
   }
 
   get providers (): NestjsProvider[] {
+    if (!this.isInitialized) {
+      this.init()
+      this.isInitialized = true
+    }
     return Array.from(this._providers)
   }
 }
