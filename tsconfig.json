@@ -26,6 +26,7 @@
   "include": [
     "eslint.config.js",
     "src/**/*",
-    "test/**/*"
+    "test/**/*",
+    "dangerfile.ts"
 , "docs/files"  ]
 }
