@@ -4,8 +4,8 @@ import { S3 } from '../../../s3/s3.js'
 import { File } from '../../entities/file.entity.js'
 import { PresignedFile } from '../../entities/presigned-file.js'
 import { PresignedFileBuilder } from '../../entities/presigned-file.builder.js'
-import { SanitizedS3Key } from '../../../s3/sanitized-s3-key.js'
-import { sanitizeS3Key } from '../../../../utils/helpers/sanitize-s3-key.helper.js'
+import { S3Key } from '../../../s3/s3-key.js'
+import { sanitizeS3Key } from '../../../s3/sanitize-s3-key.js'
 
 @Injectable()
 export class FilePresigner {
@@ -28,7 +28,7 @@ export class FilePresigner {
     return builder.build()
   }
 
-  private async createDownloadUrl (file: File, key: SanitizedS3Key): Promise<string> {
+  private async createDownloadUrl (file: File, key: S3Key): Promise<string> {
     return await this.s3.createTemporaryDownloadUrl(
       file.name,
       key,

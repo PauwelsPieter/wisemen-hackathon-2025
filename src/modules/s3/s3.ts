@@ -15,7 +15,7 @@ import { captureException } from '@sentry/nestjs'
 import { MimeType } from '../files/enums/mime-type.enum.js'
 import type { File } from '../files/entities/file.entity.js'
 import { S3UnavailableError } from './s3-unavailable.error.js'
-import { SanitizedS3Key } from './sanitized-s3-key.js'
+import { S3Key } from './s3-key.js'
 
 @Injectable()
 export class S3 {
@@ -51,7 +51,7 @@ export class S3 {
 
   async createTemporaryDownloadUrl (
     name: string,
-    key: SanitizedS3Key,
+    key: S3Key,
     mimeType: MimeType,
     expiresInSeconds?: number
   ): Promise<string> {
@@ -83,7 +83,7 @@ export class S3 {
     return await getSignedUrl(this.client, command, { expiresIn })
   }
 
-  async download (key: SanitizedS3Key): Promise<string> {
+  async download (key: S3Key): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key)
@@ -97,7 +97,7 @@ export class S3 {
     return await result.Body.transformToString()
   }
 
-  async upload (key: SanitizedS3Key, content: Buffer): Promise<void> {
+  async upload (key: S3Key, content: Buffer): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key),
@@ -110,7 +110,7 @@ export class S3 {
     })
   }
 
-  async uploadStream (key: SanitizedS3Key, stream: Readable): Promise<void> {
+  async uploadStream (key: S3Key, stream: Readable): Promise<void> {
     const parallelUploads = new Upload({
       client: this.client,
       params: {
@@ -126,7 +126,7 @@ export class S3 {
     await parallelUploads.done()
   }
 
-  async list (key: SanitizedS3Key): Promise<ListObjectsV2Output['Contents']> {
+  async list (key: S3Key): Promise<ListObjectsV2Output['Contents']> {
     const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: this.prependEnvKey(key)
@@ -136,7 +136,7 @@ export class S3 {
     return result.Contents
   }
 
-  async delete (key: SanitizedS3Key): Promise<void> {
+  async delete (key: S3Key): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.bucketName,
       Key: this.prependEnvKey(key)
@@ -154,8 +154,8 @@ export class S3 {
     }
   }
 
-  private prependEnvKey (key: SanitizedS3Key): SanitizedS3Key {
+  private prependEnvKey (key: S3Key): S3Key {
     const env: string = this.configService.get('NODE_ENV', 'local')
-    return `${env}/${key}` as SanitizedS3Key
+    return `${env}/${key}` as S3Key
   }
 }

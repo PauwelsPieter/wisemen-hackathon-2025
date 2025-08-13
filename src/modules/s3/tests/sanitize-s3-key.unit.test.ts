@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import { expect } from 'expect'
-import { FORBIDDEN_S3_CHARACTERS, sanitizeS3Key } from '../sanitize-s3-key.helper.js'
+import { FORBIDDEN_S3_CHARACTERS, sanitizeS3Key } from '../sanitize-s3-key.js'
 
 describe('sanitizeS3Key - Unit Tests', () => {
   it('replaces repeated slashes with a single slash', () => {
@@ -20,7 +20,7 @@ describe('sanitizeS3Key - Unit Tests', () => {
   })
 
   it('removes all forbidden characters when not passing a \'replaceWith\' value ', () => {
-    const originalKey = `${FORBIDDEN_S3_CHARACTERS.join('')}/only-remaining-text`
+    const originalKey = `${FORBIDDEN_S3_CHARACTERS}/only-remaining-text`
     const sanitizedKey = sanitizeS3Key(originalKey)
 
     expect(originalKey).not.toEqual(sanitizedKey)
@@ -28,7 +28,7 @@ describe('sanitizeS3Key - Unit Tests', () => {
   })
 
   it('replaces all forbidden characters with the given \'replaceWith\' value', () => {
-    const originalKey = `${FORBIDDEN_S3_CHARACTERS.join('')}`
+    const originalKey = `${FORBIDDEN_S3_CHARACTERS}`
     const sanitizedKey = sanitizeS3Key(originalKey, 'a')
 
     const expectedKey = 'a'.repeat(FORBIDDEN_S3_CHARACTERS.length)

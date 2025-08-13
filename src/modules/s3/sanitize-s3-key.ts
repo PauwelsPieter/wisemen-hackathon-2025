@@ -1,37 +1,11 @@
-import { SanitizedS3Key } from '../../modules/s3/sanitized-s3-key.js'
+import { S3Key } from './s3-key.js'
 
-export const FORBIDDEN_S3_CHARACTERS = [
-  '&',
-  '$',
-  '@',
-  '=',
-  ';',
-  ':',
-  '+',
-  ' ',
-  '?',
-  '\\',
-  '{',
-  '}',
-  '%',
-  '`',
-  '[',
-  ']',
-  '"',
-  '<',
-  '>',
-  '~',
-  '#',
-  '|'
-]
+export const FORBIDDEN_S3_CHARACTERS = '&$@=;:+ ?\\{}%`[]"<>~#|'
 
 /**
  * https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html
  */
-export function sanitizeS3Key (
-  key: string,
-  replaceWith: string = ''
-): SanitizedS3Key {
+export function sanitizeS3Key (key: string, replaceWith: string = ''): S3Key {
   let sanitizedKey = key
 
   for (const forbiddenChar of FORBIDDEN_S3_CHARACTERS) {
@@ -54,5 +28,5 @@ export function sanitizeS3Key (
     throw new Error(`The s3 key must be <= 1,024 bytes`)
   }
 
-  return sanitizedKey as SanitizedS3Key
+  return sanitizedKey as S3Key
 }
