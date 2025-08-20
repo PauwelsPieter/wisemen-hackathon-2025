@@ -44,23 +44,22 @@ export class OpenTelemetryLoggerService implements OnModuleInit {
       concurrencyLimit: 1
     })
 
-    this.loggerProvider = new LoggerProvider()
-    this.loggerProvider.addLogRecordProcessor(
-      new BatchLogRecordProcessor(logExporter)
-    )
+    this.loggerProvider = new LoggerProvider({
+      processors: [new BatchLogRecordProcessor(logExporter)]
+    })
 
     this.logProvider = this.loggerProvider.getLogger('default')
   }
 
-  public info (logRecord: LogRecord): void {
+  info (logRecord: LogRecord): void {
     this.emit(SeverityNumber.INFO, logRecord)
   }
 
-  public warn (logRecord: LogRecord): void {
+  warn (logRecord: LogRecord): void {
     this.emit(SeverityNumber.WARN, logRecord)
   }
 
-  public error (logRecord: LogRecord): void {
+  error (logRecord: LogRecord): void {
     this.emit(SeverityNumber.ERROR, logRecord)
   }
 
