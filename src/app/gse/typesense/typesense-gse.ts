@@ -5,7 +5,7 @@ import { GseType } from '../enums/gse-type.enum.js'
 
 export class TypesenseGse {
   id: GseUuid
-  airportUuid: AirportUuid
+  airportUuid?: AirportUuid
   type: GseType
   soc: number
   temperatureCelsius: number

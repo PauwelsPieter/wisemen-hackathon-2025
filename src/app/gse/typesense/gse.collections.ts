@@ -11,11 +11,13 @@ export class GseTypesenseCollection extends TypesenseCollection {
   ] as const
 
   readonly filterableFields = [
-    { name: 'airportUuid', type: 'string' },
+    // { name: 'airportUuid', type: 'string', optional: true },
     { name: 'type', type: 'string' },
     { name: 'soc', type: 'float' },
     { name: 'temperatureCelsius', type: 'float' }
   ] as const
 
-  readonly referenceFields = [] as const
+  readonly referenceFields = [
+    { name: 'airportUuid', type: 'string', collectionName: TypesenseCollectionName.AIRPORT, optional: true }
+  ] as const
 }
