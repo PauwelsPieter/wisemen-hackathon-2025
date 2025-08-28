@@ -4,9 +4,11 @@ import { TypesenseUser } from '../../../app/users/typesense/typesense-user.js'
 import { TypesenseContact } from '../../../app/contact/typesense/typesense-contact.js'
 import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
 import { TypesenseAirport } from '../../../app/airport/typesense/typesense-airport.js'
+import { TypesenseGse } from '../../../app/gse/typesense/typesense-gse.js'
 
 export interface TypesenseCollectionSchema {
   [TypesenseCollectionName.AIRPORT]: TypesenseAirport
+  [TypesenseCollectionName.GSE]: TypesenseGse
   [TypesenseCollectionName.USER]: TypesenseUser
   [TypesenseCollectionName.CONTACT]: TypesenseContact
 }

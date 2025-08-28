@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { TypesenseUserModule } from '../../app/users/typesense/user-typesense.module.js'
 import { TypesenseContactModule } from '../../app/contact/typesense/contact.typesense.module.js'
 import { TypesenseAirportModule } from '../../app/airport/typesense/airport-typesense.module.js'
+import { TypesenseGseModule } from '../../app/gse/typesense/gse-typesense.module.js'
 import { TypesenseQueryService } from './services/typesense-query.service.js'
 
 import { TypesenseDocumentService } from './services/typesense-document.service.js'
@@ -16,6 +17,7 @@ import { TypesenseCollectorsModule } from './collectors/typesense-collectors.mod
 @Module({
   imports: [
     TypesenseAirportModule,
+    TypesenseGseModule,
     TypesenseUserModule,
     TypesenseContactModule,
 
