@@ -43,7 +43,7 @@ export class TypesenseQueryService {
 
   public async search<T extends TypesenseCollectionName>(
     index: T,
-    searchParams: SearchParams
+    searchParams: SearchParams<object>
   ): Promise<MultiSearchResult<T>> {
     try {
       const result = await this.typesenseClient.client
@@ -54,8 +54,8 @@ export class TypesenseQueryService {
       const limit = result.request_params.per_page ?? DEFAULT_LIMIT
       const offset = searchParams.offset ?? DEFAULT_OFFSET
       const meta = new PaginatedOffsetResponseMeta(result.found, offset, limit)
-      const items
-      = (result.hits?.map(hit => hit.document) ?? []) as unknown as TypesenseCollectionSchema[T][]
+      const documents = result.hits?.map(hit => hit.document) ?? []
+      const items = documents as unknown as TypesenseCollectionSchema[T][]
 
       return new PaginatedOffsetResponse<TypesenseCollectionSchema[T]>(items, meta)
     } catch (e) {

@@ -1,5 +1,5 @@
-import { MultiSearchRequestSchema } from 'typesense/lib/Typesense/MultiSearch.js'
 import { PaginatedOffsetResponse } from '@wisemen/pagination'
+import { MultiSearchRequestSchema } from 'typesense/lib/Typesense/Types.js'
 import { TypesenseUser } from '../../../app/users/typesense/typesense-user.js'
 import { TypesenseContact } from '../../../app/contact/typesense/typesense-contact.js'
 import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
@@ -13,7 +13,7 @@ export type MultiSearchResult<T extends TypesenseCollectionName> =
   PaginatedOffsetResponse<TypesenseCollectionSchema[T]>
 
 export interface CustomMultiSearchRequestSchema<T extends TypesenseCollectionName>
-  extends MultiSearchRequestSchema {
+  extends MultiSearchRequestSchema<object, string> {
   collection: T
 }
 

@@ -49,7 +49,7 @@ export class ViewUserIndexRepsitory {
     return result
   }
 
-  private createTypesenseSearchParams (query: ViewUserIndexQuery): SearchParams {
+  private createTypesenseSearchParams (query: ViewUserIndexQuery): SearchParams<object> {
     return new TypesenseSearchParamsBuilder<UserTypesenseCollection>()
       .withQuery(query.search)
       .withOffset(query.pagination?.offset)

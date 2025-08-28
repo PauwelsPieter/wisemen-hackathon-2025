@@ -149,7 +149,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     return this.addJoin(TypesenseJoinType.INVERSE, collectionName, filterBy, options)
   }
 
-  build (): SearchParams {
+  build (): SearchParams<object> {
     return {
       q: this.query,
       query_by: this.queries.join(','),
