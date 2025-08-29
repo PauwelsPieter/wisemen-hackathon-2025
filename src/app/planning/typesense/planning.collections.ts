@@ -15,5 +15,8 @@ export class PlanningTypesenseCollection extends TypesenseCollection {
     { name: 'to', type: 'int64' }
   ] as const
 
-  readonly referenceFields = [] as const
+  readonly referenceFields = [
+    { name: 'gseUuid', type: 'string', collectionName: TypesenseCollectionName.GSE }
+
+  ] as const
 }
