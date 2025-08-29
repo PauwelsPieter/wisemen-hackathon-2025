@@ -1,13 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { TypesenseClient } from '../../client/typesense.client.js'
-import { AiModelName } from '../create-nl-search-model/ai-model.enum.js'
 import { AiSearchModelMapper } from '../../helpers/ai-search-model.mapper.js'
+import { SearchModel } from '../../helpers/search-model.type.js'
 import { ViewNaturalLanguageModelIndex } from './view-nl-search-model-index.response.js'
-
-export interface SearchModel {
-  modelId: string
-  modelName: AiModelName
-}
 
 @Injectable()
 export class ViewNaturalLanguageModelIndexUseCase {

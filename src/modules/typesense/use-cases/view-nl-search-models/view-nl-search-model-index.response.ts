@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { AiModelName } from '../create-nl-search-model/ai-model.enum.js'
-import { SearchModel } from './view-nl-search-model-index.use-case.js'
+import { SearchModel } from '../../helpers/search-model.type.js'
 
 class NaturalLanguageModel {
   @ApiProperty({ type: String })
