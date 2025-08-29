@@ -3,6 +3,7 @@ import { TypesenseUserModule } from '../../app/users/typesense/user-typesense.mo
 import { TypesenseContactModule } from '../../app/contact/typesense/contact.typesense.module.js'
 import { TypesenseAirportModule } from '../../app/airport/typesense/airport-typesense.module.js'
 import { TypesenseGseModule } from '../../app/gse/typesense/gse-typesense.module.js'
+import { TypesensePlanningModule } from '../../app/planning/typesense/planning-typesense.module.js'
 import { TypesenseQueryService } from './services/typesense-query.service.js'
 
 import { TypesenseDocumentService } from './services/typesense-document.service.js'
@@ -20,6 +21,7 @@ import { TypesenseCollectorsModule } from './collectors/typesense-collectors.mod
     TypesenseGseModule,
     TypesenseUserModule,
     TypesenseContactModule,
+    TypesensePlanningModule,
 
     MigrateCollectionsModule,
     ImportCollectionsModule,

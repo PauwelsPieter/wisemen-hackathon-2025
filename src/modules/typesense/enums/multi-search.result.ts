@@ -5,10 +5,12 @@ import { TypesenseContact } from '../../../app/contact/typesense/typesense-conta
 import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
 import { TypesenseAirport } from '../../../app/airport/typesense/typesense-airport.js'
 import { TypesenseGse } from '../../../app/gse/typesense/typesense-gse.js'
+import { TypesensePlanning } from '../../../app/planning/typesense/typesense-planning.js'
 
 export interface TypesenseCollectionSchema {
   [TypesenseCollectionName.AIRPORT]: TypesenseAirport
   [TypesenseCollectionName.GSE]: TypesenseGse
+  [TypesenseCollectionName.PLANNING]: TypesensePlanning
   [TypesenseCollectionName.USER]: TypesenseUser
   [TypesenseCollectionName.CONTACT]: TypesenseContact
 }
