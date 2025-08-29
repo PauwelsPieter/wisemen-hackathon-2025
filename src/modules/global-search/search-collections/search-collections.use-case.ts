@@ -24,7 +24,8 @@ export class SearchCollectionsUseCase {
     for (const collection of query.filter?.collections ?? GlobalSearchTypesenseCollections) {
       searchParams.push(this.buildSearchParams(query, collection))
     }
-    console.log('🚀 ~ SearchCollectionsUseCase ~ execute ~ searchParams:', searchParams)
+
+    console.log(searchParams)
 
     const searchResult = await this.typesense.multiSearch(searchParams)
 
@@ -73,15 +74,14 @@ export class SearchCollectionsUseCase {
     searchParams: ParamBuilder<GseTypesenseCollection>
   ): void {
     searchParams
-      .addSearchOn('location')
+      .addSearchOn('type')
       // .innerJoin(TypesenseCollectionName.AIRPORT)
   }
 
   private addPlanningParams (
     searchParams: ParamBuilder<PlanningTypesenseCollection>
   ): void {
-    searchParams
-      .addSearchOn('id')
+    return
   }
 
   private mapAndSortResults <T extends TypesenseCollectionName> (

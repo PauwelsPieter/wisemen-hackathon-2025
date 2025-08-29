@@ -7,13 +7,13 @@ export class GseTypesenseCollection extends TypesenseCollection {
   readonly name = TypesenseCollectionName.GSE
 
   readonly searchableFields = [
-    { name: 'location', type: 'geopoint' },
-    { name: 'type', type: 'string' },
-    { name: 'soc', type: 'float' },
-    { name: 'temperatureCelsius', type: 'float' }
+    { name: 'type', type: 'string' }
   ] as const
 
   readonly filterableFields = [
+    { name: 'location', type: 'geopoint' },
+    { name: 'soc', type: 'float' },
+    { name: 'temperature', type: 'float' }
   ] as const
 
   readonly referenceFields = [

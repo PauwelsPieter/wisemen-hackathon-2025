@@ -11,10 +11,10 @@ import type {
 import { TypesenseCollectionName } from '../collections/typesense-collection-name.enum.js'
 import { TypesenseFilterOptions } from './enums/typesense-filter-options.enum.js'
 import { TypesenseOperationMode } from './enums/typesense-operation-mode.enum.js'
-import { TypesenseLogicOperator } from './enums/typesense-logic-operator.enum.js'
 import { TypesenseFilterParamsBuilder } from './filter-params.builder.js'
 import { TypesenseJoinType } from './enums/typesense-join-type.enum.js'
 import { TypesenseJoinOptions, TypesenseJoinParamsBuilder } from './join-params.builder.js'
+import { TypesenseLogicOperator } from './enums/typesense-logic-operator.enum.js'
 
 export const DEFAULT_LIMIT = 10
 export const DEFAULT_OFFSET = 0
@@ -173,6 +173,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
       params.nl_model_id = this.nlModelId
       params.nl_query = true
       params.q = this.nlQuery
+      params.nl_query_debug = true
     }
 
     return params

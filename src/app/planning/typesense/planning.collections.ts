@@ -7,12 +7,11 @@ export class PlanningTypesenseCollection extends TypesenseCollection {
   readonly name = TypesenseCollectionName.PLANNING
 
   readonly searchableFields = [
-    { name: 'id', type: 'string' }
+    { name: 'from', type: 'int64' },
+    { name: 'to', type: 'int64' }
   ] as const
 
   readonly filterableFields = [
-    { name: 'from', type: 'int64' },
-    { name: 'to', type: 'int64' }
   ] as const
 
   readonly referenceFields = [

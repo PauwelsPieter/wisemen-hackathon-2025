@@ -3,24 +3,29 @@ import { Gse } from '../entities/gse.entity.js'
 import { GseUuid } from '../entities/gse.uuid.js'
 import { GseType } from '../enums/gse-type.enum.js'
 
+export class GseAirportSchema {
+  id: AirportUuid
+  name: string
+}
+
 export class TypesenseGse {
   id: GseUuid
   airportUuid?: AirportUuid
   type: GseType
   soc: number
-  temperatureCelsius: number
-  longitude: string
-  latitude: string
+  temperature: number
+  location: number[]
+
+  airport?: GseAirportSchema
 
   constructor (gse: Gse) {
     return {
       id: gse.uuid,
-      airportUuid: gse.airportUuid!,
+      airportUuid: gse.airportUuid ?? undefined,
       type: gse.type,
       soc: gse.soc,
-      temperatureCelsius: gse.temperatureCelsius,
-      latitude: gse.location[1] as string,
-      longitude: gse.location[0] as string
+      temperature: gse.temperatureCelsius,
+      location: [gse.location.coordinates[1], gse.location.coordinates[0]]
     }
   }
 }

@@ -50,7 +50,7 @@ export class CreateNaturalLanguageSearchModelUseCase {
           id: model,
           model_name: model,
           api_key: key,
-          max_bytes: 1600,
+          max_bytes: 3200,
           temperature: 0
         }
 
