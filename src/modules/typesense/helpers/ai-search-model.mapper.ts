@@ -4,9 +4,13 @@ export class AiSearchModelMapper {
   static map (modelName: string): AiModelName {
     switch (modelName) {
       case 'google/gemini-2.0-flash':
-        return AiModelName.GEMINI
+        return AiModelName.GEMINI_2_0_FLASH
+      case 'google/gemini-2.5-flash':
+        return AiModelName.GEMINI_2_5_FLASH
+      case 'google/gemini-1.5-pro':
+        return AiModelName.GEMINI_1_5_PRO
       default:
-        return AiModelName.GEMINI
+        return AiModelName.GEMINI_2_0_FLASH
     }
   }
 }
