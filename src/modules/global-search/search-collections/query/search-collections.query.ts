@@ -42,4 +42,10 @@ export class SearchCollectionsQuery {
   @IsString()
   @IsNotEmpty()
   search: string
+
+  @ApiProperty({ type: String, required: false })
+  prompt?: string
+
+  @ApiProperty({ type: String, required: false })
+  model?: string
 }
