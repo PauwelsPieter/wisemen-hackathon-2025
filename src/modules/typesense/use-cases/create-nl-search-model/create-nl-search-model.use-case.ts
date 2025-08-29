@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { TypesenseClient } from '../../client/typesense.client.js'
 import { TYPESENSE_ENDPOINTS } from '../../helpers/typesense-endpoints.constants.js'
+import { CreateNaturalLanguageModelCommand } from './create-nl-search-model.command.js'
+import { AiModelName } from './ai-model.enum.js'
 
 interface CreateNaturalLanguageModel {
   id: string
@@ -10,23 +13,40 @@ interface CreateNaturalLanguageModel {
   temperature: number
 }
 
+const modelToApiKey: Record<AiModelName, string> = {
+  [AiModelName.GEMINI]: 'GEMINI_API_KEY'
+}
+
 @Injectable()
 export class CreateNaturalLanguageSearchModelUseCase {
   constructor (
-    private readonly typesenseClient: TypesenseClient
+    private readonly typesenseClient: TypesenseClient,
+    private readonly configService: ConfigService
   ) {}
 
-  async execute (): Promise<void> {
+  async execute (
+    command: CreateNaturalLanguageModelCommand
+  ): Promise<void> {
     const url = TYPESENSE_ENDPOINTS.CREATE_NATURAL_LANGUAGE_MODEL
 
+    const apiKeyEnvVariable = this.getApiKeyEnvVariable(command.modelName)
+
+    this.configService.getOrThrow(apiKeyEnvVariable)
+
     const body: CreateNaturalLanguageModel = {
-      id: 'gemini-model',
-      model_name: 'google/gemini-2.0-flash',
-      api_key: '',
+      id: command.modelId,
+      model_name: command.modelName,
+      api_key: apiKeyEnvVariable,
       max_bytes: 1600,
       temperature: 0
     }
 
     await this.typesenseClient.client.apiCall.post(url, body)
+  }
+
+  private getApiKeyEnvVariable (
+    model: AiModelName
+  ): string {
+    return modelToApiKey[model]
   }
 }
