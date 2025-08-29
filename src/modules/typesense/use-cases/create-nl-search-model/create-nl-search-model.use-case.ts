@@ -30,13 +30,12 @@ export class CreateNaturalLanguageSearchModelUseCase {
     const url = TYPESENSE_ENDPOINTS.CREATE_NATURAL_LANGUAGE_MODEL
 
     const apiKeyEnvVariable = this.getApiKeyEnvVariable(command.modelName)
-
-    this.configService.getOrThrow(apiKeyEnvVariable)
+    const key = this.configService.getOrThrow<string>(apiKeyEnvVariable)
 
     const body: CreateNaturalLanguageModel = {
       id: command.modelId,
       model_name: command.modelName,
-      api_key: apiKeyEnvVariable,
+      api_key: key,
       max_bytes: 1600,
       temperature: 0
     }
