@@ -75,7 +75,7 @@ export class SearchCollectionsUseCase {
     searchParams
       .addSearchOn('airportName')
       .addSearchOn('type')
-      // .innerJoin(TypesenseCollectionName.AIRPORT)
+      .innerJoin(TypesenseCollectionName.AIRPORT)
   }
 
   private addPlanningParams (
