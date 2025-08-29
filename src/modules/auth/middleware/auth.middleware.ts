@@ -2,7 +2,6 @@ import { Injectable, type NestMiddleware } from '@nestjs/common'
 import type { Request, Response, NextFunction } from 'express'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { ConfigService } from '@nestjs/config'
-import { UnauthorizedError } from '../../exceptions/generic/unauthorized.error.js'
 import { UserAuthService } from '../../../app/users/services/user-auth.service.js'
 import { AuthContent, AuthContext } from '../auth.context.js'
 
@@ -26,28 +25,29 @@ export class AuthMiddleware implements NestMiddleware {
   }
 
   public async use (req: Request, _res: Response, next: NextFunction): Promise<void> {
-    if (req.headers.authorization == null) {
-      next()
+    // if (req.headers.authorization == null) {
+    //   next()
 
-      return
-    }
+    //   return
+    // }
 
-    if (!req.headers.authorization.startsWith('Bearer ')) {
-      throw new UnauthorizedError('Unauthorized: Invalid authorization header format')
-    }
+    // if (!req.headers.authorization.startsWith('Bearer ')) {
+    //   throw new UnauthorizedError('Unauthorized: Invalid authorization header format')
+    // }
 
-    const token = req.headers.authorization.split(' ')[1]
+    // const token = req.headers.authorization.split(' ')[1]
 
-    try {
-      const content = await this.verify(token)
+    // try {
+    //   const content = await this.verify(token)
 
-      this.authContext.run(content, next)
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new UnauthorizedError('Unauthorized: Invalid or expired token', error)
-      }
-      throw error
-    }
+    //   this.authContext.run(content, next)
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     throw new UnauthorizedError('Unauthorized: Invalid or expired token', error)
+    //   }
+    //   throw error
+    // }
+    next()
   }
 
   public async verify (token: string): Promise<AuthContent> {
