@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from 'typeorm'
-import { Airport } from '../../airport/entities/airport.entity.js'
 import { GseUuid } from '../../gse/entities/gse.uuid.js'
 import { Gse } from '../../gse/entities/gse.entity.js'
 import { PlanningUuid } from './planning.uuid.js'
@@ -18,7 +17,7 @@ export class Planning {
   @Column({ type: 'uuid' })
   gseUuid: GseUuid
 
-  @ManyToOne(() => Airport)
+  @ManyToOne(() => Gse)
   @JoinColumn({ name: 'gse_uuid' })
   gse?: Relation<Gse>
 
