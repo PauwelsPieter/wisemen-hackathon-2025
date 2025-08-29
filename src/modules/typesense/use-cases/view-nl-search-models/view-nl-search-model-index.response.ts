@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { AiModelName } from '../create-nl-search-model/ai-model.enum.js'
+import { SearchModel } from './view-nl-search-model-index.use-case.js'
 
 class NaturalLanguageModel {
   @ApiProperty({ type: String })
@@ -7,13 +8,18 @@ class NaturalLanguageModel {
 
   @ApiProperty({ type: String, enum: AiModelName, enumName: 'AiModelName' })
   modelName: AiModelName
+
+  constructor (searchModel: SearchModel) {
+    this.modelId = searchModel.modelId
+    this.modelName = searchModel.modelName
+  }
 }
 
 export class ViewNaturalLanguageModelIndex {
   @ApiProperty({ type: NaturalLanguageModel, isArray: true })
   models: NaturalLanguageModel[]
 
-  constructor () {
-    this.models = []
+  constructor (searchModels: SearchModel[]) {
+    this.models = searchModels.map(searchModel => new NaturalLanguageModel(searchModel))
   }
 }

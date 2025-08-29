@@ -14,7 +14,9 @@ interface CreateNaturalLanguageModel {
 }
 
 const modelToApiKey: Record<AiModelName, string> = {
-  [AiModelName.GEMINI]: 'GEMINI_API_KEY'
+  [AiModelName.GEMINI_2_0_FLASH]: 'GEMINI_API_KEY',
+  [AiModelName.GEMINI_2_5_FLASH]: 'GEMINI_API_KEY',
+  [AiModelName.GEMINI_1_5_PRO]: 'GEMINI_API_KEY'
 }
 
 @Injectable()
