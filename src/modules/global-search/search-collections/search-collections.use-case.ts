@@ -3,10 +3,10 @@ import { TypesenseQueryService } from '../../typesense/services/typesense-query.
 import { TypesenseCollectionName } from '../../typesense/collections/typesense-collection-name.enum.js'
 import { CustomMultiSearchRequestSchema, MappedMultiSearchResponseItem, MultiSearchResponse } from '../../typesense/enums/multi-search.result.js'
 import { GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseCollections } from '../global-search-typesense-collections.js'
-import { UserTypesenseCollection } from '../../../app/users/typesense/user.collections.js'
-import { TypesenseOperationMode } from '../../typesense/param-builders/enums/typesense-operation-mode.enum.js'
 import { TypesenseSearchParamsBuilder as ParamBuilder } from '../../typesense/param-builders/search-params.builder.js'
-import { ContactTypesenseCollection } from '../../../app/contact/typesense/contact.typesense-collection.js'
+import { AirportTypesenseCollection } from '../../../app/airport/typesense/airport.collections.js'
+import { GseTypesenseCollection } from '../../../app/gse/typesense/gse.collections.js'
+import { PlanningTypesenseCollection } from '../../../app/planning/typesense/planning.collections.js'
 import { SearchCollectionsResponse } from './responses/search-collections.response.js'
 import { SearchCollectionsQuery } from './query/search-collections.query.js'
 
@@ -39,12 +39,19 @@ export class SearchCollectionsUseCase {
     const params = new ParamBuilder()
       .withQuery(query.search)
 
+    if (query.prompt !== undefined && query.model !== undefined) {
+      params.withNlQuery(query.prompt, query.model)
+    }
+
     switch (collection) {
-      case TypesenseCollectionName.USER:
-        this.addUserParams(params as unknown as ParamBuilder<UserTypesenseCollection>)
+      case TypesenseCollectionName.AIRPORT:
+        this.addAirportParams(params as unknown as ParamBuilder<AirportTypesenseCollection>)
         break
-      case TypesenseCollectionName.CONTACT:
-        this.addContactParams(params as unknown as ParamBuilder<ContactTypesenseCollection>, query)
+      case TypesenseCollectionName.GSE:
+        this.addGseParams(params as unknown as ParamBuilder<GseTypesenseCollection>)
+        break
+      case TypesenseCollectionName.PLANNING:
+        this.addPlanningParams(params as unknown as ParamBuilder<PlanningTypesenseCollection>)
         break
       default:
         throw new Error(`Collection ${collection} not supported`)
@@ -53,23 +60,26 @@ export class SearchCollectionsUseCase {
     return { collection, ...params.build() }
   }
 
-  private addUserParams (
-    searchParams: ParamBuilder<UserTypesenseCollection>
+  private addAirportParams (
+    searchParams: ParamBuilder<AirportTypesenseCollection>
   ): void {
     searchParams
-      .addSearchOn('firstName', TypesenseOperationMode.ALWAYS)
-      .addSearchOn('lastName', TypesenseOperationMode.ALWAYS)
-      .addSearchOn('email', TypesenseOperationMode.ALWAYS)
+      .addSearchOn('code')
+      .addSearchOn('name')
   }
 
-  private addContactParams (
-    searchParams: ParamBuilder<ContactTypesenseCollection>,
-    query: SearchCollectionsQuery
+  private addGseParams (
+    searchParams: ParamBuilder<GseTypesenseCollection>
   ): void {
     searchParams
-      .addSearchOn('name', TypesenseOperationMode.ALWAYS)
-      .addSearchOn('email', TypesenseOperationMode.ALWAYS)
-      .addFilterOn('isActive', query.filter?.contact?.isActive)
+      .addSearchOn('location')
+  }
+
+  private addPlanningParams (
+    searchParams: ParamBuilder<PlanningTypesenseCollection>
+  ): void {
+    searchParams
+      .addSearchOn('id')
   }
 
   private mapAndSortResults <T extends TypesenseCollectionName> (

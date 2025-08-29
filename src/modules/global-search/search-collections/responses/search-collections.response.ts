@@ -2,10 +2,14 @@ import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { exhaustiveCheck } from '../../../../utils/helpers/exhaustive-check.helper.js'
 import { TypesenseCollectionName } from '../../../typesense/collections/typesense-collection-name.enum.js'
 import { GlobalSearchTypesenseCollectionNameApiProperty, GlobalSearchTypesenseCollectionNames, GlobalSearchTypesenseResult } from '../../global-search-typesense-collections.js'
-import { TypesenseUser } from '../../../../app/users/typesense/typesense-user.js'
-import { TypesenseContact } from '../../../../app/contact/typesense/typesense-contact.js'
+import { TypesenseGse } from '../../../../app/gse/typesense/typesense-gse.js'
+import { TypesensePlanning } from '../../../../app/planning/typesense/typesense-planning.js'
+import { TypesenseAirport } from '../../../../app/airport/typesense/typesense-airport.js'
 import { SearchCollectionUserResponse } from './search-collection-user.response.js'
 import { SearchCollectionContactResponse } from './search-collection-contact.response.js'
+import { SearchCollectionGseResponse } from './search-collection.gse.response.js'
+import { SearchCollectionPlanningResponse } from './search-collection-planning.response.js'
+import { SearchCollectionAirportResponse } from './search-collection-airport.response.js'
 
 @ApiExtraModels(
   SearchCollectionUserResponse,
@@ -17,11 +21,14 @@ class SearchCollectionsResponseItem {
 
   @ApiProperty({
     oneOf: [
-      { $ref: getSchemaPath(SearchCollectionUserResponse) },
-      { $ref: getSchemaPath(SearchCollectionContactResponse) }
+      { $ref: getSchemaPath(SearchCollectionGseResponse) },
+      { $ref: getSchemaPath(SearchCollectionPlanningResponse) },
+      { $ref: getSchemaPath(SearchCollectionAirportResponse) }
     ]
   })
-  entity: SearchCollectionUserResponse | SearchCollectionContactResponse
+  entity: SearchCollectionGseResponse
+    | SearchCollectionPlanningResponse
+    | SearchCollectionAirportResponse
 
   @ApiProperty({ type: 'number' })
   text_match: number
@@ -38,10 +45,12 @@ class SearchCollectionsResponseItem {
     const item = searchCollectionsItem.item
 
     switch (searchCollectionsItem.collection) {
-      case TypesenseCollectionName.USER:
-        return new SearchCollectionUserResponse(item as TypesenseUser)
-      case TypesenseCollectionName.CONTACT:
-        return new SearchCollectionContactResponse(item as TypesenseContact)
+      case TypesenseCollectionName.GSE:
+        return new SearchCollectionGseResponse(item as TypesenseGse)
+      case TypesenseCollectionName.PLANNING:
+        return new SearchCollectionPlanningResponse(item as TypesensePlanning)
+      case TypesenseCollectionName.AIRPORT:
+        return new SearchCollectionAirportResponse(item as TypesenseAirport)
       default:
         exhaustiveCheck(searchCollectionsItem.collection)
     }

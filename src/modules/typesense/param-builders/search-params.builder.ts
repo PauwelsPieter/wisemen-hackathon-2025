@@ -28,6 +28,8 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
   private offset: number = DEFAULT_OFFSET
   private limit: number = DEFAULT_LIMIT
   private infix: TypesenseOperationMode[] = []
+  private nlModelId: string | null = null
+  private nlQuery: string | null = null
 
   constructor () {}
 
@@ -149,8 +151,14 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
     return this.addJoin(TypesenseJoinType.INVERSE, collectionName, filterBy, options)
   }
 
+  withNlQuery (prompt: string, modelId: string): this {
+    this.nlQuery = prompt
+    this.nlModelId = modelId
+    return this
+  }
+
   build (): SearchParams<object> {
-    return {
+    const params: SearchParams<object> = {
       q: this.query,
       query_by: this.queries.join(','),
       include_fields: this.includeFields.join(','),
@@ -160,6 +168,14 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
       limit: this.limit,
       infix: this.infix
     }
+
+    if (this.nlModelId !== null && this.nlQuery !== null) {
+      params.nl_model_id = this.nlModelId
+      params.nl_query = true
+      params.q = this.nlQuery
+    }
+
+    return params
   }
 
   private getOperator (options?: TypesenseFilterOptions): string {

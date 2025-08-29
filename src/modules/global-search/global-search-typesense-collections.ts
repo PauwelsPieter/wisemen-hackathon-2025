@@ -5,8 +5,9 @@ import { MappedMultiSearchResponseItem } from '../typesense/enums/multi-search.r
 export type GlobalSearchTypesenseCollectionNames = typeof GlobalSearchTypesenseCollections[number]
 
 export const GlobalSearchTypesenseCollections = [
-  TypesenseCollectionName.USER,
-  TypesenseCollectionName.CONTACT
+  TypesenseCollectionName.GSE,
+  TypesenseCollectionName.PLANNING,
+  TypesenseCollectionName.AIRPORT
 ] as const
 
 export function GlobalSearchTypesenseCollectionNameApiProperty (
