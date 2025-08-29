@@ -7,8 +7,8 @@ export class AiSearchModelMapper {
         return AiModelName.GEMINI_2_0_FLASH
       case 'google/gemini-2.5-flash':
         return AiModelName.GEMINI_2_5_FLASH
-      case 'google/gemini-1.5-pro':
-        return AiModelName.GEMINI_1_5_PRO
+      // case 'google/gemini-1.5-pro':
+      //   return AiModelName.GEMINI_1_5_PRO
       case 'google/gemini-2.5-flash-lite':
         return AiModelName.GEMINI_2_5_FLASH_LITE
       default:
