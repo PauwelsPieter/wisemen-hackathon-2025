@@ -5,12 +5,12 @@ import { GseType } from '../../../../app/gse/enums/gse-type.enum.js'
 import { TypesenseGse } from '../../../../app/gse/typesense/typesense-gse.js'
 
 export class LocationResponse {
-  longitude: number
-  latitude: number
+  longitude: string
+  latitude: string
 
-  constructor (location: string[]) {
-    this.longitude = Number(location[1])
-    this.latitude = Number(location[0])
+  constructor (gse: TypesenseGse) {
+    this.longitude = gse.longitude
+    this.latitude = gse.latitude
   }
 }
 
@@ -39,6 +39,6 @@ export class SearchCollectionGseResponse {
     this.type = gse.type
     this.soc = gse.soc
     this.temperatureCelsius = gse.temperatureCelsius
-    this.location = new LocationResponse(gse.location)
+    this.location = new LocationResponse(gse)
   }
 }
