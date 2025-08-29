@@ -39,13 +39,18 @@ export class SearchCollectionsQuery {
   filter?: SearchCollectionsFilterQuery
 
   @ApiProperty({ type: 'string' })
+  @IsUndefinable()
   @IsString()
   @IsNotEmpty()
-  search: string
+  search?: string
 
   @ApiProperty({ type: String, required: false })
-  prompt?: string
+  @IsString()
+  @IsNotEmpty()
+  prompt: string
 
   @ApiProperty({ type: String, required: false })
-  model?: string
+  @IsString()
+  @IsNotEmpty()
+  model: string
 }
