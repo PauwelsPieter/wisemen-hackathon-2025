@@ -8,10 +8,9 @@ export class LocationResponse {
   longitude: number
   latitude: number
 
-  constructor (location: string) {
-    const results = location.split(',')
-    this.longitude = Number(results[0])
-    this.latitude = Number(results[1])
+  constructor (location: string[]) {
+    this.longitude = Number(location[1])
+    this.latitude = Number(location[0])
   }
 }
 
