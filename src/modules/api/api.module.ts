@@ -16,6 +16,7 @@ import { OneSignalModule } from '../one-signal/one-signal.module.js'
 import { GlobalSearchModule } from '../global-search/global-search.module.js'
 import { NotificationModule } from '../notification/notification.module.js'
 import { JobsApiModule } from '../jobs/jobs.api-module.js'
+import { TypesenseModule } from '../typesense/typesense.module.js'
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { JobsApiModule } from '../jobs/jobs.api-module.js'
     DomainEventLogModule,
     GlobalSearchModule,
     NotificationModule,
-    JobsApiModule
+    JobsApiModule,
+    TypesenseModule
   ]
 })
 export class ApiModule {
