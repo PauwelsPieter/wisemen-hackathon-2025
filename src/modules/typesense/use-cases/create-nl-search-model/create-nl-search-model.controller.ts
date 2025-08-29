@@ -1,19 +1,24 @@
-import { Controller, Post } from '@nestjs/common'
-import { ApiTags, ApiOkResponse } from '@nestjs/swagger'
-import { Public } from '../../../permission/permission.decorator.js'
+import { Body, Controller, Post } from '@nestjs/common'
+import { ApiTags, ApiOkResponse, ApiOAuth2 } from '@nestjs/swagger'
+import { Permissions } from '../../../permission/permission.decorator.js'
+import { Permission } from '../../../permission/permission.enum.js'
 import { CreateNaturalLanguageSearchModelUseCase } from './create-nl-search-model.use-case.js'
+import { CreateNaturalLanguageModelCommand } from './create-nl-search-model.command.js'
 
 @ApiTags('Typesense')
 @Controller('typesense/create-nl-search-model')
-@Public()
+@ApiOAuth2([])
 export class CreateNaturalLanguageSearchModelController {
   constructor (
     private readonly useCase: CreateNaturalLanguageSearchModelUseCase
   ) {}
 
   @Post()
+  @Permissions(Permission.TYPESENSE)
   @ApiOkResponse()
-  async execute (): Promise<void> {
-    await this.useCase.execute()
+  async execute (
+    @Body() command: CreateNaturalLanguageModelCommand
+  ): Promise<void> {
+    await this.useCase.execute(command)
   }
 }

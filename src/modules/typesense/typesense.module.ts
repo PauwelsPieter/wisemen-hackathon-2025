@@ -15,6 +15,7 @@ import { ViewCollectionsModule } from './use-cases/view-collections/view-collect
 import { TypesenseCollectionsModule } from './collections/typesense-collections.module.js'
 import { TypesenseCollectorsModule } from './collectors/typesense-collectors.module.js'
 import { TypesenseCreateNlSearchModule } from './use-cases/create-nl-search-model/create-nl-search-model.module.js'
+import { TypesenseViewNaturalLanguageIndexModule } from './use-cases/view-nl-search-models/view-nl-search-model-index.module.js'
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { TypesenseCreateNlSearchModule } from './use-cases/create-nl-search-mode
     ViewCollectionsModule,
     TypesenseCollectionsModule,
     TypesenseCollectorsModule,
-    TypesenseCreateNlSearchModule
+    TypesenseCreateNlSearchModule,
+    TypesenseViewNaturalLanguageIndexModule
   ],
   providers: [
     TypesenseClient,
