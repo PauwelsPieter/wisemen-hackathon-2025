@@ -159,7 +159,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
 
   build (): SearchParams<object> {
     const params: SearchParams<object> = {
-      q: this.query,
+      // q: this.query,
       query_by: this.queries.join(','),
       include_fields: this.includeFields.join(','),
       filter_by: this.filters.join(` ${TypesenseLogicOperator.AND} `),

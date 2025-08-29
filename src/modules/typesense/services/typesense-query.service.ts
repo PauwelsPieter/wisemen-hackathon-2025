@@ -20,7 +20,7 @@ export class TypesenseQueryService {
       const results = await this.typesenseClient.client
         .multiSearch.perform<TypesenseCollectionSchema[T][]>({ searches: searchSchemas })
 
-      console.log(results)
+      console.log(results.results.map(r => r.parsed_nl_query))
 
       const response: MultiSearchResponse<T> = {} as MultiSearchResponse<T>
 
