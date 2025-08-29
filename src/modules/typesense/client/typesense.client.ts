@@ -17,6 +17,7 @@ export class TypesenseClient {
   private initialize (): void {
     try {
       this._client = new Typesense.Client({
+        connectionTimeoutSeconds: 10,
         nodes: [{
           host: this.configService.getOrThrow('TYPESENSE_HOST'),
           port: 8108,

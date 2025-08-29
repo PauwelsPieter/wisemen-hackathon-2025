@@ -25,8 +25,6 @@ export class SearchCollectionsUseCase {
       searchParams.push(this.buildSearchParams(query, collection))
     }
 
-    console.log(searchParams)
-
     const searchResult = await this.typesense.multiSearch(searchParams)
 
     const sortedResults = this.mapAndSortResults(searchResult)
@@ -40,6 +38,7 @@ export class SearchCollectionsUseCase {
   ): CustomMultiSearchRequestSchema<T> {
     const params = new ParamBuilder()
       .withQuery(query.search)
+      .withLimit(5)
 
     if (query.prompt !== undefined && query.model !== undefined) {
       params.withNlQuery(query.prompt, query.model)
@@ -74,6 +73,7 @@ export class SearchCollectionsUseCase {
     searchParams: ParamBuilder<GseTypesenseCollection>
   ): void {
     searchParams
+      .addSearchOn('airportName')
       .addSearchOn('type')
       // .innerJoin(TypesenseCollectionName.AIRPORT)
   }
@@ -81,7 +81,9 @@ export class SearchCollectionsUseCase {
   private addPlanningParams (
     searchParams: ParamBuilder<PlanningTypesenseCollection>
   ): void {
-    return
+    searchParams
+      .addSearchOn('from')
+      .addSearchOn('to')
   }
 
   private mapAndSortResults <T extends TypesenseCollectionName> (

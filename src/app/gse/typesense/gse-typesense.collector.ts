@@ -19,7 +19,10 @@ export class GseTypesenseCollector implements TypesenseCollector {
 
   async fetch (uuids?: GseUuid[]): Promise<Gse[]> {
     return await this.GseRepository.find({
-      where: { uuid: AnyOrIgnore(uuids) }
+      where: { uuid: AnyOrIgnore(uuids) },
+      relations: {
+        airport: true
+      }
     })
   }
 
@@ -27,7 +30,10 @@ export class GseTypesenseCollector implements TypesenseCollector {
     return await this.GseRepository.find({
       where: [
         { updatedAt: MoreThanOrEqual(since) }
-      ]
+      ],
+      relations: {
+        airport: true
+      }
     })
   }
 

@@ -174,6 +174,7 @@ export class TypesenseSearchParamsBuilder<Collection extends TypesenseCollection
       params.nl_query = true
       params.q = this.nlQuery
       params.nl_query_debug = true
+      params.nl_query_prompt_cache_ttl = 0
     }
 
     return params

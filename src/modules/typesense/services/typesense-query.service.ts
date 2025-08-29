@@ -20,7 +20,12 @@ export class TypesenseQueryService {
       const results = await this.typesenseClient.client
         .multiSearch.perform<TypesenseCollectionSchema[T][]>({ searches: searchSchemas })
 
-      console.log(results.results.map(r => r.parsed_nl_query))
+      for (const result of results.results) {
+        if (result.error != null) {
+          throw new Error(result.error)
+        }
+        console.log(result.parsed_nl_query?.augmented_params)
+      }
 
       const response: MultiSearchResponse<T> = {} as MultiSearchResponse<T>
 
