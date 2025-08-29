@@ -75,6 +75,7 @@ export class MigrateCollectionsUseCase {
 
         await collection.documents().import(documentsChunk, { action: 'upsert' })
       } catch (e) {
+        console.log(e)
         captureException(e)
         throw e
       }

@@ -5,15 +5,14 @@ import { GlobalSearchTypesenseCollectionNameApiProperty, GlobalSearchTypesenseCo
 import { TypesenseGse } from '../../../../app/gse/typesense/typesense-gse.js'
 import { TypesensePlanning } from '../../../../app/planning/typesense/typesense-planning.js'
 import { TypesenseAirport } from '../../../../app/airport/typesense/typesense-airport.js'
-import { SearchCollectionUserResponse } from './search-collection-user.response.js'
-import { SearchCollectionContactResponse } from './search-collection-contact.response.js'
 import { SearchCollectionGseResponse } from './search-collection.gse.response.js'
 import { SearchCollectionPlanningResponse } from './search-collection-planning.response.js'
 import { SearchCollectionAirportResponse } from './search-collection-airport.response.js'
 
 @ApiExtraModels(
-  SearchCollectionUserResponse,
-  SearchCollectionContactResponse
+  SearchCollectionGseResponse,
+  SearchCollectionPlanningResponse,
+  SearchCollectionAirportResponse
 )
 class SearchCollectionsResponseItem {
   @GlobalSearchTypesenseCollectionNameApiProperty()

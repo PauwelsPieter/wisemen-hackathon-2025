@@ -38,18 +38,18 @@ export class SearchCollectionsQuery {
   @ValidateNested()
   filter?: SearchCollectionsFilterQuery
 
-  @ApiProperty({ type: 'string' })
+  @ApiProperty({ type: 'string', required: false })
   @IsUndefinable()
   @IsString()
   @IsNotEmpty()
   search?: string
 
-  @ApiProperty({ type: String, required: false })
+  @ApiProperty({ type: String })
   @IsString()
   @IsNotEmpty()
   prompt: string
 
-  @ApiProperty({ type: String, required: false })
+  @ApiProperty({ type: String })
   @IsString()
   @IsNotEmpty()
   model: string

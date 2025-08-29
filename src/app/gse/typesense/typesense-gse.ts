@@ -9,7 +9,7 @@ export class TypesenseGse {
   type: GseType
   soc: number
   temperatureCelsius: number
-  location: [number, number]
+  location: string[]
 
   constructor (gse: Gse) {
     return {
@@ -18,7 +18,7 @@ export class TypesenseGse {
       type: gse.type,
       soc: gse.soc,
       temperatureCelsius: gse.temperatureCelsius,
-      location: [gse.location.coordinates[0], gse.location.coordinates[1]]
+      location: [String(gse.location[1]), String(gse.location[0])]
     }
   }
 }
